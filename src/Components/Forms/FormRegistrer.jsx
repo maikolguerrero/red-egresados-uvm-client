@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 let styles = {
     input: "w-full px-3 py-1.5 text-xs md:text-sm font-barolw rounded-lg border border-verdeA border-b-2",
-    subtitle_form: "py-1 px-2 border-b-2 border-verdeC text-sm font-barlow-condensed font-semibold"
+    subtitle_form: "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold"
 }
 
 function FormRegister(props) {
@@ -31,7 +31,7 @@ function FormRegister(props) {
                 placeholder="Apellidos"
               />
             </div>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <input
                 className={styles.input}
                 type="text"
@@ -77,7 +77,7 @@ function FormRegister(props) {
                 placeholder="Mención"
               />
             </div>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <input
                 className={styles.input}
                 type="number"
@@ -107,7 +107,7 @@ function FormRegister(props) {
                 placeholder="Usuario"
               />
             </div>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <input
                 className={styles.input}
                 type="password"
