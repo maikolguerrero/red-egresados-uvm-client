@@ -9,7 +9,9 @@ let styles = {
 function FormRegister(props) {
   return (
     <>
-      <form className="flex flex-col gap-8 w-full">
+      <form onSubmit={(e) => (
+        e.preventDefault()
+      )} className="flex flex-col gap-8 w-full">
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>
             DATOS PERSONALES
