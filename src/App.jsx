@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Recover from "./views/Recover";
+import Landing from "./views/Landing";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: "/recover-password",
     element: <Recover />,
+  },
+  {
+    path: "/landing",
+    element: <Landing />,
   },
   {
     path: "*",
