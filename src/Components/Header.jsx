@@ -19,6 +19,9 @@ function Header() {
 
         <nav className="bg-verdeD h-[3.5vh] w-full">
           <ul className="flex gap-5 justify-center items-center h-full">
+          <li className="font-medium font-barlow-semi-condensed text-xs lg:text-sm text-Blanco hover:cursor-pointer hover:text-verdeA transition-all duration-300">
+              <Link to={"/landing"}>INICIO</Link>
+            </li>
             <li className="font-medium font-barlow-semi-condensed text-xs lg:text-sm text-Blanco hover:cursor-pointer hover:text-verdeA transition-all duration-300">
               <Link to={"/home"}>RED DE EGRESADOS</Link>
             </li>

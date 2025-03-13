@@ -4,6 +4,7 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import Recover from "./views/Recover";
 import Landing from "./views/Landing";
+import Home from "./views/Home";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/landing",
     element: <Landing />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
   },
   {
     path: "*",
