@@ -6,6 +6,7 @@ import Recover from "./views/Recover";
 import Landing from "./views/Landing";
 import Home from "./views/Home";
 import MyProfile from "./views/profile/MyProfile";
+import Graduates from "./views/social/Graduates";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <Home />,
+  },
+  {
+    path: "/graduates",
+    element: <Graduates />,
   },
   {
     path: "/my-profile",

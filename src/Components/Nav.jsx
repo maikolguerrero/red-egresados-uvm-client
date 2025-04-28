@@ -20,12 +20,12 @@ function Nav() {
         </div>
 
         <ul className="py-4 border-b border-verdeD ">
-            <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><IoIosHome className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>PRINCIPAL</p></li>
+            <Link to={"/home"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><IoIosHome className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>PRINCIPAL</p></Link>
             <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><HiMiniChartBarSquare className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>TENDENCIAS</p></li>
         </ul>
 
         <ul className="py-4 border-b border-verdeD ">
-            <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaGraduationCap className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>EGRESADOS</p></li>
+            <Link to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaGraduationCap className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>EGRESADOS</p></Link>
             <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaPeopleGroup className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>FOROS</p></li>
             <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><PiProjectorScreenChartBold className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>PROYECTOS</p></li>
             <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><BsCalendarDate className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>EVENTOS</p></li>
