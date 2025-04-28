@@ -5,6 +5,7 @@ import { FaArrowLeftLong, FaArrowRightLong, FaPeopleGroup } from "react-icons/fa
 import { HiMiniChartBarSquare } from "react-icons/hi2";
 import { IoIosHome, IoIosNotifications } from "react-icons/io";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 function Nav() {
   const [sidebar, setSidebar] = useState(true);
@@ -32,7 +33,7 @@ function Nav() {
 
         <ul className="py-4 border-b border-verdeD ">
             <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><IoIosNotifications className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>NOTIFICACIONES</p></li>
-            <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaUser className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>PERFIL</p></li>
+            <Link to={"/my-profile"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaUser className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>PERFIL</p></Link>
         </ul>
       </nav>
     </>

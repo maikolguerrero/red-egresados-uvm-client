@@ -1,11 +1,19 @@
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import Button from "../Buttons/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function FormLogin(props) {
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    navigate("/home");
+  };
+
   return (
     <>
-      <form className="flex flex-col gap-8 w-full">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full">
         <div className="w-full flex relative">
           <input
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"

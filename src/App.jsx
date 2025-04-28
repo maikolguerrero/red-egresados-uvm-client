@@ -5,12 +5,13 @@ import Register from "./views/Register";
 import Recover from "./views/Recover";
 import Landing from "./views/Landing";
 import Home from "./views/Home";
+import MyProfile from "./views/profile/MyProfile";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <h1 className="text-3xl font-bold underline font-barlow-condensed">Hola mundo!</h1>,
+    element: <Login />,
   },
   {
     path: "/login",
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/home",
     element: <Home />,
+  },
+  {
+    path: "/my-profile",
+    element: <MyProfile />,
   },
   {
     path: "*",
