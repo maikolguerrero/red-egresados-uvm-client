@@ -26,7 +26,7 @@ function Nav() {
 
         <ul className="py-4 border-b border-verdeD ">
             <Link to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaGraduationCap className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>EGRESADOS</p></Link>
-            <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaPeopleGroup className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>FOROS</p></li>
+            <Link to={"/forums"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><FaPeopleGroup className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>FOROS</p></Link>
             <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><PiProjectorScreenChartBold className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>PROYECTOS</p></li>
             <li className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all"><BsCalendarDate className="text-2xl" /> <p className={`${sidebar ? ("hidden") : ("visible")} font-barolw font-bold text-sm`}>EVENTOS</p></li>
         </ul>

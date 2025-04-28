@@ -49,15 +49,17 @@ function Graduates() {
       <main className="flex">
         <Nav />
         <div className="w-full px-3 py-12 md:px-6 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <section className="flex gap-6 flex-wrap justify-center">
-            {data
-              .slice(
-                (currentPage - 1) * perPage,
-                (currentPage - 1) * perPage + perPage
-              )
-              .map((item, key) => (
-                <CardGraduate key={item} />
-              ))}
+          <div className="flex flex-col gap-6 items-center">
+            <section className="flex gap-6 flex-wrap justify-center">
+              {data
+                .slice(
+                  (currentPage - 1) * perPage,
+                  (currentPage - 1) * perPage + perPage
+                )
+                .map((item, key) => (
+                  <CardGraduate key={item} />
+                ))}
+            </section>
             <div className="flex overflow-x-auto sm:justify-center">
               <ThemeProvider theme={customTheme}>
                 <Pagination
@@ -69,7 +71,7 @@ function Graduates() {
                 />
               </ThemeProvider>
             </div>
-          </section>
+          </div>
         </div>
       </main>
     </>
