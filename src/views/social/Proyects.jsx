@@ -3,6 +3,7 @@ import { CardProyect } from "../../Components/Card/CardProyect";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { useState } from "react";
+import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -45,7 +46,7 @@ function Proyects() {
       <Header />
       <div className="h-[10.5vh]"></div>
 
-      <main className="flex">
+      <main className="flex relative">
         <Nav />
         <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh]  overflow-y-scroll overflow-x-auto">
           <div className="w-full gap-6 justify-center flex-wrap flex">
@@ -70,6 +71,10 @@ function Proyects() {
             </ThemeProvider>
           </div>
         </section>
+
+        <div className="absolute right-8 bottom-6">
+          <ButtonMessages />
+        </div>
       </main>
     </>
   );

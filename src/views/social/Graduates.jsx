@@ -3,6 +3,7 @@ import { CardGraduate } from "../../Components/Card/CardGraduate";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
+import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -46,7 +47,7 @@ function Graduates() {
       <Header />
       <div className="h-[10.5vh]"></div>
 
-      <main className="flex">
+      <main className="flex relative">
         <Nav />
         <div className="w-full px-3 py-12 md:px-6 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
           <div className="flex flex-col gap-6 items-center">
@@ -72,6 +73,10 @@ function Graduates() {
               </ThemeProvider>
             </div>
           </div>
+        </div>
+
+        <div className="absolute right-8 bottom-6">
+          <ButtonMessages />
         </div>
       </main>
     </>

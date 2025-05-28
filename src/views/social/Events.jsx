@@ -3,6 +3,7 @@ import { CardEvent } from "../../Components/Card/CardEvent";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
+import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -47,7 +48,7 @@ function Events() {
       <Header />
       <div className="h-[10.5vh]"></div>
 
-      <main className="flex">
+      <main className="flex relative">
         <Nav />
         <div className="w-full px-3 py-12 md:px-6 lg:px-16 gap-14 grid grid-cols-1 items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -77,6 +78,10 @@ function Events() {
               />
             </ThemeProvider>
           </div>
+        </div>
+
+        <div className="absolute right-8 bottom-6">
+          <ButtonMessages />
         </div>
       </main>
     </>

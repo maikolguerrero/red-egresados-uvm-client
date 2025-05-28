@@ -3,6 +3,7 @@ import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { useState } from "react";
 import { CardBanner } from "../../Components/Card/CardBanner";
+import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 
 const data = [{
     id: 1,
@@ -61,7 +62,7 @@ function Notifications() {
       <Header />
       <div className="h-[10.5vh]"></div>
 
-      <main className="flex">
+      <main className="flex relative">
         <Nav />
         <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh]  overflow-y-scroll overflow-x-auto">
           <div className="w-full gap-6 justify-center flex-col flex">
@@ -86,6 +87,10 @@ function Notifications() {
             </ThemeProvider>
           </div>
         </section>
+
+        <div className="absolute right-8 bottom-6">
+          <ButtonMessages />
+        </div>
       </main>
     </>
   );

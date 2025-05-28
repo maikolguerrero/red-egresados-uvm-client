@@ -11,6 +11,7 @@ import Forums from "./views/social/Forums";
 import Events from "./views/social/Events";
 import Proyects from "./views/social/Proyects";
 import Notifications from "./views/profile/Notifications";
+import Config from "./views/profile/Config";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
   {
     path: "/notifications",
     element: <Notifications />,
+  },
+  {
+    path: "/config",
+    element: <Config />,
   },
   {
     path: "/my-profile",
