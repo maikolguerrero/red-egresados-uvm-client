@@ -9,6 +9,8 @@ import MyProfile from "./views/profile/MyProfile";
 import Graduates from "./views/social/Graduates";
 import Forums from "./views/social/Forums";
 import Events from "./views/social/Events";
+import Proyects from "./views/social/Proyects";
+import Notifications from "./views/profile/Notifications";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -47,6 +49,14 @@ const router = createBrowserRouter([
   {
     path: "/events",
     element: <Events />,
+  },
+  {
+    path: "/proyects",
+    element: <Proyects />,
+  },
+  {
+    path: "/notifications",
+    element: <Notifications />,
   },
   {
     path: "/my-profile",
