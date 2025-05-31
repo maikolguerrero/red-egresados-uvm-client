@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import logo from "../../public/LogoUvm.png"
+import { useDispatch } from "react-redux";
+import { logoutSesion } from "../services/auth/authService";
 
 function Header() {
+  const dispatch = useDispatch()
+
+  const handdleLogout = (e) => {
+    dispatch(logoutSesion())
+  }
+  
   return (
     <>
       <div className="w-full fixed">
@@ -26,7 +34,7 @@ function Header() {
               <Link to={"/home"}>RED DE EGRESADOS</Link>
             </li>
             <li className="font-medium font-barlow-semi-condensed text-xs lg:text-sm text-Blanco hover:cursor-pointer hover:text-RojoA transition-all duration-300">
-              <Link to={"/login"}>CERRAR SESIÓN</Link>
+              <button onClick={handdleLogout}>CERRAR SESIÓN</button>
             </li>
           </ul>
         </nav>

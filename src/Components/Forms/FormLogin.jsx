@@ -1,14 +1,37 @@
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import Button from "../Buttons/Button";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginUserFetch } from "../../services/usersService";
+
+let defaultValues = {
+  "emailOrUsername": "",
+  "password": ""
+}
 
 function FormLogin(props) {
-
+  const dispatch = useDispatch()
   const navigate = useNavigate();
 
+  const [values, setValues] = useState({});
+
+  useEffect(() => {
+    setValues(defaultValues);
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = (e) => {
-    e.preventDefault()
-    navigate("/home");
+    e.preventDefault();
+    dispatch(loginUserFetch(values))
+    // navigate("/home");
   };
 
   return (
@@ -18,7 +41,9 @@ function FormLogin(props) {
           <input
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
             type="text"
-            name="username"
+            name="emailOrUsername"
+            value={values.emailOrUsername}
+            onChange={handleInputChange}
             placeholder="Usuario"
           />
           <FaUserCircle className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
@@ -28,6 +53,8 @@ function FormLogin(props) {
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
             type="password"
             name="password"
+            value={values.password}
+            onChange={handleInputChange}
             placeholder="Contraseña"
           />
           <FaLock className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
@@ -36,11 +63,15 @@ function FormLogin(props) {
         <div className="flex flex-col gap-2 items-center text-Negro font-barolw font-bold text-xs md:text-sm lg:text-base text-center">
           <p className="">
             ¿No tienes una cuenta?{" "}
-            <Link to={"/register"} className="text-verdeC">Regístrate Aquí.</Link>
+            <Link to={"/register"} className="text-verdeC">
+              Regístrate Aquí.
+            </Link>
           </p>
           <p>
             ¿Olvidaste tu contraseña?{" "}
-            <Link to={"/recover-password"} className="text-verdeC">Recupérala Aquí.</Link>
+            <Link to={"/recover-password"} className="text-verdeC">
+              Recupérala Aquí.
+            </Link>
           </p>
         </div>
 

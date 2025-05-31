@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./views/Login";
 import Register from "./views/Register";
@@ -12,71 +12,142 @@ import Events from "./views/social/Events";
 import Proyects from "./views/social/Proyects";
 import Notifications from "./views/profile/Notifications";
 import Config from "./views/profile/Config";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import { useDispatch } from "react-redux";
+import { verifySesion } from "./services/auth/authService";
+import { SnackbarProvider } from "notistack";
+
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: (
+      <ProtectedRoute>
+        <Login />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <ProtectedRoute>
+        <Login />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/register",
-    element: <Register />,
+    element: (
+      <ProtectedRoute>
+        <Register />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/recover-password",
-    element: <Recover />,
+    element: (
+      <ProtectedRoute>
+        <Recover />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/landing",
-    element: <Landing />,
+    element: (
+      <ProtectedRoute>
+        <Landing />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/home",
-    element: <Home />,
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/graduates",
-    element: <Graduates />,
+    element: (
+      <ProtectedRoute>
+        <Graduates />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/forums",
-    element: <Forums />,
+    element: (
+      <ProtectedRoute>
+        {" "}
+        <Forums />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/events",
-    element: <Events />,
+    element: (
+      <ProtectedRoute>
+        <Events />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/proyects",
-    element: <Proyects />,
+    element: (
+      <ProtectedRoute>
+        <Proyects />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/notifications",
-    element: <Notifications />,
+    element: (
+      <ProtectedRoute>
+        <Notifications />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/config",
-    element: <Config />,
+    element: (
+      <ProtectedRoute>
+        <Config />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/my-profile",
-    element: <MyProfile />,
+    element: (
+      <ProtectedRoute>
+        <MyProfile />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",
-    element: <h2 className="text-3xl font-bold underline font-barlow-condensed"> Pagina de Error</h2>,
+    element: (
+      <h2 className="text-3xl font-bold underline font-barlow-condensed">
+        {" "}
+        Pagina de Error
+      </h2>
+    ),
   },
 ]);
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(verifySesion());
+  }, []);
+
   return (
     <>
-      <RouterProvider router={router} />
+      <SnackbarProvider>
+        <RouterProvider router={router} />
+      </SnackbarProvider>
     </>
   );
 }
