@@ -1,7 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify';
-import { loginUserFetch, postData } from '../services/usersService';
-import { logoutSesion, resendEmailFetch, verifySesion } from '../services/auth/authService';
+import { createSlice } from '@reduxjs/toolkit'
+import { loginUserFetch, logoutSesion, postData, resendEmailFetch, verifySesion } from '../services/auth/authService';
 
 export const authSlice = createSlice({
   name: 'verification',
@@ -46,7 +44,10 @@ export const authSlice = createSlice({
     });
     builder.addCase(loginUserFetch.fulfilled, (state, action) => {
       state.loading = false;
-      state.message = action.payload
+      state.message = action.payload.message
+      state.id = action.payload.id
+      state.username = action.payload.username
+      state.role = action.payload.role
       state.sessionActive = true
     });
     builder.addCase(loginUserFetch.rejected, (state, action) => {
@@ -78,6 +79,9 @@ export const authSlice = createSlice({
     builder.addCase(logoutSesion.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload
+      state.id = ""
+      state.username = ""
+      state.role = ""
       state.sessionActive = false
     });
     builder.addCase(logoutSesion.rejected, (state, action) => {

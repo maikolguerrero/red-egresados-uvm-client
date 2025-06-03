@@ -7,13 +7,13 @@ import Nav from "../../Components/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../services/users/usersService";
 
-function MyProfile() {
-  const dispatch = useDispatch()
-  const auth = useSelector((state) => state.auth)
+function GraduatesProfile() {
+  const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
+  const currentPath = location.pathname; // Acceder a la ruta actual
 
   useEffect(() => {
-    dispatch(getProfile({ username: auth.username }));
+    dispatch(getProfile({ username: currentPath.split("/")[2] }));
   }, []);
 
   return (
@@ -42,4 +42,4 @@ function MyProfile() {
   );
 }
 
-export default MyProfile;
+export default GraduatesProfile;

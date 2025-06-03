@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CardGraduate } from "../../Components/Card/CardGraduate";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsers } from "../../services/users/usersService";
+import { onChangePage } from "../../features/users/usersSlice";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -36,12 +39,23 @@ const customTheme = createTheme({
 });
 
 function Graduates() {
+  const dispatch = useDispatch()
+  const users = useSelector((state) => state.users.users)
+  const total = useSelector((state) => state.users.pagination.total)
+  const pages = useSelector((state) => state.users.pagination.pages)
+  const page = useSelector((state) => state.users.pagination.page)
+  const limit = useSelector((state) => state.users.pagination.limit)
+
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
 
+  useEffect(() => {
+    dispatch(getUsers())
+  }, [])
+
   const max = Math.ceil(data.length / perPage);
 
-  const onPageChange = (page) => setCurrentPage(page);
+  const onPageChange = (page) => dispatch(onChangePage(page));
   return (
     <>
       <Header />
@@ -52,22 +66,23 @@ function Graduates() {
         <div className="w-full px-3 py-12 md:px-6 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
           <div className="flex flex-col gap-6 items-center">
             <section className="flex gap-6 flex-wrap justify-center">
-              {data
+              {users
                 .slice(
-                  (currentPage - 1) * perPage,
-                  (currentPage - 1) * perPage + perPage
+                  (page - 1) * limit,
+                  (page - 1) * limit + limit
                 )
                 .map((item, key) => (
-                  <CardGraduate key={item} />
-                ))}
+                  <CardGraduate user={item} key={item.id} />
+                ))
+              }
             </section>
             <div className="flex overflow-x-auto sm:justify-center">
               <ThemeProvider theme={customTheme}>
                 <Pagination
                   theme={customTheme}
                   className="border-verdeD"
-                  currentPage={currentPage}
-                  totalPages={max}
+                  currentPage={page}
+                  totalPages={pages}
                   onPageChange={onPageChange}
                 />
               </ThemeProvider>

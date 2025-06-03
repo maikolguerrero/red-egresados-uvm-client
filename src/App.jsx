@@ -16,6 +16,7 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import { useDispatch } from "react-redux";
 import { verifySesion } from "./services/auth/authService";
 import { SnackbarProvider } from "notistack";
+import GraduatesProfile from "./views/social/GraduatesProfile";
 
 
 /*Enrutador de la web*/
@@ -73,6 +74,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Graduates />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/graduates/:username",
+    element: (
+      <ProtectedRoute>
+        <GraduatesProfile />
       </ProtectedRoute>
     ),
   },

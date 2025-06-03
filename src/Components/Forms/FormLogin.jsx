@@ -3,7 +3,7 @@ import Button from "../Buttons/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginUserFetch } from "../../services/usersService";
+import { loginUserFetch } from "../../services/auth/authService";
 
 let defaultValues = {
   "emailOrUsername": "",

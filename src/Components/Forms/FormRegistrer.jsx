@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
-import { postData } from "../../services/usersService";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
-import { useDispatch, useSelector } from "react-redux";
-import { actived } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
+import { postData } from "../../services/auth/authService";
 
 let styles = {
   input:
