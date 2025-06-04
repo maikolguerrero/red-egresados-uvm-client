@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import perfil from "../../../public/Perfil.jpg"
 import BadgeNormal from "../Buttons/BadgeNormal";
+import { ModalNotHeader } from "../Modals/ModalNotHeader";
 
 function CardProfile({ profile }) {
   const [anchoPantalla, setAnchoPantalla] = useState(window.innerWidth);
+
+  const [openModal, setOpenModal] = useState(false)
+  const [openModal2, setOpenModal2] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -46,21 +50,66 @@ function CardProfile({ profile }) {
               <>
                 <BadgeNormal color="bg-RojoC" text="Sin habilidades" />
               </>
-            ) : anchoPantalla > 767 ? (
+            ) : (
+              <button
+                onClick={(e) => setOpenModal(true)}
+                class="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+              >
+                ver habilidades de valor{" "}
+                {profile.profile.professional.skills.length}
+              </button>
+            )}
+            {profile.profile.professional.interests.length === 0 ? (
               <>
-                <BadgeNormal color="bg-verdeD" text="Robótica" />
-                <BadgeNormal color="bg-verdeD" text="Inglés" />
-                <BadgeNormal color="bg-verdeD" text="Telecom" />
-                <BadgeNormal color="bg-verdeD" text="Programador" />
+                <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
               </>
             ) : (
-              <button class="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md">
-                habilidades profesionales
+              <button
+                onClick={(e) => setOpenModal2(true)}
+                class="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+              >
+                ver intereses personales{" "}
+                {profile.profile.professional.interests.length}
               </button>
             )}
           </div>
         </div>
       </div>
+
+      <ModalNotHeader
+        size={"sm"}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        component={
+          <>
+            <h4 className="py-1 px-2 border-b-2 mb-6 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
+              HABILIDADES PROFESIONALES
+            </h4>
+            <div className="flex gap-2">
+              {profile.profile.professional.skills.map((item, key) => (
+                <BadgeNormal color="bg-verdeD" text={item} key={key} />
+              ))}
+            </div>
+          </>
+        }
+      />
+      <ModalNotHeader
+        size={"sm"}
+        openModal={openModal2}
+        setOpenModal={setOpenModal2}
+        component={
+          <>
+            <h4 className="py-1 px-2 border-b-2 mb-6 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
+              INTERESES PERSONALES
+            </h4>
+            <div className="flex gap-2">
+              {profile.profile.professional.interests.map((item, key) => (
+                <BadgeNormal color="bg-verdeD" text={item} key={key} />
+              ))}
+            </div>
+          </>
+        }
+      />
     </>
   );
 }

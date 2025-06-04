@@ -2,7 +2,7 @@
 import { Button, Checkbox, Label, Modal, ModalBody, ModalHeader, TextInput } from "flowbite-react";
 import { useRef, useState } from "react";
 
-export function ModalNotHeader({ component, openModal, setOpenModal }) {
+export function ModalNotHeader({ size, component, openModal, setOpenModal }) {
 
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -10,7 +10,7 @@ export function ModalNotHeader({ component, openModal, setOpenModal }) {
     <>
       <Modal
         show={openModal}
-        size="3xl"
+        size={size}
         popup
         onClose={() => setOpenModal(false)}
       >

@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../../Buttons/Button";
 import { Label } from "flowbite-react";
 import { FaCamera } from "react-icons/fa";
+import { enqueueSnackbar } from "notistack";
+import { typeError } from "../../../models/alertModels";
+import { updatePictureProfile, updateProfile } from "../../../services/users/usersService";
 
 let styles = {
   input:
@@ -13,30 +16,48 @@ let styles = {
 };
 
 let defaultValues = {
-  "idNumber": "",
-  "studentId": "",
-  "firstName": "",
-  "lastName": "",
-  "birthDate": "",
-  "degree": "",
-  "mention": "",
-  "graduationDate": "",
-  "email": "",
-  "username": "",
-  "password": "",
-  "passwordConfirm": "",
-  "location": ""
-}
+  phone: "",
+  alternateEmail: "",
+  website: "",
+};
+
+let defaultSocialMedias = {
+  instagram: "",
+  facebook: "",
+  linkedin: "",
+  x: "",
+  youtube: "",
+  tiktok: "",
+  whatsapp: "",
+  telegram: "",
+  github: "",
+};
 
 function FormContact() {
   const profile = useSelector((state) => state.users.profile);
   const dispatch = useDispatch();
 
   const [values, setValues] = useState({});
+  const [image, setImage] = useState(false);
+  const [values2, setValues2] = useState({})
+  const [picture, setPicture] = useState("");
 
   useEffect(() => {
     setValues(defaultValues);
+    setValues2(defaultSocialMedias);
   }, []);
+
+  useEffect(() => {
+    setValues(profile.profile.contact)
+    setValues2(profile.profile.socialMedia)
+  }, [profile])
+
+  const onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImage(URL.createObjectURL(event.target.files[0]));
+      setPicture(event.target.files[0])
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,13 +67,36 @@ function FormContact() {
     });
   };
 
+  const handleInputChange2 = (e) => {
+    const { name, value } = e.target;
+    setValues2({
+      ...values2,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(updateProfile({
+      contact: values,
+      socialMedia: values2
+    }))
+  };
+
+  const handleSubmitPicture = async (e) => {
+    e.preventDefault();
+    if (picture === "") {
+      enqueueSnackbar("No se ha seleccionado una foto nueva", typeError)
+    } else {
+      const formData = new FormData()
+      formData.append("picture", picture);
+      dispatch(updatePictureProfile(formData))
+    }
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full">
+      <form className="flex flex-col gap-8 w-full">
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>FOTO PERFIL</h4>
           <div className="flex flex-col gap-3">
@@ -60,19 +104,29 @@ function FormContact() {
               <div className="flex relative">
                 <img
                   src={
-                    profile.user.profilePicture.url === null
+                    image != false
+                      ? image
+                      : profile.user.profilePicture.url === null
                       ? perfil
                       : profile.user.profilePicture.url
                   }
                   alt="Foto Perfil"
-                  className="h-auto w-[200px] border border-verdeD"
+                  className="h-[200px] w-[200px] border border-verdeD object-cover"
                 />
                 <div className="bg-verdeD h-10 w-10 absolute right-0 bottom-0 flex justify-center items-center">
                   <FaCamera className="text-white text-2xl" />
                 </div>
-                <input type="file" className="absolute w-full h-full hover:cursor-pointer opacity-0" />
+                <input
+                  type="file"
+                  onChange={onImageChange}
+                  className="absolute w-full h-full hover:cursor-pointer opacity-0"
+                />
               </div>
-              <Button className={"w-auto"} text="ACTUALIZAR FOTO" />
+              <Button
+                action={handleSubmitPicture}
+                className={"w-auto"}
+                text="ACTUALIZAR FOTO"
+              />
             </div>
           </div>
         </div>
@@ -87,8 +141,8 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
+                name="phone"
+                value={values.phone}
                 onChange={handleInputChange}
                 placeholder="Teléfono"
               />
@@ -100,8 +154,8 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="email"
-                name="firstName"
-                value={values.firstName}
+                name="alternateEmail"
+                value={values.alternateEmail}
                 onChange={handleInputChange}
                 placeholder="Correo de contacto"
               />
@@ -112,9 +166,9 @@ function FormContact() {
               </Label>
               <input
                 className={styles.input}
-                type="email"
-                name="firstName"
-                value={values.firstName}
+                type="text"
+                name="website"
+                value={values.website}
                 onChange={handleInputChange}
                 placeholder="Sitio web"
               />
@@ -132,9 +186,9 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="instagram"
+                value={values2.instagram}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -145,22 +199,22 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="facebook"
+                value={values2.facebook}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Linkedinn:
+                Linkedin:
               </Label>
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="linkedin"
+                value={values2.linkedin}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -171,9 +225,9 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="x"
+                value={values2.x}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -184,9 +238,9 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="youtube"
+                value={values2.youtube}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -197,9 +251,9 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="tiktok"
+                value={values2.tiktok}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -210,9 +264,9 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="whatsapp"
+                value={values2.whatsapp}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -223,9 +277,9 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="telegram"
+                value={values2.telegram}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -236,9 +290,9 @@ function FormContact() {
               <input
                 className={styles.input}
                 type="text"
-                name="firstName"
-                value={values.firstName}
-                onChange={handleInputChange}
+                name="github"
+                value={values2.github}
+                onChange={handleInputChange2}
                 placeholder="Url de tu perfil"
               />
             </div>
@@ -246,7 +300,7 @@ function FormContact() {
         </div>
 
         <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
-          <Button className={"w-full"} text="GUARDAR CAMBIOS" />
+          <Button action={handleSubmit} className={"w-full"} text="GUARDAR CAMBIOS" />
         </div>
       </form>
     </>

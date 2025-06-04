@@ -75,3 +75,78 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
+
+export const updatePictureProfile = createAsyncThunk(
+  "authSlice/updatePictureProfile", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        "http://localhost:3000" + "/api/alumni/profile/picture",
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "PATCH", // or 'PUT'
+          body: data
+        }
+      );
+
+      let datas = await response.json();
+      if (datas.success) {
+        enqueueSnackbar("Se actualizó la foto de perfil", typeSuccess)
+        return {
+          message: "Se actualizó la foto de perfil",
+          picture: datas.data.profilePicture
+        }
+      } else {
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const updateProfile = createAsyncThunk(
+  "authSlice/updateProfile", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        "http://localhost:3000" + "/api/alumni/update-profile",
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "PATCH", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess)
+        return {
+          message: datas.message,
+          profile: datas.data
+        }
+      } else {
+        if (datas.message === "Error de validación") {
+          throw `${datas.metadata.errors[0].message}`;
+        }
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);

@@ -5,7 +5,7 @@ export function Skills({text, onClick}) {
     <>
         <div className="flex gap-2 p-2 bg-verdeD rounded-md text-sm text-white items-center">
             <p>{text}</p>
-            <IoCloseOutline className="text-xl text-white hover:cursor-pointer" />
+            <IoCloseOutline onClick={(e) => onClick(text)} className="text-xl text-white hover:cursor-pointer" />
         </div>
     </>
   );

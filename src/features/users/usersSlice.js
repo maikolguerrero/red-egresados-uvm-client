@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getProfile, getUsers } from '../../services/users/usersService';
+import { getProfile, getUsers, updatePictureProfile, updateProfile } from '../../services/users/usersService';
 
 export const usersSlice = createSlice({
   name: "users",
@@ -48,6 +48,34 @@ export const usersSlice = createSlice({
       state.users = action.payload.users;
     });
     builder.addCase(getUsers.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(updatePictureProfile.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updatePictureProfile.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.profile.user.profilePicture = action.payload.picture;
+    });
+    builder.addCase(updatePictureProfile.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(updateProfile.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(updateProfile.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.profile.profile = action.payload.profile
+    });
+    builder.addCase(updateProfile.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

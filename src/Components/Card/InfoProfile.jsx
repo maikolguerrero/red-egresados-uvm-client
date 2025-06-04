@@ -4,11 +4,24 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { TabsProfile } from "../TabsProfile";
+import { FaXTwitter } from "react-icons/fa6";
+import { CardEducation } from "./Profile/CardEducation";
+import { CardCertification } from "./Profile/CardCertification";
+import { CardExperience } from "./Profile/CardExperience";
 
 function InfoProfile({profile}) {
   const auth = useSelector((state) => state.auth)
 
   const [openModal, setOpenModal] = useState(false);
+  const [openEducation, setOpenEducation] = useState(false);
+  const [openCerti, setOpenCerti] = useState(false);
+  const [openExp, setOpenExp] = useState(false);
+
+  const [values, setValues] = useState({
+    education: {},
+    certification: {},
+    experience: {}
+  })
 
   return (
     <>
@@ -23,33 +36,36 @@ function InfoProfile({profile}) {
             </p>
             {profile.profile.contact === undefined ? (
               <></>
-            ) : profile.profile.contact.phone === undefined ? (
+            ) : profile.profile.contact.phone === undefined ||
+              profile.profile.contact.phone === "" ? (
+              <></>
+            ) : (
               <p>
                 <b>Teléfono:</b> {profile.profile.contact.phone}
               </p>
-            ) : (
-              <></>
             )}
 
             {profile.profile.contact === undefined ? (
               <></>
-            ) : profile.profile.contact.website === undefined ? (
+            ) : profile.profile.contact.website === undefined ||
+              profile.profile.contact.website === "" ? (
+              <></>
+            ) : (
               <p>
                 <b>Sitio Web:</b> {profile.profile.contact.website}
               </p>
-            ) : (
-              <></>
             )}
 
             {profile.profile.contact === undefined ? (
               <></>
-            ) : profile.profile.contact.alternateEmail === undefined ? (
+            ) : profile.profile.contact.alternateEmail === undefined ||
+              profile.profile.contact.alternateEmail === "" ? (
+              <></>
+            ) : (
               <p>
                 <b>Correo Electrónico:</b>{" "}
                 {profile.profile.contact.alternateEmail}
               </p>
-            ) : (
-              <></>
             )}
 
             <p>
@@ -80,24 +96,55 @@ function InfoProfile({profile}) {
             </h5>
 
             <ul className="flex gap-2 text-white text-2xl px-2">
-              <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                <FaFacebook />
-              </li>
-              <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                <FaWhatsapp />
-              </li>
-              <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                <FaLinkedin />
-              </li>
-              <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                <FaYoutube />
-              </li>
-              <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                <FaGithub />
-              </li>
-              <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                <FaInstagram />
-              </li>
+              {profile.profile.socialMedia.instagram === "" ? (
+                <></>
+              ) : (
+                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                  <a href={profile.profile.socialMedia.instagram}><FaInstagram /></a>
+                </li>
+              )}
+              {profile.profile.socialMedia.facebook === "" ? (
+                <></>
+              ) : (
+                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                  <a href={profile.profile.socialMedia.facebook}><FaFacebook /></a>
+                </li>
+              )}
+              {profile.profile.socialMedia.whatsapp === "" ? (
+                <></>
+              ) : (
+                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                  <a href={profile.profile.socialMedia.whatsapp}><FaWhatsapp /></a>
+                </li>
+              )}
+              {profile.profile.socialMedia.linkedin === "" ? (
+                <></>
+              ) : (
+                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                  <a href={profile.profile.socialMedia.linkedin}><FaLinkedin /></a>
+                </li>
+              )}
+              {profile.profile.socialMedia.youtube === "" ? (
+                <></>
+              ) : (
+                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                  <a href={profile.profile.socialMedia.youtube}><FaYoutube /></a>
+                </li>
+              )}
+              {profile.profile.socialMedia.github === "" ? (
+                <></>
+              ) : (
+                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                  <a href={profile.profile.socialMedia.github}><FaGithub /></a>
+                </li>
+              )}
+              {profile.profile.socialMedia.x === "" ? (
+                <></>
+              ) : (
+                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                  <a href={profile.profile.socialMedia.x}><FaXTwitter /></a>
+                </li>
+              )}
             </ul>
           </div>
         )}
@@ -112,34 +159,29 @@ function InfoProfile({profile}) {
 
             <div className="flex justify-between">
               <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">Ingeniería en Computación.</p>{" "}
-                  <span className="text-verdeD font-semibold">2015 - 2019</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Especialidad en Ciberseguridad.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2019 - 2021</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Maestria en Seguridad de Datos.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2021 - 2022</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Doctorado en Gestion de Proyectos.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2022 - 2024</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Certificado de Desarrollador en JavaScript.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2024 - 2024</span>
-                </li>
+                {profile.profile.education.map((item, key) => (
+                  <li className="flex justify-between w-full" key={key}>
+                    <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
+                      {item.degree} -{" "}
+                      <button
+                        onClick={(e) => {
+                          setValues({
+                            education: item,
+                            certification: {},
+                            experience: {},
+                          });
+                          setOpenEducation(true);
+                        }}
+                        className="text-RojoC"
+                      >
+                        Detalles
+                      </button>
+                    </p>{" "}
+                    <span className="text-verdeD text-sm font-semibold">
+                      {item.startYear} - {item.endYear}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -155,34 +197,29 @@ function InfoProfile({profile}) {
 
             <div className="flex justify-between">
               <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">Ingeniería en Computación.</p>{" "}
-                  <span className="text-verdeD font-semibold">2015 - 2019</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Especialidad en Ciberseguridad.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2019 - 2021</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Maestria en Seguridad de Datos.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2021 - 2022</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Doctorado en Gestion de Proyectos.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2022 - 2024</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Certificado de Desarrollador en JavaScript.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2024 - 2024</span>
-                </li>
+                {profile.profile.certifications.map((item, key) => (
+                  <li className="flex justify-between w-full" key={key}>
+                    <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
+                      {item.name} -{" "}
+                      <button
+                        onClick={(e) => {
+                          setValues({
+                            education: {},
+                            certification: item,
+                            experience: {},
+                          });
+                          setOpenCerti(true)
+                        }}
+                        className="text-RojoC"
+                      >
+                        Detalles
+                      </button>
+                    </p>{" "}
+                    <span className="text-verdeD text-sm font-semibold">
+                      {item.issueDate.split("T")[0]}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -198,26 +235,30 @@ function InfoProfile({profile}) {
 
             <div className="flex justify-between">
               <ul className="flex flex-col gap-1 w-full text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Jefe de Aldea Tecnológica en la Universidad Valle del
-                    Momboy.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2021 - 2024</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Jefe Departamento de ATIT - Telecomunicaciones en
-                    Coorpoelec.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2020 - 2021</span>
-                </li>
-                <li className="flex justify-between w-full">
-                  <p className="w-3/4 lg:w-auto">
-                    Operardor de conexiones de telecomunicaciones en Inter.
-                  </p>{" "}
-                  <span className="text-verdeD font-semibold">2019 - 2020</span>
-                </li>
+                {profile.profile.experience.map((item, key) => (
+                  <li className="flex justify-between w-full" key={key}>
+                    <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
+                      {item.position} -{" "}
+                      <button
+                        onClick={(e) => {
+                          setValues({
+                            education: {},
+                            certification: {},
+                            experience: item,
+                          });
+                          setOpenExp(true)
+                        }}
+                        className="text-RojoC"
+                      >
+                        Detalles
+                      </button>
+                    </p>{" "}
+                    <span className="text-verdeD text-sm font-semibold">
+                      {item.startDate.split("T")[0]} hasta{" "}
+                      {item.endDate.split("T")[0]}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -225,13 +266,40 @@ function InfoProfile({profile}) {
 
         {profile.user.username === auth.username ? (
           <div className="py-4 px-2 w-full">
-            <Button action={(e) => {setOpenModal(true)}} text={"EDITAR PERFIL"} />
+            <Button
+              action={(e) => {
+                setOpenModal(true);
+              }}
+              text={"EDITAR PERFIL"}
+            />
           </div>
         ) : (
           <></>
         )}
 
-        <ModalNotHeader openModal={openModal} setOpenModal={setOpenModal} component={<TabsProfile />} />
+        <ModalNotHeader
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          component={<TabsProfile />}
+        />
+        <ModalNotHeader
+          size={"sm"}
+          openModal={openEducation}
+          setOpenModal={setOpenEducation}
+          component={<CardEducation data={values.education} />}
+        />
+        <ModalNotHeader
+          size={"sm"}
+          openModal={openCerti}
+          setOpenModal={setOpenCerti}
+          component={<CardCertification data={values.certification} />}
+        />
+        <ModalNotHeader
+          size={"sm"}
+          openModal={openExp}
+          setOpenModal={setOpenExp}
+          component={<CardExperience data={values.experience} />}
+        />
       </div>
     </>
   );
