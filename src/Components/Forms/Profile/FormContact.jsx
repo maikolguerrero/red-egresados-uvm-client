@@ -7,6 +7,7 @@ import { FaCamera } from "react-icons/fa";
 import { enqueueSnackbar } from "notistack";
 import { typeError } from "../../../models/alertModels";
 import { updatePictureProfile, updateProfile } from "../../../services/users/usersService";
+import perfil from "../../../../public/Perfil.jpg"
 
 let styles = {
   input:
@@ -48,8 +49,12 @@ function FormContact() {
   }, []);
 
   useEffect(() => {
-    setValues(profile.profile.contact)
-    setValues2(profile.profile.socialMedia)
+    if (profile.profile.contact != undefined) {
+      setValues(profile.profile.contact)
+    }
+    if (profile.profile.socialMedia != undefined) {
+      setValues2(profile.profile.socialMedia)
+    }
   }, [profile])
 
   const onImageChange = (event) => {
