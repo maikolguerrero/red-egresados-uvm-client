@@ -48,7 +48,7 @@ function CardProfile({ profile }) {
           <div className="flex gap-1 md:gap-2 flex-wrap">
             {profile.profile.professional.skills.length === 0 ? (
               <>
-                <BadgeNormal color="bg-RojoC" text="Sin habilidades" />
+                <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
               </>
             ) : (
               <button

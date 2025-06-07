@@ -205,3 +205,39 @@ export const loginUserFetch = createAsyncThunk(
     }
   }
 );
+
+export const verifyEmail = createAsyncThunk(
+  "authSlice/verifyEmail", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        // "http://localhost:3000" + "/api/auth/verify-email?token =" + "?",
+         `http://localhost:3000/api/auth/verify-email?token=${data}`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "GET", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess);
+        return {
+          message: datas.message,
+        };
+      } else {
+        throw `${datas.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);

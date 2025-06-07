@@ -1,0 +1,97 @@
+import { useEffect, useState } from "react";
+import { AiFillLike } from "react-icons/ai";
+import { FaCircle } from "react-icons/fa";
+import { MdReportProblem } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { likeThreads } from "../../../services/forum/forumService";
+
+export function CardReplie({ comment }) {
+  const dispatch = useDispatch();
+    
+  const [type, setType] = useState("");
+  const [datePublic, setDatePublic] = useState(0);
+
+  useEffect(() => {
+    function calcularDiferenciaFechas(fecha1, fecha2) {
+      const diferenciaMilisegundos = fecha2.getTime() - fecha1.getTime();
+
+      const dias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
+      const horas = Math.floor(
+        (diferenciaMilisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutos = Math.floor(diferenciaMilisegundos / (1000 * 60));
+
+      return { dias: dias, horas: horas, minutos: minutos };
+    }
+
+    let date = new Date();
+    let date2 = new Date(comment.createdAt);
+
+    let response = calcularDiferenciaFechas(date2, date);
+    if (response.horas >= 24) {
+      setDatePublic(response.dias);
+      setType("d");
+    } else {
+      if (response.minutos >= 60) {
+        setDatePublic(response.horas);
+        setType("h");
+      } else {
+        setDatePublic(response.minutos);
+        setType("m");
+      }
+    }
+  }, [comment]);
+
+  const handleLike = (e) => {
+    dispatch(
+      likeThreads({
+        id: comment.id,
+        type: "comment",
+        types: "replies"
+      })
+    );
+  }
+
+  return (
+    <>
+      <div className="flex gap-2 w-full flex-wrap mb-1 h-full items-center">
+        <img
+          className="rounded-full w-4 h-4 md:w-4 xl:w-6 xl:h-6"
+          src={
+            comment.author.profilePicture.url === null
+              ? perfil
+              : comment.author.profilePicture.url
+          }
+          alt="Foto de Perfil"
+        />
+        <div className="h-full flex items-center">
+          <p className="flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-[9px] md:text-xs xl:text-sm items-center">
+            {comment.author.username}
+            <FaCircle className="text-Negro text-[5px] md:text-[5px] xl:text-[6px] flex justify-center items-center h-full" />{" "}
+            Hace {datePublic}
+            {type}
+          </p>
+        </div>
+      </div>
+
+      <div className="px-4 flex flex-col gap-2">
+        <p className="text-xs xl:text-sm">{comment.content}</p>
+        <ul className="flex gap-1 md:gap-2 lg:gap-3 flex-wrap font-barolw text-sm md:text-base xl:text-lg">
+          <li
+            onClick={handleLike}
+            className={`${
+              comment.isLiked ? "text-Blanco bg-RojoC" : "text-Negro bg-Blanco"
+            } flex gap-2 items-center justify-center text-sm  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+          >
+            {comment.likeCount}{" "}
+            <AiFillLike className={` text-xs md:text-sm xl:text-base`} />
+          </li>
+          <li className="flex gap-2 items-center text-sm justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+            Reportar{" "}
+            <MdReportProblem className="text-xs md:text-sm xl:text-base" />
+          </li>
+        </ul>
+      </div>
+    </>
+  );
+}

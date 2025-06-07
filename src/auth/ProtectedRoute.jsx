@@ -11,19 +11,25 @@ function ProtectedRoute({ children }) {
 
   useEffect(() => {
     if (sessionActive) {
-      console.log(sessionActive);
-      console.log(currentPath);
       if (
         currentPath === "/login" ||
         currentPath === "/register" ||
-        currentPath === "/recover-password"
+        currentPath === "/recover-password" ||
+        currentPath === "/verify-email"
       ) {
         navigate("/landing");
       } else {
         return;
       }
     } else {
-      navigate("/login");
+      if (
+        currentPath === "/register" ||
+        currentPath === "/recover-password" ||
+        currentPath === "/verify-email"
+      ) {
+      } else {
+        navigate("/login");
+      }
     }
   }, [sessionActive]);
 

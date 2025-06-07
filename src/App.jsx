@@ -17,6 +17,8 @@ import { useDispatch } from "react-redux";
 import { verifySesion } from "./services/auth/authService";
 import { SnackbarProvider } from "notistack";
 import GraduatesProfile from "./views/social/GraduatesProfile";
+import Verifycation from "./views/Verifycation";
+import ForumView from "./views/forums/ForumView";
 
 
 /*Enrutador de la web*/
@@ -131,6 +133,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <MyProfile />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/verify-email",
+    element: (
+      <ProtectedRoute>
+        <Verifycation />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/forums/:forum",
+    element: (
+      <ProtectedRoute>
+        <ForumView />
       </ProtectedRoute>
     ),
   },

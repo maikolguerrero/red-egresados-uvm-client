@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loginUserFetch, logoutSesion, postData, resendEmailFetch, verifySesion } from '../services/auth/authService';
+import { loginUserFetch, logoutSesion, postData, resendEmailFetch, verifyEmail, verifySesion } from '../services/auth/authService';
 
 export const authSlice = createSlice({
   name: 'verification',
@@ -12,7 +12,8 @@ export const authSlice = createSlice({
     email: "",
     id: "",
     username: "",
-    role: ""
+    role: "",
+    verifyEmail: false
   },
   reducers: {
     actived: (state) => {
@@ -99,6 +100,20 @@ export const authSlice = createSlice({
       state.sessionActive = false
     });
     builder.addCase(resendEmailFetch.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(verifyEmail.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(verifyEmail.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+      state.verifyEmail = true
+    });
+    builder.addCase(verifyEmail.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

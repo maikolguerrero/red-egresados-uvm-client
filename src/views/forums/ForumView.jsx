@@ -1,0 +1,61 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Header from "../../Components/Header";
+import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
+import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
+import { FormAddForum } from "../../Components/Forms/Forum/FormAddForum";
+import { FormAddPicture } from "../../Components/Forms/Forum/FormAddPicture";
+import Nav from "../../Components/Nav";
+import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
+import { getThreadsComments } from "../../services/forum/forumService";
+import { InternalForum } from "../../Components/Card/Forum/InternalForum";
+
+function ForumView() {
+  const forumSelect = useSelector((state) => state.forums.forumSelect);
+  const passed = useSelector((state) => state.forums.forumAdd.passed);
+  const dispatch = useDispatch();
+
+  const [openAddForum, setOpendAddForum] = useState(false);
+
+  const currentPath = location.pathname; // Acceder a la ruta actual
+
+  useEffect(() => {
+    dispatch(getThreadsComments({ id: currentPath.split("/")[2] }));
+  }, []);
+
+  return (
+    <>
+      <Header />
+      <div className="h-[10.5vh]"></div>
+
+      <main className="flex relative">
+        <Nav />
+        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
+          <div className="flex flex-col gap-8 w-full">
+            <InternalForum forum={forumSelect} />
+          </div>
+        </section>
+
+        <div className="absolute flex flex-col gap-2 right-8 bottom-6">
+          <ButtonAdd setOpenModal={setOpendAddForum} />
+          <ButtonMessages />
+        </div>
+
+        <ModalNotHeader
+          openModal={openAddForum}
+          setOpenModal={setOpendAddForum}
+          size={"3xl"}
+          component={
+            passed === 0 ? (
+              <FormAddForum />
+            ) : (
+              <FormAddPicture setOpenModal={setOpendAddForum} />
+            )
+          }
+        />
+      </main>
+    </>
+  );
+}
+
+export default ForumView;
