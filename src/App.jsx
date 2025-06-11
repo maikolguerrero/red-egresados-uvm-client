@@ -19,6 +19,7 @@ import { SnackbarProvider } from "notistack";
 import GraduatesProfile from "./views/social/GraduatesProfile";
 import Verifycation from "./views/Verifycation";
 import ForumView from "./views/forums/ForumView";
+import EventView from "./views/events/EventView";
 
 
 /*Enrutador de la web*/
@@ -101,6 +102,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Events />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/events/:event",
+    element: (
+      <ProtectedRoute>
+        <EventView />
       </ProtectedRoute>
     ),
   },

@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
-import { FaCircle, FaComments, FaRegComments, FaShare } from "react-icons/fa";
+import { FaCircle, FaComments, FaEllipsisV, FaRegComments, FaShare } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
-import { likeThreads } from "../../services/forum/forumService";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteForum, likeThreads } from "../../services/forum/forumService";
 import perfil from "../../../public/Perfil.jpg"
 import { useNavigate } from "react-router-dom";
+import { Dropdown, DropdownItem } from "flowbite-react";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { ModalNotHeader } from "../Modals/ModalNotHeader";
+import { FormAddForum } from "../Forms/Forum/FormAddForum";
 
 export function CardForum({ forum }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const username = useSelector((state) => state.auth.username)
 
-  const [type, setType] = useState("")
-  const [datePublic, setDatePublic] = useState(0)
+  const [type, setType] = useState("");
+  const [datePublic, setDatePublic] = useState(0);
+  const [editForum, setEditForum] = useState(false)
 
   useEffect(() => {
     function calcularDiferenciaFechas(fecha1, fecha2) {
@@ -50,24 +56,63 @@ export function CardForum({ forum }) {
     navigate(`/forums/${forum.id}`)
   }
 
+  const handleDelete = (e) => {
+    dispatch(deleteForum({
+      threadId: forum.id
+    }))
+  }
+
   return (
     <article className="flex flex-col gap-1 w-full pb-8 border-b-2 border-verdeD">
-      <div className="flex gap-2 w-ful flex-wrap mb-3">
-        <img
-          className="rounded-full w-6 md:w-8 xl:w-10"
-          src={
-            forum.author.profilePicture.url === null
-              ? perfil
-              : forum.author.profilePicture.url
-          }
-          alt="Foto de Perfil"
-        />
-        <p className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
-          {forum.author.username}
-          <FaCircle className="text-Negro text-[6px] md:text-[9px] xl:text-xs flex justify-center items-center h-full" />{" "}
-          Hace {datePublic}
-          {type === "horas" ? "h" : "d"}
-        </p>
+      <div className="flex justify-between relative">
+        <div className="flex gap-2 w-ful flex-wrap mb-3">
+          <img
+            className="rounded-full w-6 md:w-8 xl:w-10"
+            src={
+              forum.author.profilePicture.url === null
+                ? perfil
+                : forum.author.profilePicture.url
+            }
+            alt="Foto de Perfil"
+          />
+          <p className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
+            {forum.author.username}
+            <FaCircle className="text-Negro text-[6px] md:text-[9px] xl:text-xs flex justify-center items-center h-full" />{" "}
+            Hace {datePublic}
+            {type === "horas" ? "h" : "d"}
+          </p>
+        </div>
+
+        {forum.author.username === username ? (
+          <>
+            <Dropdown
+              inline
+              dismissOnClick={false}
+              label={"a"}
+              renderTrigger={() => (
+                <div className="flex h-full justify-center items-center">
+                  <FaEllipsisV className="hover:cursor-pointer" />
+                </div>
+              )}
+            >
+              <DropdownItem>
+                <span onClick={(e) => setEditForum(true)} className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100">
+                  <MdEdit /> Editar
+                </span>
+              </DropdownItem>
+              <DropdownItem>
+                <span
+                  onClick={handleDelete}
+                  className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                >
+                  <MdDelete /> Eliminar
+                </span>
+              </DropdownItem>
+            </Dropdown>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="flex flex-col gap-1 px-1">
@@ -106,13 +151,20 @@ export function CardForum({ forum }) {
           onClick={handleView}
           className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer"
         >
-          {forum.comments.length}{" "}
+          {forum.commentCount}{" "}
           <FaComments className="text-base md:text-lg xl:text-xl" />
         </li>
         <li className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
           Compartir <FaShare className="text-base md:text-lg xl:text-xl" />
         </li>
       </ul>
+
+      <ModalNotHeader
+        openModal={editForum}
+        setOpenModal={setEditForum}
+        size={"3xl"}
+        component={<FormAddForum forum={forum} type={"edit"} />}
+      />
     </article>
   );
 }

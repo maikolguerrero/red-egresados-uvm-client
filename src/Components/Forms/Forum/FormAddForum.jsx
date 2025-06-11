@@ -1,12 +1,12 @@
 import { Label } from "flowbite-react";
 import { enqueueSnackbar } from "notistack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { typeError, typeInfo } from "../../../models/alertModels";
 import { IoIosAdd } from "react-icons/io";
 import { Skills } from "../../Skills";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
-import { addForum } from "../../../services/forum/forumService";
+import { addForum, editForum } from "../../../services/forum/forumService";
 
 let styles = {
   input:
@@ -15,7 +15,7 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
-export function FormAddForum() {
+export function FormAddForum({forum, type}) {
   const dispatch = useDispatch();
 
   const [tag, setTag] = useState("");
@@ -25,6 +25,19 @@ export function FormAddForum() {
     category: "",
     tags: [],
   });
+
+  useEffect(() => {
+    if (forum === undefined) {
+      return;
+    } else {
+      setValues({
+        title: forum.title,
+        content: forum.content,
+        category: forum.category,
+        tags: forum.tags,
+      });
+    }
+  }, [forum]);
 
   const addTag = (e) => {
     if (tag.trim().length === 0) {
@@ -69,14 +82,22 @@ export function FormAddForum() {
     if (values.category.trim() === "") {
       return enqueueSnackbar("Debe tener categoria el foro", typeError);
     }
-    dispatch(addForum(values));
+    if (forum === undefined) {
+      dispatch(addForum(values));
+    } else {
+      dispatch(editForum({
+        threadId: forum.id,
+        data: values,
+        type: type
+      }))
+    }
   };
 
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          Agregar Foro
+          {forum === undefined ? "Agregar Foro" : "Editar Foro"}
         </h5>
         <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
@@ -179,7 +200,7 @@ export function FormAddForum() {
         </div>
         <ButtonSmall
           className={"bg-verdeD hover:bg-RojoC"}
-          text={"Crear Foro"}
+          text={forum === undefined ? "Crear Foro" : "Editar Foro"}
         />
       </form>
     </>

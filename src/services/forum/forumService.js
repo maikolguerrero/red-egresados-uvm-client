@@ -265,3 +265,78 @@ export const addComment = createAsyncThunk(
     }
   }
 );
+
+export const deleteForum = createAsyncThunk(
+  "authSlice/deleteForum", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        "http://localhost:3000" + `/api/forum/threads/${data.threadId}`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "DELETE", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      let datas = await response.json();
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess);
+        return {
+          idThread: data.threadId,
+          message: datas.message,
+        };
+      } else {
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const editForum = createAsyncThunk(
+  "authSlice/editForum", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        "http://localhost:3000" + `/api/forum/threads/${data.threadId}`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "PATCH", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data.data)
+        }
+      );
+
+      let datas = await response.json();
+      if (datas.success) {
+        enqueueSnackbar("Se edito el foro", typeSuccess);
+        return {
+          idThread: data.threadId,
+          message: "Se edito el foro",
+          data: datas.data,
+          type: data.type
+        };
+      } else {
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);

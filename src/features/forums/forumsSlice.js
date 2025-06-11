@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addComment, addForum, addPictureForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
+import { addComment, addForum, addPictureForum, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
 
 export const forumsSlice = createSlice({
   name: "forums",
@@ -157,6 +157,60 @@ export const forumsSlice = createSlice({
       }
     });
     builder.addCase(addComment.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteForum.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteForum.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      let newForums = state.forums.filter((item) => item.id !== action.payload.idThread)
+      state.forums = newForums;
+      if (state.forumSelect.id === action.payload.idThread) {
+        state.forumSelect = {}
+      }
+    });
+    builder.addCase(deleteForum.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(editForum.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(editForum.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      if (action.payload.type === "edit") {
+        let newForums = [];
+        for (let i = 0; i < state.forums.length; i++) {
+          if (state.forums[i].id === action.payload.idThread) {
+            let forumEdit = state.forums[i];
+            forumEdit.title = action.payload.data.title;
+            forumEdit.content = action.payload.data.content;
+            forumEdit.category = action.payload.data.category;
+            forumEdit.tags = action.payload.data.tags;
+            newForums.push(forumEdit);
+          } else {
+            newForums.push(state.forums[i]);
+          }
+        }
+        state.forums = newForums;
+      } else {
+        let forumEdit = state.forumSelect;
+        forumEdit.title = action.payload.data.title;
+        forumEdit.content = action.payload.data.content;
+        forumEdit.category = action.payload.data.category;
+        forumEdit.tags = action.payload.data.tags;
+        state.forumSelect = forumEdit;
+      }
+    });
+    builder.addCase(editForum.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

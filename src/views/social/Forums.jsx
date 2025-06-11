@@ -41,7 +41,7 @@ const customTheme = createTheme({
 function Forums() {
   const passed = useSelector((state) => state.forums.forumAdd.passed);
   const pagination = useSelector((state) => state.forums.pagination);
-  const forums = useSelector((state) => state.forums.forums)
+  const forums = useSelector((state) => state.forums.forums);
   const dispatch = useDispatch();
 
   const [openAddForum, setOpendAddForum] = useState(false);

@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CardEvent } from "../../Components/Card/CardEvent";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
+import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
+import { useDispatch, useSelector } from "react-redux";
+import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
+import { FormAddEvent } from "../../Components/Forms/Event/FormAddEvent";
+import { FormAddPictureE } from "../../Components/Forms/Event/FormAddPictureE";
+import { searchEvent } from "../../services/events/eventsService";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -36,12 +42,30 @@ const customTheme = createTheme({
 });
 
 function Events() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(6);
+  const role = useSelector((state) => state.auth.role);
+  const passed = useSelector((state) => state.events.eventAdd.passed);
+  const pagination = useSelector((state) => state.events.pagination);
+  const events = useSelector((state) => state.events.events);
+  const dispatch = useDispatch();
 
-  const max = Math.ceil(data.length / perPage);
+  const [openAddEvent, setOpendAddEvent] = useState(false)
 
-  const onPageChange = (page) => setCurrentPage(page);
+  useEffect(() => {
+    dispatch(
+      searchEvent({
+        page: pagination.page,
+        limit: pagination.limit,
+      })
+    );
+  }, []);
+
+  const onPageChange = (page) =>
+    dispatch(
+      searchEvent({
+        page: page,
+        limit: pagination.limit,
+      })
+    );
 
   return (
     <>
@@ -52,17 +76,11 @@ function Events() {
         <Nav />
         <div className="w-full px-3 py-12 md:px-6 lg:px-16 gap-14 grid grid-cols-1 items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
           <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {data
-              .slice(
-                (currentPage - 1) * perPage,
-                (currentPage - 1) * perPage + perPage
-              )
-              .map((item, key) => (
+            {events
+              .map((item) => (
                 <CardEvent
-                  key={item}
-                  image={
-                    "https://uvm.edu.ve/wp-content/uploads/2024/06/IMG_20240610_100508_602-1080x675.jpg"
-                  }
+                  key={item.id}
+                  event={item}
                 />
               ))}
           </section>
@@ -72,17 +90,35 @@ function Events() {
               <Pagination
                 theme={customTheme}
                 className="border-verdeD"
-                currentPage={currentPage}
-                totalPages={max}
+                currentPage={pagination.page}
+                totalPages={pagination.pages}
                 onPageChange={onPageChange}
               />
             </ThemeProvider>
           </div>
         </div>
 
-        <div className="absolute right-8 bottom-6">
+        <div className="absolute right-8 bottom-6 flex flex-col gap-2">
+          {role === "egresado" ? (
+            <></>
+          ) : (
+            <ButtonAdd setOpenModal={setOpendAddEvent} />
+          )}
           <ButtonMessages />
         </div>
+
+        <ModalNotHeader
+          openModal={openAddEvent}
+          setOpenModal={setOpendAddEvent}
+          size={"3xl"}
+          component={
+            passed === 0 ? (
+              <FormAddEvent />
+            ) : (
+              <FormAddPictureE setOpenModal={setOpendAddEvent} />
+            )
+          }
+        />
       </main>
     </>
   );
