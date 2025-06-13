@@ -83,7 +83,11 @@ export const searchForum = createAsyncThunk(
       // Realizar la solicitud POST
       const response = await fetch(
         "http://localhost:3000" +
-          `/api/forum/threads?page=${data.page}&limit=${data.limit}`,
+          `/api/forum/threads?page=${data.page}&limit=${data.limit}${
+            data.category === null || data.category === undefined ? "" : "&category=" + data.category
+          }${
+            data.search === null || data.search === undefined ? "" : "&search=" + data.search
+          }`,
         {
           mode: "cors",
           credentials: "include",

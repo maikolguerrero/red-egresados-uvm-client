@@ -1,8 +1,24 @@
 import { FaLocationDot, FaPeopleGroup, FaPeopleRoof } from "react-icons/fa6";
 import { GiDiploma } from "react-icons/gi";
-import { IoIosPeople } from "react-icons/io";
+import { IoIosCamera, IoIosPeople } from "react-icons/io";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteEvent } from "../../../services/events/eventsService";
+import { Dropdown, DropdownItem } from "flowbite-react";
+import { FaEllipsisV } from "react-icons/fa";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { ModalNotHeader } from "../../Modals/ModalNotHeader";
+import { FormAddEvent } from "../../Forms/Event/FormAddEvent";
+import { useState } from "react";
 
 export function InternalEvent({ event }) {
+  const dispatch = useDispatch();
+  const role = useSelector((state) => state.auth.role);
+
+  const [openEditEvent, setOpenEditEvent] = useState(false);
+
+  const handleDelete = (e) => {
+    dispatch(deleteEvent({ eventId: event.id }));
+  };
 
   return (
     <>
@@ -16,9 +32,47 @@ export function InternalEvent({ event }) {
         <>
           <article className="flex flex-col gap-10 w-full font-barolw">
             <div className="h-full flex flex-col gap-2">
-              <h4 className="text-base md:text-lg xl:text-xl font-bold tracking-tight text-Negro uppercase">
-                {event.title}
-              </h4>
+              <div className="flex gap-4 justify-between">
+                <h4 className="text-base md:text-lg xl:text-xl font-bold tracking-tight text-Negro uppercase">
+                  {event.title}
+                </h4>
+                {role === "egresado" ? (
+                  <></>
+                ) : (
+                  <>
+                    <Dropdown
+                      label=""
+                      dismissOnClick={false}
+                      renderTrigger={() => (
+                        <div className="flex h-full justify-center items-center">
+                          <FaEllipsisV className="hover:cursor-pointer" />
+                        </div>
+                      )}
+                    >
+                      <DropdownItem onClick={(e) => setOpenEditEvent(true)} className="flex gap-2 items-center text-Negro">
+                        <MdEdit /> Editar Evento
+                      </DropdownItem>
+                      <DropdownItem className="flex gap-2 items-center text-Negro">
+                        <IoIosCamera /> Editar Imagen
+                      </DropdownItem>
+                      <DropdownItem
+                        onClick={handleDelete}
+                        className="flex gap-2 items-center text-Negro"
+                      >
+                        <MdDelete /> Eliminar Evento
+                      </DropdownItem>
+                    </Dropdown>
+                    <ModalNotHeader
+                      openModal={openEditEvent}
+                      setOpenModal={setOpenEditEvent}
+                      size={"3xl"}
+                      component={
+                        <FormAddEvent eventSelect={event} type={"internal"} />
+                      }
+                    />
+                  </>
+                )}
+              </div>
               <h5 className="text-RojoC text-sm md:text-base xl:text-lg font-semibold h-full flex flex-col">
                 <span>{event.startDate.split("T")[0]}</span>
                 <span>
@@ -38,7 +92,7 @@ export function InternalEvent({ event }) {
               {event.tags.length === 0 ? (
                 <></>
               ) : (
-                <ul className="flex mb-2">
+                <ul className="flex mb-2 gap-2">
                   {event.tags.map((item, key) => (
                     <li
                       className="py-1 px-3 rounded-full font-medium font-barolw bg-verdeA w-auto text-xs md:text-sm"

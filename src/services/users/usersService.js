@@ -44,7 +44,14 @@ export const getUsers = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/alumni/search",
+        "http://localhost:3000" +
+          `/api/alumni/search?page=${data.page}&limit=${data.limit}${
+            data.query === null || data.query === undefined ? "" : "&query=" + data.query
+          }${
+            data.degree === null || data.degree === undefined ? "" : "&degree=" + data.degree
+          }${
+            data.location === null || data.location === undefined ? "" : "&location=" + data.location
+          }`,
         {
           mode: "cors",
           credentials: "include",
@@ -55,6 +62,14 @@ export const getUsers = createAsyncThunk(
         }
       );
 
+      console.log("http://localhost:3000" +
+          `/api/alumni/search?page=${data.page}&limit=${data.limit}${
+            data.query === null || data.query === undefined ? "" : "?query=" + data.query
+          }${
+            data.degree === null || data.degree === undefined ? "" : "?degree=" + data.degree
+          }${
+            data.location === null || data.location === undefined ? "" : "?location=" + data.location
+          }`)
       let datas = await response.json();
       console.log(datas)
       if (datas.success) {

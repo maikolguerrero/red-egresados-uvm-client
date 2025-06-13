@@ -10,6 +10,7 @@ import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
 import { FormAddEvent } from "../../Components/Forms/Event/FormAddEvent";
 import { FormAddPictureE } from "../../Components/Forms/Event/FormAddPictureE";
 import { searchEvent } from "../../services/events/eventsService";
+import FilterEvents from "../../Components/Forms/Event/FilterEvents";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -41,6 +42,12 @@ const customTheme = createTheme({
   },
 });
 
+let defaultValues = {
+  type: "",
+  search: "",
+  upcoming: "",
+};
+
 function Events() {
   const role = useSelector((state) => state.auth.role);
   const passed = useSelector((state) => state.events.eventAdd.passed);
@@ -48,7 +55,8 @@ function Events() {
   const events = useSelector((state) => state.events.events);
   const dispatch = useDispatch();
 
-  const [openAddEvent, setOpendAddEvent] = useState(false)
+  const [openAddEvent, setOpendAddEvent] = useState(false);
+  const [values, setValues] = useState({});
 
   useEffect(() => {
     dispatch(
@@ -59,13 +67,21 @@ function Events() {
     );
   }, []);
 
-  const onPageChange = (page) =>
+  useEffect(() => {
+    setValues(defaultValues);
+  }, []);
+
+  const onPageChange = (page) => {
     dispatch(
       searchEvent({
         page: page,
         limit: pagination.limit,
+        type: values.type.trim() === "" ? null : values.type,
+        search: values.search.trim() === "" ? null : values.search,
+        upcoming: values.upcoming.trim() === "" ? null : values.upcoming,
       })
     );
+  };
 
   return (
     <>
@@ -74,28 +90,44 @@ function Events() {
 
       <main className="flex relative">
         <Nav />
-        <div className="w-full px-3 py-12 md:px-6 lg:px-16 gap-14 grid grid-cols-1 items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {events
-              .map((item) => (
-                <CardEvent
-                  key={item.id}
-                  event={item}
-                />
-              ))}
+        <div className="w-full px-3 py-12 md:px-6 lg:px-16 gap-14 grid grid-cols-1 h-[89.5vh] overflow-y-scroll overflow-x-auto">
+          <section className="w-full pb-8 border-b-2 border-verdeD">
+            <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+              Menu de filtrado
+            </h3>
+            <FilterEvents values={values} setValues={setValues} />
           </section>
 
-          <div className="flex overflow-x-auto sm:justify-center">
-            <ThemeProvider theme={customTheme}>
-              <Pagination
-                theme={customTheme}
-                className="border-verdeD"
-                currentPage={pagination.page}
-                totalPages={pagination.pages}
-                onPageChange={onPageChange}
-              />
-            </ThemeProvider>
-          </div>
+          {events.length === 0 ? (
+            <>
+              {" "}
+              <h4 className="font-barolw flex items-start h-full justify-center text-lg font-semibold px-2 text-RojoC uppercase">
+                No se encontraron eventos con ese filtrado
+              </h4>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col gap-4">
+                <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {events.map((item) => (
+                    <CardEvent key={item.id} event={item} />
+                  ))}
+                </section>
+
+                <div className="flex overflow-x-auto sm:justify-center">
+                  <ThemeProvider theme={customTheme}>
+                    <Pagination
+                      theme={customTheme}
+                      className="border-verdeD"
+                      currentPage={pagination.page}
+                      totalPages={pagination.pages}
+                      onPageChange={onPageChange}
+                    />
+                  </ThemeProvider>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="absolute right-8 bottom-6 flex flex-col gap-2">

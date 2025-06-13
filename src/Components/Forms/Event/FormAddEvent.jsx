@@ -1,5 +1,5 @@
 import { enqueueSnackbar } from "notistack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { typeError, typeInfo } from "../../../models/alertModels";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { addComment } from "../../../services/forum/forumService";
 import { Label } from "flowbite-react";
 import { Skills } from "../../Skills";
 import { IoIosAdd } from "react-icons/io";
-import { addEvent } from "../../../services/events/eventsService";
+import { addEvent, editEvent } from "../../../services/events/eventsService";
 
 let styles = {
   input:
@@ -16,7 +16,7 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
-export function FormAddEvent({ eventSelect }) {
+export function FormAddEvent({ eventSelect, type }) {
   const dispatch = useDispatch();
 
   const [tag, setTag] = useState("");
@@ -37,15 +37,28 @@ export function FormAddEvent({ eventSelect }) {
     tags: [],
     isActive: true,
   });
-  const [picture, setPicture] = useState("");
-  const [image, setImage] = useState(false);
 
-  const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImage(URL.createObjectURL(event.target.files[0]));
-      setPicture(event.target.files[0]);
+  useEffect(() => {
+    if (eventSelect === undefined) {
+      return;
+    } else {
+      setValues({
+        title: eventSelect.title,
+        description: eventSelect.description,
+        eventType: eventSelect.eventType,
+        location: eventSelect.location,
+        capacity: eventSelect.capacity,
+        virtualLink: eventSelect.virtualLink,
+        startDate: eventSelect.startDate.split(".")[0],
+        endDate: eventSelect.endDate.split(".")[0],
+        certificate: eventSelect.certificate,
+        organizers: eventSelect.organizers,
+        specialGuests: eventSelect.specialGuests,
+        tags: eventSelect.tags,
+        isActive: eventSelect.isActive,
+      });
     }
-  };
+  }, [eventSelect]);
 
   const addTag = (e) => {
     if (tag.trim().length === 0) {
@@ -157,7 +170,15 @@ export function FormAddEvent({ eventSelect }) {
         return enqueueSnackbar("Debes tener minimo 1 organizador", typeError);
     }
 
-    dispatch(addEvent(values))
+    if (eventSelect === undefined) {
+      dispatch(addEvent(values))
+    } else {
+      dispatch(editEvent({
+        eventId: eventSelect.id,
+        data: values,
+        type: type
+      }))
+    }
   };
 
   return (
@@ -245,6 +266,22 @@ export function FormAddEvent({ eventSelect }) {
             />
           </div>
 
+          <div className="w-full flex flex-col relative">
+            <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+              Status del evento:
+            </Label>
+            <select
+              className={styles.input}
+              type="text"
+              name="isActive"
+              value={values.isActive}
+              onChange={handleInputChange}
+            >
+              <option value={true}>Activo</option>
+              <option value={false}>Inactivo</option>
+            </select>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
@@ -293,7 +330,7 @@ export function FormAddEvent({ eventSelect }) {
               />
             </div>
 
-           <div className="w-full flex flex-col relative">
+            <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Fecha y hora de inicio:
               </Label>
@@ -397,7 +434,11 @@ export function FormAddEvent({ eventSelect }) {
                   <ul className="flex gap-2">
                     {values.organizers.map((item, key) => (
                       <li>
-                        <Skills key={key} text={item} onClick={deleteOrganizer} />
+                        <Skills
+                          key={key}
+                          text={item}
+                          onClick={deleteOrganizer}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -446,7 +487,11 @@ export function FormAddEvent({ eventSelect }) {
                   <ul className="flex gap-2">
                     {values.specialGuests.map((item, key) => (
                       <li>
-                        <Skills key={key} text={item} onClick={deleteEspecial} />
+                        <Skills
+                          key={key}
+                          text={item}
+                          onClick={deleteEspecial}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -458,7 +503,7 @@ export function FormAddEvent({ eventSelect }) {
 
         <ButtonSmall
           className={"bg-verdeD hover:bg-RojoC"}
-          text={"Crear evento"}
+          text={eventSelect === undefined ? "Crear evento" : "Editar evento"}
         />
       </form>
     </>

@@ -7,9 +7,9 @@ export const usersSlice = createSlice({
     users: [],
     pagination: {
       total: 0,
-      page: 0,
+      page: 1,
       pages: 0,
-      limit: 0,
+      limit: 12,
     },
     loading: false,
     error: "",

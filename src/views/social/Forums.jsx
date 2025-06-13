@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormAddPicture } from "../../Components/Forms/Forum/FormAddPicture";
 import { searchForum } from "../../services/forum/forumService";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
+import FilterForums from "../../Components/Forms/Forum/FilterForums";
 
 const customTheme = createTheme({
   base: "",
@@ -38,6 +39,11 @@ const customTheme = createTheme({
   },
 });
 
+let defaultValues = {
+  category: "",
+  search: ""
+};
+
 function Forums() {
   const passed = useSelector((state) => state.forums.forumAdd.passed);
   const pagination = useSelector((state) => state.forums.pagination);
@@ -45,6 +51,11 @@ function Forums() {
   const dispatch = useDispatch();
 
   const [openAddForum, setOpendAddForum] = useState(false);
+  const [values, setValues] = useState({});
+
+  useEffect(() => {
+    setValues(defaultValues);
+  }, []);
 
   useEffect(() => {
     dispatch(searchForum({
@@ -53,10 +64,15 @@ function Forums() {
     }))
   }, [])
 
-  const onPageChange = (page) => dispatch(searchForum({
-    page: page,
-    limit: pagination.limit
-  }));
+  const onPageChange = (page) =>
+    dispatch(
+      searchForum({
+        page: page,
+        limit: pagination.limit,
+        category: values.category.trim() === "" ? null : values.category,
+        search: values.search.trim() === "" ? null : values.search,
+      })
+    );
 
   return (
     <>
@@ -65,24 +81,40 @@ function Forums() {
 
       <main className="flex relative">
         <Nav />
-        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <div className="flex flex-col gap-8">
-            {forums
-              .slice((pagination.page - 1) * pagination.limit, (pagination.page - 1) * pagination.limit + pagination.limit)
-              .map((item) => (
-                <CardForum forum={item} key={item.id} />
-              ))}
-          </div>
 
-          <ThemeProvider theme={customTheme}>
-            <Pagination
-              theme={customTheme}
-              className="border-verdeD"
-              currentPage={pagination.page}
-              totalPages={pagination.pages}
-              onPageChange={onPageChange}
-            />
-          </ThemeProvider>
+        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
+          <article className="w-full pb-8 border-b-2 border-verdeD mb-8">
+            <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+              Menu de filtrado
+            </h3>
+            <FilterForums values={values} setValues={setValues} />
+          </article>
+
+          {forums.length === 0 ? (
+            <>
+              <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                No se encontraron foros con ese filtrado
+              </h4>
+            </>
+          ) : (
+            <>
+              <div className="flex flex-col gap-8 w-full">
+                {forums.map((item) => (
+                  <CardForum forum={item} key={item.id} />
+                ))}
+              </div>
+
+              <ThemeProvider theme={customTheme}>
+                <Pagination
+                  theme={customTheme}
+                  className="border-verdeD"
+                  currentPage={pagination.page}
+                  totalPages={pagination.pages}
+                  onPageChange={onPageChange}
+                />
+              </ThemeProvider>
+            </>
+          )}
         </section>
 
         <div className="absolute flex flex-col gap-2 right-8 bottom-6">

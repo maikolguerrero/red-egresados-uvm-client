@@ -16,8 +16,6 @@ function EventView() {
   const eventSelect = useSelector((state) => state.events.eventSelect);
   const dispatch = useDispatch();
 
-  const [openAddForum, setOpendAddForum] = useState(false);
-
   const currentPath = location.pathname; // Acceder a la ruta actual
 
   useEffect(() => {

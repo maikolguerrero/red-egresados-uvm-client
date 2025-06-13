@@ -7,6 +7,7 @@ import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../services/users/usersService";
 import { onChangePage } from "../../features/users/usersSlice";
+import FilterGraduates from "../../Components/Forms/Graduates/FilterGraduates";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -31,12 +32,17 @@ const customTheme = createTheme({
     },
     selector: {
       base: "w-12 border border-verdeD bg-Gris py-2 leading-tight text-Negro enabled:hover:bg-white enabled:hover:text-verdeD",
-      active:
-        "bg-cyan-50 text-RojoC hover:bg-white hover:text-verdeD",
+      active: "bg-cyan-50 text-RojoC hover:bg-white hover:text-verdeD",
       disabled: "cursor-not-allowed opacity-50",
     },
   },
 });
+
+let defaultValues = {
+  query: "",
+  location: "",
+  degree: "",
+};
 
 function Graduates() {
   const dispatch = useDispatch()
@@ -46,16 +52,32 @@ function Graduates() {
   const page = useSelector((state) => state.users.pagination.page)
   const limit = useSelector((state) => state.users.pagination.limit)
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(12);
+  const [values, setValues] = useState({});
 
   useEffect(() => {
-    dispatch(getUsers())
+    setValues(defaultValues);
+  }, []);
+
+  useEffect(() => {
+    dispatch(getUsers({
+      page: page,
+      limit: limit
+    }))
   }, [])
 
-  const max = Math.ceil(data.length / perPage);
+  const onPageChange = (page) => {
+    dispatch(
+      getUsers({
+        page: page,
+        limit: limit,
+        query: values.query.trim() === "" ? null : values.query,
+        location: values.location.trim() === "" ? null : values.location,
+        degree: values.degree.trim() === "" ? null : values.degree,
+      })
+    );
+  }
+    
 
-  const onPageChange = (page) => dispatch(onChangePage(page));
   return (
     <>
       <Header />
@@ -64,29 +86,40 @@ function Graduates() {
       <main className="flex relative">
         <Nav />
         <div className="w-full px-3 py-12 md:px-6 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <div className="flex flex-col gap-6 items-center">
-            <section className="flex gap-6 flex-wrap justify-center">
-              {users
-                .slice(
-                  (page - 1) * limit,
-                  (page - 1) * limit + limit
-                )
-                .map((item, key) => (
-                  <CardGraduate user={item} key={item.id} />
-                ))
-              }
+          <div className="flex flex-col gap-6 items-center w-full">
+            <section className="w-full pb-6 mb-8 border-b-2 border-verdeD">
+              <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+                Menu de filtrado
+              </h3>
+              <FilterGraduates values={values} setValues={setValues} />
             </section>
-            <div className="flex overflow-x-auto sm:justify-center">
-              <ThemeProvider theme={customTheme}>
-                <Pagination
-                  theme={customTheme}
-                  className="border-verdeD"
-                  currentPage={page}
-                  totalPages={pages}
-                  onPageChange={onPageChange}
-                />
-              </ThemeProvider>
-            </div>
+
+            {users.length === 0 ? (
+              <>
+                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                  No se encontraron egresados con ese filtrado
+                </h4>
+              </>
+            ) : (
+              <>
+                <section className="flex gap-6 flex-wrap justify-center">
+                  {users.map((item, key) => (
+                    <CardGraduate user={item} key={item.id} />
+                  ))}
+                </section>
+                <div className="flex overflow-x-auto sm:justify-center">
+                  <ThemeProvider theme={customTheme}>
+                    <Pagination
+                      theme={customTheme}
+                      className="border-verdeD"
+                      currentPage={page}
+                      totalPages={pages}
+                      onPageChange={onPageChange}
+                    />
+                  </ThemeProvider>
+                </div>
+              </>
+            )}
           </div>
         </div>
 

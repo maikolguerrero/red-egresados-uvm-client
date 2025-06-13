@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addEvent, addPictureEvent, getEvent, searchEvent } from '../../services/events/eventsService';
+import { addAgenda, addEvent, addPictureEvent, deleteAgenda, deleteEvent, editEvent, getEvent, searchEvent } from '../../services/events/eventsService';
+import { useSelector } from 'react-redux';
 
 export const eventsSlice = createSlice({
   name: "forums",
@@ -18,7 +19,7 @@ export const eventsSlice = createSlice({
   reducers: {
     finishEventAdd: (state) => {
       let newEvent = state.eventAdd.data;
-      state.events = [...state.events, newEvent]
+      state.events = [...state.events, newEvent];
       state.eventAdd = {
         data: null,
         passed: 0,
@@ -72,7 +73,7 @@ export const eventsSlice = createSlice({
       state.loading = false;
       state.message = action.payload.message;
       state.events = action.payload.events;
-      state.pagination = action.payload.pagination
+      state.pagination = action.payload.pagination;
     });
     builder.addCase(searchEvent.rejected, (state, action) => {
       state.loading = false;
@@ -89,6 +90,100 @@ export const eventsSlice = createSlice({
       state.eventSelect = action.payload.eventSelected;
     });
     builder.addCase(getEvent.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteEvent.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteEvent.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      let newEvents = state.events.filter(
+        (item) => item.id !== action.payload.eventId
+      );
+      state.events = newEvents;
+      if (state.eventSelect.id === action.payload.eventId) {
+        state.eventSelect = {};
+      }
+    });
+    builder.addCase(deleteEvent.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(editEvent.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(editEvent.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      if (action.payload.type === "edit") {
+        let newEvents = [];
+        for (let i = 0; i < state.events.length; i++) {
+          if (state.events[i].id === action.payload.eventId) {
+            newEvents.push(action.payload.data);
+          } else {
+            newEvents.push(state.events[i]);
+          }
+        }
+        state.events = newEvents;
+      } else {
+        state.eventSelect = action.payload.data;
+      }
+    });
+    builder.addCase(editEvent.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(addAgenda.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(addAgenda.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      let newsEvents = []
+      for (let i = 0; i < state.events.length; i++) {
+        if (state.events[i].id === action.payload.eventId) {
+          let editEvent = state.events[i];
+          editEvent.savedByUsers = [...editEvent.savedByUsers, action.payload.userId];
+          newsEvents.push(editEvent);
+        } else {
+          newsEvents.push(state.events[i]);
+        }
+      }
+      state.events = newsEvents;
+    });
+    builder.addCase(addAgenda.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteAgenda.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteAgenda.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      let newsEvents = []
+      for (let i = 0; i < state.events.length; i++) {
+        if (state.events[i].id === action.payload.eventId) {
+          let editEvent = state.events[i]
+          editEvent.savedByUsers = editEvent.savedByUsers.filter((item) => item !== action.payload.userId);
+          newsEvents.push(editEvent)
+        } else {
+          newsEvents.push(state.events[i]);
+        }
+      }
+      state.events = newsEvents;
+    });
+    builder.addCase(deleteAgenda.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
