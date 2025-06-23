@@ -20,6 +20,7 @@ import GraduatesProfile from "./views/social/GraduatesProfile";
 import Verifycation from "./views/Verifycation";
 import ForumView from "./views/forums/ForumView";
 import EventView from "./views/events/EventView";
+import ProjectView from "./views/projects/ProjectView";
 
 
 /*Enrutador de la web*/
@@ -118,6 +119,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Proyects />
+      </ProtectedRoute>
+    ),
+  },
+    {
+    path: "/proyects/:proyect",
+    element: (
+      <ProtectedRoute>
+        <ProjectView />
       </ProtectedRoute>
     ),
   },

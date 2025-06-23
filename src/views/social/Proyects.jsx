@@ -2,8 +2,14 @@ import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { CardProyect } from "../../Components/Card/CardProyect";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
+import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
+import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
+import { FormAddProyect } from "../../Components/Forms/Proyects/FormAddProyect";
+import { searchProyect } from "../../services/proyects/proyectService";
+import { useDispatch, useSelector } from "react-redux";
+import { Loader } from "../../Components/Loader";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -35,10 +41,26 @@ const customTheme = createTheme({
 });
 
 function Proyects() {
+  const pagination = useSelector((state) => state.proyects.pagination);
+  const proyects = useSelector((state) => state.proyects.proyects);
+  const loading = useSelector((state) => state.proyects.loadingPage);
+  const dispatch = useDispatch();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(8);
 
   const max = Math.ceil(data.length / perPage);
+
+  const [openAddProyect, setOpendAddProyect] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      searchProyect({
+        page: pagination.page,
+        limit: pagination.limit,
+      })
+    );
+  }, []);
 
   const onPageChange = (page) => setCurrentPage(page);
   return (
@@ -48,33 +70,44 @@ function Proyects() {
 
       <main className="flex relative">
         <Nav />
-        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh]  overflow-y-scroll overflow-x-auto">
-          <div className="w-full gap-6 justify-center flex-wrap flex">
-            {data
-              .slice(
-                (currentPage - 1) * perPage,
-                (currentPage - 1) * perPage + perPage
-              )
-              .map((item, key) => (
-                <CardProyect key={item} />
-              ))}
-          </div>
-          <div className="flex justify-center">
-            <ThemeProvider theme={customTheme}>
-              <Pagination
-                theme={customTheme}
-                className="border-verdeD"
-                currentPage={currentPage}
-                totalPages={max}
-                onPageChange={onPageChange}
-              />
-            </ThemeProvider>
-          </div>
-        </section>
+        {loading ? (
+          <section className="h-[89.5vh] flex justify-center items-center w-full">
+            <Loader />
+          </section>
+        ) : (
+          <>
+            <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh]  overflow-y-scroll overflow-x-auto">
+              <div className="w-full gap-6 justify-center flex-wrap flex">
+                {proyects.map((item) => (
+                  <CardProyect key={item.id} proyect={item} />
+                ))}
+              </div>
+              <div className="flex justify-center">
+                <ThemeProvider theme={customTheme}>
+                  <Pagination
+                    theme={customTheme}
+                    className="border-verdeD"
+                    currentPage={pagination.page}
+                    totalPages={pagination.pages}
+                    onPageChange={onPageChange}
+                  />
+                </ThemeProvider>
+              </div>
+            </section>
 
-        <div className="absolute right-8 bottom-6">
-          <ButtonMessages />
-        </div>
+            <div className="absolute right-8 bottom-6 flex flex-col gap-2">
+              <ButtonAdd setOpenModal={setOpendAddProyect} />
+              <ButtonMessages />
+            </div>
+          </>
+        )}
+
+        <ModalNotHeader
+          openModal={openAddProyect}
+          setOpenModal={setOpendAddProyect}
+          size={"3xl"}
+          component={<FormAddProyect />}
+        />
       </main>
     </>
   );
