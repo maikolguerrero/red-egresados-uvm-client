@@ -417,6 +417,7 @@ export const leaveProyect = createAsyncThunk(
         return {
           message: datas.message,
           projectId: data.projectId,
+          username: data.username
         }
       } else {
         throw `${datas.message}`;

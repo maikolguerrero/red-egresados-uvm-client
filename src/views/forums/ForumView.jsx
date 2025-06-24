@@ -9,10 +9,12 @@ import Nav from "../../Components/Nav";
 import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
 import { getThreadsComments } from "../../services/forum/forumService";
 import { InternalForum } from "../../Components/Card/Forum/InternalForum";
+import { Loader } from "../../Components/Loader";
 
 function ForumView() {
   const forumSelect = useSelector((state) => state.forums.forumSelect);
   const passed = useSelector((state) => state.forums.forumAdd.passed);
+  const loading = useSelector((state) => state.forums.loadingPage);
   const dispatch = useDispatch();
 
   const [openAddForum, setOpendAddForum] = useState(false);
@@ -31,9 +33,15 @@ function ForumView() {
       <main className="flex relative">
         <Nav />
         <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <div className="flex flex-col gap-8 w-full">
-            <InternalForum forum={forumSelect} />
-          </div>
+          {loading ? (
+            <section className="h-full flex justify-center items-center w-full">
+              <Loader />
+            </section>
+          ) : (
+            <div className="flex flex-col gap-8 w-full">
+              <InternalForum forum={forumSelect} />
+            </div>
+          )}
         </section>
 
         <div className="absolute flex flex-col gap-2 right-8 bottom-6">

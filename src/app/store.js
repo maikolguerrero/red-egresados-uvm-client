@@ -4,6 +4,11 @@ import usersReducer from '../features/users/usersSlice'
 import forumsReducer from '../features/forums/forumsSlice'
 import eventsReducer from '../features/events/eventsSlice'
 import proyectsReducer from '../features/proyects/proyectsSlice'
+import socketReducer from '../features/socket/socketSlice';
+import chatReducer from '../features/chatSlice';
+import sidebarReducer from '../features/sidebar/sidebarSlice';
+import notificationReducer from '../features/notifications/notificationSlice';
+
 
 export default configureStore({
   reducer: {
@@ -11,6 +16,10 @@ export default configureStore({
     users: usersReducer,
     forums: forumsReducer,
     events: eventsReducer,
-    proyects: proyectsReducer
+    proyects: proyectsReducer,
+    chat: chatReducer,
+    socket: socketReducer,
+    sidebar: sidebarReducer,
+    notifications: notificationReducer,
   },
-})
+});

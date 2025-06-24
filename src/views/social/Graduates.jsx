@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../services/users/usersService";
 import { onChangePage } from "../../features/users/usersSlice";
 import FilterGraduates from "../../Components/Forms/Graduates/FilterGraduates";
+import { Loader } from "../../Components/Loader";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -47,10 +48,10 @@ let defaultValues = {
 function Graduates() {
   const dispatch = useDispatch()
   const users = useSelector((state) => state.users.users)
-  const total = useSelector((state) => state.users.pagination.total)
   const pages = useSelector((state) => state.users.pagination.pages)
   const page = useSelector((state) => state.users.pagination.page)
   const limit = useSelector((state) => state.users.pagination.limit)
+  const loading = useSelector((state) => state.users.loadingPage)
 
   const [values, setValues] = useState({});
 
@@ -94,30 +95,38 @@ function Graduates() {
               <FilterGraduates values={values} setValues={setValues} />
             </section>
 
-            {users.length === 0 ? (
-              <>
-                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                  No se encontraron egresados con ese filtrado
-                </h4>
-              </>
+            {loading ? (
+              <section className="h-full flex justify-center items-center w-full">
+                <Loader />
+              </section>
             ) : (
               <>
-                <section className="flex gap-6 flex-wrap justify-center">
-                  {users.map((item, key) => (
-                    <CardGraduate user={item} key={item.id} />
-                  ))}
-                </section>
-                <div className="flex overflow-x-auto sm:justify-center">
-                  <ThemeProvider theme={customTheme}>
-                    <Pagination
-                      theme={customTheme}
-                      className="border-verdeD"
-                      currentPage={page}
-                      totalPages={pages}
-                      onPageChange={onPageChange}
-                    />
-                  </ThemeProvider>
-                </div>
+                {users.length === 0 ? (
+                  <>
+                    <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                      No se encontraron egresados con ese filtrado
+                    </h4>
+                  </>
+                ) : (
+                  <>
+                    <section className="flex gap-6 flex-wrap justify-center">
+                      {users.map((item, key) => (
+                        <CardGraduate user={item} key={item.id} />
+                      ))}
+                    </section>
+                    <div className="flex overflow-x-auto sm:justify-center">
+                      <ThemeProvider theme={customTheme}>
+                        <Pagination
+                          theme={customTheme}
+                          className="border-verdeD"
+                          currentPage={page}
+                          totalPages={pages}
+                          onPageChange={onPageChange}
+                        />
+                      </ThemeProvider>
+                    </div>
+                  </>
+                )}
               </>
             )}
           </div>

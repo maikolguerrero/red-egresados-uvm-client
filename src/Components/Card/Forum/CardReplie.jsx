@@ -28,11 +28,11 @@ export function CardReplie({ comment }) {
     let date2 = new Date(comment.createdAt);
 
     let response = calcularDiferenciaFechas(date2, date);
-    if (response.horas >= 24) {
+    if (response.dias >= 1) {
       setDatePublic(response.dias);
       setType("d");
     } else {
-      if (response.minutos >= 60) {
+      if (response.horas >= 1) {
         setDatePublic(response.horas);
         setType("h");
       } else {

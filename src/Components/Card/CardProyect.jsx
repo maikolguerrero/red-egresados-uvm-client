@@ -9,6 +9,8 @@ import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { FormAddProyect } from "../Forms/Proyects/FormAddProyect";
 import { cancelRequest, deleteProject, requestProyect } from "../../services/proyects/proyectService";
 import perfil from "../../../public/Perfil.jpg"
+import { RiGitRepositoryPrivateFill } from "react-icons/ri";
+import { BiWorld } from "react-icons/bi";
 
 export function CardProyect({ proyect }) {
   const navigate = useNavigate();
@@ -108,7 +110,16 @@ export function CardProyect({ proyect }) {
       </h5>
       <p className="font-normal text-Negro">{proyect.description}</p>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col gap-1">
+        <p className="font-bold text-verdeD flex items-center gap-2">
+          Visibilidad:{" "}
+          <Badge
+            color={proyect.isPublic ? "green" : "red"}
+            className="uppercase"
+          >
+            {proyect.isPublic ? <span className="flex gap-1 items-center">Publico <BiWorld/></span> : <span className="flex gap-1 items-center">Privado <RiGitRepositoryPrivateFill /></span>}
+          </Badge>
+        </p>
         <p className="font-bold text-verdeD flex items-center gap-2">
           Estado del Proyecto:{" "}
           <Badge
@@ -136,11 +147,11 @@ export function CardProyect({ proyect }) {
           </Badge>
         </p>
         <p className="font-bold text-verdeD">Colaboradores:</p>
-        <ul className="flex py-2 relative h-12">
+        <ul className="flex flex-wrap gap-1 py-2 h-12">
           {proyect.collaborators.map((item, key) => (
             <li
               key={key}
-              className={`text-RojoC font-medium text-sm absolute left-${
+              className={`text-RojoC font-medium text-sm left-${
                 key === 0 ? 0 : key * 3
               }`}
             >

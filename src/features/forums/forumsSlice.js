@@ -12,6 +12,7 @@ export const forumsSlice = createSlice({
       passed: 0,
     },
     loading: false,
+    loadingPage: false,
     error: "",
     message: "",
   },
@@ -56,17 +57,17 @@ export const forumsSlice = createSlice({
     });
 
     builder.addCase(searchForum.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(searchForum.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.forums = action.payload.forums;
       state.pagination = action.payload.pagination
     });
     builder.addCase(searchForum.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 
@@ -124,16 +125,16 @@ export const forumsSlice = createSlice({
     });
 
     builder.addCase(getThreadsComments.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(getThreadsComments.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.forumSelect = action.payload.forumSelected
     });
     builder.addCase(getThreadsComments.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 

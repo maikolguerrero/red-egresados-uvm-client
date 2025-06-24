@@ -248,6 +248,9 @@ export const proyectsSlice = createSlice({
       state.loading = false;
       state.message = action.payload.message;
       state.proyectSelect.isCollaborator = false;
+      state.proyectSelect.collaborators = state.proyectSelect.collaborators.filter(
+        (item) => item.user.username !== action.payload.username
+      );
     });
     builder.addCase(leaveProyect.rejected, (state, action) => {
       state.loading = false;

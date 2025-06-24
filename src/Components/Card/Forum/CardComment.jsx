@@ -33,11 +33,11 @@ export function CardComment({ comment }) {
     let date2 = new Date(comment.createdAt);
 
     let response = calcularDiferenciaFechas(date2, date);
-    if (response.horas >= 24) {
+    if (response.dias >= 1) {
       setDatePublic(response.dias);
       setType("d");
     } else {
-      if (response.minutos >= 60) {
+      if (response.horas >= 1) {
         setDatePublic(response.horas);
         setType("h");
       } else {
@@ -103,7 +103,7 @@ export function CardComment({ comment }) {
               onClick={(e) => setOpenComment(true)}
               className="flex gap-2 hover:cursor-pointer items-center justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300"
             >
-              {comment.replies.length}{" "}
+              {comment.replies === undefined ? "0" : comment.replies.length}{" "}
               <FaComments className="text-sm md:text-base xl:text-lg" />
             </li>
             <li className="flex gap-2 items-center justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
@@ -112,7 +112,7 @@ export function CardComment({ comment }) {
             </li>
           </ul>
 
-          {comment.replies.length === 0 ? (
+          {(comment.replies === undefined || comment.replies.length === 0) ? (
             <></>
           ) : (
             <ul className="mt-6 flex flex-col gap-4">

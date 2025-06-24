@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { typeError, typeSuccess } from "../../models/alertModels";
+import { URL_API } from "../../config";
 
 export const getProfile = createAsyncThunk(
   "authSlice/getProfile", // Nombre de la acción
@@ -8,7 +9,7 @@ export const getProfile = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/alumni/" + data.username,
+        `${URL_API}/api/alumni/` + data.username,
         {
           mode: "cors",
           credentials: "include",
@@ -20,6 +21,8 @@ export const getProfile = createAsyncThunk(
       );
 
       let datas = await response.json();
+      console.log("obtenido datas")
+      console.log(datas)
       if (datas.success) {
         enqueueSnackbar("Se ha obtenido el perfil", typeSuccess)
         return {
@@ -29,7 +32,7 @@ export const getProfile = createAsyncThunk(
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -44,14 +47,10 @@ export const getUsers = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/alumni/search?page=${data.page}&limit=${data.limit}${
-            data.query === null || data.query === undefined ? "" : "&query=" + data.query
-          }${
-            data.degree === null || data.degree === undefined ? "" : "&degree=" + data.degree
-          }${
-            data.location === null || data.location === undefined ? "" : "&location=" + data.location
-          }`,
+        `${URL_API}/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "&query=" + data.query
+        }${data.degree === null || data.degree === undefined ? "" : "&degree=" + data.degree
+        }${data.location === null || data.location === undefined ? "" : "&location=" + data.location
+        }`,
         {
           mode: "cors",
           credentials: "include",
@@ -62,14 +61,10 @@ export const getUsers = createAsyncThunk(
         }
       );
 
-      console.log("http://localhost:3000" +
-          `/api/alumni/search?page=${data.page}&limit=${data.limit}${
-            data.query === null || data.query === undefined ? "" : "?query=" + data.query
-          }${
-            data.degree === null || data.degree === undefined ? "" : "?degree=" + data.degree
-          }${
-            data.location === null || data.location === undefined ? "" : "?location=" + data.location
-          }`)
+      console.log(`${URL_API}/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "?query=" + data.query
+        }${data.degree === null || data.degree === undefined ? "" : "?degree=" + data.degree
+        }${data.location === null || data.location === undefined ? "" : "?location=" + data.location
+        }`)
       let datas = await response.json();
       console.log(datas)
       if (datas.success) {
@@ -82,7 +77,7 @@ export const getUsers = createAsyncThunk(
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -97,7 +92,7 @@ export const updatePictureProfile = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/alumni/profile/picture",
+        `${URL_API}/api/alumni/profile/picture`,
         {
           mode: "cors",
           credentials: "include",
@@ -116,7 +111,7 @@ export const updatePictureProfile = createAsyncThunk(
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -131,7 +126,7 @@ export const updateProfile = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/alumni/update-profile",
+        `${URL_API}/api/alumni/update-profile`,
         {
           mode: "cors",
           credentials: "include",
@@ -157,7 +152,7 @@ export const updateProfile = createAsyncThunk(
         }
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)

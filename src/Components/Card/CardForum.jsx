@@ -36,7 +36,7 @@ export function CardForum({ forum }) {
     let date2 = new Date(forum.createdAt)
 
     let response = calcularDiferenciaFechas(date2, date)
-    if (response.horas >= 24) {
+    if (response.dias >= 1) {
       setDatePublic(response.dias)
       setType("dias")
     } else {

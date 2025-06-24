@@ -54,6 +54,7 @@ export function InternalProject({ proyect }) {
   const handleLeaveProyect = (e) => {
     dispatch(leaveProyect({
       projectId: proyect.id,
+      username: username
     }))
   }
 

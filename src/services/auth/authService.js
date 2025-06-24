@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { Bounce, toast } from "react-toastify";
 import { typeError, typeSuccess } from "../../models/alertModels";
+import { URL_API } from "../../config";
 
 let optionsToast = {
   position: "top-right",
@@ -21,7 +22,7 @@ export const verifySesion = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/check-session",
+        `${URL_API}/api/auth/check-session`,
         {
           mode: "cors",
           credentials: "include",
@@ -60,7 +61,7 @@ export const logoutSesion = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/logout",
+        `${URL_API}/api/auth/logout`,
         {
           mode: "cors",
           credentials: "include",
@@ -94,7 +95,7 @@ export const resendEmailFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/resend-verification",
+        `${URL_API}/api/auth/resend-verification`,
         {
           mode: "cors",
           credentials: "include",
@@ -128,7 +129,7 @@ export const postData = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/register/alumni",
+        `${URL_API}/api/auth/register/alumni`,
         {
           mode: "cors",
           method: "POST", // or 'PUT'
@@ -170,7 +171,7 @@ export const loginUserFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/login",
+        `${URL_API}/api/auth/login`,
         {
           mode: "cors",
           credentials: "include",
@@ -213,7 +214,7 @@ export const verifyEmail = createAsyncThunk(
       // Realizar la solicitud POST
       const response = await fetch(
         // "http://localhost:3000" + "/api/auth/verify-email?token =" + "?",
-         `http://localhost:3000/api/auth/verify-email?token=${data}`,
+         `${URL_API}/api/auth/verify-email?token=${data}`,
         {
           mode: "cors",
           credentials: "include",
