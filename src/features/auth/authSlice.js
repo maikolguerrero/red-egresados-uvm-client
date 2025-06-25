@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loginUserFetch, logoutSesion, postData, resendEmailFetch, verifyEmail, verifySesion } from '../services/auth/authService';
+import { loginUserFetch, logoutSesion, postData, resendEmailFetch, verifyEmail, verifySesion } from '../../services/auth/authService';
 
 export const authSlice = createSlice({
   name: 'verification',
   initialState: {
     value: "No found",
-    loading: false,
+    loading: true,
     error: "",
     message: "",
     sessionActive: false,
@@ -86,6 +86,7 @@ export const authSlice = createSlice({
       state.sessionActive = false
     });
     builder.addCase(logoutSesion.rejected, (state, action) => {
+      state.sessionActive = false;
       state.loading = false;
       state.error = action.error.message;
     });

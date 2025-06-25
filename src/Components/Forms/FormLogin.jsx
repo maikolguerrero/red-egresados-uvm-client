@@ -1,6 +1,6 @@
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import Button from "../Buttons/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserFetch } from "../../services/auth/authService";
@@ -12,7 +12,6 @@ let defaultValues = {
 
 function FormLogin(props) {
   const dispatch = useDispatch()
-  const navigate = useNavigate();
 
   const [values, setValues] = useState({});
 
@@ -31,7 +30,6 @@ function FormLogin(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUserFetch(values))
-    // navigate("/home");
   };
 
   return (

@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { Bounce, toast } from "react-toastify";
 import { typeError, typeSuccess } from "../../models/alertModels";
+import { URL_API } from "../../config";
 
 let optionsToast = {
   position: "top-right",
@@ -21,11 +22,11 @@ export const verifySesion = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/check-session",
+        `${URL_API}/api/auth/check-session`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -45,7 +46,7 @@ export const verifySesion = createAsyncThunk(
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -60,11 +61,11 @@ export const logoutSesion = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/logout",
+        `${URL_API}/api/auth/logout`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -72,14 +73,14 @@ export const logoutSesion = createAsyncThunk(
       );
 
       let datas = await response.json();
-            console.log(datas)
+      console.log(datas)
       if (datas.success) {
         enqueueSnackbar(datas.message, typeSuccess)
         return (datas.message)
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -94,11 +95,11 @@ export const resendEmailFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/resend-verification",
+        `${URL_API}/api/auth/resend-verification`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -128,10 +129,10 @@ export const postData = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/register/alumni",
+        `${URL_API}/api/auth/register/alumni`,
         {
           mode: "cors",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -142,7 +143,7 @@ export const postData = createAsyncThunk(
       let datas = await response.json();
       if (datas.success) {
         enqueueSnackbar(datas.message, typeSuccess)
-        return ({message: datas.message, email: data.email});
+        return ({ message: datas.message, email: data.email });
       } else {
         if (datas.metadata.context === "input_validation") {
           throw `${datas.metadata.errors[0].message}`;
@@ -170,11 +171,11 @@ export const loginUserFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/login",
+        `${URL_API}/api/auth/login`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -212,12 +213,11 @@ export const verifyEmail = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        // "http://localhost:3000" + "/api/auth/verify-email?token =" + "?",
-         `http://localhost:3000/api/auth/verify-email?token=${data}`,
+        `${URL_API}/api/auth/verify-email?token=${data}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },

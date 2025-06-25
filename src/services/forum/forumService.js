@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
-import { Bounce, toast } from "react-toastify";
 import { typeError, typeSuccess } from "../../models/alertModels";
+import { URL_API } from "../../config";
 
 export const addForum = createAsyncThunk(
   "authSlice/addForum", // Nombre de la acción
@@ -9,11 +9,11 @@ export const addForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/forum/threads",
+        `${URL_API}/api/forum/threads`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -49,11 +49,11 @@ export const addPictureForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/forum/threads/${data.threadId}/media/images`,
+        `${URL_API}/api/forum/threads/${data.threadId}/media/images`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
@@ -82,8 +82,7 @@ export const searchForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/forum/threads?page=${data.page}&limit=${data.limit}${
+        `${URL_API}/api/forum/threads?page=${data.page}&limit=${data.limit}${
             data.category === null || data.category === undefined ? "" : "&category=" + data.category
           }${
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
@@ -91,7 +90,7 @@ export const searchForum = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -124,11 +123,11 @@ export const likeThreads = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/forum/like/${data.type}/${data.id}`,
+        `${URL_API}/api/forum/like/${data.type}/${data.id}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -192,12 +191,11 @@ export const getThreadsComments = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/forum/threads/${data.id}`,
+        `${URL_API}/api/forum/threads/${data.id}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -229,12 +227,11 @@ export const addComment = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/forum/threads/${data.id}/comments`,
+        `${URL_API}/api/forum/threads/${data.id}/comments`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
@@ -276,11 +273,11 @@ export const deleteForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/forum/threads/${data.threadId}`,
+        `${URL_API}/api/forum/threads/${data.threadId}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -312,11 +309,11 @@ export const editForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/forum/threads/${data.threadId}`,
+        `${URL_API}/api/forum/threads/${data.threadId}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },

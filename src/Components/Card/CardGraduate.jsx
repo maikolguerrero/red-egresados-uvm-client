@@ -1,16 +1,19 @@
-
 import { Card, Dropdown, DropdownItem } from "flowbite-react";
 import ButtonSmall from "../Buttons/ButtonSmall";
 import perfil from "../../../public/Perfil.jpg"
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-export function CardGraduate({user}) {
+export function CardGraduate({ user }) {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
 
   const searchProfile = (e) => {
     navigate(`/graduates/${user.user.username}`);
+  };
+
+  const startChat = () => {
+    navigate(`/chat/${user.user.username}`);
   };
 
   return (
@@ -35,7 +38,7 @@ export function CardGraduate({user}) {
           </DropdownItem>
         </Dropdown>
       </div>
-      <div className="flex flex-col items-center pb-10">
+      <div className="flex flex-col items-center text-center pb-10">
         <img
           alt="Bonnie image"
           height="96"
@@ -50,6 +53,9 @@ export function CardGraduate({user}) {
         <h5 className="mb-1 text-xl font-medium font-barolw text-negro ">
           {user.firstName} {user.lastName}
         </h5>
+        <h6 className="text-xs lg:text-base font-barlow-semi-condensed font-semibold text-black">
+          @{user.user.username}
+        </h6>
         <span className="text-sm font-medium font-barolw text-RojoC">
           {user.degree}
         </span>
@@ -63,8 +69,9 @@ export function CardGraduate({user}) {
           ) : (
             <>
               <ButtonSmall
-                text={"Colaborar"}
+                text={"Enviar Mensaje"}
                 className={"bg-verdeC hover:bg-RojoC"}
+                action={startChat}
               />
               <ButtonSmall
                 action={searchProfile}
