@@ -3,6 +3,8 @@ import socketService from '../../services/socket/socket.service';
 import { format, isToday, isYesterday, isThisYear } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { formatRelativeTime } from '../../utils/dateUtils';
+import { Loader } from '../Loader';
+
 
 export default function OnlineStatus({ userId }) {
     const [status, setStatus] = useState({ isOnline: false, lastSeen: null });
@@ -57,30 +59,6 @@ export default function OnlineStatus({ userId }) {
         };
     }, [userId]);
 
-    // const formatLastSeen = (date) => {
-    //     if (!date) return 'Desconectado';
-
-    //     const lastSeenDate = new Date(date);
-
-    //     // Si fue hoy
-    //     if (isToday(lastSeenDate)) {
-    //         return `Últ. vez hoy a las ${format(lastSeenDate, 'h:mm a', { locale: es })}`;
-    //     }
-
-    //     // Si fue ayer
-    //     if (isYesterday(lastSeenDate)) {
-    //         return `Últ. vez ayer a las ${format(lastSeenDate, 'h:mm a', { locale: es })}`;
-    //     }
-
-    //     // Si fue este año
-    //     if (isThisYear(lastSeenDate)) {
-    //         return `Últ. vez ${format(lastSeenDate, 'd MMMM', { locale: es })}`;
-    //     }
-
-    //     // Más de un año
-    //     return `Últ. vez ${format(lastSeenDate, 'd MMMM yyyy', { locale: es })}`;
-    // };
-
     const formatLastSeenDisplay = (date) => {
         if (!date) return 'Desconectado';
 
@@ -100,7 +78,7 @@ export default function OnlineStatus({ userId }) {
     if (loading) {
         return (
             <div className="text-xs font-barlow-semi-condensed text-gray-400">
-                Cargando...
+                <Loader />
             </div>
         );
     }
@@ -114,8 +92,9 @@ export default function OnlineStatus({ userId }) {
             ) : (
                 <span className="text-gray-500">
                     {formatLastSeenDisplay(status.lastSeen)}
-                </span>
-            )}
-        </div>
+                </span >
+            )
+            }
+        </div >
     );
 }

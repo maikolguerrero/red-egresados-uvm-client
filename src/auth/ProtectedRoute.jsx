@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import socketService from "../services/socket/socket.service";
+import { Loader } from "../Components/Loader";
 
 function ProtectedRoute({ children }) {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -54,7 +55,7 @@ function ProtectedRoute({ children }) {
 
   // Mostrar un loader mientras se verifica la autenticación
   if (isCheckingAuth) {
-    return <div className="flex items-center justify-center h-screen">Cargando...</div>;
+    return <div className="flex items-center justify-center h-screen"><Loader /></div>;
   }
 
   return children;

@@ -60,7 +60,7 @@ export function ButtonMessages() {
 
   useEffect(() => {
     if (isOpen && auth.id) {
-      // Refrescar conversaciones al abrir el drawerF
+      // Refrescar conversaciones al abrir el drawer
       fetchConversations();
     }
   }, [isOpen, auth.id]);

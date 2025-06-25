@@ -13,23 +13,24 @@ function Header() {
   // --- Uso del hook para saber si es móvil ---
   const isMobile = useIsMobile();
 
-
   const handdleLogout = (e) => {
     // Desconectar socket primero
     socketService.manualDisconnect('user_logout');
     // Luego hacer logout
     dispatch(logoutSesion());
   }
- 
+
   return (
     <>
       <div className="w-full fixed z-20">
         <header className="bg-Blanco h-[7vh] w-full flex justify-center items-center">
           <div className="absolute left-4">
-            {!isLanding && isMobile && (
-              <ButtonNavHamburger />
-            )}
-          </div>
+            {
+              !isLanding && isMobile && (
+                <ButtonNavHamburger />
+              )
+            }
+          </div >
           <div className="flex gap-1 justify-center items-center">
             <h2 className=" text-2xl md:text-3xl text-verdeA font-bold font-barlow-semi-condensed">
               UVM
@@ -39,7 +40,7 @@ function Header() {
               UNIVERSIDAD VALLE DEL MOMBOY
             </h3>
           </div>
-        </header>
+        </header >
 
         <nav className="bg-verdeD h-[3.5vh] w-full">
           <ul className="flex gap-5 justify-center items-center h-full">
@@ -54,7 +55,7 @@ function Header() {
             </li>
           </ul>
         </nav>
-      </div>
+      </div >
     </>
   );
 }

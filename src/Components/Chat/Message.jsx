@@ -154,10 +154,10 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                     <div className={`flex items-center justify-end gap-2 mt-1.5 flex-wrap`}>
                         <span className="text-xs font-medium opacity-80 whitespace-nowrap">
                             {formatTimeOnly(message.createdAt)}
-                        </span>
+                        </span >
                         {renderStatus()}
-                    </div>
-                </div>
+                    </div >
+                </div >
 
                 {/* Botón de menú (para todos los mensajes) */}
                 <div className="relative self-center mb-1" ref={menuRef}>
@@ -174,30 +174,32 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                     </button>
 
                     {/* Menú desplegable personalizado */}
-                    {menuOpen && (
-                        <div className={`absolute w-40 bg-white rounded-lg shadow-lg z-10 border border-gray-200 overflow-hidden ${isOwn ? 'right-0' : 'left-0'
-                            }`}>
-                            <button
-                                onClick={handleCopy}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            >
-                                <BsCopy className="text-gray-500" />
-                                Copiar
-                            </button>
-                            <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <BsReply className="text-gray-500" />
-                                Responder
-                            </button>
-                            {isOwn && (
-                                <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-100">
-                                    <BsTrash className="text-red-500" />
-                                    Eliminar
+                    {
+                        menuOpen && (
+                            <div className={`absolute w-40 bg-white rounded-lg shadow-lg z-10 border border-gray-200 overflow-hidden ${isOwn ? 'right-0' : 'left-0'
+                                }`}>
+                                <button
+                                    onClick={handleCopy}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                >
+                                    <BsCopy className="text-gray-500" />
+                                    Copiar
                                 </button>
-                            )}
-                        </div>
-                    )}
+                                <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <BsReply className="text-gray-500" />
+                                    Responder
+                                </button>
+                                {isOwn && (
+                                    <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-100">
+                                        <BsTrash className="text-red-500" />
+                                        Eliminar
+                                    </button>
+                                )}
+                            </div>
+                        )
+                    }
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

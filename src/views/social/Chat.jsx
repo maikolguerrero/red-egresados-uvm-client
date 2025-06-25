@@ -18,6 +18,7 @@ import { setCurrentChat, addMessage, setMessagesRead, setMessageRead, updateMess
 import { markMessagesAsRead } from "../../services/chat/chatService";
 import { formatDateHeader, groupMessagesByDate } from '../../utils/dateUtils';
 import useIsMobile from "../../hooks/useIsMobile";
+import { Loader } from "../../Components/Loader";
 
 export default function Chat() {
     const { username } = useParams();
@@ -185,7 +186,6 @@ export default function Chat() {
                         setInitialScrollDone(true); // Marca que el scroll inicial ya está hecho
                     }
                 });
-
             } catch (error) {
                 console.error("Error en fetchData:", error);
                 enqueueSnackbar(error.message, typeError);
@@ -264,7 +264,6 @@ export default function Chat() {
     // Efecto para manejar el estado "leído" correctamente
     useEffect(() => {
         if (!user || !auth.id) return;
-
         // Marcar mensajes como leídos cuando:
         // 1. El chat está visible
         // 2. Los mensajes son del otro usuario
@@ -415,7 +414,7 @@ export default function Chat() {
                     )}
                     <div className={`w-full ${isMobile ? 'h-[100vh]' : 'h-[89.5vh]'} flex items-center justify-center`}>
                         <div className="flex items-center justify-center w-full">
-                            <p className="font-barolw">Cargando chat...</p>
+                            <p className="font-barolw"><Loader /></p>
                         </div>
                     </div>
                 </main>
@@ -438,6 +437,7 @@ export default function Chat() {
                 )}
 
                 <div className={`w-full ${isMobile ? 'h-[100vh]' : 'h-[89.5vh]'} flex flex-col`}>
+
                     {/* Header del chat */}
                     <div className="flex items-center justify-between p-4 border-b-2 border-verdeD bg-Gris">
                         <div className="flex items-center gap-4">
@@ -492,7 +492,7 @@ export default function Chat() {
                     {/* Área de mensajes */}
                     <div
                         ref={messagesContainerRef}
-                        className="flex-1 p-4 overflow-y-auto bg-Blanco" //
+                        className="flex-1 p-4 overflow-y-auto bg-Blanco"
                     >
                         {/* Botón de prueba para cargar más mensajes */}
                         {/* {hasMore && !loadingMore && (
@@ -560,11 +560,12 @@ export default function Chat() {
                                     })}
                                 </div>
                             )
-                        })}
-                    </div>
+                        })
+                        }
+                    </div >
 
                     {/* Contenedor principal de la barra de mensaje */}
-                    <div className="p-4 border-t-2 border-verdeD bg-Gris">
+                    < div className="p-4 border-t-2 border-verdeD bg-Gris" >
                         <div className="flex items-end gap-2">
                             <button
                                 ref={emojiButtonRef}
@@ -595,7 +596,7 @@ export default function Chat() {
                                 <IoSend className="text-xl" />
                             </button>
                         </div>
-                    </div>
+                    </div >
 
                     {/* Selector de Emojis */}
                     {showEmojiPicker && (
@@ -612,8 +613,8 @@ export default function Chat() {
                             />
                         </div>
                     )}
-                </div>
-            </main>
+                </div >
+            </main >
         </>
     );
 }

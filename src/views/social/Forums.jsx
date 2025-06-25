@@ -11,6 +11,7 @@ import { FormAddPicture } from "../../Components/Forms/Forum/FormAddPicture";
 import { searchForum } from "../../services/forum/forumService";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import FilterForums from "../../Components/Forms/Forum/FilterForums";
+import { Loader } from "../../Components/Loader";
 
 const customTheme = createTheme({
   base: "",
@@ -48,6 +49,7 @@ function Forums() {
   const passed = useSelector((state) => state.forums.forumAdd.passed);
   const pagination = useSelector((state) => state.forums.pagination);
   const forums = useSelector((state) => state.forums.forums);
+  const loading = useSelector((state) => state.forums.loadingPage);
   const dispatch = useDispatch();
 
   const [openAddForum, setOpendAddForum] = useState(false);
@@ -82,7 +84,7 @@ function Forums() {
       <main className="flex relative">
         <Nav />
 
-        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
+        <section className="w-full px-3 py-12 md:px-4 lg:px-6 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
           <article className="w-full pb-8 border-b-2 border-verdeD mb-8">
             <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
               Menu de filtrado
@@ -90,29 +92,37 @@ function Forums() {
             <FilterForums values={values} setValues={setValues} />
           </article>
 
-          {forums.length === 0 ? (
-            <>
-              <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                No se encontraron foros con ese filtrado
-              </h4>
-            </>
+          {loading ? (
+            <section className="h-full flex justify-center items-center w-full">
+              <Loader />
+            </section>
           ) : (
             <>
-              <div className="flex flex-col gap-8 w-full">
-                {forums.map((item) => (
-                  <CardForum forum={item} key={item.id} />
-                ))}
-              </div>
+              {forums.length === 0 ? (
+                <>
+                  <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                    No se encontraron foros con ese filtrado
+                  </h4>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col gap-8 w-full px-1 md:px-2 lg:px-6">
+                    {forums.map((item) => (
+                      <CardForum forum={item} key={item.id} />
+                    ))}
+                  </div>
 
-              <ThemeProvider theme={customTheme}>
-                <Pagination
-                  theme={customTheme}
-                  className="border-verdeD"
-                  currentPage={pagination.page}
-                  totalPages={pagination.pages}
-                  onPageChange={onPageChange}
-                />
-              </ThemeProvider>
+                  <ThemeProvider theme={customTheme}>
+                    <Pagination
+                      theme={customTheme}
+                      className="border-verdeD"
+                      currentPage={pagination.page}
+                      totalPages={pagination.pages}
+                      onPageChange={onPageChange}
+                    />
+                  </ThemeProvider>
+                </>
+              )}
             </>
           )}
         </section>

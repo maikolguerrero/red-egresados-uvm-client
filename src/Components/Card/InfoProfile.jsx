@@ -100,49 +100,49 @@ function InfoProfile({profile}) {
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a href={profile.profile.socialMedia.instagram}><FaInstagram /></a>
+                  <a target="_blank" href={profile.profile.socialMedia.instagram}><FaInstagram /></a>
                 </li>
               )}
               {profile.profile.socialMedia.facebook === "" ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a href={profile.profile.socialMedia.facebook}><FaFacebook /></a>
+                  <a target="_blank" href={profile.profile.socialMedia.facebook}><FaFacebook /></a>
                 </li>
               )}
               {profile.profile.socialMedia.whatsapp === "" ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a href={profile.profile.socialMedia.whatsapp}><FaWhatsapp /></a>
+                  <a target="_blank" href={profile.profile.socialMedia.whatsapp}><FaWhatsapp /></a>
                 </li>
               )}
               {profile.profile.socialMedia.linkedin === "" ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a href={profile.profile.socialMedia.linkedin}><FaLinkedin /></a>
+                  <a target="_blank" href={profile.profile.socialMedia.linkedin}><FaLinkedin /></a>
                 </li>
               )}
               {profile.profile.socialMedia.youtube === "" ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a href={profile.profile.socialMedia.youtube}><FaYoutube /></a>
+                  <a target="_blank" href={profile.profile.socialMedia.youtube}><FaYoutube /></a>
                 </li>
               )}
               {profile.profile.socialMedia.github === "" ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a href={profile.profile.socialMedia.github}><FaGithub /></a>
+                  <a target="_blank" href={profile.profile.socialMedia.github}><FaGithub /></a>
                 </li>
               )}
               {profile.profile.socialMedia.x === "" ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a href={profile.profile.socialMedia.x}><FaXTwitter /></a>
+                  <a target="_blank" href={profile.profile.socialMedia.x}><FaXTwitter /></a>
                 </li>
               )}
             </ul>

@@ -12,7 +12,6 @@ import socketService from "../services/socket/socket.service";
 import { getUnreadNotificationCount } from "../services/notifications/notificationService";
 import useIsMobile from "../hooks/useIsMobile";
 
-
 function Nav() {
   const role = useSelector((state) => state.auth.role);
   const isSidebar = useSelector((state) => state.sidebar.isSidebar);
@@ -87,65 +86,67 @@ function Nav() {
 
   return (
     <>
-      {((isMobile && !isSidebar) || !isMobile) && (
-        <nav className={`${isSidebar ? "w-[60px] items-center " : "md:w-[200px] lg:w-[250px] absolute md:relative w-full"} flex flex-col border-r-2 bg-Gris border-verdeD h-[89.5vh] text-verdeD transition-all duration-[400ms] z-10`}>
-          <div className="px-4 pt-3 flex justify-end">
-            <button className="h-full p-1" onClick={() => dispatch(toggleSidebar())}>
-              {isSidebar ? <FaArrowRightLong className="text-xl" /> : <FaArrowLeftLong className="text-xl" />}
-            </button>
-          </div>
+      {
+        ((isMobile && !isSidebar) || !isMobile) && (
+          <nav className={`${isSidebar ? "w-[60px] items-center " : "md:w-[200px] lg:w-[250px] absolute md:relative w-full"} flex flex-col border-r-2 bg-Gris border-verdeD h-[89.5vh] text-verdeD transition-all duration-[400ms] z-10`}>
+            <div className="px-4 pt-3 flex justify-end">
+              <button className="h-full p-1" onClick={() => dispatch(toggleSidebar())}>
+                {isSidebar ? <FaArrowRightLong className="text-xl" /> : <FaArrowLeftLong className="text-xl" />}
+              </button>
+            </div>
 
-          <ul className="py-4 border-b border-verdeD ">
-            <Link to={"/home"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-              <IoIosHome className="text-2xl" />
-              <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PRINCIPAL</p>
-            </Link>
-          </ul>
-
-          <ul className="py-4 border-b border-verdeD ">
-            <Link to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-              <FaGraduationCap className="text-2xl" />
-              <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EGRESADOS</p>
-            </Link>
-            <Link to={"/forums"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-              <FaPeopleGroup className="text-2xl" />
-              <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>FOROS</p>
-            </Link>
-            <Link to={"/proyects"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-              <PiProjectorScreenChartBold className="text-2xl" />
-              <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PROYECTOS</p>
-            </Link>
-            <Link to={"/events"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-              <BsCalendarDate className="text-2xl" />
-              <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EVENTOS</p>
-            </Link>
-          </ul>
-
-          <ul className="py-4 border-b border-verdeD ">
-            <Link to={"/notifications"} className="relative px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-              <IoIosNotifications className="text-2xl" />
-              {(unreadCount > 0) && (
-                <span
-                  className="absolute left-8 top-0 -mt-1 bg-RojoC text-white text-[0.6rem] rounded-full w-5 h-5 flex items-center justify-center te z-10"
-                >
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
-              )}
-              <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>NOTIFICACIONES</p>
-            </Link>
-            <Link to={"/config"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-              <FaGear className="text-2xl" />
-              <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>CONFIGURACION</p>
-            </Link>
-            {role === "egresado" && (
-              <Link to={"/my-profile"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <FaUser className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PERFIL</p>
+            <ul className="py-4 border-b border-verdeD ">
+              <Link to={"/home"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <IoIosHome className="text-2xl" />
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PRINCIPAL</p>
               </Link>
-            )}
-          </ul>
-        </nav>
-      )}
+            </ul>
+
+            <ul className="py-4 border-b border-verdeD ">
+              <Link to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <FaGraduationCap className="text-2xl" />
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EGRESADOS</p>
+              </Link>
+              <Link to={"/forums"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <FaPeopleGroup className="text-2xl" />
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>FOROS</p>
+              </Link>
+              <Link to={"/proyects"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <PiProjectorScreenChartBold className="text-2xl" />
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PROYECTOS</p>
+              </Link>
+              <Link to={"/events"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <BsCalendarDate className="text-2xl" />
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EVENTOS</p>
+              </Link>
+            </ul>
+
+            <ul className="py-4 border-b border-verdeD ">
+              <Link to={"/notifications"} className="relative px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <IoIosNotifications className="text-2xl" />
+                {(unreadCount > 0) && (
+                  <span
+                    className="absolute left-8 top-0 -mt-1 bg-RojoC text-white text-[0.6rem] rounded-full w-5 h-5 flex items-center justify-center te z-10"
+                  >
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>NOTIFICACIONES</p>
+              </Link>
+              <Link to={"/config"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <FaGear className="text-2xl" />
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>CONFIGURACION</p>
+              </Link>
+              {role === "egresado" && (
+                <Link to={"/my-profile"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                  <FaUser className="text-2xl" />
+                  <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PERFIL</p>
+                </Link>
+              )}
+            </ul>
+          </nav>
+        )
+      }
     </>
   );
 }

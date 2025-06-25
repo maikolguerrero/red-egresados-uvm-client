@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./views/Login";
 import Register from "./views/Register";
@@ -10,6 +10,7 @@ import Graduates from "./views/social/Graduates";
 import Forums from "./views/social/Forums";
 import Events from "./views/social/Events";
 import Proyects from "./views/social/Proyects";
+import ProjectView from "./views/projects/ProjectView";
 import Notifications from "./views/profile/Notifications";
 import Config from "./views/profile/Config";
 import ProtectedRoute from "./auth/ProtectedRoute";
@@ -120,6 +121,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Proyects />
+      </ProtectedRoute>
+    ),
+  },
+     {
+    path: "/proyects/:proyect",
+    element: (
+      <ProtectedRoute>
+        <ProjectView />
       </ProtectedRoute>
     ),
   },
@@ -246,6 +255,7 @@ function App() {
   return (
     <>
       <SnackbarProvider>
+        
         <RouterProvider router={router} />
       </SnackbarProvider>
     </>

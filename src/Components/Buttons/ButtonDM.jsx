@@ -52,8 +52,8 @@ export function ButtonDM({ conversation, onClick }) {
           </div>
           <span className="text-xs text-gray-400 whitespace-nowrap ml-2 mt-1">
             {conversation.lastMessage && formatMessageTime(conversation.lastMessage.createdAt)}
-          </span>
-        </div>
+          </span >
+        </div >
 
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1 min-w-0">
@@ -61,7 +61,7 @@ export function ButtonDM({ conversation, onClick }) {
             <p className="text-sm text-gray-500 truncate">
               {conversation.lastMessage?.content || "Nuevo chat"}
             </p>
-          </div>
+          </div >
 
           <div className="flex items-center gap-1">
             {conversation.unreadCount > 0 && (
@@ -70,8 +70,8 @@ export function ButtonDM({ conversation, onClick }) {
               </span>
             )}
           </div>
-        </div>
-      </div>
-    </button>
+        </div >
+      </div >
+    </button >
   );
 }

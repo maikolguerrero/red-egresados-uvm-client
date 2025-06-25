@@ -29,7 +29,7 @@ function FormLogin(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUserFetch(values))
+    dispatch(loginUserFetch(values));
   };
 
   return (

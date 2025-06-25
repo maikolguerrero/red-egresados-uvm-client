@@ -46,4 +46,5 @@ export const {
     setNotifications, 
     decrementUnreadCount 
 } = notificationSlice.actions;
+
 export default notificationSlice.reducer;

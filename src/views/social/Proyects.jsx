@@ -2,8 +2,15 @@ import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { CardProyect } from "../../Components/Card/CardProyect";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
+import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
+import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
+import { FormAddProyect } from "../../Components/Forms/Proyects/FormAddProyect";
+import { searchProyect } from "../../services/proyects/proyectService";
+import { useDispatch, useSelector } from "react-redux";
+import { Loader } from "../../Components/Loader";
+import FilterProyect from "../../Components/Forms/Proyects/FilterProyect";
 
 const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
@@ -34,11 +41,35 @@ const customTheme = createTheme({
   },
 });
 
+let defaultValues = {
+  status: "",
+  search: "",
+  username: "",
+};
+
 function Proyects() {
+  const pagination = useSelector((state) => state.proyects.pagination);
+  const proyects = useSelector((state) => state.proyects.proyects);
+  const loading = useSelector((state) => state.proyects.loadingPage);
+  const dispatch = useDispatch();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(8);
+  const [values, setValues] = useState({});
 
   const max = Math.ceil(data.length / perPage);
+
+  const [openAddProyect, setOpendAddProyect] = useState(false);
+
+  useEffect(() => {
+    setValues(defaultValues);
+    dispatch(
+      searchProyect({
+        page: pagination.page,
+        limit: pagination.limit,
+      })
+    );
+  }, []);
 
   const onPageChange = (page) => setCurrentPage(page);
   return (
@@ -48,33 +79,60 @@ function Proyects() {
 
       <main className="flex relative">
         <Nav />
-        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh]  overflow-y-scroll overflow-x-auto">
-          <div className="w-full gap-6 justify-center flex-wrap flex">
-            {data
-              .slice(
-                (currentPage - 1) * perPage,
-                (currentPage - 1) * perPage + perPage
-              )
-              .map((item, key) => (
-                <CardProyect key={item} />
-              ))}
-          </div>
-          <div className="flex justify-center">
-            <ThemeProvider theme={customTheme}>
-              <Pagination
-                theme={customTheme}
-                className="border-verdeD"
-                currentPage={currentPage}
-                totalPages={max}
-                onPageChange={onPageChange}
-              />
-            </ThemeProvider>
-          </div>
-        </section>
+        <div className="w-full px-3 py-12 md:px-4 lg:px-6 gap-8 flex flex-col items-center h-[89.5vh]  overflow-y-scroll overflow-x-auto">
+          <section className="w-full pb-8 border-b-2 border-verdeD">
+            <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+              Menu de filtrado
+            </h3>
+            <FilterProyect values={values} setValues={setValues} />
+          </section>
+          {loading ? (
+            <section className="h-full flex justify-center items-center w-full">
+              <Loader />
+            </section>
+          ) : (
+            <>
+              {proyects.length === 0 ? (
+                <>
+                  {" "}
+                  <h4 className="font-barolw flex items-start h-full justify-center text-lg font-semibold px-2 text-RojoC uppercase">
+                    No se encontraron proyectos con ese filtrado
+                  </h4>
+                </>
+              ) : (
+                <section className="flex flex-col gap-6">
+                  <div className="w-full gap-6 justify-center flex-wrap flex px-1 md:px-2 lg:px-6">
+                    {proyects.map((item) => (
+                      <CardProyect key={item.id} proyect={item} />
+                    ))}
+                  </div>
+                  <div className="flex justify-center">
+                    <ThemeProvider theme={customTheme}>
+                      <Pagination
+                        theme={customTheme}
+                        className="border-verdeD"
+                        currentPage={pagination.page}
+                        totalPages={pagination.pages}
+                        onPageChange={onPageChange}
+                      />
+                    </ThemeProvider>
+                  </div>
+                </section>
+              )}
 
-        <div className="absolute right-8 bottom-6">
-          <ButtonMessages />
+              <div className="absolute right-8 bottom-6 flex flex-col gap-2">
+                <ButtonAdd setOpenModal={setOpendAddProyect} />
+                <ButtonMessages />
+              </div>
+            </>
+          )}
         </div>
+        <ModalNotHeader
+          openModal={openAddProyect}
+          setOpenModal={setOpendAddProyect}
+          size={"3xl"}
+          component={<FormAddProyect />}
+        />
       </main>
     </>
   );

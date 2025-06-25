@@ -13,6 +13,7 @@ export const eventsSlice = createSlice({
       passed: 0,
     },
     loading: false,
+    loadingPage: false,
     error: "",
     message: "",
   },
@@ -66,31 +67,31 @@ export const eventsSlice = createSlice({
     });
 
     builder.addCase(searchEvent.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(searchEvent.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.events = action.payload.events;
       state.pagination = action.payload.pagination;
     });
     builder.addCase(searchEvent.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 
     builder.addCase(getEvent.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(getEvent.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.eventSelect = action.payload.eventSelected;
     });
     builder.addCase(getEvent.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 
