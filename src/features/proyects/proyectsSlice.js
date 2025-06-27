@@ -8,6 +8,7 @@ import {
   expelCollaborator,
   getProyect,
   getRequestProyect,
+  joinProyect,
   leaveProyect,
   requestProyect,
   responseRequest,
@@ -121,6 +122,31 @@ export const proyectsSlice = createSlice({
       }
     });
     builder.addCase(deleteProject.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(joinProyect.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(joinProyect.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      state.proyectSelect.isCollaborator = true;
+      let newProjects = [];
+      for (let i = 0; i < state.proyects.length; i++) {
+        if (state.proyects[i].id === action.payload.projectId) {
+          let editProyect = state.proyects[i];
+          editProyect.isCollaborator = true;
+          newProjects.push(editProyect);
+        } else {
+          newProjects.push(state.proyects[i]);
+        }
+      }
+      state.proyects = newProjects;
+    });
+    builder.addCase(joinProyect.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

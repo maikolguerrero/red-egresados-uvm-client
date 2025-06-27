@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
-import { Bounce, toast } from "react-toastify";
 import { typeError, typeSuccess } from "../../models/alertModels";
+import { URL_API } from "../../config";
 
 export const addEvent = createAsyncThunk(
   "eventsSlice/addEvent", // Nombre de la acción
@@ -9,11 +9,11 @@ export const addEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/events",
+        `${URL_API}/api/events`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -46,11 +46,11 @@ export const addPictureEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}/media/images`,
+        `${URL_API}/api/events/${data.eventId}/media/images`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
@@ -81,8 +81,7 @@ export const searchEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/events?page=${data.page}&limit=${data.limit}${
+        `${URL_API}/api/events?page=${data.page}&limit=${data.limit}${
             data.type === null || data.type === undefined ? "" : "&type=" + data.type
           }${
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
@@ -92,7 +91,7 @@ export const searchEvent = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -125,12 +124,11 @@ export const getEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/events/${data.id}`,
+        `${URL_API}/api/events/${data.id}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -162,11 +160,11 @@ export const deleteEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}`,
+        `${URL_API}/api/events/${data.eventId}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -198,11 +196,11 @@ export const editEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}`,
+        `${URL_API}/api/events/${data.eventId}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -238,11 +236,11 @@ export const addAgenda = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}/save`,
+        `${URL_API}/api/events/${data.eventId}/save`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -275,11 +273,11 @@ export const deleteAgenda = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}/unsave`,
+        `${URL_API}/api/events/${data.eventId}/unsave`,
         {
           mode: "cors",
           credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },

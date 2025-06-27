@@ -9,7 +9,7 @@ import { HiOutlineStatusOnline } from "react-icons/hi";
 import { BiWorld } from "react-icons/bi";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { FormAddProyect } from "../../Forms/Proyects/FormAddProyect";
-import { cancelRequest, deleteProject, expelCollaborator, getRequestProyect, leaveProyect, requestProyect } from "../../../services/proyects/proyectService";
+import { cancelRequest, deleteProject, expelCollaborator, getRequestProyect, joinProyect, leaveProyect, requestProyect } from "../../../services/proyects/proyectService";
 import { IoEnter } from "react-icons/io5";
 import { CardRequest } from "./CardRequest";
 import { Loader } from "../../Loader";
@@ -43,6 +43,10 @@ export function InternalProject({ proyect }) {
 
   const handleRequest = (e) => {
     dispatch(requestProyect({ projectId: proyect.id }));
+  };
+
+  const handleJoin = (e) => {
+    dispatch(joinProyect({ projectId: proyect.id }));
   };
 
   const handleCancelRequest = (e) => {
@@ -272,12 +276,19 @@ export function InternalProject({ proyect }) {
                 >
                   Cancelar Union
                 </button>
+              ) : proyect.isPublic ? (
+                <button
+                  onClick={handleJoin}
+                  className="text-xs px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-800 font-barlow-semi-condensed font-medium uppercase"
+                >
+                  Unirme al proyecto
+                </button>
               ) : (
                 <button
                   onClick={handleRequest}
                   className="text-xs px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-800 font-barlow-semi-condensed font-medium uppercase"
                 >
-                  Unirme al proyecto
+                  Solicitud de union al proyecto
                 </button>
               )}
             </div>
@@ -349,9 +360,7 @@ export function InternalProject({ proyect }) {
                               openModal={editRole}
                               setOpenModal={setEditRole}
                               size={"3xl"}
-                              component={
-                                <FormEditRole collaborator={item} />
-                              }
+                              component={<FormEditRole collaborator={item} />}
                             />
                           </>
                         )

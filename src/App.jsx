@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./views/Login";
 import Register from "./views/Register";
@@ -22,9 +22,8 @@ import Verifycation from "./views/Verifycation";
 import ForumView from "./views/forums/ForumView";
 import EventView from "./views/events/EventView";
 import Chat from "./views/social/Chat";
-import socketService from "./services/socket.service";
+import socketService from "./services/socket/socket.service";
 import { URL_API } from "./config";
-
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -208,10 +207,7 @@ function App() {
         try {
             await dispatch(verifySesion()).unwrap();
 
-            
             if (sessionActive && !isConnected) {
-
-              
                 socketService.connect();
                 
                 // Cuando se conecte, obtener lista de usuarios online

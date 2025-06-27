@@ -13,7 +13,7 @@ export const addForum = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -53,7 +53,7 @@ export const addPictureForum = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
@@ -90,7 +90,7 @@ export const searchForum = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -127,7 +127,7 @@ export const likeThreads = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -195,7 +195,7 @@ export const getThreadsComments = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -231,7 +231,7 @@ export const addComment = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
@@ -277,7 +277,7 @@ export const deleteForum = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -313,7 +313,7 @@ export const editForum = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },

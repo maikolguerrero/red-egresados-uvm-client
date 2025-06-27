@@ -13,7 +13,7 @@ export const getProfile = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -54,7 +54,7 @@ export const getUsers = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -96,7 +96,7 @@ export const updatePictureProfile = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           body: data
         }
       );
@@ -130,7 +130,7 @@ export const updateProfile = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },

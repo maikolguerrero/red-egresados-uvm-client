@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import socketService from "../services/socket.service";
+import socketService from "../services/socket/socket.service";
 import { Loader } from "../Components/Loader";
 
 function ProtectedRoute({ children }) {

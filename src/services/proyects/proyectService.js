@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { Bounce, toast } from "react-toastify";
 import { typeError, typeSuccess } from "../../models/alertModels";
+import { URL_API } from "../../config";
 
 export const addProyect = createAsyncThunk(
   "proyectsSlice/addProyect", // Nombre de la acción
@@ -9,11 +10,11 @@ export const addProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/projects",
+        `${URL_API}/api/projects`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -50,8 +51,7 @@ export const searchProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/projects?page=${data.page}&limit=${data.limit}${
+        `${URL_API}/api/projects?page=${data.page}&limit=${data.limit}${
             data.status === null || data.status === undefined ? "" : "&status=" + data.status
           }${
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
@@ -61,7 +61,7 @@ export const searchProyect = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -95,12 +95,11 @@ export const getProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" +
-          `/api/projects/${data.id}`,
+        `${URL_API}/api/projects/${data.id}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -132,11 +131,11 @@ export const editProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}`,
+        `${URL_API}/api/projects/${data.projectId}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -172,11 +171,11 @@ export const deleteProject = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}`,
+        `${URL_API}/api/projects/${data.projectId}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -209,11 +208,11 @@ export const requestProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}/request`,
+        `${URL_API}/api/projects/${data.projectId}/request`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -224,9 +223,47 @@ export const requestProyect = createAsyncThunk(
       let datas = await response.json();
       console.log(datas)
       if (datas.success) {
-        enqueueSnackbar("Se envio la solicitu", typeSuccess)
+        enqueueSnackbar("Se envio la solicitud", typeSuccess)
         return {
-          message: "Se envio la solicitu",
+          message: "Se envio la solicitud",
+          projectId: data.projectId
+        }
+      } else {
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const joinProyect = createAsyncThunk(
+  "proyectsSlice/joinProyect", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/projects/${data.projectId}/join`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data.data)
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar("Te uniste al proyecto", typeSuccess)
+        return {
+          message: "Te uniste al proyecto",
           projectId: data.projectId
         }
       } else {
@@ -247,11 +284,11 @@ export const getRequestProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}/requests`,
+        `${URL_API}/api/projects/${data.projectId}/requests`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -284,11 +321,11 @@ export const responseRequest = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/requests/${data.requestId}`,
+        `${URL_API}/api/projects/requests/${data.requestId}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -324,11 +361,11 @@ export const expelCollaborator = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}/collaborators/${data.username}`,
+        `${URL_API}/api/projects/${data.projectId}/collaborators/${data.username}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           }
@@ -362,11 +399,11 @@ export const cancelRequest = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}/request`,
+        `${URL_API}/api/projects/${data.projectId}/request`,
         {
           mode: "cors",
           credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           }
@@ -399,11 +436,11 @@ export const leaveProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}/leave`,
+        `${URL_API}/api/projects/${data.projectId}/leave`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           }
@@ -437,11 +474,11 @@ export const editRoleCollaborator = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + `/api/projects/${data.projectId}/collaborators/role`,
+        `${URL_API}/api/projects/${data.projectId}/collaborators/role`,
         {
           mode: "cors",
           credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },

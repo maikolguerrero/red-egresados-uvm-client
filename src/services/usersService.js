@@ -13,7 +13,7 @@ export const postData = createAsyncThunk(
         `${URL_API}/api/auth/register/alumni`,
         {
           mode: "cors",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -56,7 +56,7 @@ export const loginUserFetch = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },

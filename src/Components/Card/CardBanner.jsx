@@ -6,7 +6,7 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { BsCalendarDate } from "react-icons/bs";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
 import { useState } from "react";
-import { deleteNotification } from "../../services/notificationService";
+import { deleteNotification } from "../../services/notifications/notificationService";
 import { enqueueSnackbar } from "notistack";
 import { typeError, typeSuccess } from "../../models/alertModels";
 
@@ -21,29 +21,6 @@ export function CardBanner({
 }) {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
-  let typeSelect = "";
-  let logo = "";
-
-
-  // switch (type) {
-  //   case "Proyectos":
-  //     typeSelect = "PROYECTOS";
-  //     logo = <PiProjectorScreenChartBold className="w-6 h-6" />;
-  //     break;
-  //   case "Eventos":
-  //     typeSelect = "EVENTOS";
-  //     logo = <BsCalendarDate className="w-6 h-6" />;
-  //     break;
-  //   case "Foros":
-  //     typeSelect = "FOROS";
-  //     logo = <FaPeopleGroup className="w-6 h-6" />;
-  //     break;
-  //   default:
-  //     typeSelect = type?.toUpperCase() || "NOTIFICACIÓN";
-  //     logo = <FaPeopleGroup className="w-6 h-6" />;
-  // }
-
-
 
   // Función para determinar el icono y texto según el tipo
   const getNotificationTypeInfo = () => {
@@ -134,13 +111,6 @@ export function CardBanner({
     }
   };
 
-  // const handleMarkAsReadIfNeeded = () => {
-  //   if (!isRead && onMarkAsRead) {
-  //     onMarkAsRead();
-  //   }
-  //   handleViewClick();
-  // };
-
   if (!isVisible) return null;
 
   return (
@@ -172,7 +142,6 @@ export function CardBanner({
             className={"bg-verdeC hover:bg-RojoC"}
           />
           <button
-            // onClick={handleDelete}
             onClick={(e) => {
               e.stopPropagation(); // Evita que se marque como leída al hacer clic en la X
               handleDelete();

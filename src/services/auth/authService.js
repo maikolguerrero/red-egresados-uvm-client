@@ -26,7 +26,7 @@ export const verifySesion = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -46,7 +46,7 @@ export const verifySesion = createAsyncThunk(
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -65,7 +65,7 @@ export const logoutSesion = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -73,14 +73,14 @@ export const logoutSesion = createAsyncThunk(
       );
 
       let datas = await response.json();
-            console.log(datas)
+      console.log(datas)
       if (datas.success) {
         enqueueSnackbar(datas.message, typeSuccess)
         return (datas.message)
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -99,7 +99,7 @@ export const resendEmailFetch = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -132,7 +132,7 @@ export const postData = createAsyncThunk(
         `${URL_API}/api/auth/register/alumni`,
         {
           mode: "cors",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -143,7 +143,7 @@ export const postData = createAsyncThunk(
       let datas = await response.json();
       if (datas.success) {
         enqueueSnackbar(datas.message, typeSuccess)
-        return ({message: datas.message, email: data.email});
+        return ({ message: datas.message, email: data.email });
       } else {
         if (datas.metadata.context === "input_validation") {
           throw `${datas.metadata.errors[0].message}`;
@@ -175,7 +175,7 @@ export const loginUserFetch = createAsyncThunk(
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -213,12 +213,11 @@ export const verifyEmail = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        // "http://localhost:3000" + "/api/auth/verify-email?token =" + "?",
-         `${URL_API}/api/auth/verify-email?token=${data}`,
+        `${URL_API}/api/auth/verify-email?token=${data}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },

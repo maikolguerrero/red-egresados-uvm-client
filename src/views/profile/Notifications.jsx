@@ -5,15 +5,38 @@ import Nav from "../../Components/Nav";
 import { CardBanner } from "../../Components/Card/CardBanner";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useDispatch, useSelector } from "react-redux";
-import { getNotifications, markNotificationAsRead } from "../../services/notificationService";
-import socketService from "../../services/socket.service";
+import { getNotifications, markNotificationAsRead, deleteNotification, getUnreadNotificationCount } from "../../services/notifications/notificationService";
+import socketService from "../../services/socket/socket.service";
 import { enqueueSnackbar } from "notistack";
 import { typeError } from "../../models/alertModels";
-import { deleteNotification, getUnreadNotificationCount } from "../../services/notificationService";
 import { decrementUnreadCount } from "../../features/notifications/notificationSlice";
 
 const customTheme = createTheme({
-  // ... (tu tema actual)
+  base: "",
+  layout: {
+    table: {
+      base: "text-sm text-gray-700",
+      span: "font-semibold text-gray-900",
+    },
+  },
+  pages: {
+    base: "xs:mt-0 mt-2 inline-flex items-center -space-x-px",
+    showIcon: "inline-flex",
+    previous: {
+      base: "ml-0 rounded-l-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
+      icon: "h-5 w-5",
+    },
+    next: {
+      base: "rounded-r-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
+      icon: "h-5 w-5",
+    },
+    selector: {
+      base: "w-12 border border-verdeD bg-Gris py-2 leading-tight text-Negro enabled:hover:bg-white enabled:hover:text-verdeD",
+      active:
+        "bg-cyan-50 text-RojoC hover:bg-white hover:text-verdeD",
+      disabled: "cursor-not-allowed opacity-50",
+    },
+  },
 });
 
 function Notifications() {

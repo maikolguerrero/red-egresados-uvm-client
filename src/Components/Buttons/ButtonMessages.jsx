@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { MdMessage, MdClose, MdChevronRight } from "react-icons/md";
 import { ButtonDM } from "./ButtonDM";
-import { getConversations } from "../../services/chatService";
+import { getConversations } from "../../services/chat/chatService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import socketService from "../../services/socket.service";
+import socketService from "../../services/socket/socket.service";
 import { useDispatch } from 'react-redux';
-import { setConversations as setReduxConversations } from '../../features/chatSlice';
+import { setConversations as setReduxConversations } from '../../features/chat/chatSlice';
 
 export function ButtonMessages() {
   const [isOpen, setIsOpen] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [unreadTotal, setUnreadTotal] = useState(0);
+
   const [drawerWidth, setDrawerWidth] = useState('28rem');
   const auth = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -37,6 +38,11 @@ export function ButtonMessages() {
   };
 
   useEffect(() => {
+    // Cargar conversaciones al montar el componente
+    if (auth.id) {
+      fetchConversations();
+    }
+
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setDrawerWidth('100vw');
@@ -54,6 +60,7 @@ export function ButtonMessages() {
 
   useEffect(() => {
     if (isOpen && auth.id) {
+      // Refrescar conversaciones al abrir el drawer
       fetchConversations();
     }
   }, [isOpen, auth.id]);
@@ -98,8 +105,8 @@ export function ButtonMessages() {
       >
         <MdMessage className="text-2xl" />
         {unreadTotal > 0 && (
-          <span className="absolute -top-1 -right-1 bg-RojoC text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {unreadTotal > 9 ? '9+' : unreadTotal}
+          <span className="absolute -top-2 -right-2 bg-RojoC text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">
+            {unreadTotal > 99 ? '99+' : unreadTotal}
           </span>
         )}
       </button>

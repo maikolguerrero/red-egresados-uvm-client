@@ -4,18 +4,16 @@ import {
     BsCheck,
     BsCheckAll,
     BsReply,
-    BsForward,
     BsTrash,
     BsCopy
 } from 'react-icons/bs';
 import { enqueueSnackbar } from 'notistack';
 import { typeSuccess } from '../../models/alertModels';
+import { formatTimeOnly } from '../../utils/dateUtils';
 
 export default function Message({ message, isOwn, markMessagesAsRead }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
-    // const [isRead, setIsRead] = useState(message.read);
-
     const [isRead, setIsRead] = useState(message.read);
     const [isVisible, setIsVisible] = useState(false);
     const messageRef = useRef();
@@ -33,18 +31,6 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    const formatTime = (dateString) => {
-        const timeString = new Date(dateString).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        });
-
-        // Formatear para evitar separación de "a.m./p.m."
-        return timeString.replace(/(\d+:\d+)([ap]\.m\.)/i, '$1 $2').toLowerCase();
-    };
-
 
     // Observar visibilidad del mensaje
     useEffect(() => {
@@ -68,10 +54,10 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
     useEffect(() => {
         if (isVisible && !isOwn && !isRead) {
             setIsRead(true);
-            markMessagesAsRead([message._id])
+            markMessagesAsRead([message.id])
                 .catch(err => setIsRead(false));
         }
-    }, [isVisible, isOwn, isRead, message._id, markMessagesAsRead]);
+    }, [isVisible, isOwn, isRead, message.id, markMessagesAsRead]);
 
     // Sincronizar con cambios externos
     useEffect(() => {
@@ -83,35 +69,26 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
         if (!isOwn) return null;
 
         return isRead ? (
-            // <span className="flex items-center gap-1 text-xs font-medium text-Blanco/90 whitespace-nowrap">
             <span className="flex items-center gap-0.5 text-lg font-medium text-blue-400 whitespace-nowrap">
-                {/* Leído */}
                 <BsCheckAll />
             </span>
         ) : (
-            // <span className="text-xs font-medium text-Blanco/90 whitespace-nowrap">
             <span className="text-lg font-medium text-gray-400 whitespace-nowrap">
-
-                {/* Enviado */}
                 <BsCheck />
             </span>
         );
     };
 
+    // Función para obtener las iniciales del remitente
     const getInitials = () => {
-        // if (message.sender.firstName && message.sender.lastName) {
-        //     return `${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`;
-        // }
-        return message.sender.username?.charAt(0) || 'U';
+        if (message.sender?.firstName && message.sender?.lastName) {
+            return `${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`;
+        }
+        return message.sender?.username?.charAt(0) || 'U';
     };
 
-    // const handleCopy = () => {
-    //     navigator.clipboard.writeText(message.content);
-    //     setMenuOpen(false);
-    //     enqueueSnackbar("Mensaje copiado", typeSuccess);
-    // };
 
-    // --- MODIFICACIÓN AQUÍ ---
+    // Función para copiar el contenido del mensaje
     const handleCopy = async () => { // Hacemos la función asíncrona
         if (!navigator.clipboard) {
             // Fallback para navegadores antiguos o contextos no seguros
@@ -176,11 +153,11 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                     {/* Pie de mensaje - ahora en una sola línea */}
                     <div className={`flex items-center justify-end gap-2 mt-1.5 flex-wrap`}>
                         <span className="text-xs font-medium opacity-80 whitespace-nowrap">
-                            {formatTime(message.createdAt)}
-                        </span>
+                            {formatTimeOnly(message.createdAt)}
+                        </span >
                         {renderStatus()}
-                    </div>
-                </div>
+                    </div >
+                </div >
 
                 {/* Botón de menú (para todos los mensajes) */}
                 <div className="relative self-center mb-1" ref={menuRef}>
@@ -197,30 +174,32 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                     </button>
 
                     {/* Menú desplegable personalizado */}
-                    {menuOpen && (
-                        <div className={`absolute w-40 bg-white rounded-lg shadow-lg z-10 border border-gray-200 overflow-hidden ${isOwn ? 'right-0' : 'left-0'
-                            }`}>
-                            <button
-                                onClick={handleCopy}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            >
-                                <BsCopy className="text-gray-500" />
-                                Copiar
-                            </button>
-                            <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <BsReply className="text-gray-500" />
-                                Responder
-                            </button>
-                            {isOwn && (
-                                <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-100">
-                                    <BsTrash className="text-red-500" />
-                                    Eliminar
+                    {
+                        menuOpen && (
+                            <div className={`absolute w-40 bg-white rounded-lg shadow-lg z-10 border border-gray-200 overflow-hidden ${isOwn ? 'right-0' : 'left-0'
+                                }`}>
+                                <button
+                                    onClick={handleCopy}
+                                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                >
+                                    <BsCopy className="text-gray-500" />
+                                    Copiar
                                 </button>
-                            )}
-                        </div>
-                    )}
+                                <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <BsReply className="text-gray-500" />
+                                    Responder
+                                </button>
+                                {isOwn && (
+                                    <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-100">
+                                        <BsTrash className="text-red-500" />
+                                        Eliminar
+                                    </button>
+                                )}
+                            </div>
+                        )
+                    }
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }

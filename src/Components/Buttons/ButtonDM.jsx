@@ -1,32 +1,7 @@
 import { BsCheck, BsCheckAll } from 'react-icons/bs';
+import { formatMessageTime } from '../../utils/dateUtils';
 
 export function ButtonDM({ conversation, onClick }) {
-  const formatTime = (dateString) => {
-    if (!dateString) return '';
-
-    const date = new Date(dateString);
-    const now = new Date();
-
-    if (date.toDateString() === now.toDateString()) {
-      return date.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit'
-      }).replace(/(\d+:\d+)([ap]\.m\.)/i, '$1 $2').toLowerCase();
-    }
-
-    const yesterday = new Date(now);
-    yesterday.setDate(yesterday.getDate() - 1);
-    if (date.toDateString() === yesterday.toDateString()) return 'Ayer';
-
-    const weekAgo = new Date(now);
-    weekAgo.setDate(weekAgo.getDate() - 7);
-    if (date > weekAgo) {
-      return date.toLocaleDateString([], { weekday: 'short' });
-    }
-
-    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
-  };
-
   const getInitials = () => {
     if (conversation.firstName && conversation.lastName) {
       return `${conversation.firstName.charAt(0)}${conversation.lastName.charAt(0)}`;
@@ -68,15 +43,6 @@ export function ButtonDM({ conversation, onClick }) {
 
       {/* Contenido */}
       <div className="flex-1 min-w-0 text-left">
-        {/* <div className="flex justify-between items-baseline gap-2">
-          <h6 className="text-Negro font-barlow-semi-condensed font-semibold truncate">
-            {conversation.firstName} {conversation.lastName}
-          </h6>
-          <span className="text-xs text-gray-400 whitespace-nowrap">
-            {conversation.lastMessage && formatTime(conversation.lastMessage.createdAt)}
-          </span>
-        </div> */}
-
         <div className="flex justify-between items-start">
           <div>
             <h6 className="text-Negro font-barlow-semi-condensed font-semibold">
@@ -85,9 +51,9 @@ export function ButtonDM({ conversation, onClick }) {
             <p className="text-xs text-gray-400">@{conversation.username}</p>
           </div>
           <span className="text-xs text-gray-400 whitespace-nowrap ml-2 mt-1">
-            {conversation.lastMessage && formatTime(conversation.lastMessage.createdAt)}
-          </span>
-        </div>
+            {conversation.lastMessage && formatMessageTime(conversation.lastMessage.createdAt)}
+          </span >
+        </div >
 
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1 min-w-0">
@@ -95,12 +61,7 @@ export function ButtonDM({ conversation, onClick }) {
             <p className="text-sm text-gray-500 truncate">
               {conversation.lastMessage?.content || "Nuevo chat"}
             </p>
-            {/* {conversation.username && (
-              <span className="text-xs text-gray-400 truncate hidden sm:inline">
-                @{conversation.username}
-              </span>
-            )} */}
-          </div>
+          </div >
 
           <div className="flex items-center gap-1">
             {conversation.unreadCount > 0 && (
@@ -109,14 +70,8 @@ export function ButtonDM({ conversation, onClick }) {
               </span>
             )}
           </div>
-        </div>
-
-        {/* {conversation.degree && (
-          <p className="text-xs text-verdeD truncate mt-1">
-            {conversation.degree}
-          </p>
-        )} */}
-      </div>
-    </button>
+        </div >
+      </div >
+    </button >
   );
 }
