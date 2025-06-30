@@ -69,7 +69,7 @@ export function CardForum({ forum }) {
           <img
             className="rounded-full w-6 md:w-8 xl:w-10"
             src={
-              forum.author.profilePicture.url === null
+              forum.author.profilePicture === undefined || forum.author.profilePicture.url === null 
                 ? perfil
                 : forum.author.profilePicture.url
             }

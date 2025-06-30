@@ -8,6 +8,7 @@ import socketReducer from '../features/socket/socketSlice';
 import chatReducer from '../features/chat/chatSlice';
 import sidebarReducer from '../features/sidebar/sidebarSlice';
 import notificationReducer from '../features/notifications/notificationSlice';
+import landingReducer from '../features/admin/landingSlice';
 
 export default configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export default configureStore({
     socket: socketReducer,
     sidebar: sidebarReducer,
     notifications: notificationReducer,
+    landing: landingReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false // Opcional: desactivar la verificación de serialización para acciones complejas

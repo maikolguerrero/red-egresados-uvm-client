@@ -4,11 +4,14 @@ import { FaCircle } from "react-icons/fa";
 import { MdReportProblem } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { likeThreads } from "../../../services/forum/forumService";
+import { FormReport } from "../../Forms/Forum/FormReport";
+import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 
-export function CardReplie({ comment }) {
+export function CardReplie({ forum, comment }) {
   const dispatch = useDispatch();
     
   const [type, setType] = useState("");
+  const [openReport, setOpenReport] = useState(false);
   const [datePublic, setDatePublic] = useState(0);
 
   useEffect(() => {
@@ -86,12 +89,19 @@ export function CardReplie({ comment }) {
             {comment.likeCount}{" "}
             <AiFillLike className={` text-xs md:text-sm xl:text-base`} />
           </li>
-          <li className="flex gap-2 items-center text-sm justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+          <li onClick={(e) => {setOpenReport(true)}} className="flex gap-2 items-center text-sm justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
             Reportar{" "}
             <MdReportProblem className="text-xs md:text-sm xl:text-base" />
           </li>
         </ul>
       </div>
+
+      <ModalNotHeader
+        openModal={openReport}
+        setOpenModal={setOpenReport}
+        size={"3xl"}
+        component={<FormReport idComment={comment.id} threadId={forum.id} />}
+      />
     </>
   );
 }

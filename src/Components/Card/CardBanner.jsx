@@ -9,6 +9,7 @@ import { useState } from "react";
 import { deleteNotification } from "../../services/notifications/notificationService";
 import { enqueueSnackbar } from "notistack";
 import { typeError, typeSuccess } from "../../models/alertModels";
+import { IoIosNotifications } from "react-icons/io";
 
 export function CardBanner({
   type,
@@ -51,7 +52,7 @@ export function CardBanner({
         };
       default:
         return {
-          icon: <FaPeopleGroup className="w-6 h-6" />,
+          icon: <IoIosNotifications className="w-6 h-6" />,
           typeText: "NOTIFICACIÓN",
           baseRoute: "/notifications"
         };

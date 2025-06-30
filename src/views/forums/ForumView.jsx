@@ -13,7 +13,6 @@ import { Loader } from "../../Components/Loader";
 
 function ForumView() {
   const forumSelect = useSelector((state) => state.forums.forumSelect);
-  const passed = useSelector((state) => state.forums.forumAdd.passed);
   const loading = useSelector((state) => state.forums.loadingPage);
   const dispatch = useDispatch();
 
@@ -54,11 +53,7 @@ function ForumView() {
           setOpenModal={setOpendAddForum}
           size={"3xl"}
           component={
-            passed === 0 ? (
-              <FormAddForum />
-            ) : (
-              <FormAddPicture setOpenModal={setOpendAddForum} />
-            )
+            <FormAddForum />
           }
         />
       </main>

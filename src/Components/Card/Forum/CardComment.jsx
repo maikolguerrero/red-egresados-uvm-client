@@ -8,12 +8,14 @@ import { likeThreads } from "../../../services/forum/forumService";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 import { FormAddComment } from "../../Forms/Forum/FormAddComment";
 import { CardReplie } from "./CardReplie";
+import { FormReport } from "../../Forms/Forum/FormReport";
 
-export function CardComment({ comment }) {
+export function CardComment({ forum, comment }) {
   const dispatch = useDispatch();
     
   const [type, setType] = useState("");
   const [datePublic, setDatePublic] = useState(0);
+  const [openReport, setOpenReport] = useState(false);
   const [openComment, setOpenComment] = useState(false);
 
   useEffect(() => {
@@ -106,19 +108,19 @@ export function CardComment({ comment }) {
               {comment.replies === undefined ? "0" : comment.replies.length}{" "}
               <FaComments className="text-sm md:text-base xl:text-lg" />
             </li>
-            <li className="flex gap-2 items-center justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+            <li onClick={(e) => {setOpenReport(true)}} className="flex gap-2 items-center justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
               Reportar{" "}
               <MdReportProblem className="text-sm md:text-base xl:text-lg" />
             </li>
           </ul>
 
-          {(comment.replies === undefined || comment.replies.length === 0) ? (
+          {comment.replies === undefined || comment.replies.length === 0 ? (
             <></>
           ) : (
             <ul className="mt-6 flex flex-col gap-4">
               {comment.replies.map((item) => (
                 <li key={item.id} className="flex flex-col">
-                  <CardReplie comment={item} />
+                  <CardReplie forum={forum} comment={item} />
                 </li>
               ))}
             </ul>
@@ -130,6 +132,12 @@ export function CardComment({ comment }) {
           setOpenModal={setOpenComment}
           size={"3xl"}
           component={<FormAddComment comment={comment} />}
+        />
+        <ModalNotHeader
+          openModal={openReport}
+          setOpenModal={setOpenReport}
+          size={"3xl"}
+          component={<FormReport idComment={comment.id} threadId={forum.id} />}
         />
       </div>
     </>

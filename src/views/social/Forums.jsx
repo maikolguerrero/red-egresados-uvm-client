@@ -46,7 +46,6 @@ let defaultValues = {
 };
 
 function Forums() {
-  const passed = useSelector((state) => state.forums.forumAdd.passed);
   const pagination = useSelector((state) => state.forums.pagination);
   const forums = useSelector((state) => state.forums.forums);
   const loading = useSelector((state) => state.forums.loadingPage);
@@ -137,11 +136,7 @@ function Forums() {
           setOpenModal={setOpendAddForum}
           size={"3xl"}
           component={
-            passed === 0 ? (
-              <FormAddForum />
-            ) : (
-              <FormAddPicture setOpenModal={setOpendAddForum} />
-            )
+            <FormAddForum />
           }
         />
       </main>

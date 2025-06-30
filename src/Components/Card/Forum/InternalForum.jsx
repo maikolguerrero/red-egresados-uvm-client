@@ -12,6 +12,7 @@ import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 import { FormAddComment } from "../../Forms/Forum/FormAddComment";
 import { CardComment } from "./CardComment";
 import { FormAddForum } from "../../Forms/Forum/FormAddForum";
+import { FormReport } from "../../Forms/Forum/FormReport";
 
 export function InternalForum({ forum }) {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export function InternalForum({ forum }) {
   const [type, setType] = useState("")
   const [datePublic, setDatePublic] = useState(0);
   const [openComment, setOpenComment] = useState(false);
+  const [openReport, setOpenReport] = useState(false);
   const [editForum, setEditForum] = useState(false)
 
   useEffect(() => {
@@ -147,18 +149,6 @@ export function InternalForum({ forum }) {
               <p className="text-xs md:text-sm">{forum.content}</p>
             </div>
 
-            {forum.media.length === 0 ? (
-              <></>
-            ) : (
-              <div className="w-full rounded-md border border-verdeC bg-Negro justify-center items-center flex">
-                <img
-                  className="rounded-md"
-                  src={forum.media[0].url}
-                  alt="Multimedia del foro"
-                />
-              </div>
-            )}
-
             <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg mt-4">
               <li
                 onClick={handleLike}
@@ -177,7 +167,7 @@ export function InternalForum({ forum }) {
                 Compartir{" "}
                 <FaShare className="text-base md:text-lg xl:text-xl" />
               </li>
-              <li className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+              <li onClick={(e) => {setOpenReport(true)}} className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
                 Reportar{" "}
                 <MdReportProblem className="text-base md:text-lg xl:text-xl" />
               </li>
@@ -208,7 +198,7 @@ export function InternalForum({ forum }) {
                 <ul className="p-5 rounded-md bg-Gris flex flex-col gap-8">
                   {forum.comments.map((item) => (
                     <li key={item.id}>
-                      <CardComment comment={item} />
+                      <CardComment forum={forum} comment={item} />
                     </li>
                   ))}
                 </ul>
@@ -221,6 +211,12 @@ export function InternalForum({ forum }) {
             setOpenModal={setOpenComment}
             size={"3xl"}
             component={<FormAddComment forum={forum} />}
+          />
+          <ModalNotHeader
+            openModal={openReport}
+            setOpenModal={setOpenReport}
+            size={"3xl"}
+            component={<FormReport threadId={forum.id} />}
           />
           <ModalNotHeader
             openModal={editForum}

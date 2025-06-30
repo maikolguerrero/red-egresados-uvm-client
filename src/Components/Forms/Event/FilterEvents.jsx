@@ -54,7 +54,7 @@ function FilterEvents({ values, setValues }) {
               value={values.type}
               onChange={handleInputChange}
             >
-              <option value="">...</option>
+              <option value="">Todos los tipos</option>
               <option value="conferencia">Conferencia</option>
               <option value="taller">Taller</option>
               <option value="seminario">Seminario</option>

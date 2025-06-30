@@ -52,7 +52,7 @@ function FilterForums({values, setValues}) {
               value={values.category}
               onChange={handleInputChange}
             >
-              <option value="">...</option>
+              <option value="">Todas las categorias</option>
               <option value="general">General</option>
               <option value="empleos">Empleos</option>
               <option value="eventos">Eventos</option>
