@@ -59,10 +59,12 @@ function Forums() {
   }, []);
 
   useEffect(() => {
-    dispatch(searchForum({
-      page: pagination.page,
-      limit: pagination.limit
-    }))
+    dispatch(
+      searchForum({
+        page: 1,
+        limit: 10,
+      })
+    );
   }, [])
 
   const onPageChange = (page) =>

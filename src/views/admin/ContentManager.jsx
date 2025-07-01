@@ -25,10 +25,12 @@ function ContentManager() {
                 texto={"Configuración de Langing Page"}
               />
             </Link>
-            <ButtonSecurity
-              icono={<IoIosHome className="text-6xl" />}
-              texto={"Configuración de la sección principal"}
-            />
+            <Link to={"/content-manager/home"}>
+              <ButtonSecurity
+                icono={<IoIosHome className="text-6xl" />}
+                texto={"Configuración de la sección principal"}
+              />
+            </Link>
           </div>
         </div>
 

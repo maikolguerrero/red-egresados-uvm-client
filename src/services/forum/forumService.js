@@ -125,6 +125,8 @@ export const searchForum = createAsyncThunk(
             data.category === null || data.category === undefined ? "" : "&category=" + data.category
           }${
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
+          }${
+            !data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
           }`,
         {
           mode: "cors",

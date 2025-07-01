@@ -144,10 +144,10 @@ export function InternalEvent({ event }) {
                   <b>ACTIVO:</b>{" "}
                   <span
                     className={`${
-                      event.isActive ? "text-verdeA" : "text-RojoC"
+                      event.isActive ? "text-verdeB" : "text-RojoC"
                     } font-medium`}
                   >
-                    {event.isActive ? "Si activo" : "No activo"}
+                    {event.isActive ? "Activo" : "Inactivo"}
                   </span>
                 </p>
                 <GiDiploma className="text-verdeC text-2xl" />
@@ -164,7 +164,7 @@ export function InternalEvent({ event }) {
 
               <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
                 <p className="font-barolw text-base">
-                  <b>DIPLOMADO:</b>{" "}
+                  <b>CERTIFICADO:</b>{" "}
                   {event.certificate
                     ? "Si es certificado"
                     : "No es certificado"}

@@ -78,7 +78,8 @@ function FilterEvents({ values, setValues }) {
             />
           </div>
 
-          <div className="w-full flex flex-col relative">
+          {
+            /*<div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
               Estado del Evento:
             </Label>
@@ -93,7 +94,8 @@ function FilterEvents({ values, setValues }) {
               <option value={true}>Activo</option>
               <option value={false}>Inactivo</option>
             </select>
-          </div>
+          </div>*/
+          }
         </div>
 
         <div>

@@ -18,7 +18,19 @@ export function CardEvent({event}) {
   const events = useSelector((state) => state.events.events);
 
   const [openEditEvent, setOpenEditEvent] = useState(false);
-  const [scheduled, setScheduled] = useState(false)
+  const [scheduled, setScheduled] = useState(false);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    let date = new Date();
+    let date2 = new Date(event.endDate)
+
+    if (date <= date2) {
+      setActive(true)
+    } else {
+      setActive(false)
+    }
+  }, [event])
 
   useEffect(() => {
     for (let i = 0; i < event.savedByUsers.length; i++) {
@@ -64,12 +76,16 @@ export function CardEvent({event}) {
       </a>
 
       <div className="p-5 font-barolw">
-        <h5 className="mb-1 text-sm md:text-base xl:text-lg font-bold tracking-tight text-Negro uppercase">
+        <h5 className="mb-4 text-sm md:text-base xl:text-lg font-bold tracking-tight text-Negro uppercase">
           {event.title}
         </h5>
-        <h6 className="text-RojoC mb-8 text-xs md:text-sm xl:text-base font-semibold">
-          {event.startDate.split("T")[0]}. HORA:{" "}
+        <h6 className="text-RojoC text-xs md:text-sm xl:text-base font-semibold">
+          <span className="text-verdeD">INICIA: </span>{event.startDate.split("T")[0]} A LAS {" "}
           {event.startDate.split("T")[1].split(".")[0]}
+        </h6>
+        <h6 className="text-RojoC mb-8 text-xs md:text-sm xl:text-base font-semibold">
+          <span className="text-verdeD">{active ? "FINALIZA: " : "FINALIZO: "}</span>{event.endDate.split("T")[0]} A LAS {" "}
+          {event.endDate.split("T")[1].split(".")[0]}
         </h6>
         <p className="mb-3 font-medium text-Negro ">{event.description}</p>
 
@@ -86,12 +102,14 @@ export function CardEvent({event}) {
                 text={"Eliminar de Agenda"}
                 className={"bg-verdeC hover:bg-RojoC"}
               />
-            ) : (
+            ) : active ? (
               <ButtonSmall
                 action={handleAgendar}
                 text={"Agendar"}
                 className={"bg-verdeC hover:bg-RojoC"}
               />
+            ) : (
+              <></>
             )}
           </div>
 

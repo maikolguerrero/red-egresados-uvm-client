@@ -12,21 +12,22 @@ import { getContentLanding } from "../../services/admin/landingService";
 import { FormCarrousel } from "../../Components/Forms/admin/landing/FormCarrousel";
 import { FormFeatureSection } from "../../Components/Forms/admin/landing/FormFeatureSection";
 import { Loader } from "../../Components/Loader";
+import { FormCarrouselHome } from "../../Components/Forms/admin/home/FormCarrouselHome";
+import { getContentHome } from "../../services/admin/homeService";
+import { FormTextSectionHome } from "../../Components/Forms/admin/home/FormTextSectionHome";
 
-function CMLandingPage() {
+function CMHomePage() {
   const dispatch = useDispatch();
-  const landing = useSelector((state) => state.landing.landingContent);
-  const loader = useSelector((state) => state.landing.loading);
-  const loading = useSelector((state) => state.landing.loadingPage);
+  const home = useSelector((state) => state.home.homeContent);
+  const loader = useSelector((state) => state.home.loading);
+  const loading = useSelector((state) => state.home.loadingPage);
 
-  const [modalFooter, setModalFooter] = useState(false);
-  const [modalFaqs, setModalFaqs] = useState(false);
   const [modalWelcomeS, setModalWelcolmeS] = useState(false);
   const [modalCarrousel, setModalCarrousel] = useState(false);
   const [featuredSections, setFeaturedSections] = useState(false);
 
   useEffect(() => {
-    dispatch(getContentLanding())
+    dispatch(getContentHome())
   }, []);
 
   return (
@@ -62,62 +63,38 @@ function CMLandingPage() {
                   action={(e) => setModalCarrousel(true)}
                 />
                 <ButtonBig
-                  text={"Sección de texto"}
+                  text={"Consejos de uso"}
                   className={"bg-verdeB hover:bg-RojoC w-[250px]"}
                   action={(e) => setModalWelcolmeS(true)}
                 />
-                <ButtonBig
+                {/*<ButtonBig
                   text={"Sección de texto e imágenes"}
-                  className={"bg-verdeC hover:bg-RojoC w-[250px]"}
+                  className={"bg-verdeC hover:bg-RojoC"}
                   action={(e) => setFeaturedSections(true)}
-                />
-                <ButtonBig
-                  text={"Preguntas frecuentes"}
-                  className={"bg-verdeB hover:bg-RojoC w-[250px]"}
-                  action={(e) => setModalFaqs(true)}
-                />
-                <ButtonBig
-                  text={"Footer"}
-                  className={"bg-verdeC hover:bg-RojoC w-[250px]"}
-                  action={(e) => setModalFooter(true)}
-                />
+                />*/}
               </div>
             </div>
-
-            <ModalNotHeader
-              openModal={modalFooter}
-              setOpenModal={setModalFooter}
-              size={"xl"}
-              component={<FormFooter landing={landing} />}
-            />
-
-            <ModalNotHeader
-              openModal={modalFaqs}
-              setOpenModal={setModalFaqs}
-              size={"xl"}
-              component={<FormFaqs landing={landing} />}
-            />
 
             <ModalNotHeader
               openModal={modalWelcomeS}
               setOpenModal={setModalWelcolmeS}
               size={"xl"}
-              component={<FormTextSection landing={landing} />}
+              component={<FormTextSectionHome home={home} />}
             />
 
             <ModalNotHeader
               openModal={modalCarrousel}
               setOpenModal={setModalCarrousel}
               size={"xl"}
-              component={<FormCarrousel landing={landing} />}
+              component={<FormCarrouselHome home={home} />}
             />
 
-            <ModalNotHeader
+            {/*<ModalNotHeader
               openModal={featuredSections}
               setOpenModal={setFeaturedSections}
               size={"xl"}
-              component={<FormFeatureSection landing={landing} />}
-            />
+              component={<>a</>}
+            /> */}
 
             <div className="absolute right-8 bottom-6">
               <ButtonMessages />
@@ -129,4 +106,4 @@ function CMLandingPage() {
   );
 }
 
-export default CMLandingPage;
+export default CMHomePage;

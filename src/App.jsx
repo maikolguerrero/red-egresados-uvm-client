@@ -26,6 +26,7 @@ import socketService from "./services/socket/socket.service";
 import { URL_API } from "./config";
 import ContentManager from "./views/admin/ContentManager";
 import CMLandingPage from "./views/admin/CMLandingPage";
+import CMHomePage from "./views/admin/CMHomePage";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -82,6 +83,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CMLandingPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/content-manager/home",
+    element: (
+      <ProtectedRoute>
+        <CMHomePage />
       </ProtectedRoute>
     ),
   },

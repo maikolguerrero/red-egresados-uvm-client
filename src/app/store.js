@@ -9,6 +9,7 @@ import chatReducer from '../features/chat/chatSlice';
 import sidebarReducer from '../features/sidebar/sidebarSlice';
 import notificationReducer from '../features/notifications/notificationSlice';
 import landingReducer from '../features/admin/landingSlice';
+import homeReducer from '../features/admin/homeSlice';
 
 export default configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export default configureStore({
     sidebar: sidebarReducer,
     notifications: notificationReducer,
     landing: landingReducer,
+    home: homeReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false // Opcional: desactivar la verificación de serialización para acciones complejas

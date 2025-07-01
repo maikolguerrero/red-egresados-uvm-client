@@ -65,13 +65,23 @@ function Proyects() {
     setValues(defaultValues);
     dispatch(
       searchProyect({
-        page: pagination.page,
-        limit: pagination.limit,
+        page: 1,
+        limit: 8,
       })
     );
   }, []);
 
-  const onPageChange = (page) => setCurrentPage(page);
+  const onPageChange = (page) => {
+    dispatch(
+      searchProyect({
+        page: page,
+        limit: pagination.limit,
+        status: values.status.trim() === "" ? null : values.status,
+        search: values.search.trim() === "" ? null : values.search,
+        username: values.username.trim() === "" ? null : values.username,
+      })
+    );
+  };
   return (
     <>
       <Header />

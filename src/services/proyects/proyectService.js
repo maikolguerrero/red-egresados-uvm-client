@@ -57,6 +57,8 @@ export const searchProyect = createAsyncThunk(
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
           }${
             data.username === null || data.username === undefined ? "" : "&username=" + data.username
+          }${
+            !data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
           }`,
         {
           mode: "cors",
