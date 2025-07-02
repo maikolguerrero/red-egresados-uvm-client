@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addComment, addForum, addPictureForum, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
+import { addComment, addForum, addPictureForum, addReport, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
 
 export const forumsSlice = createSlice({
   name: "forums",
@@ -7,10 +7,6 @@ export const forumsSlice = createSlice({
     forums: [],
     forumSelect: {},
     pagination: { total: 0, page: 1, pages: 0, limit: 10 },
-    forumAdd: {
-      data: null,
-      passed: 0,
-    },
     loading: false,
     loadingPage: false,
     error: "",
@@ -35,10 +31,22 @@ export const forumsSlice = createSlice({
     builder.addCase(addForum.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      state.forumAdd.data = action.payload.forum;
-      state.forumAdd.passed = 1;
+      state.forums = [action.payload.forum, ...state.forums];
     });
     builder.addCase(addForum.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(addReport.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(addReport.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    });
+    builder.addCase(addReport.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
@@ -146,7 +154,8 @@ export const forumsSlice = createSlice({
       state.loading = false;
       state.message = action.payload.message;
       if (action.payload.type === "thread") {
-        state.forumSelect.comments = [...state.forumSelect.comments, action.payload.comment]
+        action.payload.comment.replies = [];
+        state.forumSelect.comments = [action.payload.comment, ...state.forumSelect.comments]
       } else {
         let position = 0
         for (let i = 0; i < state.forumSelect.comments.length; i++) {

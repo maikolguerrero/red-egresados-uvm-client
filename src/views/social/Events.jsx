@@ -63,8 +63,8 @@ function Events() {
   useEffect(() => {
     dispatch(
       searchEvent({
-        page: pagination.page,
-        limit: pagination.limit,
+        page: 1,
+        limit: 10,
       })
     );
   }, []);

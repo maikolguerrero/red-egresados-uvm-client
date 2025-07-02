@@ -24,6 +24,9 @@ import EventView from "./views/events/EventView";
 import Chat from "./views/social/Chat";
 import socketService from "./services/socket/socket.service";
 import { URL_API } from "./config";
+import ContentManager from "./views/admin/ContentManager";
+import CMLandingPage from "./views/admin/CMLandingPage";
+import CMHomePage from "./views/admin/CMHomePage";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -64,6 +67,30 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Landing />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/content-manager",
+    element: (
+      <ProtectedRoute>
+        <ContentManager />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/content-manager/landing",
+    element: (
+      <ProtectedRoute>
+        <CMLandingPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/content-manager/home",
+    element: (
+      <ProtectedRoute>
+        <CMHomePage />
       </ProtectedRoute>
     ),
   },

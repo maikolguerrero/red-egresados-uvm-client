@@ -3,10 +3,13 @@ import logo from "./../../public/LogoUvm.png";
 import { HiXMark } from "react-icons/hi2";
 import { useState } from "react";
 import Button from "./Buttons/Button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function NavLogin() {
   const [sidebar, setSidebar] = useState(false);
+
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <>
@@ -33,7 +36,13 @@ function NavLogin() {
           }`}
         >
           <div className="w-5/6 md:w-full flex justify-center">
-            <Link to={"/register"}><Button text="REGISTRO"  /></Link>
+            {
+              currentPath === "/login" ? (
+                <Link to={"/register"}><Button text="REGISTRO"  /></Link>
+              ) : (
+                <Link to={"/login"}><Button text="LOGIN"  /></Link>
+              )
+            }
           </div>
           <div className="w-1/6 md:w-0 flex items-center h-full justify-end px-4 md:hidden">
             <button

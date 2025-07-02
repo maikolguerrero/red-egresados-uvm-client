@@ -7,7 +7,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { FormAddProyect } from "../Forms/Proyects/FormAddProyect";
-import { cancelRequest, deleteProject, requestProyect } from "../../services/proyects/proyectService";
+import { cancelRequest, deleteProject, joinProyect, requestProyect } from "../../services/proyects/proyectService";
 import perfil from "../../../public/Perfil.jpg"
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { BiWorld } from "react-icons/bi";
@@ -44,6 +44,10 @@ export function CardProyect({ proyect }) {
 
   const handleRequest = (e) => {
     dispatch(requestProyect({projectId: proyect.id}))
+  }
+
+  const handleJoin = (e) => {
+    dispatch(joinProyect({projectId: proyect.id}))
   }
 
   return (
@@ -117,7 +121,15 @@ export function CardProyect({ proyect }) {
             color={proyect.isPublic ? "green" : "red"}
             className="uppercase"
           >
-            {proyect.isPublic ? <span className="flex gap-1 items-center">Publico <BiWorld/></span> : <span className="flex gap-1 items-center">Privado <RiGitRepositoryPrivateFill /></span>}
+            {proyect.isPublic ? (
+              <span className="flex gap-1 items-center">
+                Publico <BiWorld />
+              </span>
+            ) : (
+              <span className="flex gap-1 items-center">
+                Privado <RiGitRepositoryPrivateFill />
+              </span>
+            )}
           </Badge>
         </p>
         <p className="font-bold text-verdeD flex items-center gap-2">
@@ -178,7 +190,7 @@ export function CardProyect({ proyect }) {
         />
         {proyect.owner.username === username ? (
           <></>
-        ) : isCollaborator ? (
+        ) : proyect.isCollaborator ? (
           <></>
         ) : proyect.hasPendingRequest ? (
           <ButtonSmall
@@ -186,10 +198,16 @@ export function CardProyect({ proyect }) {
             text={"Cancelar Union"}
             className={"bg-verdeC hover:bg-RojoC"}
           />
+        ) : proyect.isPublic ? (
+          <ButtonSmall
+            action={handleJoin}
+            text={"Unirme"}
+            className={"bg-verdeC hover:bg-RojoC"}
+          />
         ) : (
           <ButtonSmall
             action={handleRequest}
-            text={"Unirme"}
+            text={"Solicitar Unión"}
             className={"bg-verdeC hover:bg-RojoC"}
           />
         )}

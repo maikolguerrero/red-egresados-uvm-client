@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import socketService from "../services/socket/socket.service";
 import { getUnreadNotificationCount } from "../services/notifications/notificationService";
 import useIsMobile from "../hooks/useIsMobile";
+import { MdEditDocument } from "react-icons/md";
 
 function Nav() {
   const role = useSelector((state) => state.auth.role);
@@ -143,6 +144,15 @@ function Nav() {
                   <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PERFIL</p>
                 </Link>
               )}
+<<<<<<< HEAD
+=======
+              {role === "admin" && (
+                <Link to={"/content-manager"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                  <MdEditDocument className="text-2xl" />
+                  <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>GESTOR DE CONTENIDO</p>
+                </Link>
+              )}
+>>>>>>> origin/Anggelo-Dev
             </ul>
           </nav>
         )

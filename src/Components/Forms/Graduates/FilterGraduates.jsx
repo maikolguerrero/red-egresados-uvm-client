@@ -81,7 +81,7 @@ function FilterGraduates({ values, setValues }) {
               value={values.degree}
               onChange={handleInputChange}
             >
-              <option value="">...</option>
+              <option value="">Todas las carreras</option>
               <option value="Licenciatura%20en%20Administraci%C3%B3n%20de%20Empresas">
                 Licenciatura en Administración de Empresas
               </option>

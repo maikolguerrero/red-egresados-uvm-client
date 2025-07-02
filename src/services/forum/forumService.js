@@ -43,6 +43,45 @@ export const addForum = createAsyncThunk(
   }
 );
 
+export const addReport = createAsyncThunk(
+  "forumsSlice/addReport", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/forum/report`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        }
+      );
+
+      let datas = await response.json();
+      if (datas.success) {
+        enqueueSnackbar("Reporte enviado", typeSuccess)
+        return {
+          message: "Reporte enviado",
+        }
+      } else {
+        if (datas.message === "Error de validación") {
+          throw `${datas.metadata.errors[0].message}`
+        }
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
 export const addPictureForum = createAsyncThunk(
   "authSlice/addPictureForum", // Nombre de la acción
   async (data, thunkAPI) => {
@@ -86,6 +125,8 @@ export const searchForum = createAsyncThunk(
             data.category === null || data.category === undefined ? "" : "&category=" + data.category
           }${
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
+          }${
+            !data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
           }`,
         {
           mode: "cors",

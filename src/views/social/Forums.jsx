@@ -46,7 +46,6 @@ let defaultValues = {
 };
 
 function Forums() {
-  const passed = useSelector((state) => state.forums.forumAdd.passed);
   const pagination = useSelector((state) => state.forums.pagination);
   const forums = useSelector((state) => state.forums.forums);
   const loading = useSelector((state) => state.forums.loadingPage);
@@ -60,10 +59,12 @@ function Forums() {
   }, []);
 
   useEffect(() => {
-    dispatch(searchForum({
-      page: pagination.page,
-      limit: pagination.limit
-    }))
+    dispatch(
+      searchForum({
+        page: 1,
+        limit: 10,
+      })
+    );
   }, [])
 
   const onPageChange = (page) =>
@@ -137,11 +138,7 @@ function Forums() {
           setOpenModal={setOpendAddForum}
           size={"3xl"}
           component={
-            passed === 0 ? (
-              <FormAddForum />
-            ) : (
-              <FormAddPicture setOpenModal={setOpendAddForum} />
-            )
+            <FormAddForum />
           }
         />
       </main>

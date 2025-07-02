@@ -185,7 +185,8 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                                     <BsCopy className="text-gray-500" />
                                     Copiar
                                 </button>
-                                <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+
+                                {/* <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <BsReply className="text-gray-500" />
                                     Responder
                                 </button>
@@ -194,7 +195,7 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                                         <BsTrash className="text-red-500" />
                                         Eliminar
                                     </button>
-                                )}
+                                )} */}
                             </div>
                         )
                     }

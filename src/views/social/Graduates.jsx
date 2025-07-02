@@ -60,10 +60,12 @@ function Graduates() {
   }, []);
 
   useEffect(() => {
-    dispatch(getUsers({
-      page: page,
-      limit: limit
-    }))
+    dispatch(
+      getUsers({
+        page: 1,
+        limit: 10,
+      })
+    );
   }, [])
 
   const onPageChange = (page) => {

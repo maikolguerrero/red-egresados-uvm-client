@@ -21,15 +21,6 @@ export function FormAddComment({ forum, comment }) {
   const [values, setValues] = useState({
     content: "",
   });
-  const [picture, setPicture] = useState("");
-  const [image, setImage] = useState(false);
-
-  const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImage(URL.createObjectURL(event.target.files[0]));
-      setPicture(event.target.files[0])
-    }
-  };
 
 
   const handleInputChange = (e) => {
@@ -60,9 +51,6 @@ export function FormAddComment({ forum, comment }) {
       const formData = new FormData();
       formData.append("content", values.content);
       formData.append("parentCommentId", null);
-      if (image) {
-        formData.append("media", picture);
-      }
       dispatch(
         addComment({
           id: forum.id,
@@ -71,8 +59,6 @@ export function FormAddComment({ forum, comment }) {
         })
       );
     }
-    setImage(false);
-    setPicture("");
     setValues({
       content: "",
     });
@@ -98,37 +84,6 @@ export function FormAddComment({ forum, comment }) {
               placeholder={forum === undefined ? "Respuesta del comentario..." : "Contenido del comentario..."}
             ></textarea>
           </div>
-
-          {forum === undefined ? (
-            <></>
-          ) : (
-            <>
-              <div className="flex flex-col gap-1">
-                <Label className="mb-2 block" htmlFor="small-file-upload">
-                  Selecciona la foto (opcional):
-                </Label>
-                <FileInput
-                  onChange={onImageChange}
-                  id="small-file-upload"
-                  sizing="sm"
-                />
-              </div>
-              <div>
-                {image === false ? (
-                  <></>
-                ) : (
-                  <div className="flex flex-col w-full h-auto justify-center items-center mt-6">
-                    <h6 className="w-full flex justify-start font-barlow-semi-condensed text-lg font-bold text-verdeD">
-                      VISTA PREVIA:
-                    </h6>
-                    <div className="w-full flex justify-center bg-Negro border border-verdeD">
-                      <img src={image} alt="" className="w-auto h-auto" />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
         </div>
         <ButtonSmall className={"bg-verdeD hover:bg-RojoC"} text={"Comentar"} />
       </form>

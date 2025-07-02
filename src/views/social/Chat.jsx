@@ -472,9 +472,9 @@ export default function Chat() {
                                 </div>
                             </div>
                         </div>
-                        <button className="text-verdeD hover:text-RojoC transition-colors duration-200">
+                        {/* <button className="text-verdeD hover:text-RojoC transition-colors duration-200">
                             <BsThreeDotsVertical className="text-xl" />
-                        </button>
+                        </button> */}
                     </div>
 
                     {/* Contenedor de la fecha flotante */}

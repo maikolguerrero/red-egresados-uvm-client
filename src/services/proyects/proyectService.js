@@ -57,6 +57,8 @@ export const searchProyect = createAsyncThunk(
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
           }${
             data.username === null || data.username === undefined ? "" : "&username=" + data.username
+          }${
+            !data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
           }`,
         {
           mode: "cors",
@@ -223,9 +225,47 @@ export const requestProyect = createAsyncThunk(
       let datas = await response.json();
       console.log(datas)
       if (datas.success) {
-        enqueueSnackbar("Se envio la solicitu", typeSuccess)
+        enqueueSnackbar("Se envio la solicitud", typeSuccess)
         return {
-          message: "Se envio la solicitu",
+          message: "Se envio la solicitud",
+          projectId: data.projectId
+        }
+      } else {
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const joinProyect = createAsyncThunk(
+  "proyectsSlice/joinProyect", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/projects/${data.projectId}/join`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data.data)
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar("Te uniste al proyecto", typeSuccess)
+        return {
+          message: "Te uniste al proyecto",
           projectId: data.projectId
         }
       } else {
