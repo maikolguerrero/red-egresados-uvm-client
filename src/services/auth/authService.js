@@ -241,3 +241,140 @@ export const verifyEmail = createAsyncThunk(
     }
   }
 );
+
+export const changeRecoveryEmail = createAsyncThunk(
+  "authSlice/changeRecoveryEmail", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/auth/change-email`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess)
+        return (datas.message);
+      } else {
+        throw `${datas.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const changeEmail = createAsyncThunk(
+  "authSlice/changeEmail", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/auth/verify-email-change?token=${data}`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess);
+        return {
+          message: datas.message,
+        };
+      } else {
+        throw `${datas.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk(
+  "authSlice/forgotPassword", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/auth/forgot-password`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess)
+        return (datas.message);
+      } else {
+        throw `${datas.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const newPassword = createAsyncThunk(
+  "authSlice/newPassword", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/auth/reset-password`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      let datas = await response.json();
+      console.log(datas)
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess)
+        return (datas.message);
+      } else {
+        throw `${datas.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);

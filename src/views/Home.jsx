@@ -183,11 +183,11 @@ function Home() {
             <Loader />
           </main>
         ) : (
-          <main className="w-full px-3 py-6 md:px-6 lg:px-10 gap-14 flex flex-col h-[89.5vh] overflow-y-auto overflow-x-auto">
+          <main className="w-full px-3 py-6 md:px-6 lg:px-10 gap-14 flex flex-col h-[89.5vh] overflow-y-auto">
             {home.carouselItems.length === 0 ? (
               <></>
             ) : (
-              <section className="grid-cols-4 grid gap-4 w-full h-full">
+              <section className="grid-cols-4 grid gap-4 w-full">
                 <div className="col-span-4 h-[200px] sm:h-[250px] md:h-[300px] xl:h-[400px] w-full">
                   <ThemeProvider theme={customTheme}>
                     <Carousel
