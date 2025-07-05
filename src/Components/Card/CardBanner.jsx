@@ -122,7 +122,7 @@ export function CardBanner({
         onClick={handleViewClick}
       >
         <div className="mb-3 mr-4 flex flex-col items-start md:mb-0 md:flex-row md:items-center">
-          <div className="mb-2 flex gap-3 items-center border-verdeC md:mb-0 md:mr-4 md:border-r md:pr-4 dark:border-gray-600">
+          <div className="mb-2 flex gap-3 items-center border-verdeC md:mb-0 md:mr-4 md:border-r md:pr-4">
             {icon}
             <span className="self-center whitespace-nowrap text-lg font-semibold md:pr-6">
               {typeText}

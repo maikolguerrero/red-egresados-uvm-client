@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer } from 'react-toastify';
+import { typeError } from "../../models/alertModels";
 import { useDispatch } from "react-redux";
 import { postData } from "../../services/auth/authService";
-
+import { enqueueSnackbar } from "notistack";
 let styles = {
   input:
     "w-full px-3 py-1.5 text-xs md:text-sm font-barolw rounded-lg border border-verdeA border-b-2",
@@ -13,19 +14,14 @@ let styles = {
 };
 
 let defaultValues = {
-  "idNumber": "",
-  "studentId": "",
-  "firstName": "",
-  "lastName": "",
-  "birthDate": "",
-  "degree": "",
-  "mention": "",
-  "graduationDate": "",
+  "cedula": "",
+  "nacionalidad": "V",
+  "cedulaNum": "",
+  "nombreCompleto": "",
   "email": "",
   "username": "",
   "password": "",
-  "passwordConfirm": "",
-  "location": ""
+  "passwordConfirm": ""
 }
 
 function FormRegister(props) {
@@ -48,19 +44,38 @@ function FormRegister(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (values.password === values.passwordConfirm) {
+      values.cedula = `${values.nacionalidad}-${values.cedulaNum.trim()}`;
+      values.nombreCompleto = values.nombreCompleto.trim();
+      values.email = values.email.trim();
+      values.username = values.username.trim();
+      values.password = values.password.trim();
+      values.passwordConfirm = values.passwordConfirm.trim();
+
+      // Eliminar passwordConfirm
+      delete values.passwordConfirm;
+
+      // Eliminar nacionalidad
+      delete values.nacionalidad;
+
+      // Eliminar cedulaNum
+      delete values.cedulaNum;
+
+
+      console.log(values)
       dispatch(postData(values))
     } else {
-      toast.error("Contraseñas no coinciden", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      // toast.error("Contraseñas no coinciden", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: false,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "light",
+      //   transition: Bounce,
+      // });
+      enqueueSnackbar("Contraseñas no coinciden", typeError);
     }
   }
 
@@ -70,106 +85,35 @@ function FormRegister(props) {
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
           <div className="flex flex-col gap-3">
-            <div className="w-full flex relative">
+            <div className="flex gap-2"> {/* Usamos 'gap-2' para un pequeño espacio entre ellos */}
+              <select
+                name="nacionalidad"
+                value={values.nacionalidad}
+                onChange={handleInputChange}
+                // className="w-16 h-10 px-2 border border-gray-300 rounded-md shadow-sm focus:ring-verdeD focus:border-verdeD" // Ajusta estos estilos a tu 'styles.input' si es posible
+                className={`${styles.input} w-16 px-0 text-center`}
+              >
+                <option value="V">V</option>
+                <option value="E">E</option>
+              </select>
               <input
-                className={styles.input}
+                className={styles.input} // Aplicamos los estilos existentes para el input de texto
                 type="text"
-                name="firstName"
-                value={values.firstName}
+                name="cedulaNum"
+                value={values.cedulaNum}
                 onChange={handleInputChange}
-                placeholder="Nombres"
+                placeholder="Número de Cédula (12345678)"
               />
             </div>
-            <div className="w-full flex relative">
-              <input
-                className={styles.input}
-                type="text"
-                name="lastName"
-                value={values.lastName}
-                onChange={handleInputChange}
-                placeholder="Apellidos"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <input
-                className={styles.input}
-                type="text"
-                name="idNumber"
-                value={values.idNumber}
-                onChange={handleInputChange}
-                placeholder="Cédula"
-              />
-              <input
-                className={styles.input}
-                type="date"
-                name="birthDate"
-                value={values.birthDate}
-                onChange={handleInputChange}
-                placeholder="Fecha de Nacimiento"
-              />
-            </div>
-            <div className="w-full flex relative">
-              <input
-                className={styles.input}
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleInputChange}
-                placeholder="Correo Electrónico"
-              />
-            </div>
-            <div className="w-full flex relative">
-              <textarea
-                className={styles.input}
-                type="text"
-                name="location"
-                value={values.location}
-                onChange={handleInputChange}
-                placeholder="Ubicación"
-              ></textarea>
-            </div>
-          </div>
-        </div>
 
-        <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>DATOS UNIVERSITARIOS</h4>
-          <div className="flex flex-col gap-3">
             <div className="w-full flex relative">
               <input
                 className={styles.input}
                 type="text"
-                name="degree"
-                value={values.degree}
+                name="nombreCompleto"
+                value={values.nombreCompleto}
                 onChange={handleInputChange}
-                placeholder="Facultad"
-              />
-            </div>
-            <div className="w-full flex relative">
-              <input
-                className={styles.input}
-                type="text"
-                name="mention"
-                value={values.mention}
-                onChange={handleInputChange}
-                placeholder="Mención"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <input
-                className={styles.input}
-                type="text"
-                name="studentId"
-                value={values.studentId}
-                onChange={handleInputChange}
-                placeholder="N° Expediente"
-              />
-              <input
-                className={styles.input}
-                type="date"
-                name="graduationDate"
-                value={values.graduationDate}
-                onChange={handleInputChange}
-                placeholder="Fecha de Grado"
+                placeholder="Nombres y Apellidos (en ese orden)"
               />
             </div>
           </div>
@@ -186,6 +130,16 @@ function FormRegister(props) {
                 value={values.username}
                 onChange={handleInputChange}
                 placeholder="Usuario"
+              />
+            </div>
+            <div className="w-full flex relative">
+              <input
+                className={styles.input}
+                type="email"
+                name="email"
+                value={values.email}
+                onChange={handleInputChange}
+                placeholder="Correo Electrónico"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -221,7 +175,7 @@ function FormRegister(props) {
         <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
           <Button className={"w-full"} text="REGISTRARME" />
         </div>
-      </form>
+      </form >
       <ToastContainer
         position="top-right"
         autoClose={5000}

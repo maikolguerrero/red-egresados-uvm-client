@@ -3,8 +3,8 @@ import { formatMessageTime } from '../../utils/dateUtils';
 
 export function ButtonDM({ conversation, onClick }) {
   const getInitials = () => {
-    if (conversation.firstName && conversation.lastName) {
-      return `${conversation.firstName.charAt(0)}${conversation.lastName.charAt(0)}`;
+    if (conversation.nombreCompleto) {
+      return `${conversation.nombreCompleto.charAt(0)}`;
     }
     return conversation.username?.charAt(0) || 'U';
   };
@@ -31,7 +31,7 @@ export function ButtonDM({ conversation, onClick }) {
         {conversation.profilePicture?.url ? (
           <img
             src={conversation.profilePicture.url}
-            alt={`${conversation.firstName} ${conversation.lastName}`}
+            alt={`${conversation.nombreCompleto}`}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -46,7 +46,7 @@ export function ButtonDM({ conversation, onClick }) {
         <div className="flex justify-between items-start">
           <div>
             <h6 className="text-Negro font-barlow-semi-condensed font-semibold">
-              {conversation.firstName} {conversation.lastName}
+              {conversation.nombreCompleto}
             </h6>
             <p className="text-xs text-gray-400">@{conversation.username}</p>
           </div>

@@ -155,7 +155,7 @@ export const postData = createAsyncThunk(
           throw `${datas.message}`;
         }
         console.log(datas);
-        throw "no conozco el error";
+        throw datas.message ? datas.message : "Error al registrar";
       }
     } catch (error) {
       // Gestionar errores

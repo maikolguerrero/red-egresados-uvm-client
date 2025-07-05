@@ -75,7 +75,7 @@ export function InternalProject({ proyect }) {
           <article className="flex flex-col gap-6">
             <div className="flex justify-between">
               <div className="flex items-center gap-2">
-                <img
+                {/* <img
                   className="rounded-full w-8 md:w-8 xl:w-10"
                   src={
                     proyect.owner.profilePicture.url === null
@@ -83,7 +83,23 @@ export function InternalProject({ proyect }) {
                       : proyect.owner.profilePicture.url
                   }
                   alt="Foto de Perfil"
-                />
+                /> */}
+
+                {proyect.owner.profilePicture.url === null ? (
+                  // Si no hay foto de perfil, muestra la inicial del username
+                  <div className="w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <span className="text-white text-base md:text-base xl:text-lg font-bold uppercase">
+                      {proyect.owner.username?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                ) : (
+                  // Si hay foto, muéstrala circular
+                  <img
+                    className="w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
+                    src={proyect.owner.profilePicture.url}
+                    alt={proyect.owner.username || 'Foto de Perfil del Propietario'}
+                  />
+                )}
                 <p className="flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center">
                   {proyect.owner.username}
                 </p>
@@ -231,12 +247,12 @@ export function InternalProject({ proyect }) {
                     {proyect.status === "not_started"
                       ? "Sin Iniciar"
                       : proyect.status === "in_progress"
-                      ? "En Progreso"
-                      : proyect.status === "paused"
-                      ? "Pausado"
-                      : proyect.status === "completed"
-                      ? "Completado"
-                      : "Cancelado"}
+                        ? "En Progreso"
+                        : proyect.status === "paused"
+                          ? "Pausado"
+                          : proyect.status === "completed"
+                            ? "Completado"
+                            : "Cancelado"}
                   </span>
                 </p>
 
@@ -304,15 +320,22 @@ export function InternalProject({ proyect }) {
                   {proyect.collaborators.map((item) => (
                     <li className="text-RojoC font-medium text-sm flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <img
-                          className="rounded-full w-6 md:w-6 xl:w-8"
-                          src={
-                            item.user.profilePicture.url === null
-                              ? perfil
-                              : item.user.profilePicture.url
-                          }
-                          alt="Foto de Perfil"
-                        />
+                        {item.user.profilePicture.url === null ? (
+                          // Si no hay foto de perfil, muestra la inicial del username
+                          <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <span className="text-white text-xs md:text-xs xl:text-sm font-bold uppercase">
+                              {item.user.username?.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        ) : (
+                          // Si hay foto, muéstrala circular
+                          <img
+                            className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
+                            src={item.user.profilePicture.url}
+                            alt={item.user.username || 'Foto de Perfil del Colaborador'}
+                          />
+                        )}
+
                         <p className="flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center">
                           {item.user.username} <span>-</span>
                           {item.role === "creator" ? (

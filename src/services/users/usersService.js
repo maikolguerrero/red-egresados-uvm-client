@@ -48,8 +48,9 @@ export const getUsers = createAsyncThunk(
       // Realizar la solicitud POST
       const response = await fetch(
         `${URL_API}/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "&query=" + data.query
-        }${data.degree === null || data.degree === undefined ? "" : "&degree=" + data.degree
-        }${data.location === null || data.location === undefined ? "" : "&location=" + data.location
+        }${data.degree === null || data.degree === undefined ? "" : ("&degree=" + data.degree)
+        }${data.location === null || data.location === undefined ? "" : ("&location=" + data.location)
+        }${data.graduationYear === null || data.graduationYear === undefined ? "" : ("&graduationYear=" + data.graduationYear)
         }`,
         {
           mode: "cors",
@@ -61,9 +62,9 @@ export const getUsers = createAsyncThunk(
         }
       );
 
-      console.log(`${URL_API}/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "?query=" + data.query
-        }${data.degree === null || data.degree === undefined ? "" : "?degree=" + data.degree
-        }${data.location === null || data.location === undefined ? "" : "?location=" + data.location
+      console.log(`${URL_API}/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "&query=" + data.query
+        }${data.degree === null || data.degree === undefined ? "" : "&degree=" + data.degree
+        }${data.location === null || data.location === undefined ? "" : "&location=" + data.location
         }`)
       let datas = await response.json();
       console.log(datas)

@@ -66,24 +66,30 @@ export function CardForum({ forum }) {
     <article className="flex flex-col gap-1 w-full pb-8 border-b-2 border-verdeD">
       <div className="flex justify-between relative">
         <div className="flex gap-2 w-ful flex-wrap mb-3">
-          <img
-            className="rounded-full w-6 md:w-8 xl:w-10"
-            src={
-              forum.author.profilePicture === undefined || forum.author.profilePicture.url === null 
-                ? perfil
-                : forum.author.profilePicture.url
-            }
-            alt="Foto de Perfil"
-          />
+          {forum?.author?.profilePicture === undefined || forum?.author?.profilePicture?.url === null ? (
+            // Si no hay foto de perfil, muestra la inicial del username
+            <div className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+              <span className="text-white text-xs md:text-sm xl:text-base font-bold uppercase">
+                {forum?.author?.username?.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          ) : (
+            // Si hay foto, muéstrala circular
+            <img
+              className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
+              src={forum?.author?.profilePicture?.url}
+              alt={forum?.author?.username || 'Foto de Perfil del Autor'}
+            />
+          )}
           <p className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
-            {forum.author.username}
+            {forum?.author?.username}
             <FaCircle className="text-Negro text-[6px] md:text-[9px] xl:text-xs flex justify-center items-center h-full" />{" "}
             Hace {datePublic}
             {type === "horas" ? "h" : "d"}
           </p>
         </div>
 
-        {forum.author.username === username ? (
+        {forum?.author?.username === username ? (
           <>
             <Dropdown
               inline
@@ -117,19 +123,19 @@ export function CardForum({ forum }) {
 
       <div className="flex flex-col gap-1 px-1">
         <h4 className="text-Negro font-barolw font-medium text-base md:text-lg xl:text-xl mb-1">
-          {forum.title}
+          {forum?.title}
         </h4>
 
-        <p className="text-xs md:text-sm">{forum.content}</p>
+        <p className="text-xs md:text-sm">{forum?.content}</p>
       </div>
 
-      {forum.media.length === 0 ? (
+      {forum?.media?.length === 0 ? (
         <></>
       ) : (
         <div className="w-full">
           <img
             className="rounded-md mb-2 border border-verdeC"
-            src={forum.media[0].url}
+            src={forum?.media?.[0]?.url}
             alt="Multimedia del foro"
           />
         </div>
@@ -138,20 +144,19 @@ export function CardForum({ forum }) {
       <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg">
         <li
           onClick={handleLike}
-          className={`${
-            forum.isLiked
-              ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-Gris"
-              : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
-          } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+          className={`${forum?.isLiked
+            ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-Gris"
+            : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
+            } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
         >
-          {forum.likeCount}{" "}
+          {forum?.likeCount}{" "}
           <AiFillLike className={` text-base md:text-lg xl:text-xl`} />
         </li>
         <li
           onClick={handleView}
           className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer"
         >
-          {forum.commentCount}{" "}
+          {forum?.commentCount}{" "}
           <FaComments className="text-base md:text-lg xl:text-xl" />
         </li>
         <li className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">

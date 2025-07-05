@@ -81,8 +81,8 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
 
     // Función para obtener las iniciales del remitente
     const getInitials = () => {
-        if (message.sender?.firstName && message.sender?.lastName) {
-            return `${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`;
+        if (message.sender?.nombreCompleto) {
+            return `${message.sender.nombreCompleto.charAt(0)}`;
         }
         return message.sender?.username?.charAt(0) || 'U';
     };

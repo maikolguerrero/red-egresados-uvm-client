@@ -157,8 +157,8 @@ export function FormAddEvent({ eventSelect, type }) {
     if (values.virtualLink.trim() === "") {
         return enqueueSnackbar("Debe escribir el link virtual del evento o (no tiene)", typeError);
     }
-    if (values.capacity <= 0) {
-        return enqueueSnackbar("Debes colocar una capacidad minima de 1 persona", typeError);
+    if (values.capacity < 0) {
+        return enqueueSnackbar("Debes colocar una capacidad minima de 0", typeError);
     }
     if (values.startDate.trim() === "") {
         return enqueueSnackbar("Debes colocar una fecha de inicio", typeError);
@@ -332,7 +332,7 @@ export function FormAddEvent({ eventSelect, type }) {
 
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Fecha y hora de inicio:
+                Fecha y hora de finalización:
               </Label>
               <input
                 className={styles.input}

@@ -27,22 +27,27 @@ export function CardProyectHome({ proyect }) {
 
   return (
     <article onClick={(e) => {
-        navigate(`/proyects/${proyect.id}`)
+      navigate(`/proyects/${proyect.id}`)
     }} className="flex h-full items-center justify-center p-2 hover:cursor-pointer">
       <div className="w-full h-full flex flex-col gap-2 bg-white hover:bg-slate-100 rounded-md p-3 border border-verdeC">
         <div className="flex gap-2 w-full h-auto flex-wrap mb-1">
-          <img
-            className="rounded-full w-4 h-4 md:w-5 md:h-5 xl:w-7 xl:h-7"
-            src={
-              proyect.owner.profilePicture === undefined ||
-              proyect.owner.profilePicture.url === null
-                ? perfil
-                : proyect.owner.profilePicture.url
-            }
-            alt="Foto de Perfil"
-          />
+          {proyect?.owner?.profilePicture === undefined || proyect?.owner?.profilePicture?.url === null ? (
+            // Si no hay foto de perfil, muestra la inicial del username
+            <div className="w-4 h-4 md:w-5 md:h-5 xl:w-7 xl:h-7 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+              <span className="text-white text-[10px] md:text-xs xl:text-sm font-bold uppercase">
+                {proyect?.owner?.username?.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          ) : (
+            // Si hay foto, muéstrala circular
+            <img
+              className="w-4 h-4 md:w-5 md:h-5 xl:w-7 xl:h-7 rounded-full object-cover"
+              src={proyect?.owner?.profilePicture?.url}
+              alt={proyect?.owner?.username || 'Foto de Perfil del Propietario'}
+            />
+          )}
           <p className="flex gap-2 text-RojoC font-barolw text-xs items-center">
-            {proyect.owner.username}
+            {proyect?.owner?.username}
           </p>
         </div>
 
@@ -52,11 +57,11 @@ export function CardProyectHome({ proyect }) {
           </h4>
           <div className="flex gap-2 flex-wrap">
             <Badge
-              color={proyect.isPublic ? "green" : "red"}
+              color={proyect?.isPublic ? "green" : "red"}
               className="uppercase"
               size="xs"
             >
-              {proyect.isPublic ? (
+              {proyect?.isPublic ? (
                 <span className="flex gap-1 text-xs items-center">
                   Publico <BiWorld className="text-xs" />
                 </span>
@@ -69,32 +74,32 @@ export function CardProyectHome({ proyect }) {
 
             <Badge
               color={
-                proyect.status === "not_started"
+                proyect?.status === "not_started"
                   ? "indigo"
-                  : proyect.status === "in_progress"
-                  ? "info"
-                  : proyect.status === "paused"
-                  ? "warning"
-                  : proyect.status === "completed"
-                  ? "success"
-                  : "failure"
+                  : proyect?.status === "in_progress"
+                    ? "info"
+                    : proyect?.status === "paused"
+                      ? "warning"
+                      : proyect?.status === "completed"
+                        ? "success"
+                        : "failure"
               }
             >
-              {proyect.status === "not_started"
+              {proyect?.status === "not_started"
                 ? "Sin Iniciar"
-                : proyect.status === "in_progress"
-                ? "En Progreso"
-                : proyect.status === "paused"
-                ? "Pausado"
-                : proyect.status === "completed"
-                ? "Completado"
-                : "Cancelado"}
+                : proyect?.status === "in_progress"
+                  ? "En Progreso"
+                  : proyect?.status === "paused"
+                    ? "Pausado"
+                    : proyect?.status === "completed"
+                      ? "Completado"
+                      : "Cancelado"}
             </Badge>
 
             <Badge
               color={'dark'}
             >
-              {proyect.collaborators.length} Miembros
+              {proyect?.collaborators?.length} Miembros
             </Badge>
           </div>
         </div>
