@@ -4,8 +4,15 @@ import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { MdEmail } from "react-icons/md";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
+import { useState } from "react";
+import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
+import FormEmail from "../../Components/Forms/config/FormEmail";
+import FormResetPassword from "../../Components/Forms/config/FormResetPassword";
 
 function Config() {
+  const [openEmail, setOpenEmail] = useState(false)
+  const [openReset, setOpenReset] = useState(false)
+
   return (
     <>
       <Header />
@@ -19,14 +26,33 @@ function Config() {
           </h4>
           <div className="flex flex-col md:flex-row gap-6">
             <ButtonSecurity
+              onClick={(e) => {
+                setOpenReset(true);
+              }}
               icono={<FaKey className="text-6xl" />}
               texto={"Cambio de Contraseña"}
             />
             <ButtonSecurity
+              onClick={(e) => {
+                setOpenEmail(true);
+              }}
               icono={<MdEmail className="text-6xl" />}
               texto={"Cambio de Correo de Recuperación"}
             />
           </div>
+
+          <ModalNotHeader
+            openModal={openEmail}
+            setOpenModal={setOpenEmail}
+            size={"3xl"}
+            component={<FormEmail />}
+          />
+          <ModalNotHeader
+            openModal={openReset}
+            setOpenModal={setOpenReset}
+            size={"3xl"}
+            component={<FormResetPassword />}
+          />
         </div>
 
         <div className="absolute right-8 bottom-6">

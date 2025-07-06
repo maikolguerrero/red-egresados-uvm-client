@@ -27,6 +27,8 @@ import { URL_API } from "./config";
 import ContentManager from "./views/admin/ContentManager";
 import CMLandingPage from "./views/admin/CMLandingPage";
 import CMHomePage from "./views/admin/CMHomePage";
+import ChangeEmail from "./views/ChangeEmail";
+import ChangePassword from "./views/ChangePassword";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -188,6 +190,21 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Verifycation />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/verify-email-change",
+    element: (
+      <ProtectedRoute>
+        <ChangeEmail />
+      </ProtectedRoute>
+    ),
+  },{
+    path: "/reset-password",
+    element: (
+      <ProtectedRoute>
+        <ChangePassword />
       </ProtectedRoute>
     ),
   },
