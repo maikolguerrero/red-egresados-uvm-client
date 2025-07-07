@@ -31,7 +31,7 @@ export const addForum = createAsyncThunk(
         }
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -67,7 +67,7 @@ export const addReport = createAsyncThunk(
         }
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -97,7 +97,7 @@ export const addPictureForum = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -112,13 +112,10 @@ export const searchForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads?page=${data.page}&limit=${data.limit}${
-            data.category === null || data.category === undefined ? "" : "&category=" + data.category
-          }${
-            data.search === null || data.search === undefined ? "" : "&search=" + data.search
-          }${
-            !data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
-          }`,
+        `/api/forum/threads?page=${data.page}&limit=${data.limit}${data.category === null || data.category === undefined ? "" : "&category=" + data.category
+        }${data.search === null || data.search === undefined ? "" : "&search=" + data.search
+        }${!data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
+        }`,
         {
           method: "GET",
           headers: {
@@ -137,7 +134,7 @@ export const searchForum = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -188,7 +185,7 @@ export const likeThreads = createAsyncThunk(
             id: data.id,
           };
         }
-        
+
         if (data.type === "comment") {
           enqueueSnackbar("Like al comentario", typeSuccess);
           return {
@@ -202,7 +199,7 @@ export const likeThreads = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -235,7 +232,7 @@ export const getThreadsComments = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -278,7 +275,7 @@ export const addComment = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -311,7 +308,37 @@ export const deleteForum = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "authSlice/deleteComment", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await apiFetch(
+        `/api/forum/comments/${data.commentId}`,
+        {
+          method: "DELETE"
+        }
+      );
+
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess);
+        return {
+          commentId: data.commentId,
+          message: response.message,
+        };
+      } else {
+        throw `${response.message}`;
+      }
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -347,7 +374,7 @@ export const editForum = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)

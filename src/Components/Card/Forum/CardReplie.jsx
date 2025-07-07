@@ -9,7 +9,7 @@ import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 
 export function CardReplie({ forum, comment }) {
   const dispatch = useDispatch();
-    
+
   const [type, setType] = useState("");
   const [openReport, setOpenReport] = useState(false);
   const [datePublic, setDatePublic] = useState(0);
@@ -58,7 +58,7 @@ export function CardReplie({ forum, comment }) {
   return (
     <>
       <div className="flex gap-2 w-full flex-wrap mb-1 h-full items-center">
-        <img
+        {/* <img
           className="rounded-full w-4 h-4 md:w-4 xl:w-6 xl:h-6"
           src={
             comment.author.profilePicture.url === null
@@ -66,7 +66,22 @@ export function CardReplie({ forum, comment }) {
               : comment.author.profilePicture.url
           }
           alt="Foto de Perfil"
-        />
+        /> */}
+        {comment?.author?.profilePicture?.url === null ? (
+          // Si no hay foto de perfil, muestra la inicial del username
+          <div className="w-4 h-4 md:w-4 md:h-4 xl:w-6 xl:h-6 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+            <span className="text-white text-[8px] md:text-xs xl:text-xs font-bold uppercase">
+              {comment?.author?.username?.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        ) : (
+          // Si hay foto, muéstrala circular
+          <img
+            className="w-4 h-4 md:w-4 md:h-4 xl:w-6 xl:h-6 rounded-full object-cover"
+            src={comment?.author?.profilePicture?.url}
+            alt={comment?.author?.username || 'Foto de Perfil del Autor del Comentario'}
+          />
+        )}
         <div className="h-full flex items-center">
           <p className="flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-[9px] md:text-xs xl:text-sm items-center">
             {comment.author.username}
@@ -82,14 +97,13 @@ export function CardReplie({ forum, comment }) {
         <ul className="flex gap-1 md:gap-2 lg:gap-3 flex-wrap font-barolw text-sm md:text-base xl:text-lg">
           <li
             onClick={handleLike}
-            className={`${
-              comment.isLiked ? "text-Blanco bg-RojoC" : "text-Negro bg-Blanco"
-            } flex gap-2 items-center justify-center text-sm  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+            className={`${comment.isLiked ? "text-Blanco bg-RojoC" : "text-Negro bg-Blanco"
+              } flex gap-2 items-center justify-center text-sm  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
           >
             {comment.likeCount}{" "}
             <AiFillLike className={` text-xs md:text-sm xl:text-base`} />
           </li>
-          <li onClick={(e) => {setOpenReport(true)}} className="flex gap-2 items-center text-sm justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+          <li onClick={(e) => { setOpenReport(true) }} className="flex gap-2 items-center text-sm justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
             Reportar{" "}
             <MdReportProblem className="text-xs md:text-sm xl:text-base" />
           </li>

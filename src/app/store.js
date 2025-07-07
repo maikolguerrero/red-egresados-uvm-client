@@ -10,6 +10,7 @@ import sidebarReducer from '../features/sidebar/sidebarSlice';
 import notificationReducer from '../features/notifications/notificationSlice';
 import landingReducer from '../features/admin/landingSlice';
 import homeReducer from '../features/admin/homeSlice';
+import reportsReducer from '../features/reports/reportsSlice';
 
 export default configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export default configureStore({
     notifications: notificationReducer,
     landing: landingReducer,
     home: homeReducer,
+    reports: reportsReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false // Opcional: desactivar la verificación de serialización para acciones complejas

@@ -1,17 +1,19 @@
-import { FaCircle, FaComments } from "react-icons/fa";
+import { FaCircle, FaComments, FaEllipsisV } from "react-icons/fa";
 import perfil from "../../../../public/Perfil.jpg"
-import { MdReportProblem } from "react-icons/md";
+import { MdDelete, MdReportProblem } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { likeThreads } from "../../../services/forum/forumService";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteComment, likeThreads } from "../../../services/forum/forumService";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 import { FormAddComment } from "../../Forms/Forum/FormAddComment";
 import { CardReplie } from "./CardReplie";
 import { FormReport } from "../../Forms/Forum/FormReport";
+import { Dropdown, DropdownItem } from "flowbite-react";
 
 export function CardComment({ forum, comment }) {
   const dispatch = useDispatch();
+  const username = useSelector((state) => state.auth.username)
 
   const [type, setType] = useState("");
   const [datePublic, setDatePublic] = useState(0);
@@ -56,6 +58,12 @@ export function CardComment({ forum, comment }) {
     }))
   }
 
+  const handleDelete = (e) => {
+    dispatch(deleteComment({
+      commentId: comment.id
+    }))
+  }
+
   return (
     <>
       <div className="w-full flex flex-col">
@@ -83,6 +91,32 @@ export function CardComment({ forum, comment }) {
               {type}
             </p>
           </div>
+
+          {comment.author.username === username ? (
+            <>
+              <Dropdown
+                inline
+                dismissOnClick={false}
+                label={"a"}
+                renderTrigger={() => (
+                  <div className="flex h-full justify-center items-center">
+                    <FaEllipsisV className="hover:cursor-pointer" />
+                  </div>
+                )}
+              >
+                <DropdownItem>
+                  <span
+                    onClick={handleDelete}
+                    className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                  >
+                    <MdDelete /> Eliminar
+                  </span>
+                </DropdownItem>
+              </Dropdown>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
 
         <div className="ml-4 xl:ml-6 px-2 py-2 border-verdeC border-l flex flex-col gap-2">
@@ -113,24 +147,31 @@ export function CardComment({ forum, comment }) {
               {comment?.replies === undefined ? "0" : comment?.replies?.length}{" "}
               <FaComments className="text-sm md:text-base xl:text-lg" />
             </li>
-            <li onClick={(e) => { setOpenReport(true) }} className="flex gap-2 items-center justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+            <li
+              onClick={(e) => {
+                setOpenReport(true);
+              }}
+              className="flex gap-2 items-center justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer"
+            >
               Reportar{" "}
               <MdReportProblem className="text-sm md:text-base xl:text-lg" />
             </li>
           </ul>
 
-          {comment?.replies === undefined || comment?.replies?.length === 0 ? (
-            <></>
-          ) : (
-            <ul className="mt-6 flex flex-col gap-4">
-              {comment?.replies?.map((item) => (
-                <li key={item.id} className="flex flex-col">
-                  <CardReplie forum={forum} comment={item} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+          {
+            comment?.replies === undefined || comment?.replies?.length === 0 ? (
+              <></>
+            ) : (
+              <ul className="mt-6 flex flex-col gap-4">
+                {comment?.replies?.map((item) => (
+                  <li key={item.id} className="flex flex-col">
+                    <CardReplie forum={forum} comment={item} />
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </div >
 
         <ModalNotHeader
           openModal={openComment}
@@ -144,7 +185,7 @@ export function CardComment({ forum, comment }) {
           size={"3xl"}
           component={<FormReport idComment={comment?.id} threadId={forum?.id} />}
         />
-      </div>
+      </div >
     </>
   );
 }
