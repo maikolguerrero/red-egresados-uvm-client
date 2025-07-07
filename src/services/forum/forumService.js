@@ -244,6 +244,7 @@ export const getThreadsComments = createAsyncThunk(
       );
 
       let datas = await response.json();
+      console.log(datas)
       if (datas.success) {
         enqueueSnackbar("Cargo el foro", typeSuccess)
         return {
@@ -330,6 +331,42 @@ export const deleteForum = createAsyncThunk(
         enqueueSnackbar(datas.message, typeSuccess);
         return {
           idThread: data.threadId,
+          message: datas.message,
+        };
+      } else {
+        throw `${datas.message}`;
+      }
+      
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "authSlice/deleteComment", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/forum/comments/${data.commentId}`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      let datas = await response.json();
+      if (datas.success) {
+        enqueueSnackbar(datas.message, typeSuccess);
+        return {
+          commentId: data.commentId,
           message: datas.message,
         };
       } else {

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addComment, addForum, addPictureForum, addReport, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
+import { addComment, addForum, addPictureForum, addReport, deleteComment, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
 
 export const forumsSlice = createSlice({
   name: "forums",
@@ -185,6 +185,21 @@ export const forumsSlice = createSlice({
       }
     });
     builder.addCase(deleteForum.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteComment.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteComment.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      let newComments = state.forumSelect.comments.filter((item) => item.id !== action.payload.commentId)
+      state.forumSelect.comments = newComments;
+    });
+    builder.addCase(deleteComment.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
