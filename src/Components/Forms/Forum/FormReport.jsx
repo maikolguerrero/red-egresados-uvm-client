@@ -51,7 +51,7 @@ export function FormReport({ threadId, idComment }) {
       dispatch(
         addReport({
           threadId: threadId,
-          idComment: idComment,
+          commentId: idComment,
           description: values.description,
           reason: values.reason,
         })

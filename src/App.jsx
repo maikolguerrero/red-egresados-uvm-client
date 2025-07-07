@@ -29,6 +29,7 @@ import CMLandingPage from "./views/admin/CMLandingPage";
 import CMHomePage from "./views/admin/CMHomePage";
 import ChangeEmail from "./views/ChangeEmail";
 import ChangePassword from "./views/ChangePassword";
+import Reports from "./views/admin/Reports";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -153,7 +154,7 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-     {
+  {
     path: "/proyects/:proyect",
     element: (
       <ProtectedRoute>
@@ -200,7 +201,16 @@ const router = createBrowserRouter([
         <ChangeEmail />
       </ProtectedRoute>
     ),
-  },{
+  },
+  {
+    path: "/config/reports",
+    element: (
+      <ProtectedRoute>
+        <Reports />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/reset-password",
     element: (
       <ProtectedRoute>

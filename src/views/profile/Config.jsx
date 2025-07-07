@@ -2,16 +2,21 @@ import { FaKey } from "react-icons/fa";
 import { ButtonSecurity } from "../../Components/Buttons/ButtonSecurity";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
-import { MdEmail } from "react-icons/md";
+import { MdEmail, MdReport } from "react-icons/md";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useState } from "react";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
 import FormEmail from "../../Components/Forms/config/FormEmail";
 import FormResetPassword from "../../Components/Forms/config/FormResetPassword";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Config() {
+  const role = useSelector((state) => state.auth.role);
   const [openEmail, setOpenEmail] = useState(false)
   const [openReset, setOpenReset] = useState(false)
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -24,7 +29,7 @@ function Config() {
           <h4 className="font-barlow-condensed text-xl font-bold uppercase">
             Opciones de Seguridad
           </h4>
-          <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex flex-col md:flex-row flex-wrap md:justify-center gap-6">
             <ButtonSecurity
               onClick={(e) => {
                 setOpenReset(true);
@@ -39,6 +44,17 @@ function Config() {
               icono={<MdEmail className="text-6xl" />}
               texto={"Cambio de Correo de Recuperación"}
             />
+            {role === "admin" ? (
+              <ButtonSecurity
+                onClick={(e) => {
+                  navigate("/config/reports")
+                }}
+                icono={<MdReport className="text-6xl" />}
+                texto={"Reportes"}
+              />
+            ) : (
+              <></>
+            )}
           </div>
 
           <ModalNotHeader
