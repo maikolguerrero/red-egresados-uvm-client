@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { startSessionChecker, stopSessionChecker } from "./services/refreshToken/sessionInterceptor";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Recover from "./views/Recover";
@@ -29,6 +30,7 @@ import CMLandingPage from "./views/admin/CMLandingPage";
 import CMHomePage from "./views/admin/CMHomePage";
 import ChangeEmail from "./views/ChangeEmail";
 import ChangePassword from "./views/ChangePassword";
+import { getContentFooter } from "./services/admin/landingService";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -153,7 +155,7 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-     {
+  {
     path: "/proyects/:proyect",
     element: (
       <ProtectedRoute>
@@ -200,7 +202,7 @@ const router = createBrowserRouter([
         <ChangeEmail />
       </ProtectedRoute>
     ),
-  },{
+  }, {
     path: "/reset-password",
     element: (
       <ProtectedRoute>
@@ -237,69 +239,69 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useDispatch();
-  // const { isConnected, isAuthenticated } = useSelector((state) => state.socket);
-  // const authLoading = useSelector((state) => state.auth.loading);
   const { isConnected } = useSelector((state) => state.socket);
-  // const { isAuthenticated } = useSelector((state) => state.auth);
   const sessionActive = useSelector((state) => state.auth.sessionActive);
   const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // let isMounted = true;
+    dispatch(getContentFooter());
+  }, []);
+
+  useEffect(() => {
+    // Iniciar el verificador de sesión
+    const cleanupSessionChecker = startSessionChecker();
 
     const initializeAuthAndSocket = async () => {
-        try {
-            await dispatch(verifySesion()).unwrap();
+      try {
+        // await dispatch(verifySesion()).unwrap();
 
-            if (sessionActive && !isConnected) {
-                socketService.connect();
-                
-                // Cuando se conecte, obtener lista de usuarios online
-                const checkConnection = setInterval(() => {
-                    if (socketService.isConnected) {
-                        clearInterval(checkConnection);
-                        socketService.getOnlineUsers();
-                    }
-                }, 500);
-            }
+        if (sessionActive && !isConnected) {
+          socketService.connect();
 
-            if (!sessionActive && isConnected) {
-                await socketService.manualDisconnect('not_authenticated');
+          // Cuando se conecte, obtener lista de usuarios online
+          const checkConnection = setInterval(() => {
+            if (socketService.isConnected) {
+              clearInterval(checkConnection);
+              socketService.getOnlineUsers();
             }
-        } catch (error) {
-            console.error('Error inicializando:', error);
-            if (isConnected) {
-                await socketService.manualDisconnect('init_error');
-            }
+          }, 500);
         }
+
+        if (!sessionActive && isConnected) {
+          await socketService.manualDisconnect('not_authenticated');
+        }
+      } catch (error) {
+        console.error('Error inicializando:', error);
+        if (isConnected) {
+          await socketService.manualDisconnect('init_error');
+        }
+      }
     };
 
     const handleBeforeUnload = () => {
-        if (isConnected) {
-            const data = JSON.stringify({ 
-                userId: auth.id, 
-                type: 'window_closed' 
-            });
-            navigator.sendBeacon(`${URL_API}/api/socket/disconnect`, data);
-            socketService.manualDisconnect('window_closed');
-        }
+      if (isConnected) {
+        const data = JSON.stringify({
+          userId: auth.id,
+          type: 'window_closed'
+        });
+        navigator.sendBeacon(`${URL_API}/api/socket/disconnect`, data);
+        socketService.manualDisconnect('window_closed');
+      }
     };
 
-    // if (!sessionActive) {
-        initializeAuthAndSocket();
-        window.addEventListener('beforeunload', handleBeforeUnload);
-    // }
+    initializeAuthAndSocket();
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
-        // isMounted = false;
-        window.removeEventListener('beforeunload', handleBeforeUnload);
+      cleanupSessionChecker();
+      stopSessionChecker();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-}, [dispatch, sessionActive, isConnected, auth.id]);
+  }, [dispatch, sessionActive, isConnected, auth.id]);
 
   return (
     <>
       <SnackbarProvider>
-        
         <RouterProvider router={router} />
       </SnackbarProvider>
     </>

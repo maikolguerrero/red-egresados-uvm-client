@@ -145,7 +145,6 @@ class SocketService {
         });
     }
 
-    // En socketService.js
     sendPrivateMessage(receiverId, content, read) {
         if (!this.isConnected) {
             console.error('No hay conexión con el servidor de sockets');

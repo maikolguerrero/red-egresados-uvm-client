@@ -10,6 +10,9 @@ import { Dropdown, DropdownItem } from "flowbite-react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { FormAddForum } from "../Forms/Forum/FormAddForum";
+import { enqueueSnackbar } from "notistack";
+import { typeSuccess } from "../../models/alertModels";
+import { URL_FRONTEND } from "../../config";
 
 export function CardForum({ forum }) {
   const dispatch = useDispatch();
@@ -61,6 +64,22 @@ export function CardForum({ forum }) {
       threadId: forum.id
     }))
   }
+
+  // Función para compartir el hilo
+  const handleShare = async () => { // Hacemos la función asíncrona
+    if (!navigator.clipboard) {
+      // Fallback para navegadores antiguos o contextos no seguros
+      enqueueSnackbar("Tu navegador no soporta la función de compartir.", { variant: 'error' });
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(`${URL_FRONTEND}/forums/${forum.id}`);
+      enqueueSnackbar("Enlace copiado", typeSuccess);
+    } catch (err) {
+      console.error('Error al copiar el texto: ', err);
+      enqueueSnackbar("Error al copiar el mensaje.", { variant: 'error' });
+    }
+  };
 
   return (
     <article className="flex flex-col gap-1 w-full pb-8 border-b-2 border-verdeD">
@@ -145,7 +164,7 @@ export function CardForum({ forum }) {
         <li
           onClick={handleLike}
           className={`${forum?.isLiked
-            ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-Gris"
+            ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
             : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
             } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
         >
@@ -159,7 +178,9 @@ export function CardForum({ forum }) {
           {forum?.commentCount}{" "}
           <FaComments className="text-base md:text-lg xl:text-xl" />
         </li>
-        <li className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
+        <li
+          onClick={handleShare}
+          className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
           Compartir <FaShare className="text-base md:text-lg xl:text-xl" />
         </li>
       </ul>

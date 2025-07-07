@@ -1,4 +1,5 @@
-import { Card, Dropdown, DropdownItem } from "flowbite-react";
+import { Dropdown, DropdownItem } from "flowbite-react";
+import { formatUTCDateToLocalAMPM } from "../../utils/dateUtils";
 import ButtonSmall from "../Buttons/ButtonSmall";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,12 +81,12 @@ export function CardEvent({event}) {
           {event.title}
         </h5>
         <h6 className="text-RojoC text-xs md:text-sm xl:text-base font-semibold">
-          <span className="text-verdeD">INICIA: </span>{event.startDate.split("T")[0]} A LAS {" "}
-          {event.startDate.split("T")[1].split(".")[0]}
+          <span className="text-verdeD">INICIA: </span>{formatUTCDateToLocalAMPM(event.startDate).date} A LAS {" "}
+          {formatUTCDateToLocalAMPM(event.startDate).time}
         </h6>
         <h6 className="text-RojoC mb-8 text-xs md:text-sm xl:text-base font-semibold">
-          <span className="text-verdeD">{active ? "FINALIZA: " : "FINALIZO: "}</span>{event.endDate.split("T")[0]} A LAS {" "}
-          {event.endDate.split("T")[1].split(".")[0]}
+          <span className="text-verdeD">{active ? "FINALIZA: " : "FINALIZO: "}</span>{formatUTCDateToLocalAMPM(event.endDate).date} A LAS {" "}
+          {formatUTCDateToLocalAMPM(event.endDate).time}
         </h6>
         <p className="mb-3 font-medium text-Negro ">{event.description}</p>
 

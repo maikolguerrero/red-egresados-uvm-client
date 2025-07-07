@@ -1,40 +1,35 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
-import { Bounce, toast } from "react-toastify";
 import { typeError, typeSuccess } from "../../models/alertModels";
-import { URL_API } from "../../config";
+import { apiFetch } from "../apiService";
 
 export const addProyect = createAsyncThunk(
   "proyectsSlice/addProyect", // Nombre de la acción
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects`,
+      const response = await apiFetch(
+        `/api/projects`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "POST",
+          body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data)
+          }
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se creo el proyecto", typeSuccess)
         return {
           message: "Se creo el proyecto",
-          proyect: datas.data
+          proyect: response.data
         }
       } else {
-        if (datas.message === "Error de validación") {
-          throw `${datas.metadata.errors[0].message}`
+        if (response.message === "Error de validación") {
+          throw `${response.metadata.errors[0].message}`
         }
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -50,8 +45,8 @@ export const searchProyect = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects?page=${data.page}&limit=${data.limit}${
+      const response = await apiFetch(
+        `/api/projects?page=${data.page}&limit=${data.limit}${
             data.status === null || data.status === undefined ? "" : "&status=" + data.status
           }${
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
@@ -61,26 +56,19 @@ export const searchProyect = createAsyncThunk(
             !data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
           }`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se cargaron los proyectos", typeSuccess)
         return {
           message: "Se cargaron los proyectos",
-          proyects: datas.data,
-          pagination: datas.pagination
+          proyects: response.data,
+          pagination: response.pagination
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -96,27 +84,21 @@ export const getProyect = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.id}`,
+      const response = await apiFetch(
+        `/api/projects/${data.id}`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se cargo el proyecto", typeSuccess)
         return {
           message: "Se cargo el proyecto",
-          proyectSelected: datas.data,
+          proyectSelected: response.data,
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -132,31 +114,27 @@ export const editProyect = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "PATCH",
+          body: JSON.stringify(data.data),
           headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data.data)
+          }
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se edito el proyecto", typeSuccess);
         return {
           projectId: data.projectId,
           message: "Se edito el proyecto",
-          data: datas.data,
+          data: response.data,
           type: data.type
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -172,28 +150,21 @@ export const deleteProject = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess);
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess);
         return {
           projectId: data.projectId,
-          message: datas.message,
+          message: response.message,
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -209,29 +180,22 @@ export const requestProyect = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}/request`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}/request`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data.data)
+          body: data.data
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se envio la solicitud", typeSuccess)
         return {
           message: "Se envio la solicitud",
           projectId: data.projectId
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -247,29 +211,22 @@ export const joinProyect = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}/join`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}/join`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data.data)
+          body: data.data
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Te uniste al proyecto", typeSuccess)
         return {
           message: "Te uniste al proyecto",
           projectId: data.projectId
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -285,28 +242,21 @@ export const getRequestProyect = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}/requests`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}/requests`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Cargaron las solicitudes", typeSuccess)
         return {
           message: "Cargaron las solicitudes",
-          request: datas.data
+          request: response.data
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -322,31 +272,27 @@ export const responseRequest = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/requests/${data.requestId}`,
+      const response = await apiFetch(
+        `/api/projects/requests/${data.requestId}`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "PATCH",
+          body: JSON.stringify(data.data),
           headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data.data)
+          }
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Completado la solicitud", typeSuccess)
         return {
           message: "Completado la solicitud",
-          project: datas.data.project,
-          status: datas.data.status,
+          project: response.data.project,
+          status: response.data.status,
           requestId: data.requestId
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -362,29 +308,22 @@ export const expelCollaborator = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}/collaborators/${data.username}`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}/collaborators/${data.username}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          }
+          method: "DELETE"
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
+          message: response.message,
           projectId: data.projectId,
           username: data.username,
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -400,28 +339,22 @@ export const cancelRequest = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}/request`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}/request`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          }
+          body: data.data
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
+          message: response.message,
           projectId: data.projectId,
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -437,29 +370,23 @@ export const leaveProyect = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}/leave`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}/leave`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          }
+          body: data.data
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
+          message: response.message,
           projectId: data.projectId,
           username: data.username
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {
@@ -475,30 +402,26 @@ export const editRoleCollaborator = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/projects/${data.projectId}/collaborators/role`,
+      const response = await apiFetch(
+        `/api/projects/${data.projectId}/collaborators/role`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "PATCH",
+          body: JSON.stringify(data.data),
           headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data.data)
+          }
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se cambio el rol del colaborador", typeSuccess)
         return {
           message: "Se cambio el rol del colaborador",
-          data: datas.data,
+          data: response.data,
           username: data.data.username,
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
       
     } catch (error) {

@@ -13,6 +13,9 @@ import { FormAddComment } from "../../Forms/Forum/FormAddComment";
 import { CardComment } from "./CardComment";
 import { FormAddForum } from "../../Forms/Forum/FormAddForum";
 import { FormReport } from "../../Forms/Forum/FormReport";
+import { enqueueSnackbar } from "notistack";
+import { typeSuccess } from "../../../models/alertModels";
+import { URL_FRONTEND } from "../../../config";
 
 export function InternalForum({ forum }) {
   const dispatch = useDispatch();
@@ -64,6 +67,22 @@ export function InternalForum({ forum }) {
         threadId: forum.id,
       })
     );
+  };
+
+  // Función para compartir el hilo
+  const handleShare = async () => { // Hacemos la función asíncrona
+    if (!navigator.clipboard) {
+      // Fallback para navegadores antiguos o contextos no seguros
+      enqueueSnackbar("Tu navegador no soporta la función de compartir.", { variant: 'error' });
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(`${URL_FRONTEND}/forums/${forum.id}`);
+      enqueueSnackbar("Enlace copiado", typeSuccess);
+    } catch (err) {
+      console.error('Error al copiar el texto: ', err);
+      enqueueSnackbar("Error al copiar el mensaje.", { variant: 'error' });
+    }
   };
 
   return (
@@ -158,7 +177,9 @@ export function InternalForum({ forum }) {
             <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg mt-4">
               <li
                 onClick={handleLike}
-                className={`${forum?.isLiked ? "text-Blanco bg-RojoC" : "text-Negro bg-Gris"
+                className={`${forum?.isLiked
+                  ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
+                  : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
                   } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
               >
                 {forum?.likeCount}{" "}
@@ -168,11 +189,15 @@ export function InternalForum({ forum }) {
                 {forum?.comments?.length}{" "}
                 <FaComments className="text-base md:text-lg xl:text-xl" />
               </li>
-              <li className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+              <li
+                onClick={handleShare}
+                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
                 Compartir{" "}
                 <FaShare className="text-base md:text-lg xl:text-xl" />
               </li>
-              <li onClick={(e) => { setOpenReport(true) }} className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+              <li
+                onClick={(e) => { setOpenReport(true) }}
+                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
                 Reportar{" "}
                 <MdReportProblem className="text-base md:text-lg xl:text-xl" />
               </li>

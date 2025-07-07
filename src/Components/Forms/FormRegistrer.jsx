@@ -9,6 +9,8 @@ import { enqueueSnackbar } from "notistack";
 let styles = {
   input:
     "w-full px-3 py-1.5 text-xs md:text-sm font-barolw rounded-lg border border-verdeA border-b-2",
+  input_select:
+    "w-16 px-3 py-1.5 text-xs md:text-sm font-barolw rounded-lg border border-verdeA border-b-2",
   subtitle_form:
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
@@ -91,7 +93,7 @@ function FormRegister(props) {
                 value={values.nacionalidad}
                 onChange={handleInputChange}
                 // className="w-16 h-10 px-2 border border-gray-300 rounded-md shadow-sm focus:ring-verdeD focus:border-verdeD" // Ajusta estos estilos a tu 'styles.input' si es posible
-                className={`${styles.input} w-16 px-0 text-center`}
+                className={styles.input_select}
               >
                 <option value="V">V</option>
                 <option value="E">E</option>

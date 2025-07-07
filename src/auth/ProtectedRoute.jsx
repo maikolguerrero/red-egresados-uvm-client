@@ -45,7 +45,8 @@ function ProtectedRoute({ children }) {
         if (
           currentPath !== "/register" &&
           currentPath !== "/recover-password" &&
-          currentPath !== "/verify-email"
+          currentPath !== "/verify-email" &&
+          currentPath !== "/verify-email-change"
         ) {
           navigate("/login");
         }

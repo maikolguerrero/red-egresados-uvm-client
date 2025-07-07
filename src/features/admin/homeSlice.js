@@ -16,19 +16,19 @@ export const homeSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-     builder.addCase(getContentHome.pending, (state) => {
-       state.loadingPage = true;
-       state.error = null;
-     });
-     builder.addCase(getContentHome.fulfilled, (state, action) => {
-       state.loadingPage = false;
-       state.message = action.payload.message;
-       state.homeContent = action.payload.home;
-     });
-     builder.addCase(getContentHome.rejected, (state, action) => {
-       state.loadingPage = false;
-       state.error = action.error.message;
-     });
+    builder.addCase(getContentHome.pending, (state) => {
+      state.loadingPage = true;
+      state.error = null;
+    });
+    builder.addCase(getContentHome.fulfilled, (state, action) => {
+      state.loadingPage = false;
+      state.message = action.payload.message;
+      state.homeContent = action.payload.home;
+    });
+    builder.addCase(getContentHome.rejected, (state, action) => {
+      state.loadingPage = false;
+      state.error = action.error.message;
+    });
 
     builder.addCase(updateContentHome.pending, (state) => {
       state.loading = true;

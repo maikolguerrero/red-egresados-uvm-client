@@ -9,11 +9,14 @@ import { useState } from "react";
 import { deleteNotification } from "../../services/notifications/notificationService";
 import { enqueueSnackbar } from "notistack";
 import { typeError, typeSuccess } from "../../models/alertModels";
-import { IoIosNotifications } from "react-icons/io";
+import { IoIosNotifications, IoMdWarning, IoIosInformationCircle } from "react-icons/io";
+import { BsExclamationOctagon } from "react-icons/bs";
+import { formatNotification } from "../../utils/dateUtils";
 
 export function CardBanner({
   type,
   noti,
+  createdAt,
   isRead,
   onMarkAsRead,
   notificationId,
@@ -49,6 +52,23 @@ export function CardBanner({
           icon: <PiProjectorScreenChartBold className="w-6 h-6" />,
           typeText: "PROYECTO",
           baseRoute: "/proyects"
+        };
+      case 'new_report':
+      case 'report_resolved':
+        return {
+          icon: <BsExclamationOctagon className="w-6 h-6" />,
+          typeText: "REPORTE",
+          baseRoute: "/reports"
+        };
+      case 'user_warning':
+        return {
+          icon: <IoMdWarning className="w-6 h-6" />,
+          typeText: "ADVERTENCIA",
+        };
+      case 'system':
+        return {
+          icon: <IoIosInformationCircle className="w-6 h-6" />,
+          typeText: "SISTEMA",
         };
       default:
         return {
@@ -115,6 +135,50 @@ export function CardBanner({
   if (!isVisible) return null;
 
   return (
+    // <Banner>
+    //   <div
+    //     className={`flex w-[calc(100%-2rem)] flex-col justify-between rounded-lg border ${!isRead ? "border-RojoC" : "border-verdeD"
+    //       } bg-Gris p-4 shadow-sm md:flex-row lg:max-w-7xl cursor-pointer`}
+    //     onClick={handleViewClick}
+    //   >
+    //     <div className="mb-3 mr-4 flex flex-col items-start md:mb-0 md:flex-row md:items-center">
+    //       <div className="mb-2 flex gap-3 items-center border-verdeC md:mb-0 md:mr-4 md:border-r md:pr-4">
+    //         {icon}
+    //         <span className="self-center whitespace-nowrap text-lg font-semibold md:pr-6">
+    //           {typeText}
+    //         </span>
+    //       </div>
+    //       <p className="flex items-center text-sm font-normal text-Negro">
+    //         {noti}
+    //       </p>
+    //       <p className="text-xs text-Negro text-right">
+    //         {formatNotification(createdAt)}
+    //       </p>
+    //     </div>
+    //     <div className="flex shrink-0 items-center gap-3">
+    //       {!isRead && (
+    //         <Badge color="failure" className="mr-2">
+    //           Nuevo
+    //         </Badge>
+    //       )}
+    //       <ButtonSmall
+    //         text={"Ver..."}
+    //         className={"bg-verdeC hover:bg-RojoC"}
+    //       />
+    //       <button
+    //         onClick={(e) => {
+    //           e.stopPropagation(); // Evita que se marque como leída al hacer clic en la X
+    //           handleDelete();
+    //         }}
+    //         className="border-0 bg-transparent text-RojoC hover:text-RojoB transition-colors"
+    //         aria-label="Eliminar notificación"
+    //       >
+    //         <HiX className="h-4 w-4" />
+    //       </button>
+    //     </div>
+    //   </div>
+    // </Banner>
+
     <Banner>
       <div
         className={`flex w-[calc(100%-2rem)] flex-col justify-between rounded-lg border ${!isRead ? "border-RojoC" : "border-verdeD"
@@ -128,9 +192,16 @@ export function CardBanner({
               {typeText}
             </span>
           </div>
-          <p className="flex items-center text-sm font-normal text-Negro">
-            {noti}
-          </p>
+          {/* Nuevo contenedor flex para la notificación y la fecha */}
+          <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
+            <p className="flex items-center text-sm font-normal text-Negro">
+              {noti}
+            </p>
+            {/* Fecha al lado, con estilos más discretos */}
+            <p className="text-xs text-GrisOscuro italic"> {/* Puedes usar 'text-gray-500' si no tienes GrisOscuro */}
+              {formatNotification(createdAt)}
+            </p>
+          </div>
         </div>
         <div className="flex shrink-0 items-center gap-3">
           {!isRead && (

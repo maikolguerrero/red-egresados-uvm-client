@@ -8,6 +8,7 @@ import { Label } from "flowbite-react";
 import { Skills } from "../../Skills";
 import { IoIosAdd } from "react-icons/io";
 import { addEvent, editEvent } from "../../../services/events/eventsService";
+import { utcToLocalDateTime } from "../../../utils/dateUtils";
 
 let styles = {
   input:
@@ -38,6 +39,44 @@ export function FormAddEvent({ eventSelect, type }) {
     isActive: true,
   });
 
+  const validateDates = () => {
+    const now = new Date().toISOString();
+    const startDate = new Date(values.startDate).toISOString();
+    const endDate = new Date(values.endDate).toISOString();
+
+    // Validar que la fecha de inicio no sea pasada
+    if (startDate < now) {
+      enqueueSnackbar("La fecha de inicio no puede ser una fecha pasada", typeError);
+      return false;
+    }
+
+    // Validar que la fecha de fin no sea anterior a la de inicio
+    if (endDate < startDate) {
+      enqueueSnackbar("La fecha de fin no puede ser anterior a la de inicio", typeError);
+      return false;
+    }
+
+    return true;
+  };
+
+
+  const toLocalDateTimeString = (dateString) => {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+    // Ajustar por el offset de la zona horaria
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().slice(0, 16);
+  };
+
+  const parseLocalDateTime = (localDateTime) => {
+    if (!localDateTime) return '';
+
+    // Convertir la fecha local a un formato ISO que mantenga la hora local
+    const [date, time] = localDateTime.split('T');
+    return `${date}T${time}:00`;
+  };
+
   useEffect(() => {
     if (eventSelect === undefined) {
       return;
@@ -49,8 +88,10 @@ export function FormAddEvent({ eventSelect, type }) {
         location: eventSelect.location,
         capacity: eventSelect.capacity,
         virtualLink: eventSelect.virtualLink,
-        startDate: eventSelect.startDate.split(".")[0],
-        endDate: eventSelect.endDate.split(".")[0],
+        // startDate: eventSelect.startDate.split(".")[0],
+        // endDate: eventSelect.endDate.split(".")[0],
+        startDate: utcToLocalDateTime(eventSelect.startDate),
+        endDate: utcToLocalDateTime(eventSelect.endDate),
         certificate: eventSelect.certificate,
         organizers: eventSelect.organizers,
         specialGuests: eventSelect.specialGuests,
@@ -134,50 +175,84 @@ export function FormAddEvent({ eventSelect, type }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
+    // setValues({
+    //   ...values,
+    //   [name]: value,
+    // });
+
+    // Manejo especial para fechas
+    if (name === 'startDate' || name === 'endDate') {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (values.title.trim() === "") {
-        return enqueueSnackbar("Debe tener titulo el evento", typeError);
+      return enqueueSnackbar("Debe tener titulo el evento", typeError);
     }
     if (values.description.trim() === "") {
-        return enqueueSnackbar("Debe tener descripcion el evento", typeError);
+      return enqueueSnackbar("Debe tener descripcion el evento", typeError);
     }
     if (values.eventType.trim() === "") {
-        return enqueueSnackbar("Debe especificar el tipo de evento", typeError);
+      return enqueueSnackbar("Debe especificar el tipo de evento", typeError);
     }
-    if (values.location.trim() === "") {
-        return enqueueSnackbar("Debe escribir la ubicacion de evento", typeError);
-    }
-    if (values.virtualLink.trim() === "") {
-        return enqueueSnackbar("Debe escribir el link virtual del evento o (no tiene)", typeError);
-    }
+    // if (values.location.trim() === "") {
+    //   return enqueueSnackbar("Debe escribir la ubicacion de evento", typeError);
+    // }
+    // if (values.virtualLink.trim() === "") {
+    //     return enqueueSnackbar("Debe escribir el link virtual del evento o (no tiene)", typeError);
+    // }
     if (values.capacity < 0) {
-        return enqueueSnackbar("Debes colocar una capacidad minima de 0", typeError);
+      return enqueueSnackbar("Debes colocar una capacidad minima de 0", typeError);
     }
     if (values.startDate.trim() === "") {
-        return enqueueSnackbar("Debes colocar una fecha de inicio", typeError);
+      return enqueueSnackbar("Debes colocar una fecha de inicio", typeError);
     }
     if (values.endDate.trim() === "") {
-        return enqueueSnackbar("Debes colocar una fecha de finalizacion tentativa", typeError);
+      return enqueueSnackbar("Debes colocar una fecha de finalizacion tentativa", typeError);
+    }
+    // Validación de fechas
+    if (!validateDates()) {
+      return;
     }
     if (values.organizers.length === 0) {
-        return enqueueSnackbar("Debes tener minimo 1 organizador", typeError);
+      return enqueueSnackbar("Debes tener minimo 1 organizador", typeError);
     }
 
+    // Crear copia de values con las fechas formateadas
+    const formData = {
+      ...values,
+      startDate: parseLocalDateTime(values.startDate),
+      endDate: parseLocalDateTime(values.endDate),
+    };
+
+    // if (eventSelect === undefined) {
+    //   dispatch(addEvent(values))
+    // } else {
+    //   dispatch(editEvent({
+    //     eventId: eventSelect.id,
+    //     data: values,
+    //     type: type
+    //   }))
+    // }
+
     if (eventSelect === undefined) {
-      dispatch(addEvent(values))
+      dispatch(addEvent(formData));
     } else {
       dispatch(editEvent({
         eventId: eventSelect.id,
-        data: values,
+        data: formData,
         type: type
-      }))
+      }));
     }
   };
 
@@ -240,7 +315,7 @@ export function FormAddEvent({ eventSelect, type }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Ubicacion del evento:
+              Ubicacion del evento (opcional):
             </Label>
             <input
               className={styles.input}
@@ -254,7 +329,7 @@ export function FormAddEvent({ eventSelect, type }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Link virtual:
+              Link virtual (opcional):
             </Label>
             <input
               className={styles.input}
@@ -323,7 +398,9 @@ export function FormAddEvent({ eventSelect, type }) {
               <input
                 className={styles.input}
                 type="datetime-local"
-                min={0}
+                // min={0}
+                // min={new Date().toISOString().slice(0, 16)}
+                min={toLocalDateTimeString(new Date().toISOString())}
                 name="startDate"
                 value={values.startDate}
                 onChange={handleInputChange}
@@ -337,7 +414,8 @@ export function FormAddEvent({ eventSelect, type }) {
               <input
                 className={styles.input}
                 type="datetime-local"
-                min={0}
+                // min={values.startDate || new Date().toISOString().slice(0, 16)} // No puede ser anterior a startDate min={0}
+                min={values.startDate || toLocalDateTimeString(new Date().toISOString())}
                 name="endDate"
                 value={values.endDate}
                 onChange={handleInputChange}
@@ -346,7 +424,7 @@ export function FormAddEvent({ eventSelect, type }) {
           </div>
 
           <div className="flex flex-col gap-6">
-            <h4 className={styles.subtitle_form}>ETIQUETAS</h4>
+            <h4 className={styles.subtitle_form}>ETIQUETAS (opcional)</h4>
             <div className="flex flex-col gap-3">
               <div className="w-full flex flex-col relative">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
@@ -448,7 +526,7 @@ export function FormAddEvent({ eventSelect, type }) {
           </div>
 
           <div className="flex flex-col gap-6">
-            <h4 className={styles.subtitle_form}>INVITADOS ESPECIALES</h4>
+            <h4 className={styles.subtitle_form}>INVITADOS ESPECIALES (opcional)</h4>
             <div className="flex flex-col gap-3">
               <div className="w-full flex flex-col relative">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
