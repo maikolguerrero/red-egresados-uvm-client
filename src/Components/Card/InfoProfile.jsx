@@ -91,7 +91,7 @@ function InfoProfile({ profile }) {
 
         </div>
 
-        {profile.profile?.professional?.summary === undefined ?? (
+        {profile.profile?.professional?.summary && (
           <div className="py-4 px-2 w-full">
 
             <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">

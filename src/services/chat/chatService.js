@@ -17,7 +17,7 @@ export const getMessages = createAsyncThunk(
                 }
             );
 
-            if (!response.ok) {
+            if (!response.success) {
                 throw new Error("Error al obtener mensajes");
             }
 

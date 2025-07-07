@@ -88,14 +88,35 @@ export const groupMessagesByDate = (messages) => {
   });
 };
 
+// /**
+//  * Formatea una fecha para mostrar solo la hora con AM/PM.
+//  * @param {Date | string} date - La fecha o cadena de fecha.
+//  * @returns {string} - La hora formateada (ej: "10:30 a. m.").
+//  */
+// export const formatTimeOnly = (date) => {
+//   const d = date instanceof Date ? date : new Date(date);
+//   return format(d, "h:mm 'a. m.'", { locale: es });
+// };
 /**
  * Formatea una fecha para mostrar solo la hora con AM/PM.
  * @param {Date | string} date - La fecha o cadena de fecha.
- * @returns {string} - La hora formateada (ej: "10:30 a. m.").
+ * @returns {string} - La hora formateada (ej: "10:30 a. m." o "3:45 p. m.").
  */
 export const formatTimeOnly = (date) => {
+  // Asegurarse de que 'date' sea un objeto Date válido
   const d = date instanceof Date ? date : new Date(date);
-  return format(d, "h:mm 'a. m.'", { locale: es });
+
+  // Validar si la fecha es válida después de intentar crearla
+  if (isNaN(d.getTime())) {
+    console.error("Fecha inválida proporcionada a formatTimeOnly:", date);
+    return "Hora inválida"; // O el mensaje de error que prefieras
+  }
+
+  // Usar 'aa' (AM/PM) o 'aaa' (am/pm) para el indicador de meridiano (a.m./p.m.)
+  // 'h': hora en formato 12 horas (1-12)
+  // 'mm': minutos (00-59)
+  // 'aaa': indicador de meridiano (a.m./p.m. con puntos y espacios)
+  return format(d, "h:mm aaa", { locale: es });
 };
 
 /**

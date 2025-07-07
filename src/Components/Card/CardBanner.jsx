@@ -58,7 +58,7 @@ export function CardBanner({
         return {
           icon: <BsExclamationOctagon className="w-6 h-6" />,
           typeText: "REPORTE",
-          baseRoute: "/reports"
+          baseRoute: "/config/reports"
         };
       case 'user_warning':
         return {
@@ -88,7 +88,10 @@ export function CardBanner({
     }
 
     // Navegar según el tipo de notificación y datos disponibles
-    if (data?.threadId) {
+    if (data?.reportId) {
+      // Notificaciones de proyectos
+      navigate(`/config/reports`);
+    } else if (data?.threadId) {
       // Notificaciones relacionadas con foros
       navigate(`/forums/${data.threadId}`);
 
