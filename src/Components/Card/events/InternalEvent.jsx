@@ -11,12 +11,14 @@ import { FormAddEvent } from "../../Forms/Event/FormAddEvent";
 import { useState } from "react";
 import { formatUTCDateToLocalAMPM } from "../../../utils/dateUtils";
 import { FaCalendar } from "react-icons/fa6";
+import { FormEditImage } from "../../Forms/Event/FormEditImage";
 
 export function InternalEvent({ event }) {
   const dispatch = useDispatch();
   const role = useSelector((state) => state.auth.role);
 
   const [openEditEvent, setOpenEditEvent] = useState(false);
+  const [openEditImage, setOpenEditImage] = useState(false);
 
   const handleDelete = (e) => {
     dispatch(deleteEvent({ eventId: event.id }));
@@ -51,10 +53,13 @@ export function InternalEvent({ event }) {
                         </div>
                       )}
                     >
-                      <DropdownItem onClick={(e) => setOpenEditEvent(true)} className="flex gap-2 items-center text-Negro">
+                      <DropdownItem
+                        onClick={(e) => setOpenEditEvent(true)}
+                        className="flex gap-2 items-center text-Negro"
+                      >
                         <MdEdit /> Editar Evento
                       </DropdownItem>
-                      <DropdownItem className="flex gap-2 items-center text-Negro">
+                      <DropdownItem onClick={(e) => setOpenEditImage(true)} className="flex gap-2 items-center text-Negro">
                         <IoIosCamera /> Editar Imagen
                       </DropdownItem>
                       <DropdownItem
@@ -126,12 +131,13 @@ export function InternalEvent({ event }) {
             </div>
 
             <div>
-              <h6 className="text-base lg:text-xl uppercase font-semibold">Descripción:</h6>
+              <h6 className="text-base lg:text-xl uppercase font-semibold">
+                Descripción:
+              </h6>
               <p className="text-base lg:text-xl font-medium text-Negro ">
                 {event.description}
               </p>
             </div>
-
 
             {event?.virtualLink && (
               <div>
@@ -150,8 +156,9 @@ export function InternalEvent({ event }) {
                 <p className={`font-barolw text-base uppercase`}>
                   <b>Estado:</b>{" "}
                   <span
-                    className={`${event.endDate > new Date() ? "text-verdeB" : "text-RojoC"
-                      } font-medium`}
+                    className={`${
+                      event.endDate > new Date() ? "text-verdeB" : "text-RojoC"
+                    } font-medium`}
                   >
                     {event.endDate > new Date() ? "Activo" : "Inactivo"}
                   </span>
@@ -192,7 +199,6 @@ export function InternalEvent({ event }) {
                   <GiDiploma className="text-verdeC text-2xl" />
                 </div>
               )}
-
             </div>
 
             <div className="grid grid-cols-2 gap-8">
@@ -245,6 +251,13 @@ export function InternalEvent({ event }) {
           </article>
         </>
       )}
+
+      <ModalNotHeader
+        openModal={openEditImage}
+        setOpenModal={setOpenEditImage}
+        size={"3xl"}
+        component={<FormEditImage internal={true} event={event} />}
+      />
     </>
   );
 }

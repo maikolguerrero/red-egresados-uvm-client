@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addAgenda, addEvent, addPictureEvent, deleteAgenda, deleteEvent, editEvent, getEvent, searchEvent } from '../../services/events/eventsService';
+import { addAgenda, addEvent, addPictureEvent, deleteAgenda, deleteEvent, deletePictureEvent, editEvent, getEvent, searchEvent } from '../../services/events/eventsService';
 import { useSelector } from 'react-redux';
 
 export const eventsSlice = createSlice({
@@ -53,13 +53,32 @@ export const eventsSlice = createSlice({
     builder.addCase(addPictureEvent.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      let newEvent = state.eventAdd.data;
-      newEvent.media = [action.payload.media];
-      state.events = [...state.events, newEvent];
-      state.eventAdd = {
-        data: null,
-        passed: 0,
-      };
+      if (action.payload.internal) {
+        state.eventSelect.media = [action.payload.media]
+      } else {
+        if (state.eventAdd.passed === 1) {
+          let newEvent = state.eventAdd.data;
+          newEvent.media = [action.payload.media];
+          state.events = [...state.events, newEvent];
+          state.eventAdd = {
+            data: null,
+            passed: 0,
+          };
+        } else {
+          let newEvents = [];
+          for (let i = 0; i < state.events.length; i++) {
+            if (state.events[i].id === action.payload.eventId) {
+              let editEvent = state.events[i];
+              editEvent.media = [action.payload.media];
+              newEvents.push(editEvent);
+            } else {
+              newEvents.push(state.events[i]);
+            }
+          }
+          state.events = newEvents;
+        }
+      }
+      
     });
     builder.addCase(addPictureEvent.rejected, (state, action) => {
       state.loading = false;
@@ -185,6 +204,35 @@ export const eventsSlice = createSlice({
       state.events = newsEvents;
     });
     builder.addCase(deleteAgenda.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deletePictureEvent.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deletePictureEvent.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      console.log(action.payload.internal)
+      if (action.payload.internal) {
+        state.eventSelect.media = []
+      } else {
+        let newEvents = [];
+        for (let i = 0; i < state.events.length; i++) {
+          if (state.events[i].id === action.payload.eventId) {
+            let editEvent = state.events[i];
+            editEvent.media = [];
+            newEvents.push(editEvent);
+          } else {
+            newEvents.push(state.events[i]);
+          }
+        }
+        state.events = newEvents;
+      }
+    });
+    builder.addCase(deletePictureEvent.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
