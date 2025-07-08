@@ -32,6 +32,7 @@ import ChangeEmail from "./views/ChangeEmail";
 import ChangePassword from "./views/ChangePassword";
 import { getContentFooter } from "./services/admin/landingService";
 import Reports from "./views/admin/Reports";
+import VerifyAlumni from "./views/alumni/VerifyAlumni";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -39,7 +40,15 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <ProtectedRoute>
-        <Login />
+        <VerifyAlumni />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/verify-alumni",
+    element: (
+      <ProtectedRoute>
+        <VerifyAlumni />
       </ProtectedRoute>
     ),
   },

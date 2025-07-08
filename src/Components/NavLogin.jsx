@@ -31,18 +31,30 @@ function NavLogin() {
         </div>
 
         <nav
-          className={`bg-verdeC w-full md:w-1/6 h-[7.5vh] lg:h-full absolute md:static items-center justify-center flex transition-all duration-300 ${
-            sidebar ? "top-0 md:right-auto" : "-top-full md:right-auto"
-          }`}
+          className={`bg-verdeC w-full md:w-1/6 h-[7.5vh] lg:h-full absolute md:static items-center justify-center flex transition-all duration-300 ${sidebar ? "top-0 md:right-auto" : "-top-full md:right-auto"
+            }`}
         >
           <div className="w-5/6 md:w-full flex justify-center">
+
             {
-              currentPath === "/login" ? (
-                <Link to={"/register"}><Button text="REGISTRO"  /></Link>
+              currentPath === "/verify-alumni" ? (
+                <>
+                  <Link to={"/login"}><Button text="LOGIN" /></Link>
+                  <Link to={"/register"}><Button text="REGISTRO" className="ml-2" /></Link>
+                </>
               ) : (
-                <Link to={"/login"}><Button text="LOGIN"  /></Link>
+                <>
+                  {currentPath === "/login" ? (
+                    <Link to={"/register"}><Button text="REGISTRO" /></Link>
+                  ) : (
+                    <Link to={"/login"}><Button text="LOGIN" /></Link>
+                  )}
+                  <Link to={"/verify-alumni"}><Button text="VERIFICACIÓN" className="ml-2" /></Link>
+
+                </>
               )
             }
+
           </div>
           <div className="w-1/6 md:w-0 flex items-center h-full justify-end px-4 md:hidden">
             <button
@@ -53,7 +65,7 @@ function NavLogin() {
             </button>
           </div>
         </nav>
-      </header>
+      </header >
     </>
   );
 }

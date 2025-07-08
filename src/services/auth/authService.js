@@ -1,20 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
-import { Bounce } from "react-toastify";
 import { typeError, typeSuccess } from "../../models/alertModels";
 import { URL_API } from "../../config";
-
-let optionsToast = {
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: false,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  transition: Bounce,
-};
 
 export const verifySesion = createAsyncThunk(
   "authSlice/verifySesion", // Nombre de la acción

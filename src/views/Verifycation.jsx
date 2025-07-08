@@ -38,9 +38,9 @@ function Verifycation() {
           <p className="text-Negro text- md:text-base font-barlow-condensed font-medium text-center">
             Tu cuenta{" "}
             {VerifyEmail
-              ? "se ha verificado correctamente."
+              ? "se ha verificado correctamente"
               : "no se ha podido verificar"}{" "}
-            <a className="text-RojoC">Bienvenido a la Red de Egresados</a>.
+            <a className="text-RojoC">usuario</a>.
           </p>
           <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
             <Button action={handleLogin} className={"w-full"} text="REGRESESAR A LOGIN" />
