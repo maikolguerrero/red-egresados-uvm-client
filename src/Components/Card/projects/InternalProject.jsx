@@ -17,6 +17,7 @@ import { FormEditRole } from "../../Forms/Proyects/FormEditRole";
 
 export function InternalProject({ proyect }) {
   const username = useSelector((state) => state.auth.username);
+  const role = useSelector((state) => state.auth.role);
   const loading = useSelector((state) => state.proyects.loading);
   const dispatch = useDispatch();
 
@@ -64,7 +65,7 @@ export function InternalProject({ proyect }) {
 
   return (
     <>
-      {proyect.id === undefined ? (
+      {proyect?.id === undefined ? (
         <article className="flex flex-col gap-1 w-full pb-8">
           <h4 className="uppercase text-xl font-medium">
             Este proyecto ha sido eliminado
@@ -85,27 +86,29 @@ export function InternalProject({ proyect }) {
                   alt="Foto de Perfil"
                 /> */}
 
-                {proyect.owner.profilePicture.url === null ? (
+                {proyect?.owner?.profilePicture?.url === null ? (
                   // Si no hay foto de perfil, muestra la inicial del username
                   <div className="w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
                     <span className="text-white text-base md:text-base xl:text-lg font-bold uppercase">
-                      {proyect.owner.username?.charAt(0).toUpperCase()}
+                      {proyect?.owner?.username?.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 ) : (
                   // Si hay foto, muéstrala circular
                   <img
                     className="w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
-                    src={proyect.owner.profilePicture.url}
-                    alt={proyect.owner.username || 'Foto de Perfil del Propietario'}
+                    src={proyect?.owner?.profilePicture?.url}
+                    alt={
+                      proyect?.owner?.username || "Foto de Perfil del Propietario"
+                    }
                   />
                 )}
                 <p className="flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center">
-                  {proyect.owner.username}
+                  {proyect?.owner?.username}
                 </p>
               </div>
 
-              {proyect.owner.username === username ? (
+              {proyect?.owner?.username === username || role === "admin" ? (
                 <>
                   <Dropdown
                     inline
@@ -117,28 +120,34 @@ export function InternalProject({ proyect }) {
                       </div>
                     )}
                   >
-                    <DropdownItem>
-                      <span
-                        onClick={(e) => setEditProyect(true)}
-                        className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                      >
-                        <MdEdit /> Editar
-                      </span>
-                    </DropdownItem>
+                    {role === "admin" ? (
+                      <></>
+                    ) : (
+                      <>
+                        <DropdownItem>
+                          <span
+                            onClick={(e) => setEditProyect(true)}
+                            className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                          >
+                            <MdEdit /> Editar
+                          </span>
+                        </DropdownItem>
+                        <DropdownItem>
+                          <span
+                            onClick={handleViewRequest}
+                            className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                          >
+                            <IoEnter /> Solicitudes
+                          </span>
+                        </DropdownItem>
+                      </>
+                    )}
                     <DropdownItem>
                       <span
                         onClick={handleDelete}
                         className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
                       >
                         <MdDelete /> Eliminar
-                      </span>
-                    </DropdownItem>
-                    <DropdownItem>
-                      <span
-                        onClick={handleViewRequest}
-                        className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                      >
-                        <IoEnter /> Solicitudes
                       </span>
                     </DropdownItem>
                   </Dropdown>
@@ -167,9 +176,9 @@ export function InternalProject({ proyect }) {
                             Solicitudes de union
                           </h5>
 
-                          {proyect.request === undefined ? (
+                          {proyect?.request === undefined ? (
                             <></>
-                          ) : proyect.request.length === 0 ? (
+                          ) : proyect?.request?.length === 0 ? (
                             <>
                               <h6 className="text-sm font-barolw font-semibold text-RojoC uppercase">
                                 No hay solicitudes de union actualmente
@@ -177,7 +186,7 @@ export function InternalProject({ proyect }) {
                             </>
                           ) : (
                             <>
-                              {proyect.request.map((item) => (
+                              {proyect?.request?.map((item) => (
                                 <CardRequest request={item} project={proyect} />
                               ))}
                             </>
@@ -193,11 +202,11 @@ export function InternalProject({ proyect }) {
             </div>
 
             <div className="flex flex-col gap-1">
-              {proyect.tags.length === 0 ? (
+              {proyect?.tags?.length === 0 ? (
                 <></>
               ) : (
                 <ul className="flex gap-2">
-                  {proyect.tags.map((item, key) => (
+                  {proyect?.tags?.map((item, key) => (
                     <li
                       className="py-1 px-3 rounded-full font-barolw uppercase bg-verdeC text-Blanco w-auto text-xs"
                       key={key}
@@ -208,10 +217,10 @@ export function InternalProject({ proyect }) {
                 </ul>
               )}
               <h5 className="text-2xl font-bold tracking-tight text-Negro">
-                {proyect.title}
+                {proyect?.title}
               </h5>
               <p className="font-normal text-lg text-Negro">
-                {proyect.description}
+                {proyect?.description}
               </p>
             </div>
 
@@ -220,7 +229,7 @@ export function InternalProject({ proyect }) {
                 <p className="font-bold text-verdeD">
                   Fecha de Inicio:{" "}
                   <span className="text-Negro font-medium">
-                    {proyect.startDate.split("T")[0]}
+                    {proyect?.startDate?.split("T")[0]}
                   </span>
                 </p>
 
@@ -232,7 +241,7 @@ export function InternalProject({ proyect }) {
                 <p className="font-bold text-verdeD">
                   Fecha de Finalizacion:{" "}
                   <span className="text-Negro font-medium">
-                    {proyect.endDate.split("T")[0]}
+                    {proyect?.endDate?.split("T")[0]}
                   </span>
                 </p>
                 <FaCalendarCheck className="text-verdeD text-xl" />
@@ -244,13 +253,13 @@ export function InternalProject({ proyect }) {
                 <p className="font-bold text-verdeD">
                   Estado:{" "}
                   <span className="text-Negro font-medium">
-                    {proyect.status === "not_started"
+                    {proyect?.status === "not_started"
                       ? "Sin Iniciar"
-                      : proyect.status === "in_progress"
+                      : proyect?.status === "in_progress"
                         ? "En Progreso"
-                        : proyect.status === "paused"
+                        : proyect?.status === "paused"
                           ? "Pausado"
-                          : proyect.status === "completed"
+                          : proyect?.status === "completed"
                             ? "Completado"
                             : "Cancelado"}
                   </span>
@@ -309,7 +318,7 @@ export function InternalProject({ proyect }) {
               )}
             </div>
 
-            {proyect.collaborators.length === 0 ? (
+            {proyect?.collaborators?.length === 0 ? (
               <></>
             ) : (
               <div className="bg-gris border w-full border-verdeD px-5 py-3 rounded-md flex flex-col gap-6">
@@ -317,28 +326,31 @@ export function InternalProject({ proyect }) {
                   Colaboradores
                 </h5>
                 <ul className="px-2 flex flex-col gap-3">
-                  {proyect.collaborators.map((item) => (
+                  {proyect?.collaborators?.map((item) => (
                     <li className="text-RojoC font-medium text-sm flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        {item.user.profilePicture.url === null ? (
+                        {item?.user?.profilePicture?.url === null ? (
                           // Si no hay foto de perfil, muestra la inicial del username
                           <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
                             <span className="text-white text-xs md:text-xs xl:text-sm font-bold uppercase">
-                              {item.user.username?.charAt(0).toUpperCase()}
+                              {item?.user?.username?.charAt(0).toUpperCase()}
                             </span>
                           </div>
                         ) : (
                           // Si hay foto, muéstrala circular
                           <img
                             className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
-                            src={item.user.profilePicture.url}
-                            alt={item.user.username || 'Foto de Perfil del Colaborador'}
+                            src={item?.user?.profilePicture?.url}
+                            alt={
+                              item?.user?.username ||
+                              "Foto de Perfil del Colaborador"
+                            }
                           />
                         )}
 
                         <p className="flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center">
-                          {item.user.username} <span>-</span>
-                          {item.role === "creator" ? (
+                          {item?.user?.username} <span>-</span>
+                          {item?.role === "creator" ? (
                             <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">
                               Creador
                             </span>
@@ -352,8 +364,8 @@ export function InternalProject({ proyect }) {
                         </p>
                       </div>
 
-                      {proyect.owner.username === username ? (
-                        item.user.username === username ? (
+                      {proyect?.owner?.username === username ? (
+                        item?.user?.username === username ? (
                           <></>
                         ) : (
                           <>
@@ -368,8 +380,8 @@ export function InternalProject({ proyect }) {
                                 onClick={(e) => {
                                   dispatch(
                                     expelCollaborator({
-                                      projectId: proyect.id,
-                                      username: item.user.username,
+                                      projectId: proyect?.id,
+                                      username: item?.user?.username,
                                     })
                                   );
                                 }}

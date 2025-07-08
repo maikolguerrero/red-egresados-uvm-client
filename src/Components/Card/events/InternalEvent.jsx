@@ -11,12 +11,14 @@ import { FormAddEvent } from "../../Forms/Event/FormAddEvent";
 import { useState } from "react";
 import { formatUTCDateToLocalAMPM } from "../../../utils/dateUtils";
 import { FaCalendar } from "react-icons/fa6";
+import { FormEditImage } from "../../Forms/Event/FormEditImage";
 
 export function InternalEvent({ event }) {
   const dispatch = useDispatch();
   const role = useSelector((state) => state.auth.role);
 
   const [openEditEvent, setOpenEditEvent] = useState(false);
+  const [openEditImage, setOpenEditImage] = useState(false);
 
   const handleDelete = (e) => {
     dispatch(deleteEvent({ eventId: event.id }));
@@ -24,7 +26,7 @@ export function InternalEvent({ event }) {
 
   return (
     <>
-      {event.id === undefined ? (
+      {event?.id === undefined ? (
         <article className="flex flex-col gap-1 w-full pb-8">
           <h4 className="uppercase text-xl font-medium">
             Este evento ha sido eliminado
@@ -36,7 +38,7 @@ export function InternalEvent({ event }) {
             <div className="h-full flex flex-col gap-2">
               <div className="flex gap-4 justify-between">
                 <h4 className="text-base md:text-lg xl:text-xl font-bold tracking-tight text-Negro uppercase">
-                  {event.title}
+                  {event?.title}
                 </h4>
                 {role === "egresado" ? (
                   <></>
@@ -51,10 +53,13 @@ export function InternalEvent({ event }) {
                         </div>
                       )}
                     >
-                      <DropdownItem onClick={(e) => setOpenEditEvent(true)} className="flex gap-2 items-center text-Negro">
+                      <DropdownItem
+                        onClick={(e) => setOpenEditEvent(true)}
+                        className="flex gap-2 items-center text-Negro"
+                      >
                         <MdEdit /> Editar Evento
                       </DropdownItem>
-                      <DropdownItem className="flex gap-2 items-center text-Negro">
+                      <DropdownItem onClick={(e) => setOpenEditImage(true)} className="flex gap-2 items-center text-Negro">
                         <IoIosCamera /> Editar Imagen
                       </DropdownItem>
                       <DropdownItem
@@ -76,26 +81,26 @@ export function InternalEvent({ event }) {
                 )}
               </div>
               <h5 className="text-RojoC text-sm md:text-base xl:text-lg font-semibold h-full flex flex-col">
-                <span>{formatUTCDateToLocalAMPM(event.startDate).date}</span>
+                <span>{formatUTCDateToLocalAMPM(event?.startDate).date}</span>
                 <span>
                   {" "}
-                  HORA: {formatUTCDateToLocalAMPM(event.startDate).time}
+                  HORA: {formatUTCDateToLocalAMPM(event?.startDate).time}
                 </span>
               </h5>
               <h6 className="uppercase">
                 <b>TIPO DE EVENTO:</b>{" "}
                 <span className="text-verdeD font-medium font-barolw">
-                  {event.eventType}
+                  {event?.eventType}
                 </span>
               </h6>
             </div>
 
             <div>
-              {event.tags.length === 0 ? (
+              {event?.tags?.length === 0 ? (
                 <></>
               ) : (
                 <ul className="flex mb-2 gap-2">
-                  {event.tags.map((item, key) => (
+                  {event?.tags?.map((item, key) => (
                     <li
                       className="py-1 px-3 rounded-full font-medium font-barolw bg-verdeA w-auto text-xs md:text-sm"
                       key={key}
@@ -126,12 +131,13 @@ export function InternalEvent({ event }) {
             </div>
 
             <div>
-              <h6 className="text-base lg:text-xl uppercase font-semibold">Descripción:</h6>
+              <h6 className="text-base lg:text-xl uppercase font-semibold">
+                Descripción:
+              </h6>
               <p className="text-base lg:text-xl font-medium text-Negro ">
-                {event.description}
+                {event?.description}
               </p>
             </div>
-
 
             {event?.virtualLink && (
               <div>
@@ -150,8 +156,8 @@ export function InternalEvent({ event }) {
                 <p className={`font-barolw text-base uppercase`}>
                   <b>Estado:</b>{" "}
                   <span
-                    className={`${event.endDate > new Date() ? "text-verdeB" : "text-RojoC"
-                      } font-medium`}
+                    className={
+                      `${event.endDate > new Date() ? "text-verdeB" : "text-RojoC"} font-medium`}
                   >
                     {event.endDate > new Date() ? "Activo" : "Inactivo"}
                   </span>
@@ -159,7 +165,7 @@ export function InternalEvent({ event }) {
                 <FaCalendar className="text-verdeC text-2xl" />
               </div>
 
-              {event.capacity && (
+              {event?.capacity && (
                 <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
                   <p className="font-barolw text-base">
                     <b>CAPACIDAD DE AFORO:</b> {event.capacity}
@@ -170,7 +176,7 @@ export function InternalEvent({ event }) {
             </div>
 
             <div className="grid grid-cols-2 gap-8">
-              {event.location && (
+              {event?.location && (
                 <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
                   <p className="font-barolw text-base">
                     <b>LUGAR:</b> {event.location}
@@ -184,7 +190,7 @@ export function InternalEvent({ event }) {
                 </p>
                 <FaLocationDot className="text-verdeC text-2xl" />
               </div> */}
-              {event.certificate && (
+              {event?.certificate && (
                 <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
                   <p className="font-barolw text-base">
                     <b>Certificado</b> por participar
@@ -192,8 +198,7 @@ export function InternalEvent({ event }) {
                   <GiDiploma className="text-verdeC text-2xl" />
                 </div>
               )}
-
-            </div>
+            </div >
 
             <div className="grid grid-cols-2 gap-8">
               <div className="bg-Gris py-6 px-4 border border-verdeD rounded-md flex flex-col gap-6">
@@ -204,7 +209,7 @@ export function InternalEvent({ event }) {
                   <IoIosPeople className="text-verdeC text-2xl" />
                 </div>
 
-                {event.organizers.length === 0 ? (
+                {event?.organizers?.length === 0 ? (
                   <p className="text-sm font-barlow-condensed">
                     No hay organizadores en el evento
                   </p>
@@ -227,7 +232,7 @@ export function InternalEvent({ event }) {
                   <FaPeopleGroup className="text-verdeC text-2xl" />
                 </div>
 
-                {event.specialGuests.length === 0 ? (
+                {event?.specialGuests?.length === 0 ? (
                   <p className="text-sm font-barlow px-4 uppercase font-medium text-RojoC">
                     No hay invitados especiales en el evento
                   </p>
@@ -242,9 +247,17 @@ export function InternalEvent({ event }) {
                 )}
               </div>
             </div>
-          </article>
+          </article >
         </>
-      )}
+      )
+      }
+
+      <ModalNotHeader
+        openModal={openEditImage}
+        setOpenModal={setOpenEditImage}
+        size={"3xl"}
+        component={<FormEditImage internal={true} event={event} />}
+      />
     </>
   );
 }

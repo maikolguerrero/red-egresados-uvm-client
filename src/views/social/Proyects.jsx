@@ -116,17 +116,22 @@ function Proyects() {
                       <CardProyect key={item.id} proyect={item} />
                     ))}
                   </div>
-                  <div className="flex justify-center">
-                    <ThemeProvider theme={customTheme}>
-                      <Pagination
-                        theme={customTheme}
-                        className="border-verdeD"
-                        currentPage={pagination.page}
-                        totalPages={pagination.pages}
-                        onPageChange={onPageChange}
-                      />
-                    </ThemeProvider>
-                  </div>
+
+                  {pagination.pages == 1 ? (
+                    <></>
+                  ) : (
+                    <div className="flex justify-center">
+                      <ThemeProvider theme={customTheme}>
+                        <Pagination
+                          theme={customTheme}
+                          className="border-verdeD"
+                          currentPage={pagination.page}
+                          totalPages={pagination.pages}
+                          onPageChange={onPageChange}
+                        />
+                      </ThemeProvider>
+                    </div>
+                  )}
                 </section>
               )}
 

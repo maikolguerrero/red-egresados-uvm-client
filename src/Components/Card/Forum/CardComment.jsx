@@ -14,6 +14,7 @@ import { Dropdown, DropdownItem } from "flowbite-react";
 export function CardComment({ forum, comment }) {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.auth.username)
+  const role = useSelector((state) => state.auth.role)
 
   const [type, setType] = useState("");
   const [datePublic, setDatePublic] = useState(0);
@@ -92,8 +93,8 @@ export function CardComment({ forum, comment }) {
             </p>
           </div>
 
-          {comment.author.username === username ? (
-            <>
+          {comment.author.username === username || role === "admin" ? (
+            <div>
               <Dropdown
                 inline
                 dismissOnClick={false}
@@ -113,7 +114,7 @@ export function CardComment({ forum, comment }) {
                   </span>
                 </DropdownItem>
               </Dropdown>
-            </>
+            </div>
           ) : (
             <></>
           )}
@@ -158,20 +159,18 @@ export function CardComment({ forum, comment }) {
             </li>
           </ul>
 
-          {
-            comment?.replies === undefined || comment?.replies?.length === 0 ? (
-              <></>
-            ) : (
-              <ul className="mt-6 flex flex-col gap-4">
-                {comment?.replies?.map((item) => (
-                  <li key={item.id} className="flex flex-col">
-                    <CardReplie forum={forum} comment={item} />
-                  </li>
-                ))}
-              </ul>
-            )
-          }
-        </div >
+          {comment?.replies === undefined || comment?.replies?.length === 0 ? (
+            <></>
+          ) : (
+            <ul className="mt-6 flex flex-col gap-4">
+              {comment?.replies?.map((item) => (
+                <li key={item.id} className="flex flex-col">
+                  <CardReplie idComment={comment} forum={forum} comment={item} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <ModalNotHeader
           openModal={openComment}
@@ -183,7 +182,9 @@ export function CardComment({ forum, comment }) {
           openModal={openReport}
           setOpenModal={setOpenReport}
           size={"3xl"}
-          component={<FormReport idComment={comment?.id} threadId={forum?.id} />}
+          component={
+            <FormReport idComment={comment?.id} threadId={forum?.id} />
+          }
         />
       </div >
     </>

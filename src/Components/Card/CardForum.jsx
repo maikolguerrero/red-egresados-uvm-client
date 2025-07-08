@@ -18,6 +18,7 @@ export function CardForum({ forum }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const username = useSelector((state) => state.auth.username)
+  const role = useSelector((state) => state.auth.role)
 
   const [type, setType] = useState("");
   const [datePublic, setDatePublic] = useState(0);
@@ -85,7 +86,8 @@ export function CardForum({ forum }) {
     <article className="flex flex-col gap-1 w-full pb-8 border-b-2 border-verdeD">
       <div className="flex justify-between relative">
         <div className="flex gap-2 w-ful flex-wrap mb-3">
-          {forum?.author?.profilePicture === undefined || forum?.author?.profilePicture?.url === null ? (
+          {forum?.author?.profilePicture === undefined ||
+            forum?.author?.profilePicture?.url === null ? (
             // Si no hay foto de perfil, muestra la inicial del username
             <div className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
               <span className="text-white text-xs md:text-sm xl:text-base font-bold uppercase">
@@ -108,7 +110,7 @@ export function CardForum({ forum }) {
           </p>
         </div>
 
-        {forum?.author?.username === username ? (
+        {forum?.author?.username === username || role === "admin" ? (
           <>
             <Dropdown
               inline
@@ -120,11 +122,18 @@ export function CardForum({ forum }) {
                 </div>
               )}
             >
-              <DropdownItem>
-                <span onClick={(e) => setEditForum(true)} className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100">
-                  <MdEdit /> Editar
-                </span>
-              </DropdownItem>
+              {role === "admin" ? (
+                <></>
+              ) : (
+                <DropdownItem>
+                  <span
+                    onClick={(e) => setEditForum(true)}
+                    className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                  >
+                    <MdEdit /> Editar
+                  </span>
+                </DropdownItem>
+              )}
               <DropdownItem>
                 <span
                   onClick={handleDelete}
@@ -137,8 +146,9 @@ export function CardForum({ forum }) {
           </>
         ) : (
           <></>
-        )}
-      </div>
+        )
+        }
+      </div >
 
       <div className="flex flex-col gap-1 px-1">
         <h4 className="text-Negro font-barolw font-medium text-base md:text-lg xl:text-xl mb-1">
@@ -148,17 +158,19 @@ export function CardForum({ forum }) {
         <p className="text-xs md:text-sm">{forum?.content}</p>
       </div>
 
-      {forum?.media?.length === 0 ? (
-        <></>
-      ) : (
-        <div className="w-full">
-          <img
-            className="rounded-md mb-2 border border-verdeC"
-            src={forum?.media?.[0]?.url}
-            alt="Multimedia del foro"
-          />
-        </div>
-      )}
+      {
+        forum?.media?.length === 0 ? (
+          <></>
+        ) : (
+          <div className="w-full">
+            <img
+              className="rounded-md mb-2 border border-verdeC"
+              src={forum?.media?.[0]?.url}
+              alt="Multimedia del foro"
+            />
+          </div>
+        )
+      }
 
       <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg">
         <li
@@ -180,7 +192,8 @@ export function CardForum({ forum }) {
         </li>
         <li
           onClick={handleShare}
-          className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
+          className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer"
+        >
           Compartir <FaShare className="text-base md:text-lg xl:text-xl" />
         </li>
       </ul>
@@ -191,6 +204,6 @@ export function CardForum({ forum }) {
         size={"3xl"}
         component={<FormAddForum forum={forum} type={"edit"} />}
       />
-    </article>
+    </article >
   );
 }

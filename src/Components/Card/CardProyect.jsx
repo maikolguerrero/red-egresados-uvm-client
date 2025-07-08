@@ -15,6 +15,7 @@ import { BiWorld } from "react-icons/bi";
 export function CardProyect({ proyect }) {
   const navigate = useNavigate();
   const username = useSelector((state) => state.auth.username);
+  const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
 
   const [editProyect, setEditProyect] = useState(false);
@@ -74,7 +75,7 @@ export function CardProyect({ proyect }) {
           </p>
         </div>
 
-        {proyect?.owner?.username === username ? (
+        {proyect?.owner?.username === username || role === "admin" ? (
           <>
             <Dropdown
               inline
@@ -86,14 +87,18 @@ export function CardProyect({ proyect }) {
                 </div>
               )}
             >
-              <DropdownItem>
-                <span
-                  onClick={(e) => setEditProyect(true)}
-                  className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                >
-                  <MdEdit /> Editar
-                </span>
-              </DropdownItem>
+              {role === "admin" ? (
+                <></>
+              ) : (
+                <DropdownItem>
+                  <span
+                    onClick={(e) => setEditProyect(true)}
+                    className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                  >
+                    <MdEdit /> Editar
+                  </span>
+                </DropdownItem>
+              )}
               <DropdownItem>
                 <span
                   onClick={handleDelete}
@@ -113,8 +118,9 @@ export function CardProyect({ proyect }) {
           </>
         ) : (
           <></>
-        )}
-      </div>
+        )
+        }
+      </div >
       <h5 className="text-2xl font-bold tracking-tight text-Negro">
         {proyect?.title}
       </h5>
@@ -161,7 +167,8 @@ export function CardProyect({ proyect }) {
                   ? "Pausado"
                   : proyect?.status === "completed"
                     ? "Completado"
-                    : "Cancelado"}
+                    : "Cancelado"
+            }
           </Badge>
         </p>
         <p className="font-bold text-verdeD">Colaboradores:</p>
@@ -184,7 +191,10 @@ export function CardProyect({ proyect }) {
                 <img
                   className="w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-Gris object-cover"
                   src={item?.user?.profilePicture?.url}
-                  alt={item?.user?.username.charAt(0).toUpperCase() || 'Colaborador'} // Añade un alt text para accesibilidad
+                  alt={
+                    item?.user?.username.charAt(0).toUpperCase() ||
+                    "Colaborador"
+                  }
                 />
               )}
             </li>
@@ -200,17 +210,17 @@ export function CardProyect({ proyect }) {
           text={"Ver Detalles"}
           className={"bg-verdeC hover:bg-RojoC"}
         />
-        {proyect.owner.username === username ? (
+        {proyect?.owner?.username === username ? (
           <></>
-        ) : proyect.isCollaborator ? (
+        ) : proyect?.isCollaborator ? (
           <></>
-        ) : proyect.hasPendingRequest ? (
+        ) : proyect?.hasPendingRequest ? (
           <ButtonSmall
             action={handleCancelRequest}
             text={"Cancelar Union"}
             className={"bg-verdeC hover:bg-RojoC"}
           />
-        ) : proyect.isPublic ? (
+        ) : proyect?.isPublic ? (
           <ButtonSmall
             action={handleJoin}
             text={"Unirme"}
@@ -224,6 +234,6 @@ export function CardProyect({ proyect }) {
           />
         )}
       </div>
-    </Card>
+    </Card >
   );
 }

@@ -334,6 +334,7 @@ export const deleteComment = createAsyncThunk(
         return {
           commentId: data.commentId,
           message: response.message,
+          idComment: !data.idComment ? null : data.idComment
         };
       } else {
         throw `${response.message}`;

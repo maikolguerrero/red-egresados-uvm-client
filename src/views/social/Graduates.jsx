@@ -118,17 +118,22 @@ function Graduates() {
                         <CardGraduate user={item} key={item.id} />
                       ))}
                     </section>
-                    <div className="flex overflow-x-auto sm:justify-center">
-                      <ThemeProvider theme={customTheme}>
-                        <Pagination
-                          theme={customTheme}
-                          className="border-verdeD"
-                          currentPage={page}
-                          totalPages={pages}
-                          onPageChange={onPageChange}
-                        />
-                      </ThemeProvider>
-                    </div>
+
+                    {pages == 1 ? (
+                      <></>
+                    ) : (
+                      <div className="flex overflow-x-auto sm:justify-center">
+                        <ThemeProvider theme={customTheme}>
+                          <Pagination
+                            theme={customTheme}
+                            className="border-verdeD"
+                            currentPage={page}
+                            totalPages={pages}
+                            onPageChange={onPageChange}
+                          />
+                        </ThemeProvider>
+                      </div>
+                    )}
                   </>
                 )}
               </>

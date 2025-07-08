@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { FormAddEvent } from "../Forms/Event/FormAddEvent";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { IoIosCamera } from "react-icons/io";
+import { FormEditImage } from "../Forms/Event/FormEditImage";
 
 export function CardEvent({event}) {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ export function CardEvent({event}) {
   const [openEditEvent, setOpenEditEvent] = useState(false);
   const [scheduled, setScheduled] = useState(false);
   const [active, setActive] = useState(false);
+  const [openEditImage, setOpenEditImage] = useState(false);
 
   useEffect(() => {
     let date = new Date();
@@ -132,7 +134,7 @@ export function CardEvent({event}) {
               >
                 <MdEdit /> Editar Evento
               </DropdownItem>
-              <DropdownItem className="flex gap-2 items-center text-Negro">
+              <DropdownItem onClick={(e) => setOpenEditImage(true)} className="flex gap-2 items-center text-Negro">
                 <IoIosCamera /> Editar Imagen
               </DropdownItem>
               <DropdownItem
@@ -151,6 +153,12 @@ export function CardEvent({event}) {
         setOpenModal={setOpenEditEvent}
         size={"3xl"}
         component={<FormAddEvent eventSelect={event} type={"edit"} />}
+      />
+      <ModalNotHeader
+        openModal={openEditImage}
+        setOpenModal={setOpenEditImage}
+        size={"3xl"}
+        component={<FormEditImage internal={false} event={event} />}
       />
     </div>
   );

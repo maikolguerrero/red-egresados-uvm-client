@@ -53,30 +53,8 @@ function FormRegister(props) {
       values.password = values.password.trim();
       values.passwordConfirm = values.passwordConfirm.trim();
 
-      // Eliminar passwordConfirm
-      delete values.passwordConfirm;
-
-      // Eliminar nacionalidad
-      delete values.nacionalidad;
-
-      // Eliminar cedulaNum
-      delete values.cedulaNum;
-
-
-      console.log(values)
       dispatch(postData(values))
     } else {
-      // toast.error("Contraseñas no coinciden", {
-      //   position: "top-right",
-      //   autoClose: 5000,
-      //   hideProgressBar: false,
-      //   closeOnClick: false,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   theme: "light",
-      //   transition: Bounce,
-      // });
       enqueueSnackbar("Contraseñas no coinciden", typeError);
     }
   }

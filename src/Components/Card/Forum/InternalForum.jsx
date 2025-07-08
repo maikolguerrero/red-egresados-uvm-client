@@ -20,6 +20,7 @@ import { URL_FRONTEND } from "../../../config";
 export function InternalForum({ forum }) {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.auth.username)
+  const role = useSelector((state) => state.auth.role)
 
   const [type, setType] = useState("")
   const [datePublic, setDatePublic] = useState(0);
@@ -89,7 +90,9 @@ export function InternalForum({ forum }) {
     <>
       {forum.id === undefined ? (
         <article className="flex flex-col gap-1 w-full pb-8">
-          <h4 className="uppercase text-xl font-medium">Este foro ha sido eliminado</h4>
+          <h4 className="uppercase text-xl font-medium">
+            Este foro ha sido eliminado
+          </h4>
         </article>
       ) : (
         <>
@@ -108,7 +111,7 @@ export function InternalForum({ forum }) {
                   <img
                     className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full object-cover"
                     src={forum?.author?.profilePicture?.url}
-                    alt={forum?.author?.username || 'Foto de Perfil del Autor'}
+                    alt={forum?.author?.username || "Foto de Perfil del Autor"}
                   />
                 )}
                 <div className="flex flex-col">
@@ -124,7 +127,7 @@ export function InternalForum({ forum }) {
                 </div>
               </div>
 
-              {forum.author.username === username ? (
+              {forum.author.username === username || role === "admin" ? (
                 <>
                   <Dropdown
                     inline
@@ -136,14 +139,18 @@ export function InternalForum({ forum }) {
                       </div>
                     )}
                   >
-                    <DropdownItem>
-                      <span
-                        onClick={(e) => setEditForum(true)}
-                        className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                      >
-                        <MdEdit /> Editar
-                      </span>
-                    </DropdownItem>
+                    {role === "admin" ? (
+                      <></>
+                    ) : (
+                      <DropdownItem>
+                        <span
+                          onClick={(e) => setEditForum(true)}
+                          className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                        >
+                          <MdEdit /> Editar
+                        </span>
+                      </DropdownItem>
+                    )}
                     <DropdownItem>
                       <span
                         onClick={handleDelete}
@@ -180,7 +187,7 @@ export function InternalForum({ forum }) {
                 className={`${forum?.isLiked
                   ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
                   : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
-                  } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+                  } flex gap-2 items-center justify-center py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
               >
                 {forum?.likeCount}{" "}
                 <AiFillLike className={` text-base md:text-lg xl:text-xl`} />
@@ -191,13 +198,17 @@ export function InternalForum({ forum }) {
               </li>
               <li
                 onClick={handleShare}
-                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
+                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer"
+              >
                 Compartir{" "}
                 <FaShare className="text-base md:text-lg xl:text-xl" />
               </li>
               <li
-                onClick={(e) => { setOpenReport(true) }}
-                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer">
+                onClick={(e) => {
+                  setOpenReport(true);
+                }}
+                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer"
+              >
                 Reportar{" "}
                 <MdReportProblem className="text-base md:text-lg xl:text-xl" />
               </li>

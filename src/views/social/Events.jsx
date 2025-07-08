@@ -122,17 +122,21 @@ function Events() {
                       ))}
                     </section>
 
-                    <div className="flex overflow-x-auto sm:justify-center">
-                      <ThemeProvider theme={customTheme}>
-                        <Pagination
-                          theme={customTheme}
-                          className="border-verdeD"
-                          currentPage={pagination.page}
-                          totalPages={pagination.pages}
-                          onPageChange={onPageChange}
-                        />
-                      </ThemeProvider>
-                    </div>
+                    {pagination.pages == 1 ? (
+                      <></>
+                    ) : (
+                      <div className="flex overflow-x-auto sm:justify-center">
+                        <ThemeProvider theme={customTheme}>
+                          <Pagination
+                            theme={customTheme}
+                            className="border-verdeD"
+                            currentPage={pagination.page}
+                            totalPages={pagination.pages}
+                            onPageChange={onPageChange}
+                          />
+                        </ThemeProvider>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
