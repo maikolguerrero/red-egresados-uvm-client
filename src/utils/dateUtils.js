@@ -88,14 +88,35 @@ export const groupMessagesByDate = (messages) => {
   });
 };
 
+// /**
+//  * Formatea una fecha para mostrar solo la hora con AM/PM.
+//  * @param {Date | string} date - La fecha o cadena de fecha.
+//  * @returns {string} - La hora formateada (ej: "10:30 a. m.").
+//  */
+// export const formatTimeOnly = (date) => {
+//   const d = date instanceof Date ? date : new Date(date);
+//   return format(d, "h:mm 'a. m.'", { locale: es });
+// };
 /**
  * Formatea una fecha para mostrar solo la hora con AM/PM.
  * @param {Date | string} date - La fecha o cadena de fecha.
- * @returns {string} - La hora formateada (ej: "10:30 a. m.").
+ * @returns {string} - La hora formateada (ej: "10:30 a. m." o "3:45 p. m.").
  */
 export const formatTimeOnly = (date) => {
+  // Asegurarse de que 'date' sea un objeto Date válido
   const d = date instanceof Date ? date : new Date(date);
-  return format(d, "h:mm 'a. m.'", { locale: es });
+
+  // Validar si la fecha es válida después de intentar crearla
+  if (isNaN(d.getTime())) {
+    console.error("Fecha inválida proporcionada a formatTimeOnly:", date);
+    return "Hora inválida"; // O el mensaje de error que prefieras
+  }
+
+  // Usar 'aa' (AM/PM) o 'aaa' (am/pm) para el indicador de meridiano (a.m./p.m.)
+  // 'h': hora en formato 12 horas (1-12)
+  // 'mm': minutos (00-59)
+  // 'aaa': indicador de meridiano (a.m./p.m. con puntos y espacios)
+  return format(d, "h:mm aaa", { locale: es });
 };
 
 /**
@@ -174,4 +195,136 @@ export const formatRelativeTime = (dateInput, showTimeForTodayAndYesterday = fal
 
   // Si es de otro año
   return format(date, 'd MMMM yyyy', { locale: es }); // Ej: "15 de enero 2023"
+};
+
+/**
+ * Formatea una fecha para mostrar el tiempo relativo (Hoy, Ayer) o abreviado para el header del chat.
+ * Es una función más flexible para usar en listas de mensajes o estado de última conexión.
+ * @param {string | Date} dateInput - La fecha en formato ISO o un objeto Date.
+ * @param {boolean} showTimeForTodayAndYesterday - Si true, incluye la hora para "Hoy" y "Ayer".
+ * @returns {string} - La cadena de tiempo o fecha formateada.
+ */
+export const formatLastSeen = (dateInput) => {
+  if (!dateInput) return 'Desconectado';
+
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  const now = new Date();
+
+  if (isNaN(date.getTime())) return 'Desconectado';
+
+  // Formatear hora con a.m./p.m. en minúsculas y espacio después del punto
+  const formattedTime = formatTimeOnly(date);
+
+  if (isToday(date, { locale: es })) {
+    return `Últ. vez hoy a las ${formattedTime}`;
+  }
+
+  if (isYesterday(date, { locale: es })) {
+    return `Últ. vez ayer a las ${formattedTime}`;
+  }
+
+  const sevenDaysAgo = new Date(now);
+  sevenDaysAgo.setDate(now.getDate() - 7);
+  if (date > sevenDaysAgo) {
+    return `Últ. vez ${format(date, 'EEEE', { locale: es })} a las ${formattedTime}`;
+  }
+
+  if (isThisYear(date, { locale: es })) {
+    return `Últ. vez ${format(date, 'd MMMM', { locale: es })} a las ${formattedTime}`;
+  }
+
+  return `Últ. vez ${format(date, 'MMM d, yyyy', { locale: es })} a las ${formattedTime}`;
+};
+
+/**
+ * Formatea una fecha para mostrar el tiempo relativo (Hoy, Ayer) o abreviado para las notificaciones.
+ * @param {string | Date} dateInput - La fecha en formato ISO o un objeto Date.
+ * @returns {string} - La cadena de tiempo o fecha formateada.
+ */
+export const formatNotification = (dateInput) => {
+  if (!dateInput) return 'Sin fecha';
+
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  const now = new Date();
+
+  if (isNaN(date.getTime())) return 'Sin fecha';
+
+  // Formatear hora con a.m./p.m. en minúsculas y espacio después del punto
+  const formattedTime = formatTimeOnly(date);
+
+  if (isToday(date, { locale: es })) {
+    return `Hoy a las ${formattedTime}`;
+  }
+
+  if (isYesterday(date, { locale: es })) {
+    return `Ayer a las ${formattedTime}`;
+  }
+
+  const sevenDaysAgo = new Date(now);
+  sevenDaysAgo.setDate(now.getDate() - 7);
+  if (date > sevenDaysAgo) {
+    return `${format(date, 'EEEE', { locale: es })} a las ${formattedTime}`;
+  }
+
+  if (isThisYear(date, { locale: es })) {
+    return `${format(date, 'd MMMM', { locale: es })} a las ${formattedTime}`;
+  }
+
+  return `${format(date, 'MMM d, yyyy', { locale: es })} a las ${formattedTime}`;
+};
+
+
+/**
+ * Convierte una fecha UTC a formato local legible
+ * @param {string} utcDateString - Fecha en formato ISO (UTC)
+ * @returns {string} - Fecha formateada como "YYYY-MM-DDTHH:MM"
+ */
+export const utcToLocalDateTime = (utcDateString) => {
+  if (!utcDateString) return '';
+
+  // Crear objeto Date desde UTC
+  const date = new Date(utcDateString);
+
+  // Ajustar por el offset de la zona horaria local
+  const offset = date.getTimezoneOffset() * 60000; // offset en milisegundos
+  const localDate = new Date(date.getTime() - offset);
+
+  // Formatear a YYYY-MM-DDTHH:MM (formato que espera datetime-local)
+  return localDate.toISOString().slice(0, 16);
+};
+
+/**
+ * Convierte una fecha UTC a formato local legible con AM/PM
+ * @param {string} utcDateString - Fecha en formato ISO (UTC)
+ * @returns {object} - Objeto con { date: 'DD/MM/AAAA', time: 'HH:MM a. m./p. m.' }
+ */
+export const formatUTCDateToLocalAMPM = (utcDateString) => {
+  if (!utcDateString) return { date: '', time: '' };
+
+  try {
+    const date = new Date(utcDateString);
+
+    if (isNaN(date.getTime())) {
+      console.error('Fecha UTC inválida:', utcDateString);
+      return { date: '', time: '' };
+    }
+
+    // Formatear fecha (DD/MM/AAAA)
+    const localDate = date.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+    // Formatear hora con AM/PM
+    const localTime = formatTimeOnly(date);
+
+    return {
+      date: localDate,
+      time: localTime
+    };
+  } catch (error) {
+    console.error('Error al formatear fecha UTC:', error);
+    return { date: '', time: '' };
+  }
 };

@@ -4,7 +4,7 @@ import Footer from "../Components/Footer";
 import NavLogin from "../Components/NavLogin";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { changeEmail, newPassword, verifyEmail } from "../services/auth/authService";
+import { newPassword } from "../services/auth/authService";
 import Button from "../Components/Buttons/Button";
 import Header from "../Components/Header";
 import Nav from "../Components/Nav";

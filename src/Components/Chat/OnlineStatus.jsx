@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import socketService from '../../services/socket/socket.service';
-import { format, isToday, isYesterday, isThisYear } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { formatRelativeTime } from '../../utils/dateUtils';
+import { formatLastSeen } from '../../utils/dateUtils';
 import { Loader } from '../Loader';
 
 
@@ -61,18 +59,7 @@ export default function OnlineStatus({ userId }) {
 
     const formatLastSeenDisplay = (date) => {
         if (!date) return 'Desconectado';
-
-        const lastSeenDate = new Date(date); // Asegúrate de que es un objeto Date
-
-        // Usamos formatRelativeTime con showTimeForTodayAndYesterday = true
-        const formatted = formatRelativeTime(lastSeenDate, true);
-
-        // Añadir "Últ. vez " al inicio
-        // La función ya devuelve "hoy a las ..." o "ayer a las ...", así que solo añadimos "Últ. vez " si no es eso
-        if (formatted.startsWith('hoy a las') || formatted.startsWith('ayer a las')) {
-            return `Últ. vez ${formatted}`;
-        }
-        return `Últ. vez ${formatted}`;
+        return formatLastSeen(date);
     };
 
     if (loading) {

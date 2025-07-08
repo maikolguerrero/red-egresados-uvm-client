@@ -14,7 +14,8 @@ import { Dropdown, DropdownItem } from "flowbite-react";
 export function CardComment({ forum, comment }) {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.auth.username)
-    
+  const role = useSelector((state) => state.auth.role)
+
   const [type, setType] = useState("");
   const [datePublic, setDatePublic] = useState(0);
   const [openReport, setOpenReport] = useState(false);
@@ -69,18 +70,27 @@ export function CardComment({ forum, comment }) {
       <div className="w-full flex flex-col">
         <div className="flex w-full flex-wrap justify-between mb-3 h-full">
           <div className="flex gap-4">
-            <img
-              className="rounded-full w-6 md:w-6 xl:w-8"
-              src={
-                comment.author.profilePicture.url === null
-                  ? perfil
-                  : comment.author.profilePicture.url
-              }
-              alt="Foto de Perfil"
-            />
+            {comment?.author?.profilePicture?.url === null ? (
+              // Si no hay foto de perfil, muestra la inicial del username
+              <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                <span className="text-white text-xs md:text-xs xl:text-sm font-bold uppercase">
+                  {comment?.author?.username?.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            ) : (
+              // Si hay foto, muéstrala circular
+              <img
+                className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
+                src={comment?.author?.profilePicture?.url}
+                alt={
+                  comment?.author?.username ||
+                  "Foto de Perfil del Autor del Comentario"
+                }
+              />
+            )}
             <div className="h-full flex items-center">
               <p className="flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-xs md:text-sm xl:text-base items-center">
-                {comment.author.username}
+                {comment?.author?.username}
                 <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
                 Hace {datePublic}
                 {type}
@@ -88,8 +98,8 @@ export function CardComment({ forum, comment }) {
             </div>
           </div>
 
-          {comment.author.username === username ? (
-            <>
+          {comment.author.username === username || role === "admin" ? (
+            <div>
               <Dropdown
                 inline
                 dismissOnClick={false}
@@ -109,19 +119,19 @@ export function CardComment({ forum, comment }) {
                   </span>
                 </DropdownItem>
               </Dropdown>
-            </>
+            </div>
           ) : (
             <></>
           )}
         </div>
 
         <div className="ml-4 xl:ml-6 px-2 py-2 border-verdeC border-l flex flex-col gap-2">
-          <p>{comment.content}</p>
-          {comment.media === undefined ? (
+          <p>{comment?.content}</p>
+          {comment?.media === undefined ? (
             <></>
           ) : (
             <div>
-              <img src={comment.media.url} alt="" className="rounded-md" />
+              <img src={comment?.media?.url} alt="" className="rounded-md" />
             </div>
           )}
 
@@ -141,7 +151,7 @@ export function CardComment({ forum, comment }) {
               onClick={(e) => setOpenComment(true)}
               className="flex gap-2 hover:cursor-pointer items-center justify-center bg-Blanco py-1 px-4 rounded-full transition-all duration-300"
             >
-              {comment.replies === undefined ? "0" : comment.replies.length}{" "}
+              {comment?.replies === undefined ? "0" : comment?.replies?.length}{" "}
               <FaComments className="text-sm md:text-base xl:text-lg" />
             </li>
             <li
@@ -155,13 +165,13 @@ export function CardComment({ forum, comment }) {
             </li>
           </ul>
 
-          {comment.replies === undefined || comment.replies.length === 0 ? (
+          {comment?.replies === undefined || comment?.replies?.length === 0 ? (
             <></>
           ) : (
             <ul className="mt-6 flex flex-col gap-4">
-              {comment.replies.map((item) => (
+              {comment?.replies?.map((item) => (
                 <li key={item.id} className="flex flex-col">
-                  <CardReplie forum={forum} comment={item} />
+                  <CardReplie idComment={comment} forum={forum} comment={item} />
                 </li>
               ))}
             </ul>
@@ -178,7 +188,9 @@ export function CardComment({ forum, comment }) {
           openModal={openReport}
           setOpenModal={setOpenReport}
           size={"3xl"}
-          component={<FormReport idComment={comment.id} threadId={forum.id} />}
+          component={
+            <FormReport idComment={comment?.id} threadId={forum?.id} />
+          }
         />
       </div>
     </>

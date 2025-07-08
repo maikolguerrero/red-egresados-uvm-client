@@ -196,8 +196,18 @@ export const forumsSlice = createSlice({
     builder.addCase(deleteComment.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      let newComments = state.forumSelect.comments.filter((item) => item.id !== action.payload.commentId)
-      state.forumSelect.comments = newComments;
+      console.log(action.payload.idComment)
+      if (action.payload.idComment === null) {
+        let newComments = state.forumSelect.comments.filter((item) => item.id !== action.payload.commentId)
+        state.forumSelect.comments = newComments;
+      } else {
+        for (let i = 0; i < state.forumSelect.comments.length; i++) {
+          if (state.forumSelect.comments[i].id === action.payload.idComment) {
+            let newReplies = state.forumSelect.comments[i].replies.filter((item) => item.id !== action.payload.commentId)
+            state.forumSelect.comments[i].replies = newReplies
+          }
+        }
+      }
     });
     builder.addCase(deleteComment.rejected, (state, action) => {
       state.loading = false;

@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { enqueueSnackbar } from "notistack";
 import { typeError } from "../../../models/alertModels";
-import { changeRecoveryEmail, forgotPassword } from "../../../services/auth/authService";
+import { forgotPassword } from "../../../services/auth/authService";
+import { changeRecoveryEmail } from "../../../services/auth/changeEmailService";
 
 let defaultValues = {
   "emailOrUsername": ""

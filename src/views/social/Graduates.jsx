@@ -16,8 +16,8 @@ const customTheme = createTheme({
   base: "",
   layout: {
     table: {
-      base: "text-sm text-gray-700 dark:text-gray-400",
-      span: "font-semibold text-gray-900 dark:text-white",
+      base: "text-sm text-gray-700",
+      span: "font-semibold text-gray-900",
     },
   },
   pages: {
@@ -43,6 +43,7 @@ let defaultValues = {
   query: "",
   location: "",
   degree: "",
+  graduationYear: "",
 };
 
 function Graduates() {
@@ -76,6 +77,7 @@ function Graduates() {
         query: values.query.trim() === "" ? null : values.query,
         location: values.location.trim() === "" ? null : values.location,
         degree: values.degree.trim() === "" ? null : values.degree,
+        graduationYear: values.graduationYear.trim() === "" ? null : values.graduationYear,
       })
     );
   }
@@ -116,17 +118,22 @@ function Graduates() {
                         <CardGraduate user={item} key={item.id} />
                       ))}
                     </section>
-                    <div className="flex overflow-x-auto sm:justify-center">
-                      <ThemeProvider theme={customTheme}>
-                        <Pagination
-                          theme={customTheme}
-                          className="border-verdeD"
-                          currentPage={page}
-                          totalPages={pages}
-                          onPageChange={onPageChange}
-                        />
-                      </ThemeProvider>
-                    </div>
+
+                    {pages == 1 ? (
+                      <></>
+                    ) : (
+                      <div className="flex overflow-x-auto sm:justify-center">
+                        <ThemeProvider theme={customTheme}>
+                          <Pagination
+                            theme={customTheme}
+                            className="border-verdeD"
+                            currentPage={page}
+                            totalPages={pages}
+                            onPageChange={onPageChange}
+                          />
+                        </ThemeProvider>
+                      </div>
+                    )}
                   </>
                 )}
               </>

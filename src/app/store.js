@@ -29,5 +29,6 @@ export default configureStore({
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false // Opcional: desactivar la verificación de serialización para acciones complejas
-  })
+  }),
+  devTools: window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 });

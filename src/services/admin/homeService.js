@@ -2,34 +2,28 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { typeError, typeSuccess } from "../../models/alertModels";
 import { URL_API } from "../../config";
+import { apiFetch } from "../apiService";
 
 export const getContentHome = createAsyncThunk(
   "homeSlice/getContentHome", // Nombre de la acción
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/home`,
+      const response = await apiFetch(
+        `/api/content/home`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          }
+          method: "GET"
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se cargo el contenido del home", typeSuccess)
         return {
           message: "Se cargo el contenido del home",
-          home: datas.data
+          home: response.data
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
@@ -44,11 +38,9 @@ export const updateContentHome = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/home`,
+      const response = await apiFetch(
+        `/api/content/home`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -57,16 +49,14 @@ export const updateContentHome = createAsyncThunk(
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
-          homeUpdate: datas.data
+          message: response.message,
+          homeUpdate: response.data
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
@@ -81,26 +71,22 @@ export const addMediaHome = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/home/carousel/media`,
+      const response = await apiFetch(
+        `/api/content/home/carousel/media`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "POST",
           body: data.data,
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se agrego la imagen a la galeria", typeSuccess)
         return {
           message: "Se agrego la imagen a la galeria",
-          pictureCarrousel: datas.data
+          pictureCarrousel: response.data
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
@@ -115,11 +101,9 @@ export const deleteMediaHome = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/home/carousel/${data.index}`,
+      const response = await apiFetch(
+        `/api/content/home/carousel/${data.index}`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -127,16 +111,14 @@ export const deleteMediaHome = createAsyncThunk(
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
+          message: response.message,
           idItemCarrouse: data.idItem
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores

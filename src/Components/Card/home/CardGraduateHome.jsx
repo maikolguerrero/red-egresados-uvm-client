@@ -8,11 +8,11 @@ export function CardGraduateHome({ user }) {
   const auth = useSelector((state) => state.auth);
 
   const searchProfile = (e) => {
-    navigate(`/graduates/${user.user.username}`);
+    navigate(`/graduates/${user?.username}`);
   };
 
   const startChat = () => {
-    navigate(`/chat/${user.user.username}`);
+    navigate(`/chat/${user?.username}`);
   };
 
   return (
@@ -21,26 +21,32 @@ export function CardGraduateHome({ user }) {
     >
       <div className="w-full h-full flex flex-col gap-4 justify-center items-center bg-white rounded-md p-3 border border-verdeC">
         <div className="flex items-center text-center gap-2">
-          <img
-            alt="Bonnie image"
-            src={
-              user.user.profilePicture.url === null
-                ? perfil
-                : user.user.profilePicture.url
-            }
-            className="rounded-full shadow-lg w-14 h-14"
-          />
+          {user?.profilePicture?.url === null ? (
+            // Si no hay foto de perfil, muestra la inicial del username
+            <div className="w-14 h-14 rounded-full bg-verdeA flex items-center justify-center overflow-hidden shadow-lg flex-shrink-0">
+              <span className="text-white text-2xl font-bold uppercase">
+                {user?.username?.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          ) : (
+            // Si hay foto, muéstrala circular
+            <img
+              alt="Foto de Perfil"
+              src={user?.profilePicture?.url}
+              className="rounded-full shadow-lg w-14 h-14 object-cover"
+            />
+          )}
           <div className="flex flex-col">
             <h5 className="text-base font-medium font-barolw text-negro w-full flex justify-start">
-              {user.firstName} {user.lastName}
+              {user?.nombreCompleto}
             </h5>
             <h6 className="text-sm font-barlow-semi-condensed font-semibold text-black w-full flex justify-start">
-              @{user.user.username}
+              @{user?.username}
             </h6>
           </div>
         </div>
 
-        {auth.username === user.user.username ? (
+        {auth.username === user?.username ? (
           <>
             <span className="text-sm font-semibold font-barolw text-RojoC">
               (TU PERFIL)

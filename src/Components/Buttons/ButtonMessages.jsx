@@ -82,12 +82,12 @@ export function ButtonMessages() {
       updateConversations(updatedConversations);
     };
 
-    socketService.socket.on('conversation_updated', handleConversationUpdate);
-    socketService.socket.on('conversations_updated', handleConversationsUpdate);
+    socketService?.socket?.on('conversation_updated', handleConversationUpdate);
+    socketService?.socket?.on('conversations_updated', handleConversationsUpdate);
 
     return () => {
-      socketService.socket.off('conversation_updated', handleConversationUpdate);
-      socketService.socket.off('conversations_updated', handleConversationsUpdate);
+      socketService?.socket?.off('conversation_updated', handleConversationUpdate);
+      socketService?.socket?.off('conversations_updated', handleConversationsUpdate);
     };
   }, [auth.id]);
 
@@ -149,7 +149,7 @@ export function ButtonMessages() {
                 e.stopPropagation();
               }}
             >
-              {conversations.length === 0 ? (
+              {conversations?.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-gray-500 p-4">
                   <MdMessage className="text-4xl mb-2" />
                   <p className="text-center">No tienes conversaciones activas</p>
@@ -164,7 +164,7 @@ export function ButtonMessages() {
                   </button>
                 </div>
               ) : (
-                conversations.map((conversation) => (
+                conversations?.map((conversation) => (
                   <ButtonDM
                     key={conversation.userId}
                     conversation={conversation}

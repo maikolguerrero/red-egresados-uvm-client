@@ -9,6 +9,8 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 import { FormAddEvent } from "../../Forms/Event/FormAddEvent";
 import { useState } from "react";
+import { formatUTCDateToLocalAMPM } from "../../../utils/dateUtils";
+import { FaCalendar } from "react-icons/fa6";
 
 export function InternalEvent({ event }) {
   const dispatch = useDispatch();
@@ -74,10 +76,10 @@ export function InternalEvent({ event }) {
                 )}
               </div>
               <h5 className="text-RojoC text-sm md:text-base xl:text-lg font-semibold h-full flex flex-col">
-                <span>{event.startDate.split("T")[0]}</span>
+                <span>{formatUTCDateToLocalAMPM(event.startDate).date}</span>
                 <span>
                   {" "}
-                  HORA: {event.startDate.split("T")[1].split(".")[0]}
+                  HORA: {formatUTCDateToLocalAMPM(event.startDate).time}
                 </span>
               </h5>
               <h6 className="uppercase">
@@ -104,7 +106,7 @@ export function InternalEvent({ event }) {
                 </ul>
               )}
 
-              {event.media.length === 0 ? (
+              {/* {event.media.length === 0 ? (
                 <img
                   src={"https://www.losprincipios.org/images/default.jpg"}
                   className="w-full rounded-lg border border-verdeC"
@@ -114,63 +116,83 @@ export function InternalEvent({ event }) {
                   src={event.media[0].url}
                   className="w-full rounded-lg border border-verdeC"
                 />
+              )} */}
+              {event?.media?.length > 0 && (
+                <img
+                  src={event.media[0].url}
+                  className="w-full rounded-lg border border-verdeC"
+                />
               )}
             </div>
 
-            <p className="text-base lg:text-xl font-medium text-Negro ">
-              {event.description}
-            </p>
-
             <div>
-              <a
-                target="_blank"
-                href={event.virtualLink}
-                className="uppercase text-sm py-2 px-4 bg-verdeB rounded-md font-medium text-Blanco hover:bg-verdeD transition-all duration-300"
-              >
-                Enlace virtual
-              </a>
+              <h6 className="text-base lg:text-xl uppercase font-semibold">Descripción:</h6>
+              <p className="text-base lg:text-xl font-medium text-Negro ">
+                {event.description}
+              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-8">
-              <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
-                <p className="font-barolw text-base">
-                  <b>CAPACIDAD DE AFORO:</b> {event.capacity}
-                </p>
-                <FaPeopleRoof className="text-verdeC text-2xl" />
-              </div>
 
+            {event?.virtualLink && (
+              <div>
+                <a
+                  target="_blank"
+                  href={event.virtualLink}
+                  className="uppercase text-sm py-2 px-4 bg-verdeB rounded-md font-medium text-Blanco hover:bg-verdeD transition-all duration-300"
+                >
+                  Enlace virtual
+                </a>
+              </div>
+            )}
+
+            <div className="grid grid-cols-2 gap-8">
               <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
                 <p className={`font-barolw text-base uppercase`}>
-                  <b>ACTIVO:</b>{" "}
+                  <b>Estado:</b>{" "}
                   <span
-                    className={`${
-                      event.isActive ? "text-verdeB" : "text-RojoC"
-                    } font-medium`}
+                    className={`${event.endDate > new Date() ? "text-verdeB" : "text-RojoC"
+                      } font-medium`}
                   >
-                    {event.isActive ? "Activo" : "Inactivo"}
+                    {event.endDate > new Date() ? "Activo" : "Inactivo"}
                   </span>
                 </p>
-                <GiDiploma className="text-verdeC text-2xl" />
+                <FaCalendar className="text-verdeC text-2xl" />
               </div>
+
+              {event.capacity && (
+                <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
+                  <p className="font-barolw text-base">
+                    <b>CAPACIDAD DE AFORO:</b> {event.capacity}
+                  </p>
+                  <FaPeopleRoof className="text-verdeC text-2xl" />
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-8">
-              <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
+              {event.location && (
+                <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
+                  <p className="font-barolw text-base">
+                    <b>LUGAR:</b> {event.location}
+                  </p>
+                  <FaLocationDot className="text-verdeC text-2xl" />
+                </div>
+              )}
+              {/* <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
                 <p className="font-barolw text-base">
                   <b>LUGAR:</b> {event.location}
                 </p>
                 <FaLocationDot className="text-verdeC text-2xl" />
-              </div>
+              </div> */}
+              {event.certificate && (
+                <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
+                  <p className="font-barolw text-base">
+                    <b>Certificado</b> por participar
+                  </p>
+                  <GiDiploma className="text-verdeC text-2xl" />
+                </div>
+              )}
 
-              <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
-                <p className="font-barolw text-base">
-                  <b>CERTIFICADO:</b>{" "}
-                  {event.certificate
-                    ? "Si es certificado"
-                    : "No es certificado"}
-                </p>
-                <GiDiploma className="text-verdeC text-2xl" />
-              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-8">

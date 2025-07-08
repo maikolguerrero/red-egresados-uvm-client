@@ -15,6 +15,7 @@ import { BiWorld } from "react-icons/bi";
 export function CardProyect({ proyect }) {
   const navigate = useNavigate();
   const username = useSelector((state) => state.auth.username);
+  const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
 
   const [editProyect, setEditProyect] = useState(false);
@@ -43,32 +44,38 @@ export function CardProyect({ proyect }) {
   }
 
   const handleRequest = (e) => {
-    dispatch(requestProyect({projectId: proyect.id}))
+    dispatch(requestProyect({ projectId: proyect.id }))
   }
 
   const handleJoin = (e) => {
-    dispatch(joinProyect({projectId: proyect.id}))
+    dispatch(joinProyect({ projectId: proyect.id }))
   }
 
   return (
     <Card className="w-[448px] border-[1.5px] border-verdeD bg-Gris">
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
-          <img
-            className="rounded-full w-6 md:w-6 xl:w-8"
-            src={
-              proyect.owner.profilePicture.url === null
-                ? perfil
-                : proyect.owner.profilePicture.url
-            }
-            alt="Foto de Perfil"
-          />
+          {proyect?.owner?.profilePicture?.url === null ? (
+            // Si no hay foto de perfil, muestra la inicial del username
+            <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+              <span className="text-white text-[14px] md:text-[14px] xl:text-[16px] font-bold">
+                {proyect?.owner?.username?.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          ) : (
+            // Si hay foto, muéstrala circular
+            <img
+              className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
+              src={proyect.owner.profilePicture.url}
+              alt={proyect?.owner?.username || "Foto de Perfil del Propietario"} // Alt text para accesibilidad
+            />
+          )}
           <p className="flex gap-2 font-semibold text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
-            {proyect.owner.username}
+            {proyect?.owner?.username}
           </p>
         </div>
 
-        {proyect.owner.username === username ? (
+        {proyect?.owner?.username === username || role === "admin" ? (
           <>
             <Dropdown
               inline
@@ -80,14 +87,18 @@ export function CardProyect({ proyect }) {
                 </div>
               )}
             >
-              <DropdownItem>
-                <span
-                  onClick={(e) => setEditProyect(true)}
-                  className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                >
-                  <MdEdit /> Editar
-                </span>
-              </DropdownItem>
+              {role === "admin" ? (
+                <></>
+              ) : (
+                <DropdownItem>
+                  <span
+                    onClick={(e) => setEditProyect(true)}
+                    className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                  >
+                    <MdEdit /> Editar
+                  </span>
+                </DropdownItem>
+              )}
               <DropdownItem>
                 <span
                   onClick={handleDelete}
@@ -110,9 +121,9 @@ export function CardProyect({ proyect }) {
         )}
       </div>
       <h5 className="text-2xl font-bold tracking-tight text-Negro">
-        {proyect.title}
+        {proyect?.title}
       </h5>
-      <p className="font-normal text-Negro">{proyect.description}</p>
+      <p className="font-normal text-Negro">{proyect?.description}</p>
 
       <div className="mt-6 flex flex-col gap-1">
         <p className="font-bold text-verdeD flex items-center gap-2">
@@ -121,7 +132,7 @@ export function CardProyect({ proyect }) {
             color={proyect.isPublic ? "green" : "red"}
             className="uppercase"
           >
-            {proyect.isPublic ? (
+            {proyect?.isPublic ? (
               <span className="flex gap-1 items-center">
                 Publico <BiWorld />
               </span>
@@ -136,45 +147,55 @@ export function CardProyect({ proyect }) {
           Estado del Proyecto:{" "}
           <Badge
             color={
-              proyect.status === "not_started"
+              proyect?.status === "not_started"
                 ? "indigo"
-                : proyect.status === "in_progress"
+                : proyect?.status === "in_progress"
                 ? "info"
-                : proyect.status === "paused"
+                : proyect?.status === "paused"
                 ? "warning"
-                : proyect.status === "completed"
+                : proyect?.status === "completed"
                 ? "success"
                 : "failure"
             }
           >
-            {proyect.status === "not_started"
+            {proyect?.status === "not_started"
               ? "Sin Iniciar"
-              : proyect.status === "in_progress"
+              : proyect?.status === "in_progress"
               ? "En Progreso"
-              : proyect.status === "paused"
+              : proyect?.status === "paused"
               ? "Pausado"
-              : proyect.status === "completed"
+              : proyect?.status === "completed"
               ? "Completado"
               : "Cancelado"}
           </Badge>
         </p>
         <p className="font-bold text-verdeD">Colaboradores:</p>
         <ul className="flex flex-wrap gap-1 py-2 h-12">
-          {proyect.collaborators.map((item, key) => (
+          {proyect?.collaborators.map((item, key) => (
             <li
               key={key}
               className={`text-RojoC font-medium text-sm left-${
                 key === 0 ? 0 : key * 3
               }`}
             >
-              <img
-                className="w-5 lg:w-7 rounded-full border-2 border-Gris"
-                src={
-                  item.user.profilePicture.url === null
-                    ? perfil
-                    : item.user.profilePicture.url
-                }
-              />
+              {item?.user?.profilePicture?.url === null ? (
+                // Si no hay foto de perfil, muestra la inicial
+                <div className="w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-Gris bg-verdeA flex items-center justify-center overflow-hidden">
+                  <span className="text-white text-[10px] lg:text-[12px] font-bold">
+                    {item?.user?.username?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+              ) : (
+                // Si hay foto, muéstrala
+                <img
+                  className="w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-Gris object-cover"
+                  src={item?.user?.profilePicture?.url}
+                  alt={
+                    item?.user?.username.charAt(0).toUpperCase() ||
+                    "Colaborador"
+                  } // Añade un alt text para accesibilidad
+                />
+              )}
             </li>
           ))}
         </ul>

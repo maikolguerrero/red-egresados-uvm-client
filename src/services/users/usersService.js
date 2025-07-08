@@ -1,41 +1,27 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { typeError, typeSuccess } from "../../models/alertModels";
-import { URL_API } from "../../config";
+import { apiFetch } from "../apiService";
 
 export const getProfile = createAsyncThunk(
-  "authSlice/getProfile", // Nombre de la acción
+  "authSlice/getProfile",
   async (data, thunkAPI) => {
     try {
-      // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/alumni/` + data.username,
-        {
-          mode: "cors",
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await apiFetch(`/api/alumni/${data.username}`, {
+        method: "GET",
+      });
 
-      let datas = await response.json();
-      console.log("obtenido datas")
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar("Se ha obtenido el perfil", typeSuccess)
+      if (response.success) {
+        enqueueSnackbar("Se ha obtenido el perfil", typeSuccess);
         return {
           message: "Se ha obtenido el perfil",
-          profile: datas.data
-        }
+          profile: response.data,
+        };
       } else {
-        throw `${datas.message}`;
+        throw response.message || "Error al obtener el perfil";
       }
-
     } catch (error) {
-      // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      enqueueSnackbar(error, typeError);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -46,36 +32,26 @@ export const getUsers = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "&query=" + data.query
-        }${data.degree === null || data.degree === undefined ? "" : "&degree=" + data.degree
-        }${data.location === null || data.location === undefined ? "" : "&location=" + data.location
+      const response = await apiFetch(
+        `/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "&query=" + data.query
+        }${data.degree === null || data.degree === undefined ? "" : ("&degree=" + data.degree)
+        }${data.location === null || data.location === undefined ? "" : ("&location=" + data.location)
+        }${data.graduationYear === null || data.graduationYear === undefined ? "" : ("&graduationYear=" + data.graduationYear)
         }`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
-      console.log(`${URL_API}/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "?query=" + data.query
-        }${data.degree === null || data.degree === undefined ? "" : "?degree=" + data.degree
-        }${data.location === null || data.location === undefined ? "" : "?location=" + data.location
-        }`)
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Usuarios cargados correctamente", typeSuccess)
         return {
           message: "Usuarios cargados correctamente",
-          pagination: datas.pagination,
-          users: datas.data
+          pagination: response.pagination,
+          users: response.data
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
 
     } catch (error) {
@@ -91,25 +67,22 @@ export const updatePictureProfile = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/alumni/profile/picture`,
+      const response = await apiFetch(
+        `/api/alumni/profile/picture`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "PATCH",
           body: data
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se actualizó la foto de perfil", typeSuccess)
         return {
           message: "Se actualizó la foto de perfil",
-          picture: datas.data.profilePicture
+          picture: response.data.profilePicture
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
 
     } catch (error) {
@@ -121,41 +94,28 @@ export const updatePictureProfile = createAsyncThunk(
 );
 
 export const updateProfile = createAsyncThunk(
-  "authSlice/updateProfile", // Nombre de la acción
+  "authSlice/updateProfile",
   async (data, thunkAPI) => {
     try {
-      // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/alumni/update-profile`,
-        {
-          mode: "cors",
-          credentials: "include",
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await apiFetch("/api/alumni/update-profile", {
+        method: "PATCH",
+        body: data,
+      });
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess);
         return {
-          message: datas.message,
-          profile: datas.data
-        }
+          message: response.message,
+          profile: response.data,
+        };
       } else {
-        if (datas.message === "Error de validación") {
-          throw `${datas.metadata.errors[0].message}`;
+        if (response.message === "Error de validación") {
+          throw response.metadata.errors[0].message;
         }
-        throw `${datas.message}`;
+        throw response.message || "Error al actualizar el perfil";
       }
-
     } catch (error) {
-      // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      enqueueSnackbar(error, typeError);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

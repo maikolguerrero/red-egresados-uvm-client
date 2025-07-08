@@ -2,34 +2,28 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { typeError } from "../../models/alertModels";
 import socketService from "../../services/socket/socket.service";
-import { URL_API } from "../../config";
 import { setMessagesRead } from "../../features/chat/chatSlice";
+import { apiFetch } from "../apiService";
 
 export const getMessages = createAsyncThunk(
     "chat/getMessages",
     async ({ userId, page = 1 }, thunkAPI) => {
 
         try {
-            const response = await fetch(
-                `${URL_API}/api/chat/conversation/${userId}?page=${page}`,
+            const response = await apiFetch(
+                `/api/chat/conversation/${userId}?page=${page}`,
                 {
                     method: "GET",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
                 }
             );
 
-            const data = await response.json();
-
-            if (!response.ok || !data.success) {
-                throw new Error(data.message || "Error al obtener mensajes");
+            if (!response.success) {
+                throw new Error("Error al obtener mensajes");
             }
 
             return {
-                messages: data.data.messages,
-                hasMore: data.data.hasMore,
+                messages: response.data.messages,
+                hasMore: response.data.hasMore,
                 isNewPage: page > 1
             };
 
@@ -40,17 +34,13 @@ export const getMessages = createAsyncThunk(
 );
 
 export const getConversations = async () => {
-    const response = await fetch(
-        `${URL_API}/api/chat/conversations`,
+    const response = await apiFetch(
+        `/api/chat/conversations`,
         {
             method: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
         }
     );
-    return await response.json();
+    return response;
 };
 
 export const sendMessage = createAsyncThunk(

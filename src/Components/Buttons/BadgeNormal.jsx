@@ -1,7 +1,7 @@
 function ButtonNormal(props) {
   return (
     <>
-      <span class={`${props.color} text-Blanco text-xs md:text-sm lg:text-base font-barlow-condensed px-4 py-2 rounded-md`}>
+      <span className={`${props.color} text-Blanco text-xs md:text-sm lg:text-base font-barlow-condensed px-2 py-1 rounded-md`}>
         {props.text}
       </span>
     </>

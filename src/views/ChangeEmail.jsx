@@ -4,7 +4,7 @@ import Footer from "../Components/Footer";
 import NavLogin from "../Components/NavLogin";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { changeEmail, verifyEmail } from "../services/auth/authService";
+import { changeEmail } from "../services/auth/changeEmailService";
 import Button from "../Components/Buttons/Button";
 
 function ChangeEmail() {
@@ -29,6 +29,7 @@ function ChangeEmail() {
 
   return (
     <>
+      <NavLogin />
       <main className="bg-Blanco h-[100vh] flex items-center justify-center">
         <section className="bg-Gris w-[80%] md:w-[60%] lg:w-[40%] h-auto rounded-xl border-verdeC border-2 py-8 px-6 flex flex-col items-center gap-10">
           <h2 className="text-verdeC text-2xl text-center font-barlow-semi-condensed font-bold">

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addMediaCarrousel, addMediaSubSection, deleteMediaCarrousel, deleteMediaSubSection, getContentLanding, updateContentLanding } from '../../services/admin/landingService';
+import { addMediaCarrousel, addMediaSubSection, deleteMediaCarrousel, deleteMediaSubSection, getContentFooter, getContentLanding, updateContentLanding } from '../../services/admin/landingService';
 
 export const landingSlice = createSlice({
   name: "landing",
@@ -28,6 +28,20 @@ export const landingSlice = createSlice({
       state.landingContent = action.payload.landing;
     });
     builder.addCase(getContentLanding.rejected, (state, action) => {
+      state.loadingPage = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(getContentFooter.pending, (state) => {
+      state.loadingPage = true;
+      state.error = null;
+    });
+    builder.addCase(getContentFooter.fulfilled, (state, action) => {
+      state.loadingPage = false;
+      state.message = action.payload.message;
+      state.landingContent.footerText = action.payload.footer;
+    });
+    builder.addCase(getContentFooter.rejected, (state, action) => {
       state.loadingPage = false;
       state.error = action.error.message;
     });

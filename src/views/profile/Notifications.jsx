@@ -161,11 +161,12 @@ function Notifications() {
               ) : (
                 <div className="w-full gap-6 justify-center flex-col flex">
                   {notifications.map((item) => (
-                    console.log("Notificación:", item.id),
+                    console.log("Notificación:", item),
                     <CardBanner
                       key={item.id}
                       noti={item.data.message}
                       type={item.type}
+                      createdAt={item.createdAt}
                       isRead={item.read}
                       onMarkAsRead={() => handleMarkAsRead(item.id)}
                       notificationId={item.id}

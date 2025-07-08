@@ -17,8 +17,8 @@ const customTheme = createTheme({
   },
   "indicators": {
     "active": {
-      "off": "bg-white/50 hover:bg-white dark:bg-gray-800/50 dark:hover:bg-gray-800",
-      "on": "bg-verdeA dark:bg-gray-800"
+      "off": "bg-white/50 hover:bg-white",
+      "on": "bg-verdeA"
     },
     "base": "h-3 w-3 rounded-full",
     "wrapper": "absolute bottom-5 left-1/2 flex -translate-x-1/2 space-x-3"
@@ -31,8 +31,8 @@ const customTheme = createTheme({
     }
   },
   "control": {
-    "base": "inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white sm:h-10 sm:w-10 dark:bg-gray-800/30 dark:group-hover:bg-gray-800/60 dark:group-focus:ring-gray-800/70",
-    "icon": "h-5 w-5 text-white sm:h-6 sm:w-6 dark:text-gray-800"
+    "base": "inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/30 group-hover:bg-white/50 group-focus:outline-none group-focus:ring-4 group-focus:ring-white sm:h-10 sm:w-10",
+    "icon": "h-5 w-5 text-white sm:h-6 sm:w-6"
   },
   "scrollContainer": {
     "base": "flex h-full snap-mandatory overflow-y-hidden overflow-x-hidden scroll-smooth rounded-none",

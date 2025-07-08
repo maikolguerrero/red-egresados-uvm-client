@@ -19,8 +19,8 @@ const customTheme = createTheme({
   base: "",
   layout: {
     table: {
-      base: "text-sm text-gray-700 dark:text-gray-400",
-      span: "font-semibold text-gray-900 dark:text-white",
+      base: "text-sm text-gray-700",
+      span: "font-semibold text-gray-900",
     },
   },
   pages: {
@@ -122,17 +122,21 @@ function Events() {
                       ))}
                     </section>
 
-                    <div className="flex overflow-x-auto sm:justify-center">
-                      <ThemeProvider theme={customTheme}>
-                        <Pagination
-                          theme={customTheme}
-                          className="border-verdeD"
-                          currentPage={pagination.page}
-                          totalPages={pagination.pages}
-                          onPageChange={onPageChange}
-                        />
-                      </ThemeProvider>
-                    </div>
+                    {pagination.pages == 1 ? (
+                      <></>
+                    ) : (
+                      <div className="flex overflow-x-auto sm:justify-center">
+                        <ThemeProvider theme={customTheme}>
+                          <Pagination
+                            theme={customTheme}
+                            className="border-verdeD"
+                            currentPage={pagination.page}
+                            totalPages={pagination.pages}
+                            onPageChange={onPageChange}
+                          />
+                        </ThemeProvider>
+                      </div>
+                    )}
                   </div>
                 </>
               )}

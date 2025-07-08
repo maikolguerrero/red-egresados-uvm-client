@@ -16,6 +16,11 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
+let defaultValuesPersonalData = {
+  birthDate: null,
+  location: "",
+};
+
 let defaultValues = {
   phone: "",
   alternateEmail: "",
@@ -38,21 +43,26 @@ function FormContact() {
   const profile = useSelector((state) => state.users.profile);
   const dispatch = useDispatch();
 
+  const [valuesPersonalData, setValuesPersonalData] = useState({})
   const [values, setValues] = useState({});
   const [image, setImage] = useState(false);
   const [values2, setValues2] = useState({})
   const [picture, setPicture] = useState("");
 
   useEffect(() => {
+    setValuesPersonalData(defaultValuesPersonalData);
     setValues(defaultValues);
     setValues2(defaultSocialMedias);
   }, []);
 
   useEffect(() => {
-    if (profile.profile.contact != undefined) {
+    if (profile?.profile?.personalData != undefined) {
+      setValuesPersonalData(profile.profile.personalData)
+    }
+    if (profile?.profile?.contact != undefined) {
       setValues(profile.profile.contact)
     }
-    if (profile.profile.socialMedia != undefined) {
+    if (profile?.profile?.socialMedia != undefined) {
       setValues2(profile.profile.socialMedia)
     }
   }, [profile])
@@ -62,6 +72,14 @@ function FormContact() {
       setImage(URL.createObjectURL(event.target.files[0]));
       setPicture(event.target.files[0])
     }
+  };
+
+  const handleInputChangePersonalData = (e) => {
+    const { name, value } = e.target;
+    setValuesPersonalData({
+      ...valuesPersonalData,
+      [name]: value,
+    });
   };
 
   const handleInputChange = (e) => {
@@ -83,6 +101,7 @@ function FormContact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(updateProfile({
+      personalData: valuesPersonalData,
       contact: values,
       socialMedia: values2
     }))
@@ -107,17 +126,28 @@ function FormContact() {
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col gap-3 items-center justify-center relative">
               <div className="flex relative">
-                <img
-                  src={
-                    image != false
-                      ? image
-                      : profile.user.profilePicture.url === null
-                      ? perfil
-                      : profile.user.profilePicture.url
-                  }
-                  alt="Foto Perfil"
-                  className="h-[200px] w-[200px] border border-verdeD object-cover"
-                />
+                {image !== false ? (
+                  // Si 'image' tiene un valor (es decir, el usuario ha seleccionado una imagen temporal)
+                  <img
+                    src={image}
+                    alt="Foto Perfil"
+                    className="h-[200px] w-[200px] border border-verdeD object-cover"
+                  />
+                ) : profile.user.profilePicture.url === null ? (
+                  // Si no hay 'image' y la foto de perfil del usuario es null, muestra la inicial
+                  <div className="h-[200px] w-[200px] border border-verdeD bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <span className="text-white text-7xl font-bold uppercase">
+                      {profile.user.username?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                ) : (
+                  // Si no hay 'image' pero sí hay foto de perfil del usuario
+                  <img
+                    src={profile.user.profilePicture.url}
+                    alt="Foto Perfil"
+                    className="h-[200px] w-[200px] border border-verdeD object-cover"
+                  />
+                )}
                 <div className="bg-verdeD h-10 w-10 absolute right-0 bottom-0 flex justify-center items-center">
                   <FaCamera className="text-white text-2xl" />
                 </div>
@@ -137,7 +167,39 @@ function FormContact() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>CONTACTOS</h4>
+          <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
+          <div className="flex flex-col gap-3">
+            <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Fecha de Nacimiento:
+              </Label>
+              <input
+                className={styles.input}
+                type="date"
+                name="birthDate"
+                value={valuesPersonalData?.birthDate?.split("T")[0]}
+                onChange={handleInputChangePersonalData}
+                placeholder="Fecha de nacimiento"
+              />
+            </div>
+            <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Ubicación:
+              </Label>
+              <input
+                className={styles.input}
+                type="text"
+                name="location"
+                value={valuesPersonalData.location}
+                onChange={handleInputChangePersonalData}
+                placeholder="Ubicación"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <h4 className={styles.subtitle_form}>CONTACTO</h4>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">

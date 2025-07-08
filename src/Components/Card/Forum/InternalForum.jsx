@@ -13,10 +13,14 @@ import { FormAddComment } from "../../Forms/Forum/FormAddComment";
 import { CardComment } from "./CardComment";
 import { FormAddForum } from "../../Forms/Forum/FormAddForum";
 import { FormReport } from "../../Forms/Forum/FormReport";
+import { enqueueSnackbar } from "notistack";
+import { typeSuccess } from "../../../models/alertModels";
+import { URL_FRONTEND } from "../../../config";
 
 export function InternalForum({ forum }) {
   const dispatch = useDispatch();
   const username = useSelector((state) => state.auth.username)
+  const role = useSelector((state) => state.auth.role)
 
   const [type, setType] = useState("")
   const [datePublic, setDatePublic] = useState(0);
@@ -66,29 +70,53 @@ export function InternalForum({ forum }) {
     );
   };
 
+  // Función para compartir el hilo
+  const handleShare = async () => { // Hacemos la función asíncrona
+    if (!navigator.clipboard) {
+      // Fallback para navegadores antiguos o contextos no seguros
+      enqueueSnackbar("Tu navegador no soporta la función de compartir.", { variant: 'error' });
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(`${URL_FRONTEND}/forums/${forum.id}`);
+      enqueueSnackbar("Enlace copiado", typeSuccess);
+    } catch (err) {
+      console.error('Error al copiar el texto: ', err);
+      enqueueSnackbar("Error al copiar el mensaje.", { variant: 'error' });
+    }
+  };
+
   return (
     <>
       {forum.id === undefined ? (
         <article className="flex flex-col gap-1 w-full pb-8">
-          <h4 className="uppercase text-xl font-medium">Este foro ha sido eliminado</h4>
+          <h4 className="uppercase text-xl font-medium">
+            Este foro ha sido eliminado
+          </h4>
         </article>
       ) : (
         <>
           <article className="flex flex-col gap-1 w-full pb-8 border-b-2 border-verdeD">
             <div className="flex justify-between relative">
               <div className="flex gap-4 w-ful flex-wrap mb-3">
-                <img
-                  className="rounded-full w-8 md:w-10 xl:w-12"
-                  src={
-                    forum.author.profilePicture.url === null
-                      ? perfil
-                      : forum.author.profilePicture.url
-                  }
-                  alt="Foto de Perfil"
-                />
+                {forum?.author?.profilePicture?.url === null ? (
+                  // Si no hay foto de perfil, muestra la inicial del username
+                  <div className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <span className="text-white text-base md:text-lg xl:text-xl font-bold uppercase">
+                      {forum.author.username?.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                ) : (
+                  // Si hay foto, muéstrala circular
+                  <img
+                    className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full object-cover"
+                    src={forum?.author?.profilePicture?.url}
+                    alt={forum?.author?.username || "Foto de Perfil del Autor"}
+                  />
+                )}
                 <div className="flex flex-col">
                   <p className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
-                    {forum.author.username}
+                    {forum?.author?.username}
                     <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
                     Hace {datePublic}
                     {type === "horas" ? "h" : "d"}
@@ -99,7 +127,7 @@ export function InternalForum({ forum }) {
                 </div>
               </div>
 
-              {forum.author.username === username ? (
+              {forum.author.username === username || role === "admin" ? (
                 <>
                   <Dropdown
                     inline
@@ -111,14 +139,18 @@ export function InternalForum({ forum }) {
                       </div>
                     )}
                   >
-                    <DropdownItem>
-                      <span
-                        onClick={(e) => setEditForum(true)}
-                        className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                      >
-                        <MdEdit /> Editar
-                      </span>
-                    </DropdownItem>
+                    {role === "admin" ? (
+                      <></>
+                    ) : (
+                      <DropdownItem>
+                        <span
+                          onClick={(e) => setEditForum(true)}
+                          className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                        >
+                          <MdEdit /> Editar
+                        </span>
+                      </DropdownItem>
+                    )}
                     <DropdownItem>
                       <span
                         onClick={handleDelete}
@@ -136,38 +168,48 @@ export function InternalForum({ forum }) {
 
             <div className="flex flex-col gap-1 px-1">
               <ul className="flex gap-2 mb-3">
-                {forum.tags.map((item, key) => (
+                {forum?.tags?.map((item, key) => (
                   <li key={key}>
                     <Badge color="success">{item}</Badge>
                   </li>
                 ))}
               </ul>
               <h4 className="text-Negro font-barolw font-medium text-base md:text-lg xl:text-xl mb-1">
-                {forum.title}
+                {forum?.title}
               </h4>
 
-              <p className="text-xs md:text-sm">{forum.content}</p>
+              <p className="text-xs md:text-sm">{forum?.content}</p>
             </div>
 
             <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg mt-4">
               <li
                 onClick={handleLike}
                 className={`${
-                  forum.isLiked ? "text-Blanco bg-RojoC" : "text-Negro bg-Gris"
+                  forum?.isLiked
+                    ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
+                    : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
                 } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
               >
-                {forum.likeCount}{" "}
+                {forum?.likeCount}{" "}
                 <AiFillLike className={` text-base md:text-lg xl:text-xl`} />
               </li>
               <li className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full transition-all duration-300">
-                {forum.comments.length}{" "}
+                {forum?.comments?.length}{" "}
                 <FaComments className="text-base md:text-lg xl:text-xl" />
               </li>
-              <li className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+              <li
+                onClick={handleShare}
+                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer"
+              >
                 Compartir{" "}
                 <FaShare className="text-base md:text-lg xl:text-xl" />
               </li>
-              <li onClick={(e) => {setOpenReport(true)}} className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer">
+              <li
+                onClick={(e) => {
+                  setOpenReport(true);
+                }}
+                className="flex gap-2 items-center justify-center bg-Gris py-1 px-4 rounded-full hover:text-Blanco hover:bg-RojoC transition-all duration-300 hover:cursor-pointer"
+              >
                 Reportar{" "}
                 <MdReportProblem className="text-base md:text-lg xl:text-xl" />
               </li>
@@ -187,7 +229,7 @@ export function InternalForum({ forum }) {
           </div>
 
           <article className="flex flex-col w-full">
-            {forum.comments.length === 0 ? (
+            {forum?.comments?.length === 0 ? (
               <>
                 <h5 className="uppercase font-barolw font-semibold text-xl text-center">
                   No hay comentarios
@@ -196,7 +238,7 @@ export function InternalForum({ forum }) {
             ) : (
               <>
                 <ul className="p-5 rounded-md bg-Gris flex flex-col gap-8">
-                  {forum.comments.map((item) => (
+                  {forum?.comments?.map((item) => (
                     <li key={item.id}>
                       <CardComment forum={forum} comment={item} />
                     </li>

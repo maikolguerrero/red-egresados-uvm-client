@@ -14,28 +14,43 @@ function CardReport({ item }) {
   return (
     <>
       <div
-        className={`${
-          item.status === "pending"
-            ? "border-blue-800"
-            : item.status === "resolved"
+        className={`${item.status === "pending"
+          ? "border-blue-800"
+          : item.status === "resolved"
             ? "border-verdeB"
             : "border-red-800"
-        } flex w-full flex-col rounded-lg border bg-Gris p-4 shadow-sm lg:max-w-7xl`}
+          } flex w-full flex-col rounded-lg border bg-Gris p-4 shadow-sm lg:max-w-7xl`}
       >
         <div className="flex justify-between w-full items-center p-3 border-b border-verdeA">
           <div className="flex gap-2 items-center">
-            <img
+            {/* <img
               className="rounded-full w-8"
               src={
                 item.reporter.profilePicture === undefined ||
-                item.reporter.profilePicture.url === null
+                  item.reporter.profilePicture.url === null
                   ? perfil
                   : item.reporter.profilePicture.url
               }
               alt="Foto de Perfil"
+            /> */}
+            {item?.reporter?.profilePicture === undefined ||
+              item?.reporter?.profilePicture?.url === null ? (
+                // Si no hay foto de perfil, muestra la inicial del username
+                <div className="w-8 h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                  <span className="text-white text-sm font-bold uppercase">
+                    {item?.reporter?.username?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+              ) : (
+            // Si hay foto, muéstrala circular
+            <img
+              className="rounded-full w-8"
+              src={item?.reporter?.profilePicture?.url}
+              alt={item?.reporter?.username || 'Foto de Perfil del Autor del Comentario'}
             />
+            )}
             <p className="flex gap-2 text-black font-semibold font-barolw text-sm items-center">
-              {item.reporter.username}
+              {item?.reporter?.username}
             </p>
           </div>
 
@@ -87,20 +102,19 @@ function CardReport({ item }) {
             <h5 className="text-sm">
               <span className="font-semibold">Accion:</span>{" "}
               <span
-                className={`${
-                  item.adminAction === "no_action"
-                    ? "text-blue-800"
-                    : item.adminAction === "warning"
+                className={`${item.adminAction === "no_action"
+                  ? "text-blue-800"
+                  : item.adminAction === "warning"
                     ? "text-yellow-500"
                     : "text-red-800"
-                }`}
+                  }`}
               >
                 {
                   item.adminAction === "no_action"
                     ? "Sin accion"
                     : item.adminAction === "warning"
-                    ? "Advertencia"
-                    : "Eliminado"
+                      ? "Advertencia"
+                      : "Eliminado"
                 }
               </span>
             </h5>
@@ -110,19 +124,18 @@ function CardReport({ item }) {
           <h5 className="text-sm">
             <span className="font-semibold">Estado:</span>{" "}
             <span
-              className={`${
-                item.status === "pending"
-                  ? "text-blue-800"
-                  : item.status === "resolved"
+              className={`${item.status === "pending"
+                ? "text-blue-800"
+                : item.status === "resolved"
                   ? "text-verdeB"
                   : "text-red-800"
-              }`}
+                }`}
             >
               {item.status === "pending"
                 ? "Pendiente"
                 : item.status === "resolved"
-                ? "Resuelto"
-                : "Rechazado"}
+                  ? "Resuelto"
+                  : "Rechazado"}
             </span>
           </h5>
           <h5 className="text-sm">

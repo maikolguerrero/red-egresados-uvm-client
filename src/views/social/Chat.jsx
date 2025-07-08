@@ -160,8 +160,7 @@ export default function Chat() {
                 const userData = {
                     userId: profileResult.profile.user.id,
                     username: profileResult.profile.user.username,
-                    firstName: profileResult.profile.firstName,
-                    lastName: profileResult.profile.lastName,
+                    nombreCompleto: profileResult.profile.nombreCompleto,
                     degree: profileResult.profile.degree,
                     profilePicture: {
                         url: profileResult.profile.user.profilePicture?.url || null
@@ -172,7 +171,7 @@ export default function Chat() {
                 dispatch(setCurrentChat({
                     userId: userData.userId,
                     username: userData.username,
-                    name: `${userData.firstName} ${userData.lastName}`
+                    name: `${userData.nombreCompleto}`
                 }));
 
                 // Cargar la primera página de mensajes
@@ -365,8 +364,7 @@ export default function Chat() {
                 sender: {
                     id: auth.id,
                     username: auth.username,
-                    firstName: auth.firstName,
-                    lastName: auth.lastName
+                    nombreCompleto: auth.nombreCompleto,
                 },
                 content: message,
                 createdAt: new Date().toISOString(),
@@ -452,23 +450,23 @@ export default function Chat() {
                                     {user.profilePicture.url ? (
                                         <img
                                             src={user.profilePicture.url}
-                                            alt={`${user.firstName} ${user.lastName}`}
+                                            alt={`${user.nombreCompleto}`}
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
                                         <span className="text-white font-bold">
-                                            {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                                            {user?.nombreCompleto?.charAt(0)}
                                         </span>
                                     )}
                                 </div>
                                 <div className="min-w-0">
                                     <h3 className="font-barolw font-semibold text-Negro text-sm">
-                                        {user.firstName} {user.lastName}
+                                        {user?.nombreCompleto}
                                     </h3>
                                     <p className="text-xs font-barlow-semi-condensed text-verdeD">
-                                        @{user.username}
+                                        @{user?.username}
                                     </p>
-                                    <OnlineStatus userId={user.userId} />
+                                    <OnlineStatus userId={user?.userId} />
                                 </div>
                             </div>
                         </div>
@@ -517,7 +515,7 @@ export default function Chat() {
                         {groupedMessages.length === 0 && (
                             <div className="flex flex-col items-center justify-center h-full w-full">
                                 <p className="text-lg font-bold text-verdeA text-center">
-                                    ¡Inicia una conversación con {user.firstName} {user.lastName}!
+                                    ¡Inicia una conversación con {user?.nombreCompleto}!
                                 </p>
                             </div>
                         )}
@@ -545,8 +543,7 @@ export default function Chat() {
                                                     ...msg,
                                                     sender: {
                                                         ...msg.sender,
-                                                        firstName: msg.sender?.firstName || user?.firstName,
-                                                        lastName: msg.sender?.lastName || user?.lastName,
+                                                        nombreCompleto: msg.sender?.nombreCompleto || user?.nombreCompleto,
                                                         username: msg.sender?.username,
                                                         profilePicture: msg.sender?.profilePicture || {
                                                             url: null

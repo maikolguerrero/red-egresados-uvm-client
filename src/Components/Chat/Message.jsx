@@ -81,8 +81,8 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
 
     // Función para obtener las iniciales del remitente
     const getInitials = () => {
-        if (message.sender?.firstName && message.sender?.lastName) {
-            return `${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`;
+        if (message.sender?.nombreCompleto) {
+            return `${message.sender.nombreCompleto.charAt(0)}`;
         }
         return message.sender?.username?.charAt(0) || 'U';
     };
@@ -185,6 +185,7 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                                     <BsCopy className="text-gray-500" />
                                     Copiar
                                 </button>
+
                                 {/* <button className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <BsReply className="text-gray-500" />
                                     Responder

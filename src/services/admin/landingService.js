@@ -2,14 +2,44 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 import { typeError, typeSuccess } from "../../models/alertModels";
 import { URL_API } from "../../config";
+import { apiFetch } from "../apiService";
 
 export const getContentLanding = createAsyncThunk(
   "landingSlice/getContentLanding", // Nombre de la acción
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
+      const response = await apiFetch(
+        `/api/content/landing`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (response.success) {
+        enqueueSnackbar("Se cargo el contenido landing", typeSuccess)
+        return {
+          message: "Se cargo el contenido landing",
+          landing: response.data
+        };
+      } else {
+        throw `${response.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      enqueueSnackbar(error, typeError)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const getContentFooter = createAsyncThunk(
+  "landingSlice/getContentFooter", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/content/landing`,
+        `${URL_API}/api/content/landing/footer`,
         {
           mode: "cors",
           credentials: "include",
@@ -21,12 +51,11 @@ export const getContentLanding = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
       if (datas.success) {
-        enqueueSnackbar("Se cargo el contenido landing", typeSuccess)
+        enqueueSnackbar("Se cargo el contenido del footer", typeSuccess)
         return {
-          message: "Se cargo el contenido landing",
-          landing: datas.data
+          message: "Se cargo el contenido del footer",
+          footer: datas.data
         };
       } else {
         throw `${datas.message}`;
@@ -44,11 +73,9 @@ export const updateContentLanding = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/landing`,
+      const response = await apiFetch(
+        `/api/content/landing`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -57,16 +84,14 @@ export const updateContentLanding = createAsyncThunk(
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
-          landingUpdate: datas.data
+          message: response.message,
+          landingUpdate: response.data
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
@@ -81,26 +106,22 @@ export const addMediaCarrousel = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/landing/carousel/media`,
+      const response = await apiFetch(
+        `/api/content/landing/carousel/media`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "POST",
           body: data.data,
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
+      if (response.success) {
         enqueueSnackbar("Se agrego la imagen al carrousel", typeSuccess)
         return {
           message: "Se agrego la imagen al carrousel",
-          pictureCarrousel: datas.data
+          pictureCarrousel: response.data
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
@@ -115,28 +136,21 @@ export const deleteMediaCarrousel = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/landing/carousel/${data.index}`,
+      const response = await apiFetch(
+        `/api/content/landing/carousel/${data.index}`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
+          message: response.message,
           idItemCarrouse: data.idItem
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
@@ -151,28 +165,24 @@ export const addMediaSubSection = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
+      const response = await apiFetch(
+        `/api/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "POST",
           body: data.data,
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
-          image: datas.data,
+          message: response.message,
+          image: response.data,
           sectionIndex: data.sectionIndex,
           subsectionIndex: data.subsectionIndex
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
@@ -187,26 +197,22 @@ export const deleteMediaSubSection = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
+      const response = await apiFetch(
+        `/api/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
         {
-          mode: "cors",
-          credentials: "include",
           method: "DELETE",
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+      if (response.success) {
+        enqueueSnackbar(response.message, typeSuccess)
         return {
-          message: datas.message,
+          message: response.message,
           sectionIndex: data.sectionIndex,
           subsectionIndex: data.subsectionIndex
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores

@@ -65,7 +65,7 @@ function Forums() {
         limit: 10,
       })
     );
-  }, [])
+  }, []);
 
   const onPageChange = (page) =>
     dispatch(
@@ -113,15 +113,19 @@ function Forums() {
                     ))}
                   </div>
 
-                  <ThemeProvider theme={customTheme}>
-                    <Pagination
-                      theme={customTheme}
-                      className="border-verdeD"
-                      currentPage={pagination.page}
-                      totalPages={pagination.pages}
-                      onPageChange={onPageChange}
-                    />
-                  </ThemeProvider>
+                  {pagination.pages === 1 ? (
+                    <></>
+                  ) : (
+                    <ThemeProvider theme={customTheme}>
+                      <Pagination
+                        theme={customTheme}
+                        className="border-verdeD"
+                        currentPage={pagination.page}
+                        totalPages={pagination.pages}
+                        onPageChange={onPageChange}
+                      />
+                    </ThemeProvider>
+                  )}
                 </>
               )}
             </>
@@ -137,9 +141,7 @@ function Forums() {
           openModal={openAddForum}
           setOpenModal={setOpendAddForum}
           size={"3xl"}
-          component={
-            <FormAddForum />
-          }
+          component={<FormAddForum />}
         />
       </main>
     </>
