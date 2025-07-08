@@ -127,7 +127,7 @@ export function InternalForum({ forum }) {
                 </div>
               </div>
 
-              {forum.author.username === username || role === "admin" ? (
+              {forum.author.username === username || role === "admin" || role === "superadmin" ? (
                 <>
                   <Dropdown
                     inline
@@ -139,7 +139,7 @@ export function InternalForum({ forum }) {
                       </div>
                     )}
                   >
-                    {role === "admin" ? (
+                    {role === "admin" || role === "superadmin" ? (
                       <></>
                     ) : (
                       <DropdownItem>

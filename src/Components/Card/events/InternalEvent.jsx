@@ -40,9 +40,7 @@ export function InternalEvent({ event }) {
                 <h4 className="text-base md:text-lg xl:text-xl font-bold tracking-tight text-Negro uppercase">
                   {event.title}
                 </h4>
-                {role === "egresado" ? (
-                  <></>
-                ) : (
+                {role === "admin" || role === "superadmin" ? (
                   <>
                     <Dropdown
                       label=""
@@ -78,6 +76,8 @@ export function InternalEvent({ event }) {
                       }
                     />
                   </>
+                ) : (
+                  <></>
                 )}
               </div>
               <h5 className="text-RojoC text-sm md:text-base xl:text-lg font-semibold h-full flex flex-col">

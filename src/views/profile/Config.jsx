@@ -2,7 +2,7 @@ import { FaKey } from "react-icons/fa";
 import { ButtonSecurity } from "../../Components/Buttons/ButtonSecurity";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
-import { MdEmail, MdReport } from "react-icons/md";
+import { MdAdminPanelSettings, MdEmail, MdReport } from "react-icons/md";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useState } from "react";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
@@ -44,13 +44,26 @@ function Config() {
               icono={<MdEmail className="text-6xl" />}
               texto={"Cambio de Correo de Recuperación"}
             />
-            {role === "admin" ? (
+            {role === "admin" || role === "superadmin" ? (
+              <>
+                <ButtonSecurity
+                  onClick={(e) => {
+                    navigate("/config/reports");
+                  }}
+                  icono={<MdReport className="text-6xl" />}
+                  texto={"Reportes"}
+                />
+              </>
+            ) : (
+              <></>
+            )}
+            {role === "superadmin" ? (
               <ButtonSecurity
                 onClick={(e) => {
-                  navigate("/config/reports")
+                  navigate("/config/admins");
                 }}
-                icono={<MdReport className="text-6xl" />}
-                texto={"Reportes"}
+                icono={<MdAdminPanelSettings className="text-6xl" />}
+                texto={"Agregar Admins"}
               />
             ) : (
               <></>

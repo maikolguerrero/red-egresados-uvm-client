@@ -98,7 +98,7 @@ export function CardComment({ forum, comment }) {
             </div>
           </div>
 
-          {comment.author.username === username || role === "admin" ? (
+          {comment.author.username === username || role === "admin" || role === "superadmin" ? (
             <div>
               <Dropdown
                 inline
