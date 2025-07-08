@@ -12,6 +12,7 @@ import landingReducer from '../features/admin/landingSlice';
 import homeReducer from '../features/admin/homeSlice';
 import reportsReducer from '../features/reports/reportsSlice';
 import alumniReducer from '../features/alumni/alumniSlice';
+import adminsReducer from '../features/admin/adminsSlice';
 
 export default configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export default configureStore({
     home: homeReducer,
     reports: reportsReducer,
     alumni: alumniReducer,
+    admins: adminsReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false // Opcional: desactivar la verificación de serialización para acciones complejas

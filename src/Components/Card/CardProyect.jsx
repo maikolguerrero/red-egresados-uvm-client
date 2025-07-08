@@ -75,7 +75,7 @@ export function CardProyect({ proyect }) {
           </p>
         </div>
 
-        {proyect?.owner?.username === username || role === "admin" ? (
+        {proyect?.owner?.username === username || role === "admin" || role === "superadmin" ? (
           <>
             <Dropdown
               inline
@@ -87,7 +87,7 @@ export function CardProyect({ proyect }) {
                 </div>
               )}
             >
-              {role === "admin" ? (
+              {role === "admin" || role === "superadmin" ? (
                 <></>
               ) : (
                 <DropdownItem>

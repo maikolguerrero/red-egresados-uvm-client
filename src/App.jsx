@@ -33,6 +33,7 @@ import ChangePassword from "./views/ChangePassword";
 import { getContentFooter } from "./services/admin/landingService";
 import Reports from "./views/admin/Reports";
 import VerifyAlumni from "./views/alumni/VerifyAlumni";
+import Admins from "./views/admin/Admins";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -218,6 +219,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Reports />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/config/admins",
+    element: (
+      <ProtectedRoute>
+        <Admins />
       </ProtectedRoute>
     ),
   },

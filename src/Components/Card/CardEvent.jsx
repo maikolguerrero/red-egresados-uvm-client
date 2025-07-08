@@ -116,9 +116,7 @@ export function CardEvent({event}) {
             )}
           </div>
 
-          {role === "egresado" ? (
-            <></>
-          ) : (
+          {role === "admin" || role === "superadmin" ? (
             <Dropdown
               label=""
               dismissOnClick={false}
@@ -144,6 +142,8 @@ export function CardEvent({event}) {
                 <MdDelete /> Eliminar Evento
               </DropdownItem>
             </Dropdown>
+          ) : (
+            <></>
           )}
         </div>
       </div>

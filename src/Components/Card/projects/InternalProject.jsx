@@ -108,7 +108,7 @@ export function InternalProject({ proyect }) {
                 </p>
               </div>
 
-              {proyect?.owner?.username === username || role === "admin" ? (
+              {proyect.owner.username === username || role === "admin" || role === "superadmin" ? (
                 <>
                   <Dropdown
                     inline
@@ -120,7 +120,7 @@ export function InternalProject({ proyect }) {
                       </div>
                     )}
                   >
-                    {role === "admin" ? (
+                    {role === "admin" || role === "superadmin" ? (
                       <></>
                     ) : (
                       <>

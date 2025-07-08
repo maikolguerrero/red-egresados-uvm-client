@@ -110,7 +110,7 @@ export function CardForum({ forum }) {
           </p>
         </div>
 
-        {forum?.author?.username === username || role === "admin" ? (
+        {forum?.author?.username === username || role === "admin" || role === "superadmin" ? (
           <>
             <Dropdown
               inline
@@ -122,7 +122,7 @@ export function CardForum({ forum }) {
                 </div>
               )}
             >
-              {role === "admin" ? (
+              {role === "admin" || role === "superadmin" ? (
                 <></>
               ) : (
                 <DropdownItem>
