@@ -8,8 +8,10 @@ import { FaXTwitter } from "react-icons/fa6";
 import { CardEducation } from "./Profile/CardEducation";
 import { CardCertification } from "./Profile/CardCertification";
 import { CardExperience } from "./Profile/CardExperience";
+import { useNavigate } from "react-router-dom";
 
 function InfoProfile({ profile }) {
+  const navigate = useNavigate();
   const auth = useSelector((state) => state.auth)
 
   const [openModal, setOpenModal] = useState(false);
@@ -30,6 +32,10 @@ function InfoProfile({ profile }) {
       setDesciption(description);
     }
   }, [profile])
+
+  const startChat = () => {
+    navigate(`/chat/${profile.user.username}`);
+  };
 
   return (
     <>
@@ -342,7 +348,13 @@ function InfoProfile({ profile }) {
             />
           </div>
         ) : (
-          <></>
+          <div className="py-4 px-2 w-full">
+            <Button
+              text={"Enviar Mensaje"}
+              className={"bg-verdeC hover:bg-RojoC"}
+              action={startChat}
+            />
+          </div>
         )}
 
         <ModalNotHeader

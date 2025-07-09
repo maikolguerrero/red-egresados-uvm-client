@@ -14,12 +14,14 @@ import { IoEnter } from "react-icons/io5";
 import { CardRequest } from "./CardRequest";
 import { Loader } from "../../Loader";
 import { FormEditRole } from "../../Forms/Proyects/FormEditRole";
+import { useNavigate } from "react-router-dom";
 
 export function InternalProject({ proyect }) {
   const username = useSelector((state) => state.auth.username);
   const role = useSelector((state) => state.auth.role);
   const loading = useSelector((state) => state.proyects.loading);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [editProyect, setEditProyect] = useState(false);
   const [openRequest, setOpenRequest] = useState(false);
@@ -63,6 +65,10 @@ export function InternalProject({ proyect }) {
     }))
   }
 
+  const searchProfile = (e) => {
+    navigate(`/graduates/${proyect?.owner?.username}`);
+  };
+
   return (
     <>
       {proyect?.id === undefined ? (
@@ -103,8 +109,8 @@ export function InternalProject({ proyect }) {
                     }
                   />
                 )}
-                <p className="flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center">
-                  {proyect?.owner?.username}
+                <p onClick={searchProfile} className="cursor-pointer flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center">
+                  @{proyect?.owner?.username}
                 </p>
               </div>
 
@@ -348,8 +354,10 @@ export function InternalProject({ proyect }) {
                           />
                         )}
 
-                        <p className="flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center">
-                          {item?.user?.username} <span>-</span>
+                        <p onClick={(e) => {
+                          navigate(`/graduates/${item?.user?.username}`);
+                        }} className="cursor-pointer flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center">
+                          @{item?.user?.username} <span>-</span>
                           {item?.role === "creator" ? (
                             <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">
                               Creador
