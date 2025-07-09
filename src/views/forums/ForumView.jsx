@@ -14,6 +14,7 @@ import { Loader } from "../../Components/Loader";
 function ForumView() {
   const forumSelect = useSelector((state) => state.forums.forumSelect);
   const loading = useSelector((state) => state.forums.loadingPage);
+  const loader = useSelector((state) => state.forums.loading);
   const dispatch = useDispatch();
 
   const [openAddForum, setOpendAddForum] = useState(false);
@@ -37,9 +38,22 @@ function ForumView() {
               <Loader />
             </section>
           ) : (
-            <div className="flex flex-col gap-8 w-full">
-              <InternalForum forum={forumSelect} />
-            </div>
+            <>
+              {loader ? (
+                <>
+                  <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
+                    <div className="relative h-full w-full flex justify-center items-center">
+                      <Loader />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+              <div className="flex flex-col gap-8 w-full">
+                <InternalForum forum={forumSelect} />
+              </div>
+            </>
           )}
         </section>
 
@@ -52,9 +66,7 @@ function ForumView() {
           openModal={openAddForum}
           setOpenModal={setOpendAddForum}
           size={"3xl"}
-          component={
-            <FormAddForum />
-          }
+          component={<FormAddForum />}
         />
       </main>
     </>

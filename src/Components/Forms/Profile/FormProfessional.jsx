@@ -252,7 +252,7 @@ function FormProfessional() {
                 Descripción:
               </Label>
               <textarea
-                cols={40}
+                rows={10}
                 className={styles.input}
                 type="text"
                 name="summary"
@@ -363,7 +363,7 @@ function FormProfessional() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>EDUCACIÓN</h4>
+          <h4 className={styles.subtitle_form}>EDUCACIÓN REALIZADA</h4>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
@@ -470,7 +470,7 @@ function FormProfessional() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>CERTIFICADOS</h4>
+          <h4 className={styles.subtitle_form}>CERTIFICADOS OBTENIDOS</h4>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
@@ -574,7 +574,7 @@ function FormProfessional() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>EXPERIENCIA</h4>
+          <h4 className={styles.subtitle_form}>EXPERIENCIA LABORAL</h4>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">

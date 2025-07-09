@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserFetch } from "../../services/auth/authService";
 import { MdEmail } from "react-icons/md";
+import { changeEmailRecovery } from "../../services/auth/changeEmailService";
 
 let defaultValues = {
+  emailOrUsername: "",
   "newEmail": "",
-  "currentPassword": ""
+  "password": ""
 }
 
 function FormRecoverEmail(props) {
@@ -30,12 +32,23 @@ function FormRecoverEmail(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    dispatch(changeEmailRecovery(values))
   };
 
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full">
+        <div className="w-full flex relative">
+          <input
+            className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
+            type="text"
+            name="emailOrUsername"
+            value={values.emailOrUsername}
+            onChange={handleInputChange}
+            placeholder="Usuario"
+          />
+          <FaUserCircle className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
+        </div>
         <div className="w-full flex relative">
           <input
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
@@ -51,8 +64,8 @@ function FormRecoverEmail(props) {
           <input
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
             type="password"
-            name="currentPassword"
-            value={values.currentPassword}
+            name="password"
+            value={values.password}
             onChange={handleInputChange}
             placeholder="Escribe tu contraseña"
           />

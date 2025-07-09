@@ -11,6 +11,7 @@ import { Loader } from "../../Components/Loader";
 function ProjectView() {
   const proyectSelect = useSelector((state) => state.proyects.proyectSelect);
   const loading = useSelector((state) => state.proyects.loadingPage);
+  const loader = useSelector((state) => state.proyects.loading);
   const dispatch = useDispatch();
 
   const currentPath = location.pathname; // Acceder a la ruta actual
@@ -31,11 +32,24 @@ function ProjectView() {
             <Loader />
           </section>
         ) : (
-          <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-            <div className="flex flex-col gap-8 w-full">
-              <InternalProject proyect={proyectSelect} />
-            </div>
-          </section>
+          <>
+            {loader ? (
+              <>
+                <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
+                  <div className="relative h-full w-full flex justify-center items-center">
+                    <Loader />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+            <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
+              <div className="flex flex-col gap-8 w-full">
+                <InternalProject proyect={proyectSelect} />
+              </div>
+            </section>
+          </>
         )}
 
         <div className="absolute flex flex-col gap-2 right-8 bottom-6">

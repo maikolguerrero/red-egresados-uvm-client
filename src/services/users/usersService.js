@@ -67,13 +67,10 @@ export const updatePictureProfile = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await apiFetch(
-        `/api/alumni/profile/picture`,
-        {
-          method: "PATCH",
-          body: data
-        }
-      );
+      const response = await apiFetch(`/api/alumni/profile/picture`, {
+        method: "PATCH",
+        body: data,
+      });
 
       if (response.success) {
         enqueueSnackbar("Se actualizó la foto de perfil", typeSuccess)
@@ -97,11 +94,16 @@ export const updateProfile = createAsyncThunk(
   "authSlice/updateProfile",
   async (data, thunkAPI) => {
     try {
+      console.log(data)
       const response = await apiFetch("/api/alumni/update-profile", {
         method: "PATCH",
-        body: data,
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
+      console.log(response)
       if (response.success) {
         enqueueSnackbar(response.message, typeSuccess);
         return {

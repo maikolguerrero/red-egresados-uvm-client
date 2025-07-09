@@ -49,6 +49,7 @@ function Forums() {
   const pagination = useSelector((state) => state.forums.pagination);
   const forums = useSelector((state) => state.forums.forums);
   const loading = useSelector((state) => state.forums.loadingPage);
+  const loader = useSelector((state) => state.forums.loading);
   const dispatch = useDispatch();
 
   const [openAddForum, setOpendAddForum] = useState(false);
@@ -99,6 +100,17 @@ function Forums() {
             </section>
           ) : (
             <>
+              {loader ? (
+                <>
+                  <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
+                    <div className="relative h-full w-full flex justify-center items-center">
+                      <Loader />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
               {forums.length === 0 ? (
                 <>
                   <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
