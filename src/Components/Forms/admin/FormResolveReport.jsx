@@ -19,15 +19,27 @@ export function FormResolveReport({ reportId }) {
   const [values, setValues] = useState({
     action: "warning",
     message: "",
-    severity: "medium"
+    severity: "medium",
+    suspensionDuration: 0
   });
+  const [time, setTime] = useState("s")
+  const [timeSecons, setTimeSecons] = useState(0)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setValues({
+
+    if (values.action === "warning" || values.action === "deleted" || values.action === "no_action") {
+      setValues({
       ...values,
       [name]: value,
+      ["suspensionDuration"]: 0,
     });
+    } else {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -67,6 +79,7 @@ export function FormResolveReport({ reportId }) {
               <option value="warning">Advertencia</option>
               <option value="deleted">Eliminar</option>
               <option value="no_action">Sin Accion</option>
+              <option value="banned_user">Banearlo</option>
             </select>
           </div>
           <div className="w-full flex flex-col relative">
@@ -75,7 +88,9 @@ export function FormResolveReport({ reportId }) {
             </Label>
             <textarea
               rows={6}
-              className={styles.input}
+              className={
+                "w-auto px-3 py-1.5 text-xs md:text-sm font-barolw rounded-lg border border-verdeA border-b-2"
+              }
               type="text"
               name="message"
               value={values.message}
@@ -83,6 +98,79 @@ export function FormResolveReport({ reportId }) {
               placeholder={"Mensaje de la solucion..."}
             ></textarea>
           </div>
+          {values.action === "banned_user" ? (
+            <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Tiempo del baneo:
+              </Label>
+              <div className="flex gap-2">
+                <select
+                  className={styles.input}
+                  type="text"
+                  name="time"
+                  value={time}
+                  onChange={(e) => {
+                    const { name, value } = e.target;
+                    setTime(value)
+                    let milisecons = 0
+                    if (value === "s") {
+                      milisecons = timeSecons * 1000
+                    }
+                    if (value === "m") {
+                      milisecons = timeSecons * 60000
+                    }
+                    if (value === "h") {
+                      milisecons = timeSecons * 3.6e+6
+                    }
+                    if (value === "d") {
+                      milisecons = timeSecons * 8.64e+7
+                    }
+                    setValues({
+                      ...values,
+                      ["suspensionDuration"]: milisecons,
+                    });
+                  }}
+                  placeholder={"Accion tomada en el reporte..."}
+                >
+                  <option value="s">Segundos</option>
+                  <option value="m">Minutos</option>
+                  <option value="h">Horas</option>
+                  <option value="d">Dias</option>
+                </select>
+                <input
+                  className={styles.input}
+                  min={0}
+                  type="number"
+                  name="timeSecons"
+                  value={timeSecons}
+                  onChange={(e) => {
+                    const { name, value } = e.target;
+                    setTimeSecons(value)
+                    let milisecons = 0
+                    if (time === "s") {
+                      milisecons = value * 1000
+                    }
+                    if (time === "m") {
+                      milisecons = value * 60000
+                    }
+                    if (time === "h") {
+                      milisecons = value * 3.6e+6
+                    }
+                    if (time === "d") {
+                      milisecons = value * 8.64e+7
+                    }
+                    setValues({
+                      ...values,
+                      ["suspensionDuration"]: milisecons,
+                    });
+                  }}
+                  placeholder={"Tiempo de baneo..."}
+                />
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <ButtonSmall className={"bg-verdeD hover:bg-RojoC"} text={"Resolver"} />
       </form>

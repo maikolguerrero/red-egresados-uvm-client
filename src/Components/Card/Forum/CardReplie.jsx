@@ -7,9 +7,11 @@ import { deleteComment, likeThreads } from "../../../services/forum/forumService
 import { FormReport } from "../../Forms/Forum/FormReport";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 import { Dropdown, DropdownItem } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 
 export function CardReplie({ forum, comment, idComment }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const username = useSelector((state) => state.auth.username)
   const role = useSelector((state) => state.auth.role)
 
@@ -21,31 +23,38 @@ export function CardReplie({ forum, comment, idComment }) {
     function calcularDiferenciaFechas(fecha1, fecha2) {
       const diferenciaMilisegundos = fecha2.getTime() - fecha1.getTime();
 
+      const semanas = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24 * 7));
       const dias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
       const horas = Math.floor(
         (diferenciaMilisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
       const minutos = Math.floor(diferenciaMilisegundos / (1000 * 60));
 
-      return { dias: dias, horas: horas, minutos: minutos };
+      return { semanas: semanas, dias: dias, horas: horas, minutos: minutos };
     }
 
     let date = new Date();
     let date2 = new Date(comment.createdAt);
 
     let response = calcularDiferenciaFechas(date2, date);
-    if (response.dias >= 1) {
-      setDatePublic(response.dias);
-      setType("d");
+    if (response.semanas >= 1) {
+      setDatePublic(response.semanas);
+      setType("s");
     } else {
-      if (response.horas >= 1) {
-        setDatePublic(response.horas);
-        setType("h");
+      if (response.dias >= 1) {
+        setDatePublic(response.dias);
+        setType("d");
       } else {
-        setDatePublic(response.minutos);
-        setType("m");
+        if (response.horas >= 1) {
+          setDatePublic(response.horas);
+          setType("h");
+        } else {
+          setDatePublic(response.minutos);
+          setType("min");
+        }
       }
     }
+    
   }, [comment]);
 
   const handleLike = (e) => {
@@ -65,6 +74,10 @@ export function CardReplie({ forum, comment, idComment }) {
         idComment: idComment.id
       })
     );
+  };
+
+  const searchProfile = (e) => {
+    navigate(`/graduates/${comment?.author?.username}`);
   };
 
   return (
@@ -89,10 +102,10 @@ export function CardReplie({ forum, comment, idComment }) {
           />
         )}
         <div className="h-full flex items-center">
-          <p className="flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-[9px] md:text-xs xl:text-sm items-center">
-            {comment.author.username}
+          <p onClick={searchProfile} className="cursor-pointer flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-[9px] md:text-xs xl:text-sm items-center">
+            @{comment.author.username}
             <FaCircle className="text-Negro text-[5px] md:text-[5px] xl:text-[6px] flex justify-center items-center h-full" />{" "}
-            Hace {datePublic}
+            Hace {datePublic}{" "}
             {type}
           </p>
         </div>

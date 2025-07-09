@@ -1,9 +1,11 @@
 import { useDispatch } from "react-redux";
 import perfil from "../../../../public/Perfil.jpg";
 import { expelCollaborator, responseRequest } from "../../../services/proyects/proyectService";
+import { useNavigate } from "react-router-dom";
 
 export function CardRequest({ request, project }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAccept = (e) => {
     dispatch(
@@ -29,6 +31,10 @@ export function CardRequest({ request, project }) {
     );
   };
 
+  const searchProfile = (e) => {
+    navigate(`/graduates/${request.user.username}`);
+  };
+
   return (
     <div
       key={request.id}
@@ -47,8 +53,8 @@ export function CardRequest({ request, project }) {
           />
           <div className="flex flex-col justify-center">
             <div className="flex gap-2 items-center">
-              <p className="flex gap-2 font-semibold text-Negro font-barolw text-xs lg:text-sm items-center">
-                {request.user.username}
+              <p onClick={searchProfile} className="cursor-pointer flex gap-2 font-semibold text-Negro font-barolw text-xs lg:text-sm items-center">
+                @{request.user.username}
               </p>
               <span>-</span>
               <p

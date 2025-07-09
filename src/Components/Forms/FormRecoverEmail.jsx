@@ -1,16 +1,19 @@
-import { FaLock, FaUserCircle } from "react-icons/fa";
+import { FaLock, FaUserCircle, FaVoicemail } from "react-icons/fa";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserFetch } from "../../services/auth/authService";
+import { MdEmail } from "react-icons/md";
+import { changeEmailRecovery } from "../../services/auth/changeEmailService";
 
 let defaultValues = {
-  "emailOrUsername": "",
+  emailOrUsername: "",
+  "newEmail": "",
   "password": ""
 }
 
-function FormLogin(props) {
+function FormRecoverEmail(props) {
   const dispatch = useDispatch()
 
   const [values, setValues] = useState({});
@@ -29,7 +32,7 @@ function FormLogin(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUserFetch(values));
+    dispatch(changeEmailRecovery(values))
   };
 
   return (
@@ -49,42 +52,32 @@ function FormLogin(props) {
         <div className="w-full flex relative">
           <input
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
+            type="email"
+            name="newEmail"
+            value={values.newEmail}
+            onChange={handleInputChange}
+            placeholder="Nuevo correo electronico..."
+          />
+          <MdEmail className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
+        </div>
+        <div className="w-full flex relative">
+          <input
+            className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
             type="password"
             name="password"
             value={values.password}
             onChange={handleInputChange}
-            placeholder="Contraseña"
+            placeholder="Escribe tu contraseña"
           />
           <FaLock className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
         </div>
 
-        <div className="flex flex-col gap-2 items-center text-Negro font-barolw font-bold text-xs md:text-sm lg:text-base text-center">
-          <p className="">
-            ¿No tienes una cuenta?{" "}
-            <Link to={"/register"} className="text-verdeC">
-              Regístrate Aquí.
-            </Link>
-          </p>
-          <p className="">
-            ¿Registraste mal tu correo?{" "}
-            <Link to={"/recover/change-email"} className="text-verdeC">
-              Cambialo Aquí.
-            </Link>
-          </p>
-          <p>
-            ¿Olvidaste tu contraseña?{" "}
-            <Link to={"/recover-password"} className="text-verdeC">
-              Recupérala Aquí.
-            </Link>
-          </p>
-        </div>
-
         <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
-          <Button className={"w-full"} text="INICIAR SESIÓN" />
+          <Button className={"w-full"} text="ENVIAR CODIGO" />
         </div>
       </form>
     </>
   );
 }
 
-export default FormLogin;
+export default FormRecoverEmail;

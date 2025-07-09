@@ -10,9 +10,11 @@ import FormEmail from "../../Components/Forms/config/FormEmail";
 import FormResetPassword from "../../Components/Forms/config/FormResetPassword";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../../Components/Loader";
 
 function Config() {
   const role = useSelector((state) => state.auth.role);
+  const loader = useSelector((state) => state.auth.loading);
   const [openEmail, setOpenEmail] = useState(false)
   const [openReset, setOpenReset] = useState(false)
 
@@ -25,6 +27,17 @@ function Config() {
 
       <div className="flex relative">
         <Nav />
+        {loader ? (
+          <>
+            <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
+              <div className="relative h-full w-full flex justify-center items-center">
+                <Loader />
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
         <div className="w-full px-3 py-12 md:px-6 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
           <h4 className="font-barlow-condensed text-xl font-bold uppercase">
             Opciones de Seguridad

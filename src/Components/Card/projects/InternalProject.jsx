@@ -14,12 +14,14 @@ import { IoEnter } from "react-icons/io5";
 import { CardRequest } from "./CardRequest";
 import { Loader } from "../../Loader";
 import { FormEditRole } from "../../Forms/Proyects/FormEditRole";
+import { useNavigate } from "react-router-dom";
 
 export function InternalProject({ proyect }) {
   const username = useSelector((state) => state.auth.username);
   const role = useSelector((state) => state.auth.role);
   const loading = useSelector((state) => state.proyects.loading);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [editProyect, setEditProyect] = useState(false);
   const [openRequest, setOpenRequest] = useState(false);
@@ -63,6 +65,10 @@ export function InternalProject({ proyect }) {
     }))
   }
 
+  const searchProfile = (e) => {
+    navigate(`/graduates/${proyect?.owner?.username}`);
+  };
+
   return (
     <>
       {proyect?.id === undefined ? (
@@ -103,8 +109,9 @@ export function InternalProject({ proyect }) {
                     }
                   />
                 )}
-                <p className="flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center">
-                  {proyect?.owner?.username}
+
+                <p onClick={searchProfile} className="cursor-pointer flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center">
+                  @{proyect?.owner?.username}
                 </p>
               </div>
 
@@ -348,8 +355,10 @@ export function InternalProject({ proyect }) {
                           />
                         )}
 
-                        <p className="flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center">
-                          {item?.user?.username} <span>-</span>
+                        <p onClick={(e) => {
+                          navigate(`/graduates/${item?.user?.username}`);
+                        }} className="cursor-pointer flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center">
+                          @{item?.user?.username} <span>-</span>
                           {item?.role === "creator" ? (
                             <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">
                               Creador
@@ -364,50 +373,53 @@ export function InternalProject({ proyect }) {
                         </p>
                       </div>
 
-                      {proyect?.owner?.username === username ? (
-                        item?.user?.username === username ? (
-                          <></>
-                        ) : (
-                          <>
-                            <div className="flex gap-2">
-                              <button
-                                onClick={(e) => setEditRole(true)}
-                                className="text-xs px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 font-barlow-semi-condensed font-medium uppercase"
-                              >
-                                Rol
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  dispatch(
-                                    expelCollaborator({
-                                      projectId: proyect?.id,
-                                      username: item?.user?.username,
-                                    })
-                                  );
-                                }}
-                                className="text-xs px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-800 font-barlow-semi-condensed font-medium uppercase"
-                              >
-                                Expulsar
-                              </button>
-                            </div>
+                      {
+                        proyect?.owner?.username === username ? (
+                          item?.user?.username === username ? (
+                            <></>
+                          ) : (
+                            <>
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={(e) => setEditRole(true)}
+                                  className="text-xs px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 font-barlow-semi-condensed font-medium uppercase"
+                                >
+                                  Rol
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    dispatch(
+                                      expelCollaborator({
+                                        projectId: proyect?.id,
+                                        username: item?.user?.username,
+                                      })
+                                    );
+                                  }}
+                                  className="text-xs px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-800 font-barlow-semi-condensed font-medium uppercase"
+                                >
+                                  Expulsar
+                                </button>
+                              </div>
 
-                            <ModalNotHeader
-                              openModal={editRole}
-                              setOpenModal={setEditRole}
-                              size={"3xl"}
-                              component={<FormEditRole collaborator={item} />}
-                            />
-                          </>
+                              <ModalNotHeader
+                                openModal={editRole}
+                                setOpenModal={setEditRole}
+                                size={"3xl"}
+                                component={<FormEditRole collaborator={item} />}
+                              />
+                            </>
+                          )
+                        ) : (
+                          <></>
                         )
-                      ) : (
-                        <></>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      }
+                    </li >
+                  ))
+                  }
+                </ul >
+              </div >
             )}
-          </article>
+          </article >
         </>
       )}
     </>

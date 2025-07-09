@@ -51,6 +51,10 @@ export function CardProyect({ proyect }) {
     dispatch(joinProyect({ projectId: proyect.id }))
   }
 
+  const searchProfile = (e) => {
+    navigate(`/graduates/${proyect?.owner?.username}`);
+  };
+
   return (
     <Card className="w-[448px] border-[1.5px] border-verdeD bg-Gris">
       <div className="flex justify-between">
@@ -70,8 +74,8 @@ export function CardProyect({ proyect }) {
               alt={proyect?.owner?.username || 'Foto de Perfil del Propietario'} // Alt text para accesibilidad
             />
           )}
-          <p className="flex gap-2 font-semibold text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
-            {proyect?.owner?.username}
+          <p onClick={searchProfile} className="cursor-pointer flex gap-2 font-semibold text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
+            @{proyect?.owner?.username}
           </p>
         </div>
 
@@ -181,15 +185,19 @@ export function CardProyect({ proyect }) {
             >
               {item?.user?.profilePicture?.url === null ? (
                 // Si no hay foto de perfil, muestra la inicial
-                <div className="w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-Gris bg-verdeA flex items-center justify-center overflow-hidden">
+                <div onClick={(e) => {
+                  navigate(`/graduates/${item?.user?.username}`);
+                }} className="cursor-pointer w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-Gris bg-verdeA flex items-center justify-center overflow-hidden">
                   <span className="text-white text-[10px] lg:text-[12px] font-bold">
                     {item?.user?.username?.charAt(0).toUpperCase()}
                   </span>
                 </div>
               ) : (
                 // Si hay foto, muéstrala
-                <img
-                  className="w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-Gris object-cover"
+                <img onClick={(e) => {
+                  navigate(`/graduates/${item?.user?.username}`);
+                }}
+                  className="cursor-pointer w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-Gris object-cover"
                   src={item?.user?.profilePicture?.url}
                   alt={
                     item?.user?.username.charAt(0).toUpperCase() ||

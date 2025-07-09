@@ -16,9 +16,11 @@ import { FormReport } from "../../Forms/Forum/FormReport";
 import { enqueueSnackbar } from "notistack";
 import { typeSuccess } from "../../../models/alertModels";
 import { URL_FRONTEND } from "../../../config";
+import { useNavigate } from "react-router-dom";
 
 export function InternalForum({ forum }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const username = useSelector((state) => state.auth.username)
   const role = useSelector((state) => state.auth.role)
 
@@ -32,24 +34,36 @@ export function InternalForum({ forum }) {
     function calcularDiferenciaFechas(fecha1, fecha2) {
       const diferenciaMilisegundos = fecha2.getTime() - fecha1.getTime();
 
+      const semanas = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24 * 7));
       const dias = Math.floor(diferenciaMilisegundos / (1000 * 60 * 60 * 24));
       const horas = Math.floor(
         (diferenciaMilisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
+      const minutos = Math.floor(diferenciaMilisegundos / (1000 * 60));
 
-      return { dias: dias, horas: horas };
+      return { semanas: semanas, dias: dias, horas: horas, minutos: minutos };
     }
 
     let date = new Date();
-    let date2 = new Date(forum.createdAt)
+    let date2 = new Date(forum.createdAt);
 
-    let response = calcularDiferenciaFechas(date2, date)
-    if (response.horas >= 24) {
-      setDatePublic(response.dias)
-      setType("dias")
+    let response = calcularDiferenciaFechas(date2, date);
+    if (response.semanas >= 1) {
+      setDatePublic(response.semanas);
+      setType("s");
     } else {
-      setDatePublic(response.horas)
-      setType("horas")
+      if (response.dias >= 1) {
+        setDatePublic(response.dias);
+        setType("d");
+      } else {
+        if (response.horas >= 1) {
+          setDatePublic(response.horas);
+          setType("h");
+        } else {
+          setDatePublic(response.minutos);
+          setType("min");
+        }
+      }
     }
   }, [forum]);
 
@@ -86,6 +100,10 @@ export function InternalForum({ forum }) {
     }
   };
 
+  const searchProfile = (e) => {
+    navigate(`/graduates/${forum?.author?.username}`);
+  };
+
   return (
     <>
       {forum.id === undefined ? (
@@ -115,11 +133,11 @@ export function InternalForum({ forum }) {
                   />
                 )}
                 <div className="flex flex-col">
-                  <p className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
-                    {forum?.author?.username}
+                  <p onClick={searchProfile} className="cursor-pointer flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
+                    @{forum?.author?.username}
                     <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
-                    Hace {datePublic}
-                    {type === "horas" ? "h" : "d"}
+                    Hace {datePublic}{" "}
+                    {type}
                   </p>
                   <p className="flex gap-2 text-Negro font-medium uppercase font-barolw text-xs md:text-sm xl:text-base items-center">
                     {forum.category}

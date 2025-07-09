@@ -32,7 +32,8 @@ function ProtectedRoute({ children }) {
           currentPath === "/register" ||
           currentPath === "/verify-alumni" ||
           currentPath === "/recover-password" ||
-          currentPath === "/verify-email"
+          currentPath === "/verify-email" ||
+          currentPath === "/recover/change-email"
         ) {
           navigate("/landing");
         }
@@ -48,7 +49,9 @@ function ProtectedRoute({ children }) {
           currentPath !== "/recover-password" &&
           currentPath !== "/verify-email" &&
           currentPath !== "/verify-email-change" &&
-          currentPath !== "/verify-alumni"
+          currentPath !== "/verify-alumni" &&
+          currentPath !== "/reset-password" &&
+          currentPath !== "/recover/change-email"
         ) {
           if (currentPath === "/") {
             navigate("/verify-alumni");

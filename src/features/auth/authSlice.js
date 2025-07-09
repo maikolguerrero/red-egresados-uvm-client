@@ -8,7 +8,7 @@ import {
   resendEmailFetch,
   verifyEmail,
   verifySesion } from '../../services/auth/authService';
-import { changeEmail, changeRecoveryEmail } from '../../services/auth/changeEmailService';
+import { changeEmail, changeEmailRecovery, changeRecoveryEmail, changeRecoveryPassword } from '../../services/auth/changeEmailService';
 
 export const authSlice = createSlice({
   name: 'verification',
@@ -181,6 +181,32 @@ export const authSlice = createSlice({
       state.newPassword = true
     });
     builder.addCase(newPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(changeRecoveryPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(changeRecoveryPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+    });
+    builder.addCase(changeRecoveryPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(changeEmailRecovery.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(changeEmailRecovery.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+    });
+    builder.addCase(changeEmailRecovery.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

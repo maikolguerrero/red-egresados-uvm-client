@@ -28,8 +28,8 @@ function CardProfile({ profile }) {
         <div className="w-[150px] md:w-[200px] aspect-square border-r-[1.5px] border-verdeD flex items-center justify-center overflow-hidden flex-shrink-0">
           {profile.user.profilePicture.url === null ? (
             // Si no hay foto, muestra la inicial
-            <span className="text-Blanco text-5xl md:text-6xl lg:text-7xl font-bold bg-verdeA h-full w-full flex items-center justify-center">
-              {profile.nombreCompleto?.charAt(0)}
+            <span className="text-Blanco text-5xl md:text-6xl uppercase lg:text-7xl font-bold bg-verdeA h-full w-full flex items-center justify-center">
+              {profile.user.username?.charAt(0)}
             </span>
           ) : (
             // Si hay foto, muéstrala y ajústala para que cubra el cuadrado

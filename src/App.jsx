@@ -36,6 +36,7 @@ import { getContentAcademicRequests } from "./services/admin/academicRequestsSer
 import Reports from "./views/admin/Reports";
 import VerifyAlumni from "./views/alumni/VerifyAlumni";
 import Admins from "./views/admin/Admins";
+import RecoveryEmail from "./views/RecoveryEmail";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -60,6 +61,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Login />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/recover/change-email",
+    element: (
+      <ProtectedRoute>
+        <RecoveryEmail />
       </ProtectedRoute>
     ),
   },

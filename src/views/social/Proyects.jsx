@@ -51,6 +51,7 @@ function Proyects() {
   const pagination = useSelector((state) => state.proyects.pagination);
   const proyects = useSelector((state) => state.proyects.proyects);
   const loading = useSelector((state) => state.proyects.loadingPage);
+  const loader = useSelector((state) => state.proyects.loading);
   const dispatch = useDispatch();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -102,6 +103,17 @@ function Proyects() {
             </section>
           ) : (
             <>
+              {loader ? (
+                <>
+                  <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
+                    <div className="relative h-full w-full flex justify-center items-center">
+                      <Loader />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
               {proyects.length === 0 ? (
                 <>
                   {" "}

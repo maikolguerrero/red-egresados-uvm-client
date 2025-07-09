@@ -33,6 +33,72 @@ export const changeRecoveryEmail = createAsyncThunk(
     }
 );
 
+export const changeRecoveryPassword = createAsyncThunk(
+    "authSlice/changeRecoveryPassword", // Nombre de la acción
+    async (data, thunkAPI) => {
+        try {
+            const response = await fetch(
+                `${URL_API}/api/auth/forgot-password`,
+                {
+                    mode: "cors",
+                    credentials: "include",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                }
+            );
+
+            let datas = await response.json();
+            console.log(datas)
+            if (datas.success) {
+                enqueueSnackbar(datas.message, typeSuccess)
+                return (datas.message);
+            } else {
+                throw `${datas.message}`;
+            }
+        } catch (error) {
+            // Gestionar errores
+            enqueueSnackbar(error, typeError)
+            return thunkAPI.rejectWithValue({ continue: false });
+        }
+    }
+);
+
+export const changeEmailRecovery = createAsyncThunk(
+    "authSlice/changeEmailRecovery", // Nombre de la acción
+    async (data, thunkAPI) => {
+        try {
+            const response = await fetch(
+                `${URL_API}/api/auth/update-email-and-resend`,
+                {
+                    mode: "cors",
+                    credentials: "include",
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                }
+            );
+
+            let datas = await response.json();
+            console.log(datas)
+            if (datas.success) {
+                enqueueSnackbar(datas.message, typeSuccess)
+                return (datas.message);
+            } else {
+                throw `${datas.message}`;
+            }
+        } catch (error) {
+            // Gestionar errores
+            enqueueSnackbar(error, typeError)
+            return thunkAPI.rejectWithValue({ continue: false });
+        }
+    }
+);
+
 export const changeEmail = createAsyncThunk(
     "authSlice/changeEmail", // Nombre de la acción
     async (data, thunkAPI) => {
