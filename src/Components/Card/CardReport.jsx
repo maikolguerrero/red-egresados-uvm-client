@@ -9,6 +9,11 @@ function CardReport({ item }) {
   const [comment, setComment] = useState(false);
   const [reportResolve, setReportResolve] = useState(false);
 
+  const reason = item.reason === 'spam' ? 'Spam' :
+    item.reason === 'inappropriate' ? 'Contenido inapropiado' :
+      item.reason === 'harassment' ? 'Acoso' :
+        item.reason === 'other' ? 'Otro' : 'Desconocido';
+
   const navigate = useNavigate();
 
   return (
@@ -140,7 +145,7 @@ function CardReport({ item }) {
           </h5>
           <h5 className="text-sm">
             <span className="font-semibold">Tipo:</span>{" "}
-            <span>{item.reason}</span>
+            <span>{reason}</span>
           </h5>
           <p className="text-sm">
             <span className="font-semibold">Descripcion:</span>{" "}
