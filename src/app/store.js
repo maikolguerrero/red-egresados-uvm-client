@@ -13,6 +13,8 @@ import homeReducer from '../features/admin/homeSlice';
 import reportsReducer from '../features/reports/reportsSlice';
 import alumniReducer from '../features/alumni/alumniSlice';
 import adminsReducer from '../features/admin/adminsSlice';
+import statsReducer from '../features/admin/statsSlice';
+import academicRequestsReducer from '../features/admin/academicRequestsSlice';
 
 export default configureStore({
   reducer: {
@@ -30,6 +32,8 @@ export default configureStore({
     reports: reportsReducer,
     alumni: alumniReducer,
     admins: adminsReducer,
+    stats: statsReducer,
+    academicRequests: academicRequestsReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false // Opcional: desactivar la verificación de serialización para acciones complejas

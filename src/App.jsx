@@ -28,9 +28,11 @@ import { URL_API } from "./config";
 import ContentManager from "./views/admin/ContentManager";
 import CMLandingPage from "./views/admin/CMLandingPage";
 import CMHomePage from "./views/admin/CMHomePage";
+import CMAcademicRequests from "./views/admin/CMAcademicRequests";
 import ChangeEmail from "./views/ChangeEmail";
 import ChangePassword from "./views/ChangePassword";
 import { getContentFooter } from "./services/admin/landingService";
+import { getContentAcademicRequests } from "./services/admin/academicRequestsService";
 import Reports from "./views/admin/Reports";
 import VerifyAlumni from "./views/alumni/VerifyAlumni";
 import Admins from "./views/admin/Admins";
@@ -106,6 +108,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CMHomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/content-manager/academic-requests",
+    element: (
+      <ProtectedRoute>
+        <CMAcademicRequests />
       </ProtectedRoute>
     ),
   },
@@ -273,6 +283,7 @@ function App() {
 
   useEffect(() => {
     dispatch(getContentFooter());
+    dispatch(getContentAcademicRequests());
   }, []);
 
   useEffect(() => {

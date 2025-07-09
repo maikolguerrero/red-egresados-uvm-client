@@ -5,6 +5,7 @@ import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { IoIosHome } from "react-icons/io";
 import { BsPcDisplayHorizontal } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { FaGraduationCap } from "react-icons/fa6";
 
 function ContentManager() {
   return (
@@ -28,7 +29,13 @@ function ContentManager() {
             <Link to={"/content-manager/home"}>
               <ButtonSecurity
                 icono={<IoIosHome className="text-6xl" />}
-                texto={"Configuración de la sección principal"}
+                texto={"Configuración de la Sección Principal"}
+              />
+            </Link>
+            <Link to={"/content-manager/academic-requests"}>
+              <ButtonSecurity
+                icono={<FaGraduationCap className="text-6xl" />}
+                texto={"Info de Solicitudes Académicas"}
               />
             </Link>
           </div>

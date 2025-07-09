@@ -1,10 +1,10 @@
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
-import professionals from "../../public/ProfesionalesUVM.png"
 import { FaGraduationCap } from "react-icons/fa6";
 import { FaUserPlus, FaUsers } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { getContentLanding } from "../services/admin/landingService";
+import { getContentStats } from "../services/admin/statsService";
 import { useDispatch, useSelector } from "react-redux";
 import { Carousel, createTheme, ThemeProvider } from "flowbite-react";
 import { Loader } from "../Components/Loader";
@@ -44,11 +44,12 @@ function Landing() {
   const dispatch = useDispatch();
   const landing = useSelector((state) => state.landing.landingContent);
   const loading = useSelector((state) => state.landing.loadingPage);
-
+  const stats = useSelector((state) => state.stats.statsContent);
   const [accordion, setAccordion] = useState(false)
 
   useEffect(() => {
     dispatch(getContentLanding());
+    dispatch(getContentStats());
   }, []);
 
   return (
@@ -100,7 +101,7 @@ function Landing() {
                 ESTUDIANTES EGRESADOS
               </h5>
               <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                14.596
+                {stats?.graduatesCount}
               </p>
             </div>
 
@@ -109,10 +110,10 @@ function Landing() {
                 <FaUsers className="text-5xl" />
               </figure>
               <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
-                EGRESADOS EN LÍNEA
+                USUARIOS EN LÍNEA
               </h5>
               <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                568
+                {stats?.onlineUsers}
               </p>
             </div>
 
@@ -124,7 +125,7 @@ function Landing() {
                 EGRESADOS REGISTRADOS
               </h5>
               <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                2.435
+                {stats?.registeredGraduates}
               </p>
             </div>
           </section>
