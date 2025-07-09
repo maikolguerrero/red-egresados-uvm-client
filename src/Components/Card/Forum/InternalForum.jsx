@@ -184,11 +184,10 @@ export function InternalForum({ forum }) {
             <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg mt-4">
               <li
                 onClick={handleLike}
-                className={`${
-                  forum?.isLiked
-                    ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
-                    : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
-                } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+                className={`${forum?.isLiked
+                  ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
+                  : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
+                  } flex gap-2 items-center justify-center py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
               >
                 {forum?.likeCount}{" "}
                 <AiFillLike className={` text-base md:text-lg xl:text-xl`} />

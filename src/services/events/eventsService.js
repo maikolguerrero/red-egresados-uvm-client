@@ -60,7 +60,7 @@ export const addPictureEvent = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -75,13 +75,10 @@ export const searchEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events?page=${data.page}&limit=${data.limit}${
-            data.type === null || data.type === undefined ? "" : "&type=" + data.type
-          }${
-            data.search === null || data.search === undefined ? "" : "&search=" + data.search
-          }${
-            data.upcoming === null || data.upcoming === undefined ? "" : "&upcoming=" + data.upcoming
-          }`,
+        `/api/events?page=${data.page}&limit=${data.limit}${data.type === null || data.type === undefined ? "" : "&type=" + data.type
+        }${data.search === null || data.search === undefined ? "" : "&search=" + data.search
+        }${data.upcoming === null || data.upcoming === undefined ? "" : "&upcoming=" + data.upcoming
+        }`,
         {
           method: "GET",
         }
@@ -97,7 +94,7 @@ export const searchEvent = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -127,7 +124,7 @@ export const getEvent = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -157,7 +154,7 @@ export const deleteEvent = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -194,7 +191,7 @@ export const editEvent = createAsyncThunk(
       } else {
         throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
       enqueueSnackbar(error, typeError)
@@ -254,6 +251,7 @@ export const deleteAgenda = createAsyncThunk(
         };
       } else {
         throw `${response.message}`;
+
       }
     } catch (error) {
       // Gestionar errores

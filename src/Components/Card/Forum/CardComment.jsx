@@ -68,34 +68,29 @@ export function CardComment({ forum, comment }) {
   return (
     <>
       <div className="w-full flex flex-col">
-        <div className="flex w-full flex-wrap justify-between mb-3 h-full">
-          <div className="flex gap-4">
-            {comment?.author?.profilePicture?.url === null ? (
-              // Si no hay foto de perfil, muestra la inicial del username
-              <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
-                <span className="text-white text-xs md:text-xs xl:text-sm font-bold uppercase">
-                  {comment?.author?.username?.charAt(0).toUpperCase()}
-                </span>
-              </div>
-            ) : (
-              // Si hay foto, muéstrala circular
-              <img
-                className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
-                src={comment?.author?.profilePicture?.url}
-                alt={
-                  comment?.author?.username ||
-                  "Foto de Perfil del Autor del Comentario"
-                }
-              />
-            )}
-            <div className="h-full flex items-center">
-              <p className="flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-xs md:text-sm xl:text-base items-center">
-                {comment?.author?.username}
-                <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
-                Hace {datePublic}
-                {type}
-              </p>
+        <div className="flex gap-4 w-full flex-wrap mb-3 h-full">
+          {comment?.author?.profilePicture?.url === null ? (
+            // Si no hay foto de perfil, muestra la inicial del username
+            <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+              <span className="text-white text-xs md:text-xs xl:text-sm font-bold uppercase">
+                {comment?.author?.username?.charAt(0).toUpperCase()}
+              </span>
             </div>
+          ) : (
+            // Si hay foto, muéstrala circular
+            <img
+              className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
+              src={comment?.author?.profilePicture?.url}
+              alt={comment?.author?.username || 'Foto de Perfil del Autor del Comentario'}
+            />
+          )}
+          <div className="h-full flex items-center">
+            <p className="flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-xs md:text-sm xl:text-base items-center">
+              {comment?.author?.username}
+              <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
+              Hace {datePublic}
+              {type}
+            </p>
           </div>
 
           {comment.author.username === username || role === "admin" || role === "superadmin" ? (
@@ -138,11 +133,10 @@ export function CardComment({ forum, comment }) {
           <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg">
             <li
               onClick={handleLike}
-              className={`${
-                comment.isLiked
-                  ? "text-Blanco bg-RojoC"
-                  : "text-Negro bg-Blanco"
-              } flex gap-2 items-center justify-center text-sm  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+              className={`${comment.isLiked
+                ? "text-Blanco bg-RojoC"
+                : "text-Negro bg-Blanco"
+                } flex gap-2 items-center justify-center text-sm  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
             >
               {comment.likeCount}{" "}
               <AiFillLike className={` text-sm md:text-base xl:text-lg`} />
@@ -192,7 +186,7 @@ export function CardComment({ forum, comment }) {
             <FormReport idComment={comment?.id} threadId={forum?.id} />
           }
         />
-      </div>
+      </div >
     </>
   );
 }

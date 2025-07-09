@@ -17,8 +17,8 @@ const customTheme = createTheme({
   base: "",
   layout: {
     table: {
-      base: "text-sm text-gray-700 dark:text-gray-400",
-      span: "font-semibold text-gray-900 dark:text-white",
+      base: "text-sm text-gray-700",
+      span: "font-semibold text-gray-900",
     },
   },
   pages: {

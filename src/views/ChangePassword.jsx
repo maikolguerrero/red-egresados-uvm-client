@@ -21,7 +21,7 @@ let styles = {
 
 function ChangePassword() {
   const dispatch = useDispatch();
-  const newPasswordUpdate = useSelector((state) => state.auth.newPassword)
+  const role = useSelector((state) => state.auth.role)
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,12 +41,6 @@ function ChangePassword() {
     })
     //dispatch(changeEmail(params.get("token")))
   }, []);
-
-  useEffect(() => {
-    if (newPasswordUpdate) {
-      navigate("/home")
-    }
-  }, [newPasswordUpdate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,12 +66,13 @@ function ChangePassword() {
 
   return (
     <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
-
+      {role === "" ? (
+        <NavLogin />
+      ) : (
+        <Header />
+      )}
       <div className="flex">
-        <Nav />
-        <main className="w-full px-3 py-6 md:px-6 lg:px-10 gap-14 flex justify-center items-center h-[89.5vh] overflow-y-auto">
+        <main className="w-full px-3 py-6 md:px-6 lg:px-10 gap-14 flex justify-center items-center h-[100vh] overflow-y-auto">
           <form className="flex flex-col gap-5 w-full md:w-[300px] bg-Gris rounded-md border-2 border-verdeD p-4">
             <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
               {"ACTUALIZAR CONTRASEÑA"}
@@ -118,6 +113,7 @@ function ChangePassword() {
           </form>
         </main>
       </div>
+      <Footer />
     </>
   );
 }

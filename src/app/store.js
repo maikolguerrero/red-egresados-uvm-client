@@ -11,6 +11,7 @@ import notificationReducer from '../features/notifications/notificationSlice';
 import landingReducer from '../features/admin/landingSlice';
 import homeReducer from '../features/admin/homeSlice';
 import reportsReducer from '../features/reports/reportsSlice';
+import alumniReducer from '../features/alumni/alumniSlice';
 import adminsReducer from '../features/admin/adminsSlice';
 
 export default configureStore({
@@ -27,6 +28,7 @@ export default configureStore({
     landing: landingReducer,
     home: homeReducer,
     reports: reportsReducer,
+    alumni: alumniReducer,
     admins: adminsReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({

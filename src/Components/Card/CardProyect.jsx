@@ -67,7 +67,7 @@ export function CardProyect({ proyect }) {
             <img
               className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
               src={proyect.owner.profilePicture.url}
-              alt={proyect?.owner?.username || "Foto de Perfil del Propietario"} // Alt text para accesibilidad
+              alt={proyect?.owner?.username || 'Foto de Perfil del Propietario'} // Alt text para accesibilidad
             />
           )}
           <p className="flex gap-2 font-semibold text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
@@ -118,8 +118,9 @@ export function CardProyect({ proyect }) {
           </>
         ) : (
           <></>
-        )}
-      </div>
+        )
+        }
+      </div >
       <h5 className="text-2xl font-bold tracking-tight text-Negro">
         {proyect?.title}
       </h5>
@@ -150,23 +151,24 @@ export function CardProyect({ proyect }) {
               proyect?.status === "not_started"
                 ? "indigo"
                 : proyect?.status === "in_progress"
-                ? "info"
-                : proyect?.status === "paused"
-                ? "warning"
-                : proyect?.status === "completed"
-                ? "success"
-                : "failure"
+                  ? "info"
+                  : proyect?.status === "paused"
+                    ? "warning"
+                    : proyect?.status === "completed"
+                      ? "success"
+                      : "failure"
             }
           >
             {proyect?.status === "not_started"
               ? "Sin Iniciar"
               : proyect?.status === "in_progress"
-              ? "En Progreso"
-              : proyect?.status === "paused"
-              ? "Pausado"
-              : proyect?.status === "completed"
-              ? "Completado"
-              : "Cancelado"}
+                ? "En Progreso"
+                : proyect?.status === "paused"
+                  ? "Pausado"
+                  : proyect?.status === "completed"
+                    ? "Completado"
+                    : "Cancelado"
+            }
           </Badge>
         </p>
         <p className="font-bold text-verdeD">Colaboradores:</p>
@@ -174,9 +176,8 @@ export function CardProyect({ proyect }) {
           {proyect?.collaborators.map((item, key) => (
             <li
               key={key}
-              className={`text-RojoC font-medium text-sm left-${
-                key === 0 ? 0 : key * 3
-              }`}
+              className={`text-RojoC font-medium text-sm left-${key === 0 ? 0 : key * 3
+                }`}
             >
               {item?.user?.profilePicture?.url === null ? (
                 // Si no hay foto de perfil, muestra la inicial
@@ -193,7 +194,7 @@ export function CardProyect({ proyect }) {
                   alt={
                     item?.user?.username.charAt(0).toUpperCase() ||
                     "Colaborador"
-                  } // Añade un alt text para accesibilidad
+                  }
                 />
               )}
             </li>
@@ -209,17 +210,17 @@ export function CardProyect({ proyect }) {
           text={"Ver Detalles"}
           className={"bg-verdeC hover:bg-RojoC"}
         />
-        {proyect.owner.username === username ? (
+        {proyect?.owner?.username === username ? (
           <></>
-        ) : proyect.isCollaborator ? (
+        ) : proyect?.isCollaborator ? (
           <></>
-        ) : proyect.hasPendingRequest ? (
+        ) : proyect?.hasPendingRequest ? (
           <ButtonSmall
             action={handleCancelRequest}
             text={"Cancelar Union"}
             className={"bg-verdeC hover:bg-RojoC"}
           />
-        ) : proyect.isPublic ? (
+        ) : proyect?.isPublic ? (
           <ButtonSmall
             action={handleJoin}
             text={"Unirme"}
@@ -233,6 +234,6 @@ export function CardProyect({ proyect }) {
           />
         )}
       </div>
-    </Card>
+    </Card >
   );
 }

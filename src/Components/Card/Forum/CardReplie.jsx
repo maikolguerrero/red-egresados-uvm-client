@@ -70,15 +70,6 @@ export function CardReplie({ forum, comment, idComment }) {
   return (
     <>
       <div className="flex gap-2 w-full flex-wrap mb-1 h-full items-center">
-        {/* <img
-          className="rounded-full w-4 h-4 md:w-4 xl:w-6 xl:h-6"
-          src={
-            comment.author.profilePicture.url === null
-              ? perfil
-              : comment.author.profilePicture.url
-          }
-          alt="Foto de Perfil"
-        /> */}
         {comment?.author?.profilePicture?.url === null ? (
           // Si no hay foto de perfil, muestra la inicial del username
           <div className="w-4 h-4 md:w-4 md:h-4 xl:w-6 xl:h-6 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -138,9 +129,8 @@ export function CardReplie({ forum, comment, idComment }) {
         <ul className="flex gap-1 md:gap-2 lg:gap-3 flex-wrap font-barolw text-sm md:text-base xl:text-lg">
           <li
             onClick={handleLike}
-            className={`${
-              comment.isLiked ? "text-Blanco bg-RojoC" : "text-Negro bg-Blanco"
-            } flex gap-2 items-center justify-center text-sm  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+            className={`${comment.isLiked ? "text-Blanco bg-RojoC" : "text-Negro bg-Blanco"
+              } flex gap-2 items-center justify-center text-sm  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
           >
             {comment.likeCount}{" "}
             <AiFillLike className={` text-xs md:text-sm xl:text-base`} />
@@ -155,7 +145,7 @@ export function CardReplie({ forum, comment, idComment }) {
             <MdReportProblem className="text-xs md:text-sm xl:text-base" />
           </li>
         </ul>
-      </div>
+      </div >
 
       <ModalNotHeader
         openModal={openReport}
