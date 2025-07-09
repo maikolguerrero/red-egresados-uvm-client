@@ -25,8 +25,10 @@ function InfoProfile({ profile }) {
   })
 
   useEffect(() => {
-    let description = profile?.profile?.professional?.summary.split("\n\n")
-    setDesciption(description)
+    if (profile?.profile?.professional?.summary) {
+      let description = profile?.profile?.professional?.summary.split("\n\n");
+      setDesciption(description);
+    }
   }, [profile])
 
   return (
