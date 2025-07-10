@@ -3,6 +3,7 @@ import { ButtonSecurity } from "../../Components/Buttons/ButtonSecurity";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import { MdAdminPanelSettings, MdEmail, MdReport } from "react-icons/md";
+import { FaGraduationCap } from "react-icons/fa6";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useState } from "react";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
@@ -70,6 +71,21 @@ function Config() {
             ) : (
               <></>
             )}
+
+            {role === "admin" || role === "superadmin" ? (
+              <>
+                <ButtonSecurity
+                  onClick={(e) => {
+                    navigate("/config/graduates");
+                  }}
+                  icono={<FaGraduationCap className="text-6xl" />}
+                  texto={"Agregar de Egresados"}
+                />
+              </>
+            ) : (
+              <></>
+            )}
+
             {role === "superadmin" ? (
               <ButtonSecurity
                 onClick={(e) => {

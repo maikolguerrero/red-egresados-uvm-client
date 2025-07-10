@@ -37,6 +37,7 @@ import Reports from "./views/admin/Reports";
 import VerifyAlumni from "./views/alumni/VerifyAlumni";
 import Admins from "./views/admin/Admins";
 import RecoveryEmail from "./views/RecoveryEmail";
+import ManageGraduates from "./views/admin/ManageGraduates";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -246,6 +247,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Admins />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/config/graduates",
+    element: (
+      <ProtectedRoute>
+        <ManageGraduates />
       </ProtectedRoute>
     ),
   },

@@ -1,11 +1,6 @@
-
-import { Button, Checkbox, Label, Modal, ModalBody, ModalHeader, TextInput } from "flowbite-react";
-import { useRef, useState } from "react";
+import { Modal, ModalBody, ModalHeader } from "flowbite-react";
 
 export function ModalNotHeader({ size, component, openModal, setOpenModal }) {
-
-  const emailInputRef = useRef<HTMLInputElement>(null);
-
   return (
     <>
       <Modal

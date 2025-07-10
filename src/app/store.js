@@ -15,6 +15,7 @@ import alumniReducer from '../features/alumni/alumniSlice';
 import adminsReducer from '../features/admin/adminsSlice';
 import statsReducer from '../features/admin/statsSlice';
 import academicRequestsReducer from '../features/admin/academicRequestsSlice';
+import manageGraduatesReducer from '../features/admin/manageGraduates';
 
 export default configureStore({
   reducer: {
@@ -34,6 +35,7 @@ export default configureStore({
     admins: adminsReducer,
     stats: statsReducer,
     academicRequests: academicRequestsReducer,
+    manageGraduates: manageGraduatesReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false // Opcional: desactivar la verificación de serialización para acciones complejas
