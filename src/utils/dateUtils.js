@@ -276,6 +276,18 @@ export const formatNotification = (dateInput) => {
 
 /**
  * Convierte una fecha UTC a formato local legible
+ * @param {string} isoDateString - Fecha en formato ISO (UTC)
+ * @returns {string} - Fecha formateada como "YYYY-MM-DD"
+ */
+export const getFormattedDateForInput = (isoDateString) => {
+  if (!isoDateString) return '';
+  // Si ya viene en formato "YYYY-MM-DDTHH:mm" o "YYYY-MM-DDTHH:mm:ss.sssZ"
+  // simplemente extraemos la parte de la fecha
+  return isoDateString.split('T')[0];
+};
+
+/**
+ * Convierte una fecha UTC a formato local legible
  * @param {string} utcDateString - Fecha en formato ISO (UTC)
  * @returns {string} - Fecha formateada como "YYYY-MM-DDTHH:MM"
  */

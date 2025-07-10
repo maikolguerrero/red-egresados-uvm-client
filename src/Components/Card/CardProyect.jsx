@@ -91,7 +91,7 @@ export function CardProyect({ proyect }) {
                 </div>
               )}
             >
-              {role === "admin" || role === "superadmin" ? (
+              {(role === "admin" || role === "superadmin") && !proyect?.owner?.username === username ? (
                 <></>
               ) : (
                 <DropdownItem>

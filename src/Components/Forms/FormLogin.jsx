@@ -13,11 +13,7 @@ let defaultValues = {
 function FormLogin(props) {
   const dispatch = useDispatch()
 
-  const [values, setValues] = useState({});
-
-  useEffect(() => {
-    setValues(defaultValues);
-  }, []);
+  const [values, setValues] = useState(defaultValues);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

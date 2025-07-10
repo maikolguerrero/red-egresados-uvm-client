@@ -63,25 +63,25 @@ function Landing() {
         </main>
       ) : (
         <>
-          {landing.carouselItems.length === 0 ? (
+          {landing?.carouselItems.length === 0 ? (
             <></>
           ) : (
             <div className="h-[200px] md:h-[400px] xl:h-[600px] 2xl:h-[650px]">
               <ThemeProvider theme={customTheme}>
                 <Carousel theme={customTheme} slideInterval={5000}>
-                  {landing.carouselItems.map((item, key) => (
-                    <img src={item.url} alt="..." />
+                  {landing?.carouselItems.map((item, key) => (
+                    <img key={key} src={item.url} alt="..." />
                   ))}
                 </Carousel>
               </ThemeProvider>
             </div>
           )}
 
-          {landing.welcomeSections.length === 0 ? (
+          {landing?.welcomeSections.length === 0 ? (
             <></>
           ) : (
-            landing.welcomeSections.map((item, key) => (
-              <section className="flex flex-col justify-center items-center gap-4 pt-16 pb-16 px-4">
+            landing?.welcomeSections.map((item, key) => (
+              <section key={key} className="flex flex-col justify-center items-center gap-4 pt-16 pb-16 px-4">
                 <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
                   {item.title}
                 </h3>
@@ -130,7 +130,7 @@ function Landing() {
             </div>
           </section>
 
-          {landing.featuredSections.length === 0 ? (
+          {landing?.featuredSections.length === 0 ? (
             <></>
           ) : (
             <>
@@ -167,7 +167,7 @@ function Landing() {
             </>
           )}
 
-          {landing.faqs.length === 0 ? (
+          {landing?.faqs.length === 0 ? (
             <></>
           ) : (
             <section className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">

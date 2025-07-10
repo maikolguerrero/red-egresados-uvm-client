@@ -1,7 +1,7 @@
 import { Label } from "flowbite-react";
 import { FaFilter } from "react-icons/fa6";
+import { GrPowerReset } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { searchProyect } from "../../../services/proyects/proyectService";
 
 let styles = {
@@ -13,8 +13,7 @@ let styles = {
 
 function FilterProyect({ values, setValues }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const pagination = useSelector((state) => state.events.pagination);
+  const pagination = useSelector((state) => state.proyects.pagination);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +34,20 @@ function FilterProyect({ values, setValues }) {
         username: values.username.trim() === "" ? null : values.username,
       })
     );
+  };
+
+  const handleReset = (e) => {
+    if (values.status.trim() === "" && values.search.trim() === ""
+      && values.username.trim() === "") {
+      e.preventDefault();
+      return;
+    }
+
+    setValues({
+      status: "",
+      search: "",
+      username: "",
+    });
   };
 
   return (
@@ -90,12 +103,20 @@ function FilterProyect({ values, setValues }) {
           </div>
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <button
             type="submit"
             className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
           >
             <FaFilter /> Filtrar
+          </button>
+          <button
+            onClick={(e) => {
+              handleReset(e);
+            }}
+            className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
+          >
+            <GrPowerReset /> Limpiar
           </button>
         </div>
       </form>

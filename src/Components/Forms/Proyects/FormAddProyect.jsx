@@ -6,8 +6,8 @@ import { IoIosAdd } from "react-icons/io";
 import { Skills } from "../../Skills";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
-import { addForum, editForum } from "../../../services/forum/forumService";
 import { addProyect, editProyect } from "../../../services/proyects/proyectService";
+import { getFormattedDateForInput } from "../../../utils/dateUtils";
 
 let styles = {
   input:
@@ -16,7 +16,7 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
-export function FormAddProyect({proyect, type}) {
+export function FormAddProyect({ proyect, type }) {
   const dispatch = useDispatch();
 
   const [tag, setTag] = useState("");
@@ -30,6 +30,45 @@ export function FormAddProyect({proyect, type}) {
     tags: [],
   });
 
+  const validateDates = () => {
+    const now = new Date().toISOString();
+    const startDate = new Date(values.startDate).toISOString();
+    const endDate = new Date(values.endDate).toISOString();
+
+    // Validar que la fecha de inicio no sea pasada
+    if (startDate < now) {
+      enqueueSnackbar("La fecha de inicio no puede ser una fecha pasada", typeError);
+      return false;
+    }
+
+    // Validar que la fecha de fin no sea anterior a la de inicio
+    if (endDate < startDate) {
+      enqueueSnackbar("La fecha de fin no puede ser anterior a la de inicio", typeError);
+      return false;
+    }
+
+    return true;
+  };
+
+
+  const toLocalDateTimeString = (dateString) => {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+    // Ajustar por el offset de la zona horaria
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().slice(0, 10);
+  };
+
+  const parseLocalDateTime = (localDateTime) => {
+    if (!localDateTime) return '';
+
+    // Convertir la fecha local a un formato ISO que mantenga la hora local
+    const [date, time] = localDateTime.split('T');
+    return `${date}`;
+  };
+
+
   useEffect(() => {
     if (proyect === undefined) {
       return;
@@ -37,8 +76,8 @@ export function FormAddProyect({proyect, type}) {
       setValues({
         title: proyect.title,
         description: proyect.description,
-        startDate: proyect.startDate.split("T")[0],
-        endDate: proyect.endDate.split("T")[0],
+        startDate: getFormattedDateForInput(proyect.startDate),
+        endDate: getFormattedDateForInput(proyect.endDate),
         isPublic: proyect.isPublic,
         status: proyect.status,
         tags: proyect.tags,
@@ -92,12 +131,23 @@ export function FormAddProyect({proyect, type}) {
     if (values.endDate.trim() === "") {
       return enqueueSnackbar("Debe tener fecha de finalizacion tentativa el proyecto", typeError);
     }
+    // Validación de fechas
+    if (!validateDates()) {
+      return;
+    }
     if (values.endDate <= values.startDate) {
       return enqueueSnackbar("La fecha de finalizacion debe ser mayor a la fecha de inicio del proyecto", typeError);
     }
-    
+
+    // Crear copia de values con las fechas formateadas
+    const formData = {
+      ...values,
+      startDate: parseLocalDateTime(values.startDate),
+      endDate: parseLocalDateTime(values.endDate),
+    };
+
     if (proyect === undefined) {
-      dispatch(addProyect(values));
+      dispatch(addProyect(formData));
       setValues({
         title: "",
         description: "",
@@ -110,7 +160,7 @@ export function FormAddProyect({proyect, type}) {
     } else {
       dispatch(editProyect({
         projectId: proyect.id,
-        data: values,
+        data: formData,
         type: type
       }));
     }
@@ -159,7 +209,7 @@ export function FormAddProyect({proyect, type}) {
               <input
                 className={styles.input}
                 type="date"
-                min={0}
+                min={toLocalDateTimeString(new Date().toISOString())}
                 name="startDate"
                 value={values.startDate}
                 onChange={handleInputChange}
@@ -173,7 +223,7 @@ export function FormAddProyect({proyect, type}) {
               <input
                 className={styles.input}
                 type="date"
-                min={0}
+                min={toLocalDateTimeString(new Date().toISOString())}
                 name="endDate"
                 value={values.endDate}
                 onChange={handleInputChange}

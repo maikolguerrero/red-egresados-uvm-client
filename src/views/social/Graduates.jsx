@@ -6,7 +6,6 @@ import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../services/users/usersService";
-import { onChangePage } from "../../features/users/usersSlice";
 import FilterGraduates from "../../Components/Forms/Graduates/FilterGraduates";
 import { Loader } from "../../Components/Loader";
 
@@ -54,11 +53,11 @@ function Graduates() {
   const limit = useSelector((state) => state.users.pagination.limit)
   const loading = useSelector((state) => state.users.loadingPage)
 
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState(defaultValues);
 
-  useEffect(() => {
-    setValues(defaultValues);
-  }, []);
+  // useEffect(() => {
+  //   setValues(defaultValues);
+  // }, []);
 
   useEffect(() => {
     dispatch(

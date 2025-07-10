@@ -1,17 +1,13 @@
-import { Avatar, Button, Carousel, createTheme, ThemeProvider, Timeline, TimelineBody, TimelineContent, TimelineItem, TimelinePoint, TimelineTime, TimelineTitle } from "flowbite-react";
-import Footer from "../Components/Footer";
+import { Carousel, createTheme, ThemeProvider, Timeline, TimelineBody, TimelineContent, TimelineItem, TimelinePoint, TimelineTime, TimelineTitle } from "flowbite-react";
 import Header from "../Components/Header";
 import Nav from "../Components/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getContentHome } from "../services/admin/homeService";
-import { HiArrowNarrowRight, HiInformationCircle } from "react-icons/hi";
 import { searchForum } from "../services/forum/forumService";
 import { searchProyect } from "../services/proyects/proyectService";
 import { getUsers } from "../services/users/usersService";
 import { searchEvent } from "../services/events/eventsService";
-import { FaCircle, FaComments } from "react-icons/fa";
-import { AiFillLike } from "react-icons/ai";
 import { CardForumHome } from "../Components/Card/home/CardForumHome";
 import { CardGraduateHome } from "../Components/Card/home/CardGraduateHome";
 import { CardProyectHome } from "../Components/Card/home/CardProyectHome";
@@ -196,7 +192,7 @@ function Home() {
                       slideInterval={5000}
                     >
                       {home.carouselItems.map((item, key) => (
-                        <img src={item.url} alt="..." />
+                        <img key={key} src={item.url} alt="..." />
                       ))}
                     </Carousel>
                   </ThemeProvider>
@@ -216,16 +212,14 @@ function Home() {
                   ) : (
                     <Timeline theme={customThemeTimeline}>
                       {home.welcomeSections.map((item, key) => (
-                        <>
-                          <TimelineItem>
-                            <TimelinePoint />
-                            <TimelineContent>
-                              <TimelineTime>Consejo #{key + 1}</TimelineTime>
-                              <TimelineTitle>{item.title}</TimelineTitle>
-                              <TimelineBody>{item.description}</TimelineBody>
-                            </TimelineContent>
-                          </TimelineItem>
-                        </>
+                        <TimelineItem key={key}>
+                          <TimelinePoint />
+                          <TimelineContent>
+                            <TimelineTime>Consejo #{key + 1}</TimelineTime>
+                            <TimelineTitle>{item.title}</TimelineTitle>
+                            <TimelineBody>{item.description}</TimelineBody>
+                          </TimelineContent>
+                        </TimelineItem>
                       ))}
                     </Timeline>
                   )}

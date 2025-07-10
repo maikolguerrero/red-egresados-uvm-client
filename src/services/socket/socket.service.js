@@ -62,7 +62,7 @@ class SocketService {
 
     setupEventListeners() {
         this.socket.on('user_status_change', (data) => {
-            this.dispatch({
+            store.dispatch({
                 type: 'chat/setUserOnlineStatus',
                 payload: {
                     userId: data.userId,
