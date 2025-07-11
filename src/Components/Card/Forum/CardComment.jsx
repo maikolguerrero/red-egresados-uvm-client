@@ -58,7 +58,7 @@ export function CardComment({ forum, comment }) {
         }
       }
     }
-    
+
   }, [comment]);
 
   const handleLike = (e) => {
@@ -100,6 +100,7 @@ export function CardComment({ forum, comment }) {
             />
           )}
           <div className="h-full flex items-center">
+
             <p onClick={searchProfile} className="cursor-pointer flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-xs md:text-sm xl:text-base items-center">
               @{comment?.author?.username}
               <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
@@ -108,7 +109,7 @@ export function CardComment({ forum, comment }) {
             </p>
           </div>
 
-          {comment.author.username === username || role === "admin" || role === "superadmin" ? (
+          {comment?.author?.username === username || role === "admin" || role === "superadmin" ? (
             <div>
               <Dropdown
                 inline

@@ -97,7 +97,7 @@ export function CardProyectHome({ proyect }) {
             </Badge>
 
             <Badge
-              color={'dark'}
+              color={'light'}
             >
               {proyect?.collaborators?.length} Miembros
             </Badge>

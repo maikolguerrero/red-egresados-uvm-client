@@ -1,10 +1,7 @@
-import { Button, Label } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { Label } from "flowbite-react";
 import { FaFilter } from "react-icons/fa6";
-import { RiResetLeftFill } from "react-icons/ri";
 import { GrPowerReset } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../../services/users/usersService";
 
 let styles = {
@@ -16,7 +13,6 @@ let styles = {
 
 function FilterGraduates({ values, setValues }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const pagination = useSelector((state) => state.users.pagination);
 
   const handleInputChange = (e) => {

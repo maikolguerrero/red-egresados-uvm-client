@@ -28,13 +28,16 @@ import { URL_API } from "./config";
 import ContentManager from "./views/admin/ContentManager";
 import CMLandingPage from "./views/admin/CMLandingPage";
 import CMHomePage from "./views/admin/CMHomePage";
+import CMAcademicRequests from "./views/admin/CMAcademicRequests";
 import ChangeEmail from "./views/ChangeEmail";
 import ChangePassword from "./views/ChangePassword";
 import { getContentFooter } from "./services/admin/landingService";
+import { getContentAcademicRequests } from "./services/admin/academicRequestsService";
 import Reports from "./views/admin/Reports";
 import VerifyAlumni from "./views/alumni/VerifyAlumni";
 import Admins from "./views/admin/Admins";
 import RecoveryEmail from "./views/RecoveryEmail";
+import ManageGraduates from "./views/admin/ManageGraduates";
 
 /*Enrutador de la web*/
 const router = createBrowserRouter([
@@ -115,6 +118,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CMHomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/content-manager/academic-requests",
+    element: (
+      <ProtectedRoute>
+        <CMAcademicRequests />
       </ProtectedRoute>
     ),
   },
@@ -240,6 +251,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/config/graduates",
+    element: (
+      <ProtectedRoute>
+        <ManageGraduates />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/reset-password",
     element: (
       <ProtectedRoute>
@@ -282,6 +301,7 @@ function App() {
 
   useEffect(() => {
     dispatch(getContentFooter());
+    dispatch(getContentAcademicRequests());
   }, []);
 
   useEffect(() => {

@@ -157,9 +157,9 @@ export function InternalEvent({ event }) {
                   <b>Estado:</b>{" "}
                   <span
                     className={
-                      `${event.endDate > new Date() ? "text-verdeB" : "text-RojoC"} font-medium`}
+                      `${(event.startDate >= new Date() && event.endDate <= new Date()) ? "text-verdeB" : "text-RojoC"} font-medium`}
                   >
-                    {event.endDate > new Date() ? "Activo" : "Inactivo"}
+                    {(event.startDate >= new Date() && event.endDate <= new Date()) ? "Activo" : "Inactivo"}
                   </span>
                 </p>
                 <FaCalendar className="text-verdeC text-2xl" />

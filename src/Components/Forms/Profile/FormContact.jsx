@@ -177,6 +177,7 @@ function FormContact() {
                 className={styles.input}
                 type="date"
                 name="birthDate"
+                max={new Date().toISOString().split("T")[0].split("-")[0] - 18 + "-" + new Date().toISOString().split("T")[0].split("-")[1] + "-" + new Date().toISOString().split("T")[0].split("-")[2]} // Restar 18 años
                 value={valuesPersonalData?.birthDate?.split("T")[0]}
                 onChange={handleInputChangePersonalData}
                 placeholder="Fecha de nacimiento"

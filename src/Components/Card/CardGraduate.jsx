@@ -115,7 +115,7 @@ export function CardGraduate({ user }) {
       </Card>
 
       <ModalNotHeader
-        size={"sm"}
+        size={"xl"}
         openModal={openModal}
         setOpenModal={setOpenModal}
         component={
@@ -128,16 +128,14 @@ export function CardGraduate({ user }) {
             <h4 className="py-1 px-2 border-b-2 mb-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
               Titulos obtenidos en la UVM
             </h4>
-            <div className="flex flex-col gap-2">
+            <ul className="list-inside flex flex-col gap-2">
               {user.carrerasPregrado.map((item, key) => (
-                <BadgeNormal color="bg-verdeD" text={item.carrera} key={key} />
+                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-verdeB" >{item.carrera}</li>
               ))}
-            </div>
-            <div className="">
               {user.programasPostgrado.map((item, key) => (
-                <BadgeNormal color="bg-verdeD" text={item.programa} key={key} />
+                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-RojoC" >{item.programa}</li>
               ))}
-            </div>
+            </ul>
           </div>
         }
       />

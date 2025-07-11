@@ -97,33 +97,33 @@ function Nav() {
             </div>
 
             <ul className="py-4 border-b border-verdeD ">
-              <Link to={"/home"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+              <Link title="Principal" to={"/home"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                 <IoIosHome className="text-2xl" />
                 <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PRINCIPAL</p>
               </Link>
             </ul>
 
             <ul className="py-4 border-b border-verdeD ">
-              <Link to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+              <Link title="Egresados" to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                 <FaGraduationCap className="text-2xl" />
                 <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EGRESADOS</p>
               </Link>
-              <Link to={"/forums"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+              <Link title="Foros" to={"/forums"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                 <FaPeopleGroup className="text-2xl" />
                 <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>FOROS</p>
               </Link>
-              <Link to={"/proyects"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+              <Link title="Proyectos" to={"/proyects"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                 <PiProjectorScreenChartBold className="text-2xl" />
                 <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PROYECTOS</p>
               </Link>
-              <Link to={"/events"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+              <Link title="Eventos" to={"/events"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                 <BsCalendarDate className="text-2xl" />
                 <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EVENTOS</p>
               </Link>
             </ul>
 
             <ul className="py-4 border-b border-verdeD ">
-              <Link to={"/notifications"} className="relative px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+              <Link title="Notificaciones" to={"/notifications"} className="relative px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                 <IoIosNotifications className="text-2xl" />
                 {(unreadCount > 0) && (
                   <span
@@ -134,18 +134,18 @@ function Nav() {
                 )}
                 <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>NOTIFICACIONES</p>
               </Link>
-              <Link to={"/config"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+              <Link title="Configuración" to={"/config"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                 <FaGear className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>CONFIGURACION</p>
+                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>CONFIGURACIÓN</p>
               </Link>
               {role === "egresado" && (
-                <Link to={"/my-profile"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <Link title="Perfil" to={"/my-profile"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                   <FaUser className="text-2xl" />
                   <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PERFIL</p>
                 </Link>
               )}
               {role === "admin" || role === "superadmin" ? (
-                <Link to={"/content-manager"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
+                <Link title="Gestor de Contenido" to={"/content-manager"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
                   <MdEditDocument className="text-2xl" />
                   <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>GESTOR DE CONTENIDO</p>
                 </Link>

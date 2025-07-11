@@ -1,6 +1,6 @@
-import { Button, Label } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { Label } from "flowbite-react";
 import { FaFilter } from "react-icons/fa6";
+import { GrPowerReset } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { searchForum } from "../../../services/forum/forumService";
@@ -12,7 +12,7 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
-function FilterForums({values, setValues}) {
+function FilterForums({ values, setValues }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const pagination = useSelector((state) => state.forums.pagination);
@@ -35,6 +35,18 @@ function FilterForums({values, setValues}) {
         search: values.search.trim() === "" ? null : values.search,
       })
     );
+  };
+
+  const handleReset = (e) => {
+    if (values.category.trim() === "" && values.search.trim() === "") {
+      e.preventDefault();
+      return;
+    }
+
+    setValues({
+      category: "",
+      search: "",
+    });
   };
 
   return (
@@ -76,12 +88,20 @@ function FilterForums({values, setValues}) {
           </div>
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <button
             type="submit"
             className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
           >
             <FaFilter /> Filtrar
+          </button>
+          <button
+            onClick={(e) => {
+              handleReset(e);
+            }}
+            className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
+          >
+            <GrPowerReset /> Limpiar
           </button>
         </div>
       </form>

@@ -106,7 +106,7 @@ export function CardForum({ forum }) {
       <div className="flex justify-between relative">
         <div className="flex gap-2 w-ful flex-wrap mb-3">
           {forum?.author?.profilePicture === undefined ||
-          forum?.author?.profilePicture?.url === null ? (
+            forum?.author?.profilePicture?.url === null ? (
             // Si no hay foto de perfil, muestra la inicial del username
             <div className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
               <span className="text-white text-xs md:text-sm xl:text-base font-bold uppercase">
@@ -118,7 +118,7 @@ export function CardForum({ forum }) {
             <img
               className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
               src={forum?.author?.profilePicture?.url}
-              alt={forum?.author?.username || "Foto de Perfil del Autor"}
+              alt={forum?.author?.username || 'Foto de Perfil del Autor'}
             />
           )}
           <p
@@ -170,8 +170,9 @@ export function CardForum({ forum }) {
           </>
         ) : (
           <></>
-        )}
-      </div>
+        )
+        }
+      </div >
 
       <div
         onClick={handleView}
@@ -184,26 +185,27 @@ export function CardForum({ forum }) {
         <p className="text-xs md:text-sm">{forum?.content}</p>
       </div>
 
-      {forum?.media?.length === 0 ? (
-        <></>
-      ) : (
-        <div className="w-full">
-          <img
-            className="rounded-md mb-2 border border-verdeC"
-            src={forum?.media?.[0]?.url}
-            alt="Multimedia del foro"
-          />
-        </div>
-      )}
+      {
+        forum?.media?.length === 0 ? (
+          <></>
+        ) : (
+          <div className="w-full">
+            <img
+              className="rounded-md mb-2 border border-verdeC"
+              src={forum?.media?.[0]?.url}
+              alt="Multimedia del foro"
+            />
+          </div>
+        )
+      }
 
       <ul className="flex gap-2 md:gap-3 lg:gap-4 flex-wrap font-barolw text-sm md:text-base xl:text-lg">
         <li
           onClick={handleLike}
-          className={`${
-            forum?.isLiked
-              ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
-              : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
-          } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
+          className={`${forum?.isLiked
+            ? "text-Blanco bg-RojoC hover:text-Negro hover:bg-RojoA"
+            : "text-Negro bg-Gris hover:text-Blanco hover:bg-RojoC"
+            } flex gap-2 items-center justify-center  py-1 px-4 rounded-full transition-all duration-300 hover:cursor-pointer`}
         >
           {forum?.likeCount}{" "}
           <AiFillLike className={` text-base md:text-lg xl:text-xl`} />
@@ -229,6 +231,6 @@ export function CardForum({ forum }) {
         size={"3xl"}
         component={<FormAddForum forum={forum} type={"edit"} />}
       />
-    </article>
+    </article >
   );
 }

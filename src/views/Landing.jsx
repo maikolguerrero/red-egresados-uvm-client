@@ -1,10 +1,10 @@
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
-import professionals from "../../public/ProfesionalesUVM.png"
 import { FaGraduationCap } from "react-icons/fa6";
 import { FaUserPlus, FaUsers } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { getContentLanding } from "../services/admin/landingService";
+import { getContentStats } from "../services/admin/statsService";
 import { useDispatch, useSelector } from "react-redux";
 import { Carousel, createTheme, ThemeProvider } from "flowbite-react";
 import { Loader } from "../Components/Loader";
@@ -44,11 +44,12 @@ function Landing() {
   const dispatch = useDispatch();
   const landing = useSelector((state) => state.landing.landingContent);
   const loading = useSelector((state) => state.landing.loadingPage);
-
+  const stats = useSelector((state) => state.stats.statsContent);
   const [accordion, setAccordion] = useState(false)
 
   useEffect(() => {
     dispatch(getContentLanding());
+    dispatch(getContentStats());
   }, []);
 
   return (
@@ -62,25 +63,25 @@ function Landing() {
         </main>
       ) : (
         <>
-          {landing.carouselItems.length === 0 ? (
+          {landing?.carouselItems.length === 0 ? (
             <></>
           ) : (
             <div className="h-[200px] md:h-[400px] xl:h-[600px] 2xl:h-[650px]">
               <ThemeProvider theme={customTheme}>
                 <Carousel theme={customTheme} slideInterval={5000}>
-                  {landing.carouselItems.map((item, key) => (
-                    <img src={item.url} alt="..." />
+                  {landing?.carouselItems.map((item, key) => (
+                    <img key={key} src={item.url} alt="..." />
                   ))}
                 </Carousel>
               </ThemeProvider>
             </div>
           )}
 
-          {landing.welcomeSections.length === 0 ? (
+          {landing?.welcomeSections.length === 0 ? (
             <></>
           ) : (
-            landing.welcomeSections.map((item, key) => (
-              <section className="flex flex-col justify-center items-center gap-4 pt-16 pb-16 px-4">
+            landing?.welcomeSections.map((item, key) => (
+              <section key={key} className="flex flex-col justify-center items-center gap-4 pt-16 pb-16 px-4">
                 <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
                   {item.title}
                 </h3>
@@ -100,7 +101,7 @@ function Landing() {
                 ESTUDIANTES EGRESADOS
               </h5>
               <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                14.596
+                {stats?.graduatesCount}
               </p>
             </div>
 
@@ -109,10 +110,10 @@ function Landing() {
                 <FaUsers className="text-5xl" />
               </figure>
               <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
-                EGRESADOS EN LÍNEA
+                USUARIOS EN LÍNEA
               </h5>
               <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                568
+                {stats?.onlineUsers}
               </p>
             </div>
 
@@ -124,12 +125,12 @@ function Landing() {
                 EGRESADOS REGISTRADOS
               </h5>
               <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                2.435
+                {stats?.registeredGraduates}
               </p>
             </div>
           </section>
 
-          {landing.featuredSections.length === 0 ? (
+          {landing?.featuredSections.length === 0 ? (
             <></>
           ) : (
             <>
@@ -166,7 +167,7 @@ function Landing() {
             </>
           )}
 
-          {landing.faqs.length === 0 ? (
+          {landing?.faqs.length === 0 ? (
             <></>
           ) : (
             <section className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">

@@ -84,8 +84,8 @@ export const apiFetch = async (url, options = {}) => {
     // Procesamos la respuesta
     const data = await response.json();
 
-    if (!response.ok) {
-      throw data;
+    if (!response.success) {
+      return data;
     }
 
     return data;
