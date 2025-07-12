@@ -6,11 +6,12 @@ import { IoSend } from "react-icons/io5";
 import EmojiPicker from 'emoji-picker-react';
 import { enqueueSnackbar } from "notistack";
 import { throttle } from 'lodash';
-import { typeError } from "../../models/alertModels";
+import { typeError, typeSuccess } from "../../models/alertModels";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
 import Message from "../../Components/Chat/Message";
 import OnlineStatus from "../../Components/Chat/OnlineStatus";
+import ButtonSmall from "../../Components/Buttons/buttonSmall";
 import { getProfile } from "../../services/users/usersService";
 import { getMessages, sendMessage } from "../../services/chat/chatService";
 import socketService from "../../services/socket/socket.service";
@@ -26,6 +27,8 @@ export default function Chat() {
     const dispatch = useDispatch();
     const auth = useSelector((state) => state.auth);
     const chat = useSelector((state) => state.chat);
+    const [hasChatPermission, setHasChatPermission] = useState(false);
+    const [pendingRequest, setPendingRequest] = useState(null);
     const { messages } = useSelector(state => state.chat);
     const [message, setMessage] = useState("");
     const [user, setUser] = useState(null);
@@ -147,6 +150,50 @@ export default function Chat() {
         };
     }, [loadMoreMessages, loadingMore, hasMore, initialScrollDone]);
 
+    // useEffect que configura los listeners del socket
+    useEffect(() => {
+        if (!socketService.socket) return;
+
+        const handleChatRequestAccepted = (data) => {
+            if (data.messageId === pendingRequest?.id) {
+                setPendingRequest(null);
+                setHasChatPermission(true);
+                enqueueSnackbar(`Solicitud de chat aceptada`, typeSuccess);
+            }
+        };
+
+        socketService.socket.on('chat_request_accepted', handleChatRequestAccepted);
+
+        return () => {
+            if (socketService.socket) {
+                socketService.socket.off('chat_request_accepted', handleChatRequestAccepted);
+            }
+        };
+    }, [pendingRequest]);
+
+    // Efecto para verificar permisos al cargar el chat
+    useEffect(() => {
+        if (!user || !messages.length) {
+            setHasChatPermission(true);
+            return;
+        }
+
+        const checkPermissions = () => {
+            const initialRequest = messages.find(msg => msg.isInitialRequest);
+            if (initialRequest) {
+                setPendingRequest(initialRequest);
+                setHasChatPermission(initialRequest.status === 'accepted');
+            } else {
+                // Verificar si hay algún mensaje aceptado entre estos usuarios
+                const hasAcceptedMessage = messages.some(msg =>
+                    msg.status === 'accepted' || !msg.isInitialRequest
+                );
+                setHasChatPermission(hasAcceptedMessage);
+            }
+        };
+
+        checkPermissions();
+    }, [messages, user]);
 
     // Efecto para la carga inicial del chat
     useEffect(() => {
@@ -351,7 +398,24 @@ export default function Chat() {
         }
     }, [messages, auth.id, handleMarkAsRead]);
 
+    // Función para aceptar la solicitud
+    const handleAcceptRequest = async () => {
+        try {
+            await socketService.acceptChatRequest(pendingRequest.id);
+            setPendingRequest({ ...pendingRequest, status: 'accepted' });
+            setHasChatPermission(true);
+            enqueueSnackbar('Solicitud de chat aceptada', typeSuccess);
+        } catch (error) {
+            enqueueSnackbar(error.message, typeError);
+        }
+    };
+
     const handleSendMessage = async () => {
+        if (!hasChatPermission) {
+            enqueueSnackbar("Debes esperar a que el usuario acepte tu solicitud de chat", typeError);
+            return;
+        }
+
         if (message.trim() === "") {
             enqueueSnackbar("No puedes enviar un mensaje vacío", typeError);
             return;
@@ -514,12 +578,16 @@ export default function Chat() {
                         {/* si no hay mensajes */}
                         {groupedMessages.length === 0 && (
                             <div className="flex flex-col items-center justify-center h-full w-full">
-                                <p className="text-lg font-bold text-verdeA text-center">
-                                    ¡Inicia una conversación con {user?.nombreCompleto}!
+                                <p className="text-xl font-bold text-verdeD text-center">
+                                    ¡Inicia una conversación!
+                                </p>
+                                <p className="text-sm font-bold text-verdeB text-center mt-2">
+                                    Puedes enviar un solo mensaje hasta que {user?.nombreCompleto} apruebe tu solicitud para iniciar la conversación
                                 </p>
                             </div>
                         )}
 
+                        {/* mensajes */}
                         {groupedMessages.map((group) => {
                             const dateKey = new Date(group.date).toISOString().split('T')[0];
                             return (
@@ -557,42 +625,63 @@ export default function Chat() {
                                     })}
                                 </div>
                             )
-                        })
-                        }
+                        })}
+
+                        {/* solicitud de chat */}
+                        {pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
+                            <div className="fixed bottom-20 left-0 right-0 bg-verdeA font-bold text-white p-4 ">
+                                <div className="container mx-auto flex  items-center p-2">
+                                    <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
+                                    <ButtonSmall
+                                        text={"Aceptar solicitud"}
+                                        className={"bg-verdeC hover:bg-RojoC"}
+                                        action={handleAcceptRequest}
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div >
 
                     {/* Contenedor principal de la barra de mensaje */}
-                    < div className="p-4 border-t-2 border-verdeD bg-Gris" >
-                        <div className="flex items-end gap-2">
-                            <button
-                                ref={emojiButtonRef}
-                                onClick={handleEmojiButtonClick}
-                                className="text-verdeD hover:text-RojoC transition-colors duration-200 p-2 rounded-full">
-                                <BsEmojiSmile className="text-xl"
-                                />
-                            </button>
-                            <div className="flex-1 min-h-[40px] flex items-end">
-                                <textarea
-                                    ref={textareaRef}
-                                    value={message}
-                                    onChange={handleChange}
-                                    onKeyDown={handleKeyDown}
-                                    placeholder="Escribe un mensaje..."
-                                    rows={1}
-                                    className="w-full h-full p-2 text-Negro font-barolw text-sm resize-none
-                                   bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
-                                    style={{ overflowY: 'hidden' }}
-                                />
+                    <div className={`p-4 border-t-2 border-verdeD bg-Gris`}>
+                        {!hasChatPermission && pendingRequest?.sender.id === auth.id ? (
+                            <div className="text-center text-sm text-verdeC">
+                                Esperando a que {user.nombreCompleto} acepte tu solicitud de chat
                             </div>
+                        ) :
+                            (
+                                <div className="flex items-end gap-2">
+                                    <button
+                                        ref={emojiButtonRef}
+                                        onClick={handleEmojiButtonClick}
+                                        className="text-verdeD hover:text-RojoC transition-colors duration-200 p-2 rounded-full">
+                                        <BsEmojiSmile className="text-xl"
+                                        />
+                                    </button>
+                                    <div className="flex-1 min-h-[40px] flex items-end">
+                                        <textarea
+                                            ref={textareaRef}
+                                            value={message}
+                                            onChange={handleChange}
+                                            onKeyDown={handleKeyDown}
+                                            placeholder="Escribe un mensaje..."
+                                            rows={1}
+                                            className="w-full h-full p-2 text-Negro font-barolw text-sm resize-none
+                                   bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
+                                            style={{ overflowY: 'hidden' }}
+                                        />
+                                    </div>
 
-                            <button
-                                onClick={handleSendMessage}
-                                disabled={message.trim() === ""}
-                                className="bg-verdeA hover:bg-verdeD text-white align-center p-2 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                <IoSend className="text-xl" />
-                            </button>
-                        </div>
+                                    <button
+                                        onClick={handleSendMessage}
+                                        disabled={message.trim() === ""}
+                                        className="bg-verdeA hover:bg-verdeD text-white align-center p-2 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <IoSend className="text-xl" />
+                                    </button>
+                                </div>
+                            )}
+
                     </div >
 
                     {/* Selector de Emojis */}

@@ -13,8 +13,31 @@ const chatSlice = createSlice({
         unreadCount: 0,
         contactViewingStatus: {}, // { userId: boolean }
         userOnlineStatus: {}, // { userId: { isOnline: boolean, lastSeen: Date } }
+        chatRequests: {} // Para rastrear solicitudes de chat
     },
     reducers: {
+        chatRequestAccepted: (state, action) => {
+            const { messageId, acceptorId } = action.payload;
+
+            // Actualizar el estado del mensaje en la lista de mensajes
+            state.messages = state.messages.map(msg => {
+                if (msg.id === messageId) {
+                    return { ...msg, status: 'accepted' };
+                }
+                return msg;
+            });
+
+            // Si el mensaje aceptado es el currentChat, actualizar permisos
+            if (state.currentChat?.userId === acceptorId ||
+                state.messages.some(m => m.sender.id === acceptorId || m.receiver.id === acceptorId)) {
+                state.hasChatPermission = true;
+            }
+
+            // Eliminar la solicitud pendiente si existe
+            if (state.pendingRequest?.id === messageId) {
+                state.pendingRequest = null;
+            }
+        },
         updateConversationOnNewMessage: (state, action) => {
             const message = action.payload;
             const contactId = message.sender.id === state.currentUser.id
@@ -177,6 +200,7 @@ const chatSlice = createSlice({
 });
 
 export const {
+    chatRequestAccepted,
     setConversations,
     addMessage,
     setMessagesRead,

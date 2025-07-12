@@ -72,6 +72,16 @@ class SocketService {
             });
         });
 
+        this.socket.on('chat_request_accepted', (data) => {
+            store.dispatch({
+                type: 'chat/chatRequestAccepted',
+                payload: {
+                    messageId: data.messageId,
+                    acceptorId: data.acceptorId
+                }
+            });
+        });
+
         this.socket.on('new_private_message', (message) => {
             store.dispatch({ type: 'chat/addMessage', payload: message });
 
@@ -141,6 +151,23 @@ class SocketService {
             store.dispatch({
                 type: 'notifications/setUnreadCount',
                 payload: count
+            });
+        });
+    }
+
+    acceptChatRequest(messageId) {
+        return new Promise((resolve, reject) => {
+            if (!this.isConnected) {
+                reject(new Error('No hay conexión con el servidor'));
+                return;
+            }
+
+            this.socket.emit('accept_chat_request', { messageId }, (response) => {
+                if (response?.success) {
+                    resolve(response.message);
+                } else {
+                    reject(new Error(response?.error || 'Error al aceptar solicitud'));
+                }
             });
         });
     }
