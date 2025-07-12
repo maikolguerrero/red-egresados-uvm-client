@@ -1,32 +1,24 @@
-export const typeSuccess = {
-  variant: "success",
+const defaultAlert = {
   autoHideDuration: 3000,
   anchorOrigin: {
-    vertical: "bottom",
+    vertical: "top",
     horizontal: "right",
   },
+};
+
+export const typeSuccess = {
+  ...defaultAlert,
+  variant: "success",
 };
 export const typeError = {
+  ...defaultAlert,
   variant: "error",
-  autoHideDuration: 3000,
-  anchorOrigin: {
-    vertical: "bottom",
-    horizontal: "right",
-  },
 };
 export const typeWarning = {
+  ...defaultAlert,
   variant: "warning",
-  autoHideDuration: 3000,
-  anchorOrigin: {
-    vertical: "bottom",
-    horizontal: "right",
-  },
 };
 export const typeInfo = {
+  ...defaultAlert,
   variant: "info",
-  autoHideDuration: 3000,
-  anchorOrigin: {
-    vertical: "bottom",
-    horizontal: "right",
-  },
 };

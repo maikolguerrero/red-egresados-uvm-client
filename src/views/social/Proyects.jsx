@@ -56,14 +56,13 @@ function Proyects() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(8);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState(defaultValues);
 
   const max = Math.ceil(data.length / perPage);
 
   const [openAddProyect, setOpendAddProyect] = useState(false);
 
   useEffect(() => {
-    setValues(defaultValues);
     dispatch(
       searchProyect({
         page: 1,

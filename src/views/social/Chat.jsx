@@ -412,7 +412,7 @@ export default function Chat() {
                     )}
                     <div className={`w-full ${isMobile ? 'h-[100vh]' : 'h-[89.5vh]'} flex items-center justify-center`}>
                         <div className="flex items-center justify-center w-full">
-                            <p className="font-barolw"><Loader /></p>
+                            <Loader />
                         </div>
                     </div>
                 </main>
