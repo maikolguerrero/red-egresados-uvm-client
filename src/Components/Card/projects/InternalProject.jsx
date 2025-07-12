@@ -14,6 +14,7 @@ import { CardRequest } from "./CardRequest";
 import { Loader } from "../../Loader";
 import { FormEditRole } from "../../Forms/Proyects/FormEditRole";
 import { useNavigate } from "react-router-dom";
+import { forEach } from "lodash";
 
 export function InternalProject({ proyect }) {
   const username = useSelector((state) => state.auth.username);
@@ -25,6 +26,17 @@ export function InternalProject({ proyect }) {
   const [editProyect, setEditProyect] = useState(false);
   const [openRequest, setOpenRequest] = useState(false);
   const [editRole, setEditRole] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    proyect?.collaborators?.forEach((item) => {
+      if (item?.user?.username === username) {
+        if (item.role === "admin") {
+          setIsAdmin(true);
+        }
+      }
+    });
+  }, [proyect]);
 
   const handleDelete = (e) => {
     dispatch(
@@ -104,17 +116,24 @@ export function InternalProject({ proyect }) {
                     className="w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
                     src={proyect?.owner?.profilePicture?.url}
                     alt={
-                      proyect?.owner?.username || "Foto de Perfil del Propietario"
+                      proyect?.owner?.username ||
+                      "Foto de Perfil del Propietario"
                     }
                   />
                 )}
 
-                <p onClick={searchProfile} className="cursor-pointer flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center">
+                <p
+                  onClick={searchProfile}
+                  className="cursor-pointer flex gap-2 font-semibold text-RojoC font-barolw text-sm md:text-base xl:text-lg items-center"
+                >
                   @{proyect?.owner?.username}
                 </p>
               </div>
 
-              {proyect.owner.username === username || role === "admin" || role === "superadmin" ? (
+              {proyect.owner.username === username ||
+                role === "admin" ||
+                role === "superadmin" ||
+                isAdmin === true ? (
                 <>
                   <Dropdown
                     inline
@@ -126,18 +145,8 @@ export function InternalProject({ proyect }) {
                       </div>
                     )}
                   >
-                    {role === "admin" || role === "superadmin" ? (
-                      <></>
-                    ) : (
+                    {isAdmin && proyect.isPublic === false ? (
                       <>
-                        <DropdownItem>
-                          <span
-                            onClick={(e) => setEditProyect(true)}
-                            className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                          >
-                            <MdEdit /> Editar
-                          </span>
-                        </DropdownItem>
                         <DropdownItem>
                           <span
                             onClick={handleViewRequest}
@@ -147,15 +156,46 @@ export function InternalProject({ proyect }) {
                           </span>
                         </DropdownItem>
                       </>
+                    ) : (
+                      <>
+                        {role === "admin" || role === "superadmin" ? (
+                          <></>
+                        ) : (
+                          <>
+                            <DropdownItem>
+                              <span
+                                onClick={(e) => setEditProyect(true)}
+                                className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                              >
+                                <MdEdit /> Editar
+                              </span>
+                            </DropdownItem>
+                            {proyect.isPublic === false ? (
+                              <>
+                                <DropdownItem>
+                                  <span
+                                    onClick={handleViewRequest}
+                                    className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                                  >
+                                    <IoEnter /> Solicitudes
+                                  </span>
+                                </DropdownItem>
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        )}
+                        <DropdownItem>
+                          <span
+                            onClick={handleDelete}
+                            className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
+                          >
+                            <MdDelete /> Eliminar
+                          </span>
+                        </DropdownItem>
+                      </>
                     )}
-                    <DropdownItem>
-                      <span
-                        onClick={handleDelete}
-                        className="flex gap-1 items-center px-4 py-2 text-sm uppercase font-medium font-barlow-condensed text-Negro hover:bg-gray-100"
-                      >
-                        <MdDelete /> Eliminar
-                      </span>
-                    </DropdownItem>
                   </Dropdown>
 
                   <ModalNotHeader
@@ -354,9 +394,12 @@ export function InternalProject({ proyect }) {
                           />
                         )}
 
-                        <p onClick={(e) => {
-                          navigate(`/graduates/${item?.user?.username}`);
-                        }} className="cursor-pointer flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center">
+                        <p
+                          onClick={(e) => {
+                            navigate(`/graduates/${item?.user?.username}`);
+                          }}
+                          className="cursor-pointer flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center"
+                        >
                           @{item?.user?.username} <span>-</span>
                           {item?.role === "creator" ? (
                             <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">

@@ -40,6 +40,8 @@ export function FormCarrouselHome({home}) {
       dispatch(addMediaHome({
         data: formData
       }))
+      setImage(false);
+      setPicture("")
     }
   };
 

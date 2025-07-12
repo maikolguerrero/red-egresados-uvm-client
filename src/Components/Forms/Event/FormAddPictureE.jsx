@@ -52,11 +52,11 @@ export function FormAddPictureE({setOpenModal}) {
     <>
       <form className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          Agregar Foto al Foro
+          Agregar Imagen al evento
         </h5>
         <div className="flex flex-col gap-1">
           <Label className="mb-2 block" htmlFor="small-file-upload">
-            Selecciona la foto:
+            Selecciona la imagen:
           </Label>
           <FileInput
             onChange={onImageChange}

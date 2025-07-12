@@ -11,6 +11,7 @@ import { FormAddEvent } from "../Forms/Event/FormAddEvent";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { IoIosCamera } from "react-icons/io";
 import { FormEditImage } from "../Forms/Event/FormEditImage";
+import logoUVM from "../../../public/LogoUVM.png"
 
 export function CardEvent({event}) {
   const dispatch = useDispatch();
@@ -64,11 +65,13 @@ export function CardEvent({event}) {
     <div className="w-full bg-white border border-verdeD rounded-lg shadow-sm ">
       <a>
         {event.media.length === 0 ? (
-          <img
-            src={"https://www.losprincipios.org/images/default.jpg"}
-            className="rounded-t-lg border-b border-verdeD w-full"
-            alt="Multimedia Evento"
-          />
+          <div className="flex rounded-t-lg w-full h-[300px] justify-center items-center bg-slate-200 border-verdeD border-b">
+            <img
+              src={logoUVM}
+              className="rounded-t-lg w-56"
+              alt="Multimedia Evento"
+            />
+          </div>
         ) : (
           <img
             className="rounded-t-lg border-b border-verdeD w-full"
@@ -83,11 +86,15 @@ export function CardEvent({event}) {
           {event.title}
         </h5>
         <h6 className="text-RojoC text-xs md:text-sm xl:text-base font-semibold">
-          <span className="text-verdeD">INICIA: </span>{formatUTCDateToLocalAMPM(event.startDate).date} A LAS {" "}
+          <span className="text-verdeD">INICIA: </span>
+          {formatUTCDateToLocalAMPM(event.startDate).date} A LAS{" "}
           {formatUTCDateToLocalAMPM(event.startDate).time}
         </h6>
         <h6 className="text-RojoC mb-8 text-xs md:text-sm xl:text-base font-semibold">
-          <span className="text-verdeD">{active ? "FINALIZA: " : "FINALIZO: "}</span>{formatUTCDateToLocalAMPM(event.endDate).date} A LAS {" "}
+          <span className="text-verdeD">
+            {active ? "FINALIZA: " : "FINALIZO: "}
+          </span>
+          {formatUTCDateToLocalAMPM(event.endDate).date} A LAS{" "}
           {formatUTCDateToLocalAMPM(event.endDate).time}
         </h6>
         <p className="mb-3 font-medium text-Negro ">{event.description}</p>
@@ -132,7 +139,10 @@ export function CardEvent({event}) {
               >
                 <MdEdit /> Editar Evento
               </DropdownItem>
-              <DropdownItem onClick={(e) => setOpenEditImage(true)} className="flex gap-2 items-center text-Negro">
+              <DropdownItem
+                onClick={(e) => setOpenEditImage(true)}
+                className="flex gap-2 items-center text-Negro"
+              >
                 <IoIosCamera /> Editar Imagen
               </DropdownItem>
               <DropdownItem

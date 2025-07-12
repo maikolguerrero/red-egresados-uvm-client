@@ -142,7 +142,7 @@ function Home() {
         limit: 4,
         category: null,
         search: null,
-        sort: "likes",
+        sort: "popular",
       })
     );
     dispatch(
