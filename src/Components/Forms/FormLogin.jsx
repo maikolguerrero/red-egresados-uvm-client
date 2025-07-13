@@ -62,9 +62,9 @@ function FormLogin(props) {
             </Link>
           </p>
           <p className="">
-            ¿Registraste mal tu correo?{" "}
+            ¿No has verificado tu cuenta?{" "}
             <Link to={"/recover/change-email"} className="text-verdeC">
-              Cambialo Aquí.
+              Verificala Aquí.
             </Link>
           </p>
           <p>

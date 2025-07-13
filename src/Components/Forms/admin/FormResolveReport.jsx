@@ -79,7 +79,7 @@ export function FormResolveReport({ reportId }) {
               <option value="warning">Advertencia</option>
               <option value="deleted">Eliminar</option>
               <option value="no_action">Sin Accion</option>
-              <option value="banned_user">Banearlo</option>
+              <option value="banned_user">Suspender usuario</option>
             </select>
           </div>
           <div className="w-full flex flex-col relative">
@@ -101,7 +101,7 @@ export function FormResolveReport({ reportId }) {
           {values.action === "banned_user" ? (
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Tiempo del baneo:
+                Tiempo de suspensión:
               </Label>
               <div className="flex gap-2">
                 <select

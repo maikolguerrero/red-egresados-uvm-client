@@ -1,10 +1,9 @@
-import perfil from "../../../../public/Perfil.jpg"
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import { FaCalendarCheck, FaCalendarDay, FaEllipsisV } from "react-icons/fa";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { BiWorld } from "react-icons/bi";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
@@ -15,6 +14,7 @@ import { CardRequest } from "./CardRequest";
 import { Loader } from "../../Loader";
 import { FormEditRole } from "../../Forms/Proyects/FormEditRole";
 import { useNavigate } from "react-router-dom";
+import EntityNotFound from "../../EntityNotFound";
 import { forEach } from "lodash";
 
 export function InternalProject({ proyect }) {
@@ -84,11 +84,9 @@ export function InternalProject({ proyect }) {
   return (
     <>
       {proyect?.id === undefined ? (
-        <article className="flex flex-col gap-1 w-full pb-8">
-          <h4 className="uppercase text-xl font-medium">
-            Este proyecto ha sido eliminado
-          </h4>
-        </article>
+        <>
+          <EntityNotFound entity="Proyecto" entityPath="/projects" />
+        </>
       ) : (
         <>
           <article className="flex flex-col gap-6">
@@ -132,9 +130,9 @@ export function InternalProject({ proyect }) {
               </div>
 
               {proyect.owner.username === username ||
-              role === "admin" ||
-              role === "superadmin" ||
-              isAdmin === true ? (
+                role === "admin" ||
+                role === "superadmin" ||
+                isAdmin === true ? (
                 <>
                   <Dropdown
                     inline
@@ -233,8 +231,8 @@ export function InternalProject({ proyect }) {
                             </>
                           ) : (
                             <>
-                              {proyect?.request?.map((item) => (
-                                <CardRequest request={item} project={proyect} />
+                              {proyect?.request?.map((item, key) => (
+                                <CardRequest request={item} project={proyect} key={key} />
                               ))}
                             </>
                           )}
@@ -303,12 +301,12 @@ export function InternalProject({ proyect }) {
                     {proyect?.status === "not_started"
                       ? "Sin Iniciar"
                       : proyect?.status === "in_progress"
-                      ? "En Progreso"
-                      : proyect?.status === "paused"
-                      ? "Pausado"
-                      : proyect?.status === "completed"
-                      ? "Completado"
-                      : "Cancelado"}
+                        ? "En Progreso"
+                        : proyect?.status === "paused"
+                          ? "Pausado"
+                          : proyect?.status === "completed"
+                            ? "Completado"
+                            : "Cancelado"}
                   </span>
                 </p>
 
@@ -339,7 +337,7 @@ export function InternalProject({ proyect }) {
                   onClick={handleLeaveProyect}
                   className="text-xs px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-800 font-barlow-semi-condensed font-medium uppercase"
                 >
-                  Salirme del proyecto
+                  Salir del proyecto
                 </button>
               ) : proyect.hasPendingRequest ? (
                 <button
@@ -373,8 +371,8 @@ export function InternalProject({ proyect }) {
                   Colaboradores
                 </h5>
                 <ul className="px-2 flex flex-col gap-3">
-                  {proyect?.collaborators?.map((item) => (
-                    <li className="text-RojoC font-medium text-sm flex justify-between items-center">
+                  {proyect?.collaborators?.map((item, key) => (
+                    <li key={key} className="text-RojoC font-medium text-sm flex justify-between items-center">
                       <div className="flex items-center gap-2">
                         {item?.user?.profilePicture?.url === null ? (
                           // Si no hay foto de perfil, muestra la inicial del username
@@ -416,50 +414,53 @@ export function InternalProject({ proyect }) {
                         </p>
                       </div>
 
-                      {proyect?.owner?.username === username ? (
-                        item?.user?.username === username ? (
-                          <></>
-                        ) : (
-                          <>
-                            <div className="flex gap-2">
-                              <button
-                                onClick={(e) => setEditRole(true)}
-                                className="text-xs px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 font-barlow-semi-condensed font-medium uppercase"
-                              >
-                                Rol
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  dispatch(
-                                    expelCollaborator({
-                                      projectId: proyect?.id,
-                                      username: item?.user?.username,
-                                    })
-                                  );
-                                }}
-                                className="text-xs px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-800 font-barlow-semi-condensed font-medium uppercase"
-                              >
-                                Expulsar
-                              </button>
-                            </div>
+                      {
+                        proyect?.owner?.username === username ? (
+                          item?.user?.username === username ? (
+                            <></>
+                          ) : (
+                            <>
+                              <div className="flex gap-2">
+                                <button
+                                  onClick={(e) => setEditRole(true)}
+                                  className="text-xs px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 font-barlow-semi-condensed font-medium uppercase"
+                                >
+                                  Rol
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    dispatch(
+                                      expelCollaborator({
+                                        projectId: proyect?.id,
+                                        username: item?.user?.username,
+                                      })
+                                    );
+                                  }}
+                                  className="text-xs px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-800 font-barlow-semi-condensed font-medium uppercase"
+                                >
+                                  Expulsar
+                                </button>
+                              </div>
 
-                            <ModalNotHeader
-                              openModal={editRole}
-                              setOpenModal={setEditRole}
-                              size={"3xl"}
-                              component={<FormEditRole collaborator={item} />}
-                            />
-                          </>
+                              <ModalNotHeader
+                                openModal={editRole}
+                                setOpenModal={setEditRole}
+                                size={"3xl"}
+                                component={<FormEditRole collaborator={item} />}
+                              />
+                            </>
+                          )
+                        ) : (
+                          <></>
                         )
-                      ) : (
-                        <></>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      }
+                    </li >
+                  ))
+                  }
+                </ul >
+              </div >
             )}
-          </article>
+          </article >
         </>
       )}
     </>

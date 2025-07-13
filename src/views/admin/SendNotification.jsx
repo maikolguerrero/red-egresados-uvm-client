@@ -1,19 +1,18 @@
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
+import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import ButtonBig from "../../Components/Buttons/ButtonBig";
 import { useState } from "react";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
 import { useSelector } from "react-redux";
 import { Loader } from "../../Components/Loader";
-import { FormEgresadoPregrado } from "../../Components/Forms/admin/graduates/FormEgresadoPregrado";
-import { FormEgresadoPostgrado } from "../../Components/Forms/admin/graduates/FormEgresadoPostgrado";
+import { FormNotification } from "../../Components/Forms/admin/notification/FormNotification";
 
-function ManageGraduates() {
-    const loader = useSelector((state) => state.manageGraduates.loading);
-    const loading = useSelector((state) => state.manageGraduates.loadingPage);
+export default function SendNotification() {
+    const loader = useSelector((state) => state.sendNotification.loading);
+    const loading = useSelector((state) => state.sendNotification.loadingPage);
 
-    const [modalPregrado, setModalPregrado] = useState(false);
-    const [modalPostgrado, setModalPostgrado] = useState(false);
+    const [modalSendNotification, setModalSendNotification] = useState(false);
 
     return (
         <>
@@ -43,35 +42,26 @@ function ManageGraduates() {
                             </h4>
                             <div className="flex flex-wrap justify-center gap-6">
                                 <ButtonBig
-                                    text={"Egresados de Pregrado"}
+                                    text={"Enviar Notificación a Todos los egresados"}
                                     className={"bg-verdeC hover:bg-RojoC w-[250px]"}
-                                    action={(e) => setModalPregrado(true)}
-                                />
-                                <ButtonBig
-                                    text={"Egresados de Postgrado"}
-                                    className={"bg-verdeB hover:bg-RojoC w-[250px]"}
-                                    action={(e) => setModalPostgrado(true)}
+                                    action={(e) => setModalSendNotification(true)}
                                 />
                             </div>
                         </div>
 
                         <ModalNotHeader
-                            openModal={modalPregrado}
-                            setOpenModal={setModalPregrado}
-                            size={"7xl"}
-                            component={<FormEgresadoPregrado />}
+                            openModal={modalSendNotification}
+                            setOpenModal={setModalSendNotification}
+                            size={"xl"}
+                            component={<FormNotification />}
                         />
-                        <ModalNotHeader
-                            openModal={modalPostgrado}
-                            setOpenModal={setModalPostgrado}
-                            size={"7xl"}
-                            component={<FormEgresadoPostgrado />}
-                        />
+
+                        <div className="absolute right-8 bottom-6">
+                            <ButtonMessages />
+                        </div>
                     </>
                 )}
             </div>
         </>
     );
 }
-
-export default ManageGraduates;

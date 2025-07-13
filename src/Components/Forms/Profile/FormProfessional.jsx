@@ -53,22 +53,15 @@ function FormProfessional() {
   const profile = useSelector((state) => state.users.profile);
   const dispatch = useDispatch();
 
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState(defaultValues);
   const [skills, setSkills] = useState([]);
   const [interests, setInterests] = useState([]);
   const [education, setEducation] = useState([]);
   const [certifications, setCertifications] = useState([]);
   const [experience, setExperience] = useState([]);
-  const [valuesEd, setValuesEd] = useState({});
-  const [valuesCr, setValuesCr] = useState({});
-  const [valuesEx, setValuesEx] = useState({});
-
-  useEffect(() => {
-    setValues(defaultValues);
-    setValuesEd(defaultEd);
-    setValuesCr(defaultCr);
-    setValuesEx(defaultEx);
-  }, []);
+  const [valuesEd, setValuesEd] = useState(defaultEd);
+  const [valuesCr, setValuesCr] = useState(defaultCr);
+  const [valuesEx, setValuesEx] = useState(defaultEx);
 
   useEffect(() => {
     setSkills(profile.profile.professional.skills);

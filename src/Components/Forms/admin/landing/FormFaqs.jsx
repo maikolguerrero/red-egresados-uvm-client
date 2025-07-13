@@ -136,7 +136,7 @@ export function FormFaqs({landing}) {
               ) : (
                 <ul className="flex flex-col gap-2 pb-3 mb-3 border-b-2 border-verdeD">
                   {landingContent.faqs.map((item, key) => (
-                    <li>
+                    <li key={key}>
                       <ItemBabge
                         key={key}
                         text={item.question}

@@ -123,7 +123,7 @@ export function CardForum({ forum }) {
           )}
           <p
             onClick={searchProfile}
-            className="flex z-50 gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center cursor-pointer"
+            className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center cursor-pointer"
           >
             @{forum?.author?.username}
             <FaCircle className="text-Negro text-[6px] md:text-[9px] xl:text-xs flex justify-center items-center h-full" />{" "}

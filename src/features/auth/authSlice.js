@@ -7,7 +7,8 @@ import {
   postData,
   resendEmailFetch,
   verifyEmail,
-  verifySesion } from '../../services/auth/authService';
+  verifySesion
+} from '../../services/auth/authService';
 import { changeEmail, changeEmailRecovery, changeRecoveryEmail, changeRecoveryPassword } from '../../services/auth/changeEmailService';
 
 export const authSlice = createSlice({
@@ -15,6 +16,7 @@ export const authSlice = createSlice({
   initialState: {
     value: "No found",
     loading: true,
+    checked: false,
     error: "",
     message: "",
     sessionActive: false,
@@ -32,6 +34,9 @@ export const authSlice = createSlice({
     },
     desactived: (state) => {
       state.value = "No found"
+    },
+    markAsChecked: (state) => {
+      state.checked = true;
     }
   },
   extraReducers: (builder) => {
@@ -56,6 +61,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(loginUserFetch.fulfilled, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.message = action.payload.message
       state.id = action.payload.id
       state.username = action.payload.username
@@ -64,6 +70,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(loginUserFetch.rejected, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.error = action.error.message;
     });
 
@@ -73,6 +80,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(verifySesion.fulfilled, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.message = action.payload.message
       state.id = action.payload.id
       state.username = action.payload.username
@@ -81,6 +89,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(verifySesion.rejected, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.error = action.error.message;
     });
 
@@ -90,6 +99,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(logoutSesion.fulfilled, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.message = action.payload
       state.id = ""
       state.username = ""
@@ -99,6 +109,7 @@ export const authSlice = createSlice({
     builder.addCase(logoutSesion.rejected, (state, action) => {
       state.sessionActive = false;
       state.loading = false;
+      state.checked = true;
       state.error = action.error.message;
     });
 
@@ -214,6 +225,6 @@ export const authSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { actived, desactived } = authSlice.actions;
+export const { actived, desactived, markAsChecked } = authSlice.actions;
 
 export default authSlice.reducer

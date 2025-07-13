@@ -91,14 +91,14 @@ export function FormCarrouselHome({home}) {
             LISTA DE IMÁGENES:
           </h6>
 
-          {home.carouselItems.length === 0 ? (
+          {home?.carouselItems?.length === 0 ? (
             <p className="px-2 font-barlow-semi-condensed text-RojoC font-medium">
               No hay ninguna imagen en la galeria...
             </p>
           ) : (
             <ul className="px-2 flex flex-col gap-4">
-              {home.carouselItems.map((item, key) => (
-                <li className="list-disc font-medium font-barolw uppercase flex items-center justify-between">
+              {home?.carouselItems?.map((item, key) => (
+                <li key={key} className="list-disc font-medium font-barolw uppercase flex items-center justify-between">
                   - Imagen {key + 1}
                   <div className="flex gap-2">
                     <button
@@ -112,8 +112,8 @@ export function FormCarrouselHome({home}) {
                     </button>
                     <button
                       onClick={(e) => {
-                        for (let i = 0; i < home.carouselItems.length; i++) {
-                          if (item.id === home.carouselItems[i].id) {
+                        for (let i = 0; i < home?.carouselItems?.length; i++) {
+                          if (item.id === home?.carouselItems[i].id) {
                             dispatch(
                               deleteMediaHome({
                                 idItem: item.id,

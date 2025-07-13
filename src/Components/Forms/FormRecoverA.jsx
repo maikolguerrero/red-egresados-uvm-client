@@ -36,28 +36,32 @@ function FormRecoverA(props) {
         className="flex flex-col gap-8 w-full"
       >
         <p className="text-Negro text- md:text-base font-barlow-condensed font-medium text-center">
-          Ingresa tu <a className="text-RojoC">correo electronico</a>.
+          Ingresa tu <span className="text-RojoC">nombre de usuario</span> o <span className="text-RojoC">correo electrónico</span>.
         </p>
         <div className="w-full flex relative">
           <input
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"
-            type="email"
+            type="text"
             name="emailOrUsername"
             value={values.emailOrUsername}
             onChange={handleInputChange}
-            placeholder="Correo de recuperacion..."
+            placeholder="Nombre de usuario o correo de tu cuenta..."
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:justify-center gap-4">
-          <Link to={"/login"} className="w-full">
-            <Button className={"w-full"} text="INICIAR SESIÓN" />
-          </Link>
+        <div className="grid grid-cols-1 lg:grid-cols-1 lg:justify-center gap-4">
           <Button
             className={"w-full"}
             action={handleSubmit}
-            text="ENVIAR CODIGO"
+            text="ENVIAR CORREO PARA RESTABLECER CONTRASEÑA"
           />
+          <div className="flex flex-col gap-2 mt-2 items-center text-Negro font-barolw font-bold text-xs md:text-sm lg:text-base text-center">
+            <p className="">
+              <Link to={"/login"} className="text-verdeC">
+                Regresar a Iniciar Sesión.
+              </Link>
+            </p>
+          </div>
         </div>
       </form>
     </>

@@ -7,10 +7,12 @@ import Nav from "../../Components/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../services/users/usersService";
 import { Loader } from "../../Components/Loader";
+import EntityNotFound from "../../Components/EntityNotFound";
 
 function GraduatesProfile() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
+
   const loading = useSelector((state) => state.users.loadingPage);
   const currentPath = location.pathname; // Acceder a la ruta actual
 
@@ -32,8 +34,10 @@ function GraduatesProfile() {
             </section>
           ) : (
             <>
-              {users.profile === null ? (
-                <></>
+              {!users?.profile || users?.profile?.user.role !== "egresado" ? (
+                <>
+                  <EntityNotFound entity="Egresado" entityPath="/graduates" />
+                </>
               ) : (
                 <>
                   <CardProfile profile={users.profile} />

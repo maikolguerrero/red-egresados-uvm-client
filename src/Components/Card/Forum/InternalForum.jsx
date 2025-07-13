@@ -17,6 +17,7 @@ import { enqueueSnackbar } from "notistack";
 import { typeSuccess } from "../../../models/alertModels";
 import { URL_FRONTEND } from "../../../config";
 import { useNavigate } from "react-router-dom";
+import EntityNotFound from "../../EntityNotFound";
 
 export function InternalForum({ forum }) {
   const dispatch = useDispatch();
@@ -107,11 +108,9 @@ export function InternalForum({ forum }) {
   return (
     <>
       {forum.id === undefined ? (
-        <article className="flex flex-col gap-1 w-full pb-8">
-          <h4 className="uppercase text-xl font-medium">
-            Este foro ha sido eliminado
-          </h4>
-        </article>
+        <>
+          <EntityNotFound entity="Hilo" entityPath="/forums" />
+        </>
       ) : (
         <>
           <article className="flex flex-col gap-1 w-full pb-8 border-b-2 border-verdeD">

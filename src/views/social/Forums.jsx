@@ -7,7 +7,6 @@ import Nav from "../../Components/Nav";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
 import { FormAddForum } from "../../Components/Forms/Forum/FormAddForum";
 import { useDispatch, useSelector } from "react-redux";
-import { FormAddPicture } from "../../Components/Forms/Forum/FormAddPicture";
 import { searchForum } from "../../services/forum/forumService";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import FilterForums from "../../Components/Forms/Forum/FilterForums";
@@ -53,11 +52,7 @@ function Forums() {
   const dispatch = useDispatch();
 
   const [openAddForum, setOpendAddForum] = useState(false);
-  const [values, setValues] = useState({});
-
-  useEffect(() => {
-    setValues(defaultValues);
-  }, []);
+  const [values, setValues] = useState(defaultValues);
 
   useEffect(() => {
     dispatch(

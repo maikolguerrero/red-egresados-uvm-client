@@ -9,8 +9,6 @@ import { getUsers } from "../../services/users/usersService";
 import FilterGraduates from "../../Components/Forms/Graduates/FilterGraduates";
 import { Loader } from "../../Components/Loader";
 
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-
 const customTheme = createTheme({
   base: "",
   layout: {
@@ -54,10 +52,6 @@ function Graduates() {
   const loading = useSelector((state) => state.users.loadingPage)
 
   const [values, setValues] = useState(defaultValues);
-
-  // useEffect(() => {
-  //   setValues(defaultValues);
-  // }, []);
 
   useEffect(() => {
     dispatch(

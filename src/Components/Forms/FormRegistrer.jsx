@@ -29,11 +29,7 @@ let defaultValues = {
 function FormRegister(props) {
   const dispatch = useDispatch()
 
-  const [values, setValues] = useState({})
-
-  useEffect(() => {
-    setValues(defaultValues)
-  }, [])
+  const [values, setValues] = useState(defaultValues)
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -143,6 +139,10 @@ function FormRegister(props) {
           </div>
         </div>
 
+        <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
+          <Button className={"w-full"} text="REGISTRARTE" />
+        </div>
+
         <div className="flex flex-col gap-2 items-center text-Negro font-barolw font-bold text-xs md:text-sm lg:text-base text-center">
           <p className="">
             ¿Ya tienes una cuenta?{" "}
@@ -150,10 +150,6 @@ function FormRegister(props) {
               Inicia Sesión Aquí.
             </Link>
           </p>
-        </div>
-
-        <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
-          <Button className={"w-full"} text="REGISTRARME" />
         </div>
       </form >
       <ToastContainer

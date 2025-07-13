@@ -14,11 +14,15 @@ export const getProfile = createAsyncThunk(
       if (response.success) {
         enqueueSnackbar("Se ha obtenido el perfil", typeSuccess);
         return {
+          success: true,
           message: "Se ha obtenido el perfil",
           profile: response.data,
         };
       } else {
-        throw response.message || "Error al obtener el perfil";
+        return {
+          success: false,
+          message: "Usuario no encontrado",
+        }
       }
     } catch (error) {
       enqueueSnackbar(error, typeError);
