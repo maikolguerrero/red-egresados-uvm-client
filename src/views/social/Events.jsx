@@ -58,7 +58,7 @@ function Events() {
   const dispatch = useDispatch();
 
   const [openAddEvent, setOpendAddEvent] = useState(false);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState(defaultValues);
 
   useEffect(() => {
     dispatch(
@@ -67,10 +67,6 @@ function Events() {
         limit: 10,
       })
     );
-  }, []);
-
-  useEffect(() => {
-    setValues(defaultValues);
   }, []);
 
   const onPageChange = (page) => {

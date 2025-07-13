@@ -49,7 +49,6 @@ export function FormAcademicRequest({ academicRequests }) {
                 email: values.email,
             }
         };
-        alert(JSON.stringify(sendAcademicRequests));
         dispatch(updateContentAcademicRequests(sendAcademicRequests));
         // dispatch(getContentAcademicRequests());
     };

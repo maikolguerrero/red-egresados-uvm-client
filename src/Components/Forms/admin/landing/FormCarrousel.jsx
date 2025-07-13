@@ -88,14 +88,14 @@ export function FormCarrousel({landing}) {
             LISTA DE IMÁGENES:
           </h6>
 
-          {landing.carouselItems.length === 0 ? (
+          {landing?.carouselItems?.length === 0 ? (
             <p className="px-2 font-barlow-semi-condensed text-RojoC font-medium">
               No hay ninguna imagen en el carrousel...
             </p>
           ) : (
             <ul className="px-2 flex flex-col gap-4">
-              {landing.carouselItems.map((item, key) => (
-                <li className="list-disc font-medium font-barolw uppercase flex items-center justify-between">
+              {landing?.carouselItems?.map((item, key) => (
+                <li key={key} className="list-disc font-medium font-barolw uppercase flex items-center justify-between">
                   - Imagen {key + 1}
                   <div className="flex gap-2">
                     <button
@@ -109,8 +109,8 @@ export function FormCarrousel({landing}) {
                     </button>
                     <button
                       onClick={(e) => {
-                        for (let i = 0; i < landing.carouselItems.length; i++) {
-                          if (item.id === landing.carouselItems[i].id) {
+                        for (let i = 0; i < landing?.carouselItems?.length; i++) {
+                          if (item.id === landing?.carouselItems[i].id) {
                             dispatch(
                               deleteMediaCarrousel({
                                 idItem: item.id,

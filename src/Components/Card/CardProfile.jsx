@@ -47,6 +47,9 @@ function CardProfile({ profile }) {
             <h4 className="text-sm md:text-base lg:text-lg font-barlow-semi-condensed uppercase font-bold text-RojoC">
               {profile?.nombreCompleto}
             </h4>
+            <h5 className="text-[10px] md:text-[14px] lg:text-base font-barlow-semi-condensed font-semibold text-verdeD">
+              @{profile?.user?.username}
+            </h5>
             {profile?.carrerasPregrado?.slice(0, 1).map((carrera, index) => (
               <h6
                 key={index}
@@ -67,7 +70,8 @@ function CardProfile({ profile }) {
             {(profile?.programasPostgrado?.length + profile?.carrerasPregrado?.length) > 2 ? (
               <button
                 onClick={(e) => setOpenModal3(true)}
-                className="text-xs lg:text-base font-barlow-semi-condensed font-semibold text-verdeD hover:text-verdeB"
+                className="text-[10px] md:text-[14px] lg:text-base font-barlow-semi-condensed font-semibold text-verdeD hover:text-verdeB"
+
               >
                 Ver más
               </button>
@@ -137,33 +141,27 @@ function CardProfile({ profile }) {
       />
 
       <ModalNotHeader
-        size={"sm"}
+        size={"xl"}
         openModal={openModal3}
         setOpenModal={setOpenModal3}
         component={
           <div
-            className="flex flex-col gap-2 h-[200px]"
-            style={{
-              overflowY:
-                profile?.carrerasPregrado?.length + profile?.programasPostgrado?.length >
-                  3
-                  ? "scroll"
-                  : "auto",
-            }}
+            className="flex flex-col gap-2 h-full"
+            // style={{
+            //   overflowY: profile?.carrerasPregrado?.length + profile?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
+            // }}
           >
             <h4 className="py-1 px-2 border-b-2 mb-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
               Titulos obtenidos en la UVM
             </h4>
-            <div className="flex flex-col gap-2">
+            <ul className="list-inside flex flex-col gap-2">
               {profile?.carrerasPregrado?.map((item, key) => (
-                <BadgeNormal color="bg-verdeD" text={item.carrera} key={key} />
+                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-verdeB" >{item.carrera}</li>
               ))}
-            </div>
-            <div className="">
               {profile?.programasPostgrado?.map((item, key) => (
-                <BadgeNormal color="bg-verdeD" text={item.programa} key={key} />
+                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-RojoC" >{item.programa}</li>
               ))}
-            </div>
+            </ul>
           </div>
         }
       />

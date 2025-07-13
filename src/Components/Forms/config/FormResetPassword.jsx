@@ -21,11 +21,7 @@ let styles = {
 function FormResetPassword() {
   const dispatch = useDispatch()
 
-  const [values, setValues] = useState({});
-
-  useEffect(() => {
-    setValues(defaultValues);
-  }, []);
+  const [values, setValues] = useState(defaultValues);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -62,7 +58,7 @@ function FormResetPassword() {
         <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Ingresa tu nombre  correo de recuperación:
+              Ingresa tu nombre de usuario o correo electrónico de tu cuenta:
             </Label>
             <input
               className={styles.input}
@@ -70,7 +66,7 @@ function FormResetPassword() {
               name="emailOrUsername"
               value={values.emailOrUsername}
               onChange={handleInputChange}
-              placeholder="Correo Electrónico"
+              placeholder="Nombre de usuario o correo"
             />
           </div>
         </div>

@@ -20,35 +20,35 @@ function ContentManager() {
             Selecciona una sección a configurar
           </h4>
           {/* <div className="flex flex-col md:flex-row gap-6"> */}
-            <div className="flex flex-col md:flex-row flex-wrap md:justify-center gap-6">
+          <div className="flex flex-col md:flex-row flex-wrap md:justify-center gap-6">
 
-              <Link to={"/content-manager/landing"}>
-                <ButtonSecurity
-                  icono={<BsPcDisplayHorizontal className="text-6xl" />}
-                  texto={"Configuración de Langing Page"}
-                />
-              </Link>
-              <Link to={"/content-manager/home"}>
-                <ButtonSecurity
-                  icono={<IoIosHome className="text-6xl" />}
-                  texto={"Configuración de la Sección Principal"}
-                />
-              </Link>
-              <Link to={"/content-manager/academic-requests"}>
-                <ButtonSecurity
-                  icono={<FaGraduationCap className="text-6xl" />}
-                  texto={"Info de Solicitudes Académicas"}
-                />
-              </Link>
-            </div>
-          </div>
-
-          <div className="absolute right-8 bottom-6">
-            <ButtonMessages />
+            <Link to={"/content-manager/landing"}>
+              <ButtonSecurity
+                icono={<BsPcDisplayHorizontal className="text-6xl" />}
+                texto={"Configuración de Langing Page"}
+              />
+            </Link>
+            <Link to={"/content-manager/home"}>
+              <ButtonSecurity
+                icono={<IoIosHome className="text-6xl" />}
+                texto={"Configuración de la Sección Principal"}
+              />
+            </Link>
+            <Link to={"/content-manager/academic-requests"}>
+              <ButtonSecurity
+                icono={<FaGraduationCap className="text-6xl" />}
+                texto={"Info de Solicitudes Académicas"}
+              />
+            </Link>
           </div>
         </div>
-      </>
-      );
+
+        <div className="absolute right-8 bottom-6">
+          <ButtonMessages />
+        </div>
+      </div>
+    </>
+  );
 }
 
-      export default ContentManager;
+export default ContentManager;

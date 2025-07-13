@@ -34,7 +34,7 @@ function GraduatesProfile() {
             </section>
           ) : (
             <>
-              {!users?.profile || users?.profile?.user?.role !== "egresado" ? (
+              {!users?.profile || users?.profile?.user.role !== "egresado" ? (
                 <>
                   <EntityNotFound entity="Egresado" entityPath="/graduates" />
                 </>

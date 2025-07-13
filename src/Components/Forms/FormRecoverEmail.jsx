@@ -33,7 +33,7 @@ function FormRecoverEmail(props) {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
         <div className="w-full flex relative">
           <input
             className="w-full px-3 pr-11 py-1 text-sm md:text-base font-barolw rounded-lg border border-verdeA border-b-2"

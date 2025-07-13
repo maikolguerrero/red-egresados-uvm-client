@@ -120,20 +120,20 @@ export function CardGraduate({ user }) {
         setOpenModal={setOpenModal}
         component={
           <div
-            className="flex flex-col gap-2 h-[200px]"
-            style={{
-              overflowY: user?.carrerasPregrado?.length + user?.programasPostgrado?.length > 3 ? 'scroll' : 'hidden',
-            }}
+            className="flex flex-col gap-2 h-full"
+            // style={{
+            //   overflowY: user?.carrerasPregrado?.length + user?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
+            // }}
           >
             <h4 className="py-1 px-2 border-b-2 mb-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
               Titulos obtenidos en la UVM
             </h4>
-            <ul className="list-inside flex flex-col gap-2">
-              {user.carrerasPregrado.map((item, key) => (
-                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-verdeB" >{item.carrera}</li>
+            <ul className="list-inside flex flex-col gap-2 text-sm md:text-base">
+              {user?.carrerasPregrado?.map((item, key) => (
+                <li key={key} className="list-disc font-barlow-condensed font-medium text-verdeB" >{item.carrera}</li>
               ))}
-              {user.programasPostgrado.map((item, key) => (
-                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-RojoC" >{item.programa}</li>
+              {user?.programasPostgrado?.map((item, key) => (
+                <li key={key} className="list-disc font-barlow-condensed font-medium text-RojoC" >{item.programa}</li>
               ))}
             </ul>
           </div>

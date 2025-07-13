@@ -19,6 +19,8 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
+
+
 function ChangePassword() {
   const dispatch = useDispatch();
   const role = useSelector((state) => state.auth.role)
@@ -31,14 +33,21 @@ function ChangePassword() {
   // Puedes usar `new URLSearchParams()` para parsear los parámetros de consulta
   const params = new URLSearchParams(queryParams);
 
-  const [values, setValues] = useState({})
+  const token = params.get("token")
+
+  const defaultValues = {
+    "newPassword": "",
+    "confirmNewPassword": "",
+    "token": token ? token : ""
+  }
+
+  const [values, setValues] = useState(defaultValues)
+
 
   useEffect(() => {
-    setValues({
-      "newPassword": "",
-      "confirmNewPassword": "",
-      "token": params.get("token")
-    })
+    if (!token) {
+      navigate("/login")
+    }
     //dispatch(changeEmail(params.get("token")))
   }, []);
 
@@ -61,59 +70,64 @@ function ChangePassword() {
     if (values.confirmNewPassword.trim() === "") {
       return enqueueSnackbar("Debes confimar la nueva contraseña", typeError);
     }
-    dispatch(newPassword(values))
+    dispatch(newPassword(values));
+    navigate("/login")
   };
 
   return (
     <>
-      {role === "" ? (
-        <NavLogin />
-      ) : (
-        <Header />
+      {token && (
+        <>
+          {role === "" ? (
+            <NavLogin />
+          ) : (
+            <Header />
+          )}
+          <div className="flex">
+            <main className="w-full px-3 py-6 md:px-6 lg:px-10 gap-14 flex justify-center items-center h-[100vh] overflow-y-auto">
+              <form className="flex flex-col gap-5 w-full md:w-[300px] bg-Gris rounded-md border-2 border-verdeD p-4">
+                <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
+                  {"ACTUALIZAR CONTRASEÑA"}
+                </h5>
+                <div className="flex flex-col gap-2">
+                  <div className="w-full flex flex-col relative">
+                    <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                      Nueva Contraseña:
+                    </Label>
+                    <input
+                      className={styles.input}
+                      type="password"
+                      name="newPassword"
+                      value={values.newPassword}
+                      onChange={handleInputChange}
+                      placeholder="********"
+                    />
+                  </div>
+                  <div className="w-full flex flex-col relative">
+                    <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                      Confirmar Contraseña:
+                    </Label>
+                    <input
+                      className={styles.input}
+                      type="password"
+                      name="confirmNewPassword"
+                      value={values.confirmNewPassword}
+                      onChange={handleInputChange}
+                      placeholder="********"
+                    />
+                  </div>
+                </div>
+                <ButtonSmall
+                  action={handleSubmit}
+                  className={"bg-verdeD hover:bg-RojoC"}
+                  text={"Actualizar"}
+                />
+              </form>
+            </main>
+          </div>
+          <Footer />
+        </>
       )}
-      <div className="flex">
-        <main className="w-full px-3 py-6 md:px-6 lg:px-10 gap-14 flex justify-center items-center h-[100vh] overflow-y-auto">
-          <form className="flex flex-col gap-5 w-full md:w-[300px] bg-Gris rounded-md border-2 border-verdeD p-4">
-            <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-              {"ACTUALIZAR CONTRASEÑA"}
-            </h5>
-            <div className="flex flex-col gap-2">
-              <div className="w-full flex flex-col relative">
-                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Nueva Contraseña:
-                </Label>
-                <input
-                  className={styles.input}
-                  type="password"
-                  name="newPassword"
-                  value={values.newPassword}
-                  onChange={handleInputChange}
-                  placeholder="********"
-                />
-              </div>
-              <div className="w-full flex flex-col relative">
-                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Confirmar Contraseña:
-                </Label>
-                <input
-                  className={styles.input}
-                  type="password"
-                  name="confirmNewPassword"
-                  value={values.confirmNewPassword}
-                  onChange={handleInputChange}
-                  placeholder="********"
-                />
-              </div>
-            </div>
-            <ButtonSmall
-              action={handleSubmit}
-              className={"bg-verdeD hover:bg-RojoC"}
-              text={"Actualizar"}
-            />
-          </form>
-        </main>
-      </div>
-      <Footer />
     </>
   );
 }

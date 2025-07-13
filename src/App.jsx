@@ -38,270 +38,294 @@ import VerifyAlumni from "./views/alumni/VerifyAlumni";
 import Admins from "./views/admin/Admins";
 import RecoveryEmail from "./views/RecoveryEmail";
 import ManageGraduates from "./views/admin/ManageGraduates";
-
-/*Enrutador de la web*/
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <VerifyAlumni />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/verify-alumni",
-    element: (
-      <ProtectedRoute>
-        <VerifyAlumni />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <ProtectedRoute>
-        <Login />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/recover/change-email",
-    element: (
-      <ProtectedRoute>
-        <RecoveryEmail />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/register",
-    element: (
-      <ProtectedRoute>
-        <Register />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/recover-password",
-    element: (
-      <ProtectedRoute>
-        <Recover />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/landing",
-    element: (
-      <ProtectedRoute>
-        <Landing />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/content-manager",
-    element: (
-      <ProtectedRoute>
-        <ContentManager />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/content-manager/landing",
-    element: (
-      <ProtectedRoute>
-        <CMLandingPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/content-manager/home",
-    element: (
-      <ProtectedRoute>
-        <CMHomePage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/content-manager/academic-requests",
-    element: (
-      <ProtectedRoute>
-        <CMAcademicRequests />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/home",
-    element: (
-      <ProtectedRoute>
-        <Home />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/graduates",
-    element: (
-      <ProtectedRoute>
-        <Graduates />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/graduates/:username",
-    element: (
-      <ProtectedRoute>
-        <GraduatesProfile />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/forums",
-    element: (
-      <ProtectedRoute>
-        {" "}
-        <Forums />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/events",
-    element: (
-      <ProtectedRoute>
-        <Events />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/events/:event",
-    element: (
-      <ProtectedRoute>
-        <EventView />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/proyects",
-    element: (
-      <ProtectedRoute>
-        <Proyects />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/proyects/:proyect",
-    element: (
-      <ProtectedRoute>
-        <ProjectView />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/notifications",
-    element: (
-      <ProtectedRoute>
-        <Notifications />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/config",
-    element: (
-      <ProtectedRoute>
-        <Config />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/my-profile",
-    element: (
-      <ProtectedRoute>
-        <MyProfile />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/verify-email",
-    element: (
-      <ProtectedRoute>
-        <Verifycation />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/verify-email-change",
-    element: (
-      <ProtectedRoute>
-        <ChangeEmail />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/config/reports",
-    element: (
-      <ProtectedRoute>
-        <Reports />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/config/admins",
-    element: (
-      <ProtectedRoute>
-        <Admins />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/config/graduates",
-    element: (
-      <ProtectedRoute>
-        <ManageGraduates />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/reset-password",
-    element: (
-      <ProtectedRoute>
-        <ChangePassword />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/forums/:forum",
-    element: (
-      <ProtectedRoute>
-        <ForumView />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/chat/:username",
-    element: (
-      <ProtectedRoute>
-        <Chat />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "*",
-    element: (
-      <h2 className="text-3xl font-bold underline font-barlow-condensed">
-        {" "}
-        Pagina de Error
-      </h2>
-    ),
-  },
-]);
+import SendNotification from "./views/admin/SendNotification";
+import { Navigate } from "react-router-dom";
 
 function App() {
   const dispatch = useDispatch();
   const { isConnected } = useSelector((state) => state.socket);
   const sessionActive = useSelector((state) => state.auth.sessionActive);
   const auth = useSelector((state) => state.auth);
+  const checked = useSelector((state) => state.auth.checked);
+
+  const renderSessionActive = (Route) => {
+    if(!checked){
+      return <Navigate to={window.location.pathname} />;
+    }
+    if(sessionActive){
+      return <Route />;
+    }
+    return <Navigate to="/" />;
+  }
+
+  /*Enrutador de la web*/
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute>
+          <VerifyAlumni />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/verify-alumni",
+      element: (
+        <ProtectedRoute>
+          <VerifyAlumni />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <ProtectedRoute>
+          <Login />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/register",
+      element: (
+        <ProtectedRoute>
+          <Register />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/recover/change-email",
+      element: (
+        <ProtectedRoute>
+          <RecoveryEmail />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/recover-password",
+      element: (
+        <ProtectedRoute>
+          <Recover />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/landing",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Landing)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/home",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Home)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/graduates",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Graduates)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/graduates/:username",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(GraduatesProfile)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/forums",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Forums)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/forums/:forum",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(ForumView)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/events",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Events)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/events/:event",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(EventView)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/proyects",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Proyects)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/proyects/:proyect",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(ProjectView)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/notifications",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Notifications)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/config",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Config)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/my-profile",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(MyProfile)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/reset-password",
+      element: (
+        <ProtectedRoute>
+          <ChangePassword />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/verify-email",
+      element: (
+        <ProtectedRoute>
+          <Verifycation />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/verify-email-change",
+      element: (
+        <ProtectedRoute>
+          <ChangeEmail />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/config/reports",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Reports)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/config/admins",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Admins)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/config/graduates",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(ManageGraduates)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/config/notification",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(SendNotification)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/content-manager",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(ContentManager)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/content-manager/landing",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(CMLandingPage)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/content-manager/home",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(CMHomePage)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/content-manager/academic-requests",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(CMAcademicRequests)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/chat/:username",
+      element: (
+        <ProtectedRoute>
+          {renderSessionActive(Chat)}
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "*",
+      element: (
+        <h2 className="text-3xl font-bold underline font-barlow-condensed">
+          {" "}
+          Pagina de Error
+        </h2>
+      ),
+    },
+  ]);
 
   useEffect(() => {
+    dispatch(verifySesion());
     dispatch(getContentFooter());
     dispatch(getContentAcademicRequests());
+    // dispatch(verifySesion());
+    // await dispatch(verifySesion()).unwrap();
+
   }, []);
 
   useEffect(() => {

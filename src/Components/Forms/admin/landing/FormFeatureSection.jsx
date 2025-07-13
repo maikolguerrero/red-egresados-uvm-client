@@ -176,7 +176,7 @@ export function FormFeatureSection({ landing }) {
                       ) : (
                         <ul className="py-4 px-2 flex flex-col gap-3">
                           {item.subsections?.map((item, key) => (
-                            <li className="flex justify-between p-2 bg-verdeD rounded-md items-center">
+                            <li key={key} className="flex justify-between p-2 bg-verdeD rounded-md items-center">
                               {item.subtitle}
                               <div className="flex gap-2">
                                 <button

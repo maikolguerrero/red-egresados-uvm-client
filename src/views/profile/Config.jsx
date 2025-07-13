@@ -2,7 +2,7 @@ import { FaKey } from "react-icons/fa";
 import { ButtonSecurity } from "../../Components/Buttons/ButtonSecurity";
 import Header from "../../Components/Header";
 import Nav from "../../Components/Nav";
-import { MdAdminPanelSettings, MdEmail, MdReport } from "react-icons/md";
+import { MdAdminPanelSettings, MdEmail, MdReport, MdNotifications } from "react-icons/md";
 import { FaGraduationCap } from "react-icons/fa6";
 import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useState } from "react";
@@ -56,9 +56,9 @@ function Config() {
                 setOpenEmail(true);
               }}
               icono={<MdEmail className="text-6xl" />}
-              texto={"Cambio de Correo de Recuperación"}
+              texto={"Cambio de Correo de la Cuenta"}
             />
-            {role === "admin" || role === "superadmin" ? (
+            {role === "admin" || role === "superadmin" && (
               <>
                 <ButtonSecurity
                   onClick={(e) => {
@@ -68,11 +68,9 @@ function Config() {
                   texto={"Reportes"}
                 />
               </>
-            ) : (
-              <></>
             )}
 
-            {role === "admin" || role === "superadmin" ? (
+            {role === "admin" || role === "superadmin" && (
               <>
                 <ButtonSecurity
                   onClick={(e) => {
@@ -82,11 +80,20 @@ function Config() {
                   texto={"Agregar Egresados"}
                 />
               </>
-            ) : (
-              <></>
             )}
 
-            {role === "superadmin" ? (
+            {role === "admin" || role === "superadmin" && (
+              <ButtonSecurity
+                onClick={(e) => {
+                  navigate("/config/notification");
+                }}
+                icono={<MdNotifications className="text-6xl" />}
+                texto={"Enviar Notificación a Egresados"}
+              />
+            )}
+
+
+            {role === "superadmin" && (
               <ButtonSecurity
                 onClick={(e) => {
                   navigate("/config/admins");
@@ -94,8 +101,6 @@ function Config() {
                 icono={<MdAdminPanelSettings className="text-6xl" />}
                 texto={"Agregar Admins"}
               />
-            ) : (
-              <></>
             )}
           </div>
 
@@ -116,7 +121,7 @@ function Config() {
         <div className="absolute right-8 bottom-6">
           <ButtonMessages />
         </div>
-      </div>
+      </div >
     </>
   );
 }
