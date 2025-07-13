@@ -26,15 +26,15 @@ function CardProfile({ profile }) {
       <div className="w-full lg:w-5/6 bg-Gris border-[1.5px] border-verdeD flex gap-2 md:gap-3 lg:gap-5">
         {/* Contenedor de la imagen/letra - Ahora con ancho fijo y aspect-square */}
         <div className="w-[150px] md:w-[200px] aspect-square border-r-[1.5px] border-verdeD flex items-center justify-center overflow-hidden flex-shrink-0">
-          {profile.user.profilePicture.url === null ? (
+          {profile?.user?.profilePicture?.url === null ? (
             // Si no hay foto, muestra la inicial
-            <span className="text-Blanco text-5xl md:text-6xl uppercase lg:text-7xl font-bold bg-verdeA h-full w-full flex items-center justify-center">
-              {profile.user.username?.charAt(0)}
+            <span className="text-Blanco text-6xl md:text-7xl lg:text-8xl uppercase font-bold bg-verdeA h-full w-full flex items-center justify-center">
+              {profile?.user?.username?.charAt(0)}
             </span>
           ) : (
             // Si hay foto, muéstrala y ajústala para que cubra el cuadrado
             <img
-              src={profile.user.profilePicture.url}
+              src={profile?.user?.profilePicture?.url}
               alt="Foto Perfil"
               className="h-full w-full object-cover"
             />
@@ -45,9 +45,9 @@ function CardProfile({ profile }) {
         <div className="flex flex-col justify-between py-3">
           <div>
             <h4 className="text-sm md:text-base lg:text-lg font-barlow-semi-condensed uppercase font-bold text-RojoC">
-              {profile.nombreCompleto}
+              {profile?.nombreCompleto}
             </h4>
-            {profile.carrerasPregrado?.slice(0, 1).map((carrera, index) => (
+            {profile?.carrerasPregrado?.slice(0, 1).map((carrera, index) => (
               <h6
                 key={index}
                 className="text-[10px] md:text-[14px] lg:text-base font-barlow-semi-condensed font-semibold text-black"
@@ -55,7 +55,7 @@ function CardProfile({ profile }) {
                 {carrera.carrera}
               </h6>
             ))}
-            {profile.programasPostgrado?.slice(0, 1).map((programa, index) => (
+            {profile?.programasPostgrado?.slice(0, 1).map((programa, index) => (
               <h6
                 key={index}
                 className="text-[10px] md:text-[14px] lg:text-base font-barlow-semi-condensed font-semibold text-black"
@@ -64,7 +64,7 @@ function CardProfile({ profile }) {
               </h6>
             ))}
             {/* Botón "Ver más" si hay más de 2 carreras/programas */}
-            {(profile.programasPostgrado?.length + profile.carrerasPregrado?.length) > 2 ? (
+            {(profile?.programasPostgrado?.length + profile?.carrerasPregrado?.length) > 2 ? (
               <button
                 onClick={(e) => setOpenModal3(true)}
                 className="text-xs lg:text-base font-barlow-semi-condensed font-semibold text-verdeD hover:text-verdeB"
@@ -76,24 +76,24 @@ function CardProfile({ profile }) {
 
           {/* Habilidades e Intereses */}
           <div className="flex gap-1 md:gap-2 flex-wrap">
-            {profile.profile.professional.skills.length === 0 ? (
+            {profile?.profile?.professional?.skills?.length === 0 ? (
               <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
             ) : (
               <button
                 onClick={(e) => setOpenModal(true)}
                 className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
               >
-                ver habilidades de valor {profile.profile.professional.skills.length}
+                ver habilidades de valor {profile?.profile?.professional?.skills?.length}
               </button>
             )}
-            {profile.profile.professional.interests.length === 0 ? (
+            {profile?.profile?.professional?.interests?.length === 0 ? (
               <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
             ) : (
               <button
                 onClick={(e) => setOpenModal2(true)}
                 className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
               >
-                ver intereses personales {profile.profile.professional.interests.length}
+                ver intereses personales {profile?.profile?.professional?.interests?.length}
               </button>
             )}
           </div>
@@ -110,7 +110,7 @@ function CardProfile({ profile }) {
               HABILIDADES PROFESIONALES
             </h4>
             <div className="flex gap-2">
-              {profile.profile.professional.skills.map((item, key) => (
+              {profile?.profile?.professional?.skills?.map((item, key) => (
                 <BadgeNormal color="bg-verdeD" text={item} key={key} />
               ))}
             </div>
@@ -128,7 +128,7 @@ function CardProfile({ profile }) {
               INTERESES PERSONALES
             </h4>
             <div className="flex gap-2">
-              {profile.profile.professional.interests.map((item, key) => (
+              {profile?.profile?.professional?.interests?.map((item, key) => (
                 <BadgeNormal color="bg-verdeD" text={item} key={key} />
               ))}
             </div>

@@ -49,7 +49,7 @@ export function CardForumHome({ forum }) {
           {forum?.author?.profilePicture === undefined || forum?.author?.profilePicture?.url === null ? (
             // Si no hay foto de perfil, muestra la inicial del username
             <div className="w-4 h-4 md:w-5 md:h-5 xl:w-7 xl:h-7 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
-              <span className="text-white text-[10px] md:text-xs xl:text-sm font-bold uppercase">
+              <span className="text-white text-[8px] md:text-[9px] xl:text-[12px] font-bold uppercase">
                 {forum?.author?.username?.charAt(0).toUpperCase()}
               </span>
             </div>

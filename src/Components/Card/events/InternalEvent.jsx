@@ -12,6 +12,7 @@ import { useState } from "react";
 import { formatUTCDateToLocalAMPM } from "../../../utils/dateUtils";
 import { FaCalendar } from "react-icons/fa6";
 import { FormEditImage } from "../../Forms/Event/FormEditImage";
+import EntityNotFound from "../../EntityNotFound";
 
 export function InternalEvent({ event }) {
   const dispatch = useDispatch();
@@ -27,11 +28,9 @@ export function InternalEvent({ event }) {
   return (
     <>
       {event?.id === undefined ? (
-        <article className="flex flex-col gap-1 w-full pb-8">
-          <h4 className="uppercase text-xl font-medium">
-            Este evento ha sido eliminado
-          </h4>
-        </article>
+        <>
+          <EntityNotFound entity="Evento" entityPath="/events" />
+        </>
       ) : (
         <>
           <article className="flex flex-col gap-10 w-full font-barolw">

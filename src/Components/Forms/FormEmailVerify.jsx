@@ -31,7 +31,7 @@ function FormEmailVerify(props) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full">
         <div className="flex flex-col gap-6">
           <p className="text-Negro text-base md:text-lg font-barlow-condensed font-medium text-center">
-            Se te ha enviado un email a tu correo electrónico para <a className="text-RojoC">ACTIVAR</a> tu cuenta.
+            Se envió un email a tu correo electrónico para <a className="text-RojoC">ACTIVAR</a> tu cuenta.
           </p>
         </div>
 
@@ -44,9 +44,9 @@ function FormEmailVerify(props) {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
+        {/* <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
           <Button className={"w-full"} text="YA ME VERIFIQUÉ" />
-        </div>
+        </div> */}
       </form>
       <ToastContainer
         position="top-right"

@@ -3,7 +3,7 @@ import { Dropdown, DropdownItem } from "flowbite-react";
 import { FaCalendarCheck, FaCalendarDay, FaEllipsisV } from "react-icons/fa";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiOutlineStatusOnline } from "react-icons/hi";
 import { BiWorld } from "react-icons/bi";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
@@ -14,6 +14,7 @@ import { CardRequest } from "./CardRequest";
 import { Loader } from "../../Loader";
 import { FormEditRole } from "../../Forms/Proyects/FormEditRole";
 import { useNavigate } from "react-router-dom";
+import EntityNotFound from "../../EntityNotFound";
 import { forEach } from "lodash";
 
 export function InternalProject({ proyect }) {
@@ -83,11 +84,9 @@ export function InternalProject({ proyect }) {
   return (
     <>
       {proyect?.id === undefined ? (
-        <article className="flex flex-col gap-1 w-full pb-8">
-          <h4 className="uppercase text-xl font-medium">
-            Este proyecto ha sido eliminado
-          </h4>
-        </article>
+        <>
+          <EntityNotFound entity="Proyecto" entityPath="/projects" />
+        </>
       ) : (
         <>
           <article className="flex flex-col gap-6">

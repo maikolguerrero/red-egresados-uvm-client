@@ -1,7 +1,7 @@
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
 import { FaGraduationCap } from "react-icons/fa6";
-import { FaUserPlus, FaUsers } from "react-icons/fa";
+import { FaUserPlus, FaUsers, FaChevronDown } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { getContentLanding } from "../services/admin/landingService";
 import { getContentStats } from "../services/admin/statsService";
@@ -77,10 +77,10 @@ function Landing() {
             </div>
           )}
 
-          {landing?.welcomeSections.length === 0 ? (
+          {landing?.welcomeSections?.length === 0 ? (
             <></>
           ) : (
-            landing?.welcomeSections.map((item, key) => (
+            landing?.welcomeSections?.map((item, key) => (
               <section key={key} className="flex flex-col justify-center items-center gap-4 pt-16 pb-16 px-4">
                 <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
                   {item.title}
@@ -130,35 +130,33 @@ function Landing() {
             </div>
           </section>
 
-          {landing?.featuredSections.length === 0 ? (
+          {landing?.featuredSections?.length === 0 ? (
             <></>
           ) : (
             <>
-              {landing.featuredSections.map((item) => (
-                <section className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
+              {landing?.featuredSections?.map((item, key) => (
+                <section key={key} className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
                   <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
                     {item.mainTitle}
                   </h3>
-                  {item.subsections.length === 0 ? (
+                  {item.subsections?.length === 0 ? (
                     <></>
                   ) : (
                     <ul className="flex flex-wrap justify-center items-center gap-8 ">
-                      {item.subsections.map((itemSubsection) => (
-                        <>
-                          <li className="relative ">
-                            <img
-                              src={
-                                !itemSubsection.image
-                                  ? "''"
-                                  : itemSubsection.image.url
-                              }
-                              className={` w-[250px] h-[200px] bg-cover bg-center object-cover rounded-md border-2 border-verdeC`}
-                            />
-                            <p className="bg-Blanco absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 uppercase border-x-2 border-verdeC bg-opacity-75 text-sm w-full text-center py-6 font-barlow-semi-condensed font-semibold text-Negro">
-                              {itemSubsection.subtitle}
-                            </p>
-                          </li>
-                        </>
+                      {item.subsections?.map((itemSubsection, key) => (
+                        <li key={key} className="relative ">
+                          <img
+                            src={
+                              !itemSubsection.image
+                                ? "''"
+                                : itemSubsection.image.url
+                            }
+                            className={` w-[250px] h-[200px] bg-cover bg-center object-cover rounded-md border-2 border-verdeC`}
+                          />
+                          <p className="bg-Blanco absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 uppercase border-x-2 border-verdeC bg-opacity-75 text-sm w-full text-center py-6 font-barlow-semi-condensed font-semibold text-Negro">
+                            {itemSubsection.subtitle}
+                          </p>
+                        </li>
                       ))}
                     </ul>
                   )}
@@ -167,7 +165,7 @@ function Landing() {
             </>
           )}
 
-          {landing?.faqs.length === 0 ? (
+          {landing?.faqs?.length === 0 ? (
             <></>
           ) : (
             <section className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
@@ -175,8 +173,8 @@ function Landing() {
                 PREGUNTAS FRECUENTES
               </h3>
               <ul className="w-full px-4 flex flex-wrap justify-center gap-4">
-                {landing.faqs.map((item, key) => (
-                  <li className="w-full lg:w-[48%] relative">
+                {landing?.faqs?.map((item, key) => (
+                  <li key={key} className="w-full lg:w-[48%] relative">
                     <h2>
                       <button
                         type="button"
@@ -190,22 +188,7 @@ function Landing() {
                         }}
                       >
                         <span className="uppercase">{item.question}</span>
-                        <svg
-                          data-accordion-icon
-                          className="w-3 h-3 rotate-180 shrink-0"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 10 6"
-                        >
-                          <path
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 5 5 1 1 5"
-                          />
-                        </svg>
+                        <FaChevronDown />
                       </button>
                     </h2>
                     <div

@@ -43,17 +43,11 @@ function FormContact() {
   const profile = useSelector((state) => state.users.profile);
   const dispatch = useDispatch();
 
-  const [valuesPersonalData, setValuesPersonalData] = useState({})
-  const [values, setValues] = useState({});
+  const [valuesPersonalData, setValuesPersonalData] = useState(defaultValuesPersonalData)
+  const [values, setValues] = useState(defaultValues)
   const [image, setImage] = useState(false);
-  const [values2, setValues2] = useState({})
+  const [values2, setValues2] = useState(defaultSocialMedias)
   const [picture, setPicture] = useState("");
-
-  useEffect(() => {
-    setValuesPersonalData(defaultValuesPersonalData);
-    setValues(defaultValues);
-    setValues2(defaultSocialMedias);
-  }, []);
 
   useEffect(() => {
     if (profile?.profile?.personalData != undefined) {

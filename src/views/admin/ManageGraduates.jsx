@@ -49,7 +49,7 @@ function ManageGraduates() {
                                 />
                                 <ButtonBig
                                     text={"Egresados de Postgrado"}
-                                    className={"bg-verdeC hover:bg-RojoC w-[250px]"}
+                                    className={"bg-verdeB hover:bg-RojoC w-[250px]"}
                                     action={(e) => setModalPostgrado(true)}
                                 />
                             </div>

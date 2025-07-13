@@ -79,7 +79,7 @@ function Config() {
                     navigate("/config/graduates");
                   }}
                   icono={<FaGraduationCap className="text-6xl" />}
-                  texto={"Agregar de Egresados"}
+                  texto={"Agregar Egresados"}
                 />
               </>
             ) : (

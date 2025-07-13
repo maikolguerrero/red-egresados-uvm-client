@@ -34,7 +34,7 @@ function InfoProfile({ profile }) {
   }, [profile])
 
   const startChat = () => {
-    navigate(`/chat/${profile.user.username}`);
+    navigate(`/chat/${profile?.user?.username}`);
   };
 
   return (
@@ -44,16 +44,16 @@ function InfoProfile({ profile }) {
           <h2 className="text-lg lg:text-xl font-barlow-semi-condensed font-bold uppercase border-b border-verdeD  w-full pb-1 px-2 mb-4">
             Perfil Personal
           </h2>
-          {(profile.profile?.personalData || profile.profile?.contact) && (
+          {(profile?.profile?.personalData || profile?.profile?.contact) && (
             <>
               <h5 className="text-base lg:text-xl font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
                 Datos Personales
               </h5>
               <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
-                {profile.profile?.personalData === undefined ||
-                profile.profile?.personalData?.birthDate === undefined ||
-                profile.profile?.personalData?.birthDate === null ||
-                profile.profile?.personalData?.birthDate === "" ? (
+                {profile?.profile?.personalData === undefined ||
+                profile?.profile?.personalData?.birthDate === undefined ||
+                profile?.profile?.personalData?.birthDate === null ||
+                profile?.profile?.personalData?.birthDate === "" ? (
                   <></>
                 ) : (
                   <p>
@@ -62,9 +62,9 @@ function InfoProfile({ profile }) {
                   </p>
                 )}
 
-                {profile.profile?.personalData === undefined ||
-                profile.profile?.personalData?.location === undefined ||
-                profile.profile?.personalData?.location === "" ? (
+                {profile?.profile?.personalData === undefined ||
+                profile?.profile?.personalData?.location === undefined ||
+                profile?.profile?.personalData?.location === "" ? (
                   <></>
                 ) : (
                   <p>
@@ -72,9 +72,9 @@ function InfoProfile({ profile }) {
                   </p>
                 )}
 
-                {profile.profile?.contact === undefined ||
-                profile.profile?.contact?.phone === undefined ||
-                profile.profile?.contact?.phone === "" ? (
+                {profile?.profile?.contact === undefined ||
+                profile?.profile?.contact?.phone === undefined ||
+                profile?.profile?.contact?.phone === "" ? (
                   <></>
                 ) : (
                   <p>
@@ -82,9 +82,9 @@ function InfoProfile({ profile }) {
                   </p>
                 )}
 
-                {profile.profile?.contact === undefined ||
-                profile.profile?.contact?.website === undefined ||
-                profile.profile?.contact?.website === "" ? (
+                {profile?.profile?.contact === undefined ||
+                profile?.profile?.contact?.website === undefined ||
+                profile?.profile?.contact?.website === "" ? (
                   <></>
                 ) : (
                   <p>
@@ -92,9 +92,9 @@ function InfoProfile({ profile }) {
                   </p>
                 )}
 
-                {profile.profile?.contact === undefined ||
-                profile.profile?.contact?.alternateEmail === undefined ||
-                profile.profile?.contact?.alternateEmail === "" ? (
+                {profile?.profile?.contact === undefined ||
+                profile?.profile?.contact?.alternateEmail === undefined ||
+                profile?.profile?.contact?.alternateEmail === "" ? (
                   <></>
                 ) : (
                   <p>
@@ -107,7 +107,7 @@ function InfoProfile({ profile }) {
           )}
         </div>
 
-        {profile.profile?.professional?.summary && (
+        {profile?.profile?.professional?.summary && (
           <div className="py-4 px-2 w-full">
             <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
               PERFIL PROFESIONAL
@@ -124,9 +124,9 @@ function InfoProfile({ profile }) {
           </div>
         )}
 
-        {profile.profile?.socialMedia === undefined ||
-        profile.profile?.socialMedia?.instagram === undefined ||
-        profile.profile?.socialMedia?.instagram === "" ? (
+        {profile?.profile?.socialMedia === undefined ||
+        profile?.profile?.socialMedia?.instagram === undefined ||
+        profile?.profile?.socialMedia?.instagram === "" ? (
           <></>
         ) : (
           <div className="py-4 px-2 w-full">
@@ -135,8 +135,8 @@ function InfoProfile({ profile }) {
             </h5>
 
             <ul className="flex gap-2 text-white text-2xl px-2">
-              {profile.profile?.socialMedia?.instagram === "" ||
-              profile.profile?.socialMedia?.instagram === undefined ? (
+              {profile?.profile?.socialMedia?.instagram === "" ||
+              profile?.profile?.socialMedia?.instagram === undefined ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
@@ -174,7 +174,8 @@ function InfoProfile({ profile }) {
                   </a>
                 </li>
               )}
-              {profile?.profile?.socialMedia?.linkedin === "" ? (
+              {profile?.profile?.socialMedia?.linkedin === "" ||
+              profile?.profile?.socialMedia?.linkedin === undefined ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
@@ -186,7 +187,8 @@ function InfoProfile({ profile }) {
                   </a>
                 </li>
               )}
-              {profile?.profile?.socialMedia?.youtube === "" ? (
+              {profile?.profile?.socialMedia?.youtube === "" ||
+              profile?.profile?.socialMedia?.youtube === undefined ? (
                 <></>
               ) : (
                 <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
@@ -338,7 +340,7 @@ function InfoProfile({ profile }) {
           </div>
         )}
 
-        {profile.user.username === auth.username ? (
+        {profile?.user?.username === auth.username ? (
           <div className="py-4 px-2 w-full">
             <Button
               action={(e) => {

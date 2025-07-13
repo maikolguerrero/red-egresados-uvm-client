@@ -204,15 +204,21 @@ export default function Chat() {
 
                 const profileResult = await dispatch(getProfile({ username })).unwrap();
 
+                if (!profileResult.success) {
+                    enqueueSnackbar(profileResult.message, typeError);
+                    navigate('/graduates');
+                    return;
+                }
+
                 const userData = {
                     userId: profileResult.profile.user.id,
                     username: profileResult.profile.user.username,
-                    nombreCompleto: profileResult.profile.nombreCompleto,
-                    degree: profileResult.profile.degree,
+                    nombreCompleto: profileResult.profile?.nombreCompleto || profileResult.profile?.user?.fullName,
                     profilePicture: {
                         url: profileResult.profile.user.profilePicture?.url || null
                     }
                 };
+
                 setUser(userData);
 
                 dispatch(setCurrentChat({

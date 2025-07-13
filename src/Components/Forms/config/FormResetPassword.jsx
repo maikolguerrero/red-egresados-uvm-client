@@ -35,17 +35,18 @@ function FormResetPassword() {
     });
   };
 
-  const validarEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
+  const validarEmailOUsername = (emailOrUsername) => {
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const regexUsername = /^[a-zA-Z0-9_-]{4,16}$/;
+    return regexEmail.test(emailOrUsername) || regexUsername.test(emailOrUsername);
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.emailOrUsername.trim() === "") {
-      return enqueueSnackbar("Debes el nuevo correo de recuperacion", typeError);
+      return enqueueSnackbar("Debes ingresar el nombre de usuario o correo de tu cuenta", typeError);
     }
-    if (!validarEmail(values.emailOrUsername)) {
+    if (!validarEmailOUsername(values.emailOrUsername)) {
       return enqueueSnackbar("Tu correo electrónico no es válido", typeError);
     }
 
@@ -61,11 +62,11 @@ function FormResetPassword() {
         <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Ingresa tu correo de recuperación:
+              Ingresa tu nombre  correo de recuperación:
             </Label>
             <input
               className={styles.input}
-              type="email"
+              type="text"
               name="emailOrUsername"
               value={values.emailOrUsername}
               onChange={handleInputChange}

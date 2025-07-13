@@ -14,11 +14,14 @@ function RecoveryEmail() {
           <h2 className="text-verdeC text-2xl md:text-3xl lg:text-4xl font-barlow-semi-condensed font-bold">
             RECUPERAR CORREO
           </h2>
+          <p className="text-Negro text- md:text-base font-barlow-condensed font-medium text-center">
+            Ingresa tu <span className="text-RojoC">nombre de usuario</span> o <span className="text-RojoC">correo electrónico</span> para cambiar el correo de tu cuenta y verificarlo. (Aplica solo a los <span className="text-verdeB">usuarios que no han verificado su correo electrónico</span>)
+          </p>
           <FormRecoverEmail />
         </section>
 
-        <AcademicRequests />
-      </main>
+      <AcademicRequests />
+    </main >
 
       <Footer />
       <ToastContainer

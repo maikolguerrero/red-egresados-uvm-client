@@ -128,7 +128,7 @@ export function FormTextSectionHome({home}) {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de consejos de la red:
               </Label>
-              {homeContent.welcomeSections.length === 0 ? (
+              {homeContent?.welcomeSections?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium border-b-2 pb-3 mb-3 border-verdeD">
                     No hay ningun consejo de uso de la red registrado...
@@ -136,8 +136,8 @@ export function FormTextSectionHome({home}) {
                 </>
               ) : (
                 <ul className="flex flex-col gap-2 pb-3 mb-3 border-b-2 border-verdeD">
-                  {homeContent.welcomeSections.map((item, key) => (
-                    <li>
+                  {homeContent?.welcomeSections?.map((item, key) => (
+                    <li key={key}>
                       <ItemBabge
                         key={key}
                         text={item.title}
