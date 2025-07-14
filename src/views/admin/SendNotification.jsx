@@ -26,9 +26,11 @@ export default function SendNotification() {
                     ) : (
                         <></>
                     )}
+
                     <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase">
                         Selecciona una opción de configuración
                     </h4>
+
                     <div className="flex flex-wrap justify-center gap-6">
                         <ButtonBig
                             text={"Enviar Notificación a Todos los egresados"}

@@ -65,7 +65,7 @@ export function CardEvent({event}) {
     <div className="w-full bg-white border border-verdeD rounded-lg shadow-sm ">
       <a>
         {event.media.length === 0 ? (
-          <div className="flex rounded-t-lg w-full h-[300px] justify-center items-center bg-slate-200 border-verdeD border-b">
+          <div className="flex rounded-t-lg w-full h-[300px] justify-center items-center bg-slate-100 border-verdeD border-b">
             <img
               src={logoUVM}
               className="rounded-t-lg w-56"
@@ -103,7 +103,7 @@ export function CardEvent({event}) {
           <div className="flex gap-3">
             <ButtonSmall
               action={handleNavigate}
-              text={"Ver mas..."}
+              text={"Ver más..."}
               className={"bg-verdeC hover:bg-RojoC"}
             />
             {scheduled ? (

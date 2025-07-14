@@ -55,7 +55,7 @@ function FilterForums({ values, setValues }) {
         <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Categoria del Foro:
+              Categoría del Foro:
             </Label>
             <select
               className={styles.input}
@@ -64,7 +64,7 @@ function FilterForums({ values, setValues }) {
               value={values.category}
               onChange={handleInputChange}
             >
-              <option value="">Todas las categorias</option>
+              <option value="">Todas las categorías</option>
               <option value="general">General</option>
               <option value="empleos">Empleos</option>
               <option value="eventos">Eventos</option>
@@ -83,7 +83,7 @@ function FilterForums({ values, setValues }) {
               name="search"
               value={values.search}
               onChange={handleInputChange}
-              placeholder="Filtrar por titulo del foro..."
+              placeholder="Filtrar por título del foro..."
             />
           </div>
         </div>

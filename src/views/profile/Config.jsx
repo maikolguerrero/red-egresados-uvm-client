@@ -74,26 +74,30 @@ function Config() {
           </>
         )}
 
-        {role === "admin" || role === "superadmin" && (
-          <ButtonSecurity
-            onClick={(e) => {
-              navigate("/config/notification");
-            }}
-            icono={<MdNotifications className="text-6xl" />}
-            texto={"Enviar Notificación a Egresados"}
-          />
-        )}
+        {
+          role === "admin" || role === "superadmin" && (
+            <ButtonSecurity
+              onClick={(e) => {
+                navigate("/config/notification");
+              }}
+              icono={<MdNotifications className="text-6xl" />}
+              texto={"Enviar Notificación a Egresados"}
+            />
+          )
+        }
 
-        {role === "superadmin" && (
-          <ButtonSecurity
-            onClick={(e) => {
-              navigate("/config/admins");
-            }}
-            icono={<MdAdminPanelSettings className="text-6xl" />}
-            texto={"Agregar Admins"}
-          />
-        )}
-      </div>
+        {
+          role === "superadmin" && (
+            <ButtonSecurity
+              onClick={(e) => {
+                navigate("/config/admins");
+              }}
+              icono={<MdAdminPanelSettings className="text-6xl" />}
+              texto={"Agregar Admins"}
+            />
+          )
+        }
+      </div >
 
       <ModalNotHeader
         openModal={openEmail}

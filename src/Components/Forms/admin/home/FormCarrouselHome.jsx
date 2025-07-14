@@ -15,7 +15,7 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
-export function FormCarrouselHome({home}) {
+export function FormCarrouselHome({ home }) {
   const dispatch = useDispatch();
 
   const [picture, setPicture] = useState("");
@@ -50,11 +50,11 @@ export function FormCarrouselHome({home}) {
       <div className="flex flex-col gap-4">
         <form className="flex flex-col gap-5 border-b-2 border-verdeD pb-8">
           <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-            Agregar Imagen a la Galeria
+            Agregar Imágen a la Galeria
           </h5>
           <div className="flex flex-col gap-1">
             <Label className="mb-2 block" htmlFor="small-file-upload">
-              Selecciona la foto:
+              Selecciona la imágen:
             </Label>
             <FileInput
               onChange={onImageChange}
@@ -82,7 +82,7 @@ export function FormCarrouselHome({home}) {
           <ButtonSmall
             action={handleSubmit}
             className={"bg-verdeA hover:bg-RojoC"}
-            text={"AGREGAR FOTO"}
+            text={"AGREGAR IMÁGEN"}
           />
         </form>
 
@@ -93,13 +93,13 @@ export function FormCarrouselHome({home}) {
 
           {home?.carouselItems?.length === 0 ? (
             <p className="px-2 font-barlow-semi-condensed text-RojoC font-medium">
-              No hay ninguna imagen en la galeria...
+              No hay ninguna imágen en la galeria...
             </p>
           ) : (
             <ul className="px-2 flex flex-col gap-4">
               {home?.carouselItems?.map((item, key) => (
                 <li key={key} className="list-disc font-medium font-barolw uppercase flex items-center justify-between">
-                  - Imagen {key + 1}
+                  - Imágen {key + 1}
                   <div className="flex gap-2">
                     <button
                       className="p-2 text-sm bg-blue-600 rounded-md text-white hover:bg-blue-800"
@@ -141,7 +141,7 @@ export function FormCarrouselHome({home}) {
               <>
                 <div className="flex flex-col gap-2">
                   <h6 className="text-lg font-semibold text-Negro font-barlow-semi-condensed uppercase">
-                    Imagen seleccionada
+                    Imágen seleccionada
                   </h6>
                   <img src={urlMedia} className="border-2 border-verdeD" />
                 </div>

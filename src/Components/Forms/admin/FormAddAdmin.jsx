@@ -76,7 +76,7 @@ export function FormAddAdmin() {
           </div>
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Correo electronico:
+              Correo electrónico:
             </Label>
             <input
               className={styles.input}

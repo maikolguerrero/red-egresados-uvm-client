@@ -12,7 +12,6 @@ function ContentManager() {
       </h4>
       {/* <div className="flex flex-col md:flex-row gap-6"> */}
       <div className="flex flex-col md:flex-row flex-wrap md:justify-center gap-6">
-
         <Link to={"/content-manager/landing"}>
           <ButtonSecurity
             icono={<BsPcDisplayHorizontal className="text-6xl" />}

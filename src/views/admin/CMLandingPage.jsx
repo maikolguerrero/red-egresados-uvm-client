@@ -9,6 +9,11 @@ import { getContentLanding } from "../../services/admin/landingService";
 import { FormCarrousel } from "../../Components/Forms/admin/landing/FormCarrousel";
 import { FormFeatureSection } from "../../Components/Forms/admin/landing/FormFeatureSection";
 import { Loader } from "../../Components/Loader";
+import PreviewA from "../../../public/PreviewA.png"
+import PreviewB from "../../../public/PreviewB.png"
+import PreviewC from "../../../public/PreviewC.png"
+import PreviewD from "../../../public/PreviewD.png"
+import PreviewE from "../../../public/PreviewE.png"
 
 function CMLandingPage() {
   const dispatch = useDispatch();
@@ -43,35 +48,81 @@ function CMLandingPage() {
           ) : (
             <></>
           )}
+
           <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase">
             Selecciona una opción de configuración
           </h4>
-          <div className="flex flex-wrap justify-center gap-6">
-            <ButtonBig
-              text={"Carrousel de Imágenes"}
-              className={"bg-verdeC hover:bg-RojoC w-[250px]"}
-              action={(e) => setModalCarrousel(true)}
-            />
-            <ButtonBig
-              text={"Sección de texto"}
-              className={"bg-verdeB hover:bg-RojoC w-[250px]"}
-              action={(e) => setModalWelcolmeS(true)}
-            />
-            <ButtonBig
-              text={"Sección de texto e imágenes"}
-              className={"bg-verdeC hover:bg-RojoC w-[250px]"}
-              action={(e) => setFeaturedSections(true)}
-            />
-            <ButtonBig
-              text={"Preguntas frecuentes"}
-              className={"bg-verdeB hover:bg-RojoC w-[250px]"}
-              action={(e) => setModalFaqs(true)}
-            />
-            <ButtonBig
-              text={"Footer"}
-              className={"bg-verdeC hover:bg-RojoC w-[250px]"}
-              action={(e) => setModalFooter(true)}
-            />
+
+          <div className="flex flex-wrap justify-center gap-8">
+            <div className="w-[300px] flex flex-col gap-3">
+              <ButtonBig
+                text={"Galería de Imágenes"}
+                className={"bg-verdeC hover:bg-RojoC w-full"}
+                action={(e) => setModalCarrousel(true)}
+              />
+              <div className="flex flex-col gap-2">
+                <h6 className="font-barlow-semi-condensed font-medium text-base w-full flex items-center justify-center">
+                  Visualización Previa
+                </h6>
+                <img className="rounded-md border border-verdeB" src={PreviewA} />
+              </div>
+            </div>
+
+            <div className="w-[300px] flex flex-col gap-3">
+              <ButtonBig
+                text={"Sección de texto"}
+                className={"bg-verdeC hover:bg-RojoC w-full"}
+                action={(e) => setModalWelcolmeS(true)}
+              />
+              <div className="flex flex-col gap-2">
+                <h6 className="font-barlow-semi-condensed font-medium text-base w-full flex items-center justify-center">
+                  Visualización Previa
+                </h6>
+                <img className="rounded-md border border-verdeB" src={PreviewB} />
+              </div>
+            </div>
+
+            <div className="w-[300px] flex flex-col gap-3">
+              <ButtonBig
+                text={"Sección de texto e imágenes"}
+                className={"bg-verdeC hover:bg-RojoC w-full"}
+                action={(e) => setFeaturedSections(true)}
+              />
+              <div className="flex flex-col gap-2">
+                <h6 className="font-barlow-semi-condensed font-medium text-base w-full flex items-center justify-center">
+                  Visualización Previa
+                </h6>
+                <img className="rounded-md border border-verdeB" src={PreviewC} />
+              </div>
+            </div>
+
+            <div className="w-[300px] flex flex-col gap-3">
+              <ButtonBig
+                text={"Preguntas frecuentes"}
+                className={"bg-verdeC hover:bg-RojoC w-full"}
+                action={(e) => setModalFaqs(true)}
+              />
+              <div className="flex flex-col gap-2">
+                <h6 className="font-barlow-semi-condensed font-medium text-base w-full flex items-center justify-center">
+                  Visualización Previa
+                </h6>
+                <img className="rounded-md border border-verdeB" src={PreviewD} />
+              </div>
+            </div>
+
+            <div className="w-[300px] flex flex-col gap-3">
+              <ButtonBig
+                text={"Pie de página"}
+                className={"bg-verdeC hover:bg-RojoC w-full"}
+                action={(e) => setModalFooter(true)}
+              />
+              <div className="flex flex-col gap-2">
+                <h6 className="font-barlow-semi-condensed font-medium text-base w-full flex items-center justify-center">
+                  Visualización Previa
+                </h6>
+                <img className="rounded-md border border-verdeB" src={PreviewE} />
+              </div>
+            </div>
           </div>
 
           <ModalNotHeader

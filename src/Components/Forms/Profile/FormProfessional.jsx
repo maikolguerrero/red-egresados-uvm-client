@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../Buttons/Button";
-import { Label } from "flowbite-react";
+import { Checkbox, Label } from "flowbite-react";
 import { FaCamera } from "react-icons/fa";
 import { IoIosAdd } from "react-icons/io";
 import { Skills } from "../../Skills";
@@ -20,7 +20,7 @@ let styles = {
 
 let defaultValues = {
   "summary": "",
-  "skills" : "",
+  "skills": "",
   "interests": "",
 };
 
@@ -49,6 +49,15 @@ let defaultEx = {
   description: "",
 };
 
+let defaultIsPublic = {
+  summary: true,
+  skills: true,
+  interests: true,
+  certifications: true,
+  education: true,
+  experience: true
+}
+
 function FormProfessional() {
   const profile = useSelector((state) => state.users.profile);
   const dispatch = useDispatch();
@@ -63,14 +72,28 @@ function FormProfessional() {
   const [valuesCr, setValuesCr] = useState(defaultCr);
   const [valuesEx, setValuesEx] = useState(defaultEx);
 
+  const [valuesIsPublic, setValuesIsPublic] = useState(defaultIsPublic);
+
   useEffect(() => {
-    setSkills(profile.profile.professional.skills);
-    setInterests(profile.profile.professional.interests);
-    setEducation(profile.profile.education);
-    setCertifications(profile.profile.certifications);
-    setExperience(profile.profile.experience);
+    setSkills(profile.profile.professional.skills.values);
+    setInterests(profile.profile.professional.interests.values);
+    setEducation(profile.profile.education.items);
+    setCertifications(profile.profile.certifications.items);
+    setExperience(profile.profile.experience.items);
+    setValuesIsPublic({
+      summary: profile.profile.professional.summary.isPublic,
+      skills: profile.profile.professional.skills.isPublic,
+      interests: profile.profile.professional.interests.isPublic,
+      certifications: profile.profile.certifications.isPublic,
+      education: profile.profile.education.isPublic,
+      experience: profile.profile.experience.isPublic,
+    });
+
     setValues({
-      summary: profile.profile.professional.summary,
+      summary:
+        profile.profile.professional.summary.value === undefined
+          ? ""
+          : profile.profile.professional.summary.value,
       skills: "",
       interests: "",
     });
@@ -107,7 +130,7 @@ function FormProfessional() {
     if (valuesEd.startYear === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
     if (valuesEd.endYear === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
     if (valuesEd.startYear > valuesEd.endYear) return enqueueSnackbar("No puedes escribir un año mayor al de finalizacion", typeError)
-    
+
     setEducation([...education, valuesEd]);
     setValuesEd({
       institution: "",
@@ -125,7 +148,7 @@ function FormProfessional() {
     if (valuesCr.issueDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
     if (valuesCr.credentialID.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
     if (valuesCr.credentialURL.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
-      
+
     setCertifications([...certifications, valuesCr]);
     setValuesCr({
       name: "",
@@ -144,7 +167,7 @@ function FormProfessional() {
     if (valuesEx.startDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
     if (valuesEx.endDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
     if (valuesEx.startDate > valuesEx.endDate) return enqueueSnackbar("No puede ser mayor la fecha de inicio que la fecha de finalizacion", typeError)
-    
+
     setExperience([...experience, valuesEx]);
     setValuesEx({
       position: "",
@@ -219,17 +242,45 @@ function FormProfessional() {
     });
   };
 
+  const handleCheckChange = (name, value) => {
+    setValuesIsPublic({
+      ...valuesIsPublic,
+      [name]: value
+    })
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let data = {
+      personalData: profile.profile.personalData,
+      contact: profile.profile.contact,
+      socialMedia: profile.profile.socialMedia,
       professional: {
-        summary: values.summary,
-        skills: skills,
-        interests: interests,
+        summary: {
+          value: values.summary,
+          isPublic: valuesIsPublic.summary,
+        },
+        skills: {
+          values: skills,
+          isPublic: valuesIsPublic.skills,
+        },
+        interests: {
+          values: interests,
+          isPublic: valuesIsPublic.interests,
+        },
       },
-      experience: experience,
-      education: education,
-      certifications: certifications,
+      experience: {
+        items: experience,
+        isPublic: valuesIsPublic.experience,
+      },
+      education: {
+        items: education,
+        isPublic: valuesIsPublic.education,
+      },
+      certifications: {
+        items: certifications,
+        isPublic: valuesIsPublic.certifications,
+      },
     };
     dispatch(updateProfile(data))
   };
@@ -253,6 +304,18 @@ function FormProfessional() {
                 onChange={handleInputChange}
                 placeholder="Descripción profesional..."
               ></textarea>
+              <div className="flex items-center gap-2 mt-2">
+                <Checkbox
+                  className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                  checked={valuesIsPublic.summary}
+                  onChange={(e) =>
+                    handleCheckChange("summary", !valuesIsPublic.summary)
+                  }
+                />
+                <Label className="font-barlow-semi-condensed text-RojoC">
+                  Hacer público este contenido
+                </Label>
+              </div>
             </div>
           </div>
         </div>
@@ -294,13 +357,27 @@ function FormProfessional() {
                   </h6>
                 </>
               ) : (
-                <ul className="flex gap-2">
-                  {skills.map((item, key) => (
-                    <li>
-                      <Skills key={key} text={item} onClick={deleteSkill} />
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="flex gap-2">
+                    {skills.map((item, key) => (
+                      <li>
+                        <Skills key={key} text={item} onClick={deleteSkill} />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                      checked={valuesIsPublic.skills}
+                      onChange={(e) =>
+                        handleCheckChange("skills", !valuesIsPublic.skills)
+                      }
+                    />
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
+                    </Label>
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -343,13 +420,34 @@ function FormProfessional() {
                   </h6>
                 </>
               ) : (
-                <ul className="flex gap-2">
-                  {interests.map((item, key) => (
-                    <li>
-                      <Skills key={key} text={item} onClick={deleteInterest} />
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="flex gap-2">
+                    {interests.map((item, key) => (
+                      <li>
+                        <Skills
+                          key={key}
+                          text={item}
+                          onClick={deleteInterest}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                      checked={valuesIsPublic.interests}
+                      onChange={(e) =>
+                        handleCheckChange(
+                          "interests",
+                          !valuesIsPublic.interests
+                        )
+                      }
+                    />
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
+                    </Label>
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -446,17 +544,34 @@ function FormProfessional() {
                   </h6>
                 </>
               ) : (
-                <ul className="flex flex-col gap-2">
-                  {education.map((item, key) => (
-                    <li>
-                      <ItemBabge
-                        key={key}
-                        text={item.degree}
-                        onClick={deleteEducation}
-                      />
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="flex flex-col gap-2">
+                    {education.map((item, key) => (
+                      <li>
+                        <ItemBabge
+                          key={key}
+                          text={item.degree}
+                          onClick={deleteEducation}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                      checked={valuesIsPublic.education}
+                      onChange={(e) =>
+                        handleCheckChange(
+                          "education",
+                          !valuesIsPublic.education
+                        )
+                      }
+                    />
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
+                    </Label>
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -550,17 +665,34 @@ function FormProfessional() {
                   </h6>
                 </>
               ) : (
-                <ul className="flex flex-col gap-2">
-                  {certifications.map((item, key) => (
-                    <li>
-                      <ItemBabge
-                        key={key}
-                        text={item.name}
-                        onClick={deleteCertification}
-                      />
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="flex flex-col gap-2">
+                    {certifications.map((item, key) => (
+                      <li>
+                        <ItemBabge
+                          key={key}
+                          text={item.name}
+                          onClick={deleteCertification}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                      checked={valuesIsPublic.certifications}
+                      onChange={(e) =>
+                        handleCheckChange(
+                          "certifications",
+                          !valuesIsPublic.certifications
+                        )
+                      }
+                    />
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
+                    </Label>
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -670,24 +802,45 @@ function FormProfessional() {
                   </h6>
                 </>
               ) : (
-                <ul className="flex flex-col gap-2">
-                  {experience.map((item, key) => (
-                    <li>
-                      <ItemBabge
-                        key={key}
-                        text={item.position}
-                        onClick={deleteExperiencie}
-                      />
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="flex flex-col gap-2">
+                    {experience.map((item, key) => (
+                      <li>
+                        <ItemBabge
+                          key={key}
+                          text={item.position}
+                          onClick={deleteExperiencie}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                      checked={valuesIsPublic.experience}
+                      onChange={(e) =>
+                        handleCheckChange(
+                          "experience",
+                          !valuesIsPublic.experience
+                        )
+                      }
+                    />
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
+                    </Label>
+                  </div>
+                </>
               )}
             </div>
           </div>
         </div>
 
         <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
-          <Button action={handleSubmit} className={"w-full"} text="GUARDAR CAMBIOS" />
+          <Button
+            action={handleSubmit}
+            className={"w-full"}
+            text="GUARDAR CAMBIOS"
+          />
         </div>
       </form>
     </>

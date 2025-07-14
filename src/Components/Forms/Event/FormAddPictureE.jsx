@@ -52,11 +52,11 @@ export function FormAddPictureE({setOpenModal}) {
     <>
       <form className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          Agregar Imagen al evento
+          Agregar Imágen al evento
         </h5>
         <div className="flex flex-col gap-1">
           <Label className="mb-2 block" htmlFor="small-file-upload">
-            Selecciona la imagen:
+            Selecciona la imágen:
           </Label>
           <FileInput
             onChange={onImageChange}
@@ -84,7 +84,7 @@ export function FormAddPictureE({setOpenModal}) {
         <ButtonSmall
           action={handleSubmit}
           className={"bg-verdeA hover:bg-RojoC"}
-          text={"AGREGAR FOTO"}
+          text={"AGREGAR IMÁGEN"}
         />
         <ButtonSmall
           action={handleClose}

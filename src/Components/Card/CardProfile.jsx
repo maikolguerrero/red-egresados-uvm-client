@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import perfil from "../../../public/Perfil.jpg"
 import BadgeNormal from "../Buttons/BadgeNormal";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
+import { useSelector } from "react-redux";
 
 function CardProfile({ profile }) {
+  const username = useSelector((state) => state.auth.username)
   const [anchoPantalla, setAnchoPantalla] = useState(window.innerWidth);
 
   const [openModal, setOpenModal] = useState(false)
@@ -67,11 +69,12 @@ function CardProfile({ profile }) {
               </h6>
             ))}
             {/* Botón "Ver más" si hay más de 2 carreras/programas */}
-            {(profile?.programasPostgrado?.length + profile?.carrerasPregrado?.length) > 2 ? (
+            {(profile?.programasPostgrado?.length +
+              profile?.carrerasPregrado?.length >
+              2) ? (
               <button
                 onClick={(e) => setOpenModal3(true)}
                 className="text-[10px] md:text-[14px] lg:text-base font-barlow-semi-condensed font-semibold text-verdeD hover:text-verdeB"
-
               >
                 Ver más
               </button>
@@ -80,29 +83,73 @@ function CardProfile({ profile }) {
 
           {/* Habilidades e Intereses */}
           <div className="flex gap-1 md:gap-2 flex-wrap">
-            {profile?.profile?.professional?.skills?.length === 0 ? (
-              <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
+            {profile?.user?.username === username ? (
+              <>
+                {" "}
+                {profile?.profile?.professional?.skills?.values.length === 0 ? (
+                  <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
+                ) : (
+                  <button
+                    onClick={(e) => setOpenModal(true)}
+                    className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+                  >
+                    ver habilidades de valor{" "}
+                    {profile?.profile?.professional?.skills?.values.length}
+                  </button>
+                )}
+              </>
             ) : (
-              <button
-                onClick={(e) => setOpenModal(true)}
-                className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
-              >
-                ver habilidades de valor {profile?.profile?.professional?.skills?.length}
-              </button>
+              <>
+                {profile?.profile?.professional?.skills?.values.length === 0 ||
+                  profile?.profile?.professional?.skills?.isPublic === false ? (
+                  <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
+                ) : (
+                  <button
+                    onClick={(e) => setOpenModal(true)}
+                    className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+                  >
+                    ver habilidades de valor{" "}
+                    {profile?.profile?.professional?.skills?.values.length}
+                  </button>
+                )}
+              </>
             )}
-            {profile?.profile?.professional?.interests?.length === 0 ? (
-              <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+
+            {profile?.user?.username === username ? (
+              <>
+                {profile?.profile?.professional?.interests?.values.length ===
+                  0 ? (
+                  <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                ) : (
+                  <button
+                    onClick={(e) => setOpenModal2(true)}
+                    className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+                  >
+                    ver intereses personales{" "}
+                    {profile?.profile?.professional?.interests?.values.length}
+                  </button>
+                )}
+              </>
             ) : (
-              <button
-                onClick={(e) => setOpenModal2(true)}
-                className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
-              >
-                ver intereses personales {profile?.profile?.professional?.interests?.length}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
+              <>
+                {profile?.profile?.professional?.interests?.values.length ===
+                  0 || profile?.profile?.professional?.interests?.isPublic === false ? (
+                  <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                ) : (
+                  <button
+                    onClick={(e) => setOpenModal2(true)}
+                    className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+                  >
+                    ver intereses personales{" "}
+                    {profile?.profile?.professional?.interests?.values.length}
+                  </button>
+                )}
+              </>
+            )
+            }
+          </div >
+        </div >
+      </div >
 
       <ModalNotHeader
         size={"sm"}
@@ -114,15 +161,17 @@ function CardProfile({ profile }) {
               HABILIDADES PROFESIONALES
             </h4>
             <div className="flex gap-2">
-              {profile?.profile?.professional?.skills?.map((item, key) => (
-                <BadgeNormal color="bg-verdeD" text={item} key={key} />
-              ))}
-            </div>
+              {profile?.profile?.professional?.skills?.values.map(
+                (item, key) => (
+                  <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                )
+              )}
+            </ div >
           </>
         }
       />
 
-      <ModalNotHeader
+      < ModalNotHeader
         size={"sm"}
         openModal={openModal2}
         setOpenModal={setOpenModal2}
@@ -132,37 +181,49 @@ function CardProfile({ profile }) {
               INTERESES PERSONALES
             </h4>
             <div className="flex gap-2">
-              {profile?.profile?.professional?.interests?.map((item, key) => (
-                <BadgeNormal color="bg-verdeD" text={item} key={key} />
-              ))}
-            </div>
+              {profile?.profile?.professional?.interests?.values.map(
+                (item, key) => (
+                  <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                )
+              )}
+            </div >
           </>
         }
       />
 
-      <ModalNotHeader
+      < ModalNotHeader
         size={"xl"}
         openModal={openModal3}
         setOpenModal={setOpenModal3}
         component={
-          <div
+          < div
             className="flex flex-col gap-2 h-full"
-            // style={{
-            //   overflowY: profile?.carrerasPregrado?.length + profile?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
-            // }}
+          // style={{
+          //   overflowY: profile?.carrerasPregrado?.length + profile?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
+          // }}
           >
             <h4 className="py-1 px-2 border-b-2 mb-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
               Titulos obtenidos en la UVM
             </h4>
             <ul className="list-inside flex flex-col gap-2">
               {profile?.carrerasPregrado?.map((item, key) => (
-                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-verdeB" >{item.carrera}</li>
+                <li
+                  key={key}
+                  className="list-disc font-barlow-condensed text-lg font-medium text-verdeB"
+                >
+                  {item.carrera}
+                </li>
               ))}
               {profile?.programasPostgrado?.map((item, key) => (
-                <li key={key} className="list-disc font-barlow-condensed text-lg font-medium text-RojoC" >{item.programa}</li>
+                <li
+                  key={key}
+                  className="list-disc font-barlow-condensed text-lg font-medium text-RojoC"
+                >
+                  {item.programa}
+                </li>
               ))}
             </ul>
-          </div>
+          </div >
         }
       />
     </>

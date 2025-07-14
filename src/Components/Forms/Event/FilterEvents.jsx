@@ -79,7 +79,7 @@ function FilterEvents({ values, setValues }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Titulo y Descripcion:
+              Título y Descripción:
             </Label>
             <input
               className={styles.input}
@@ -87,7 +87,7 @@ function FilterEvents({ values, setValues }) {
               name="search"
               value={values.search}
               onChange={handleInputChange}
-              placeholder="Filtrar por titulo o descripcion..."
+              placeholder="Filtrar por título o descripción..."
             />
           </div>
 

@@ -201,7 +201,7 @@ function Home() {
               {home.welcomeSections.length === 0 ? (
                 <h5 className="font-barolw font-medium text-verdeD">
                   No se han publicados consejos para usar la red de
-                  egresados aun...
+                  egresados aún...
                 </h5>
               ) : (
                 <Timeline theme={customThemeTimeline}>

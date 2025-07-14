@@ -51,10 +51,10 @@ function App() {
   const checked = useSelector((state) => state.auth.checked);
 
   const renderSessionActive = (Route) => {
-    if(!checked){
+    if (!checked) {
       return <Navigate to={window.location.pathname} />;
     }
-    if(sessionActive){
+    if (sessionActive) {
       return <Route />;
     }
     return <Navigate to="/" />;
@@ -185,7 +185,17 @@ function App() {
           <Layout>
             {renderSessionActive(EventView)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/events/:event",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(EventView)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -215,7 +225,7 @@ function App() {
           <Layout>
             {renderSessionActive(Notifications)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
@@ -225,7 +235,7 @@ function App() {
           <Layout>
             {renderSessionActive(Config)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
@@ -235,7 +245,17 @@ function App() {
           <Layout>
             {renderSessionActive(MyProfile)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/my-profile",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(MyProfile)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -245,27 +265,23 @@ function App() {
           <Layout>
             <ChangePassword />
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/verify-email",
       element: (
         <ProtectedRoute>
-          <Layout>
-            <Verifycation />
-          </Layout>
-        </ProtectedRoute>
+          <Verifycation />
+        </ProtectedRoute >
       ),
     },
     {
       path: "/verify-email-change",
       element: (
         <ProtectedRoute>
-          <Layout>
-            <ChangeEmail />
-          </Layout>
-        </ProtectedRoute>
+          <ChangeEmail />
+        </ProtectedRoute >
       ),
     },
     {
@@ -275,7 +291,7 @@ function App() {
           <Layout>
             {renderSessionActive(Reports)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
@@ -285,7 +301,17 @@ function App() {
           <Layout>
             {renderSessionActive(Admins)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/config/admins",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(Admins)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -295,7 +321,7 @@ function App() {
           <Layout>
             {renderSessionActive(ManageGraduates)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
@@ -305,7 +331,17 @@ function App() {
           <Layout>
             {renderSessionActive(SendNotification)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/config/notification",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(SendNotification)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -315,7 +351,7 @@ function App() {
           <Layout>
             {renderSessionActive(ContentManager)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
@@ -325,7 +361,17 @@ function App() {
           <Layout>
             {renderSessionActive(CMLandingPage)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/content-manager/landing",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMLandingPage)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -335,7 +381,17 @@ function App() {
           <Layout>
             {renderSessionActive(CMHomePage)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/content-manager/home",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMHomePage)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -345,7 +401,17 @@ function App() {
           <Layout>
             {renderSessionActive(CMAcademicRequests)}
           </Layout>
-        </ProtectedRoute>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/content-manager/academic-requests",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMAcademicRequests)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -370,9 +436,7 @@ function App() {
     dispatch(verifySesion());
     dispatch(getContentFooter());
     dispatch(getContentAcademicRequests());
-    // dispatch(verifySesion());
     // await dispatch(verifySesion()).unwrap();
-
   }, []);
 
   useEffect(() => {

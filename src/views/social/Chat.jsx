@@ -7,9 +7,11 @@ import EmojiPicker from 'emoji-picker-react';
 import { enqueueSnackbar } from "notistack";
 import { throttle } from 'lodash';
 import { typeError, typeSuccess } from "../../models/alertModels";
+import Header from "../../Components/Header";
+import Nav from "../../Components/Nav";
 import Message from "../../Components/Chat/Message";
 import OnlineStatus from "../../Components/Chat/OnlineStatus";
-import ButtonSmall from "../../Components/Buttons/ButtonSmall";
+import ButtonSmall from "../../Components/Buttons/buttonSmall";
 import { getProfile } from "../../services/users/usersService";
 import { getMessages, sendMessage } from "../../services/chat/chatService";
 import socketService from "../../services/socket/socket.service";
@@ -545,70 +547,76 @@ export default function Chat() {
                 )}
 
                 {/* si no hay mensajes */}
-                {(!loading && groupedMessages.length === 0) && (
-                    <div className="flex flex-col items-center justify-center h-full w-full">
-                        <p className="text-xl font-bold text-verdeD text-center">
-                            ¡Inicia una conversación!
-                        </p>
-                        <p className="text-sm font-bold text-verdeB text-center mt-2">
-                            Puedes enviar un solo mensaje hasta que {user?.nombreCompleto} apruebe tu solicitud para iniciar la conversación
-                        </p>
-                    </div>
-                )}
-
-                {/* mensajes */}
-                {groupedMessages.map((group) => {
-                    const dateKey = new Date(group.date).toISOString().split('T')[0];
-                    return (
-                        <div key={group.date} className="mb-4">
-                            <div
-                                ref={getDateRef(dateKey)} // Asignar la ref aquí
-                                id={dateKey} // Asignar un ID para el IntersectionObserver
-                                className="flex items-center justify-center my-4"
-                            >
-                                <div className="bg-Gris/50 text-Negro/70 text-xs font-medium px-3 py-1 rounded-full">
-                                    {formatDateHeader(group.date)}
-                                </div>
-                            </div>
-
-                            {group.messages.map((msg) => {
-                                const isOwn = msg.sender?.id === auth.id;
-                                return (
-                                    <Message
-                                        key={msg.id}
-                                        message={{
-                                            ...msg,
-                                            sender: {
-                                                ...msg.sender,
-                                                nombreCompleto: msg.sender?.nombreCompleto || user?.nombreCompleto,
-                                                username: msg.sender?.username,
-                                                profilePicture: msg.sender?.profilePicture || {
-                                                    url: null
-                                                }
-                                            }
-                                        }}
-                                        isOwn={isOwn}
-                                        markMessagesAsRead={handleMarkAsRead}
-                                    />
-                                );
-                            })}
+                {
+                    (!loading && groupedMessages.length === 0) && (
+                        <div className="flex flex-col items-center justify-center h-full w-full">
+                            <p className="text-xl font-bold text-verdeD text-center">
+                                ¡Inicia una conversación!
+                            </p>
+                            <p className="text-sm font-bold text-verdeB text-center mt-2">
+                                Puedes enviar un solo mensaje hasta que {user?.nombreCompleto} apruebe tu solicitud para iniciar la conversación
+                            </p>
                         </div>
                     )
-                })}
+                }
+
+                {/* mensajes */}
+                {
+                    groupedMessages.map((group) => {
+                        const dateKey = new Date(group.date).toISOString().split('T')[0];
+                        return (
+                            <div key={group.date} className="mb-4">
+                                <div
+                                    ref={getDateRef(dateKey)} // Asignar la ref aquí
+                                    id={dateKey} // Asignar un ID para el IntersectionObserver
+                                    className="flex items-center justify-center my-4"
+                                >
+                                    <div className="bg-Gris/50 text-Negro/70 text-xs font-medium px-3 py-1 rounded-full">
+                                        {formatDateHeader(group.date)}
+                                    </div>
+                                </div>
+
+                                {group.messages.map((msg) => {
+                                    const isOwn = msg.sender?.id === auth.id;
+                                    return (
+                                        <Message
+                                            key={msg.id}
+                                            message={{
+                                                ...msg,
+                                                sender: {
+                                                    ...msg.sender,
+                                                    nombreCompleto: msg.sender?.nombreCompleto || user?.nombreCompleto,
+                                                    username: msg.sender?.username,
+                                                    profilePicture: msg.sender?.profilePicture || {
+                                                        url: null
+                                                    }
+                                                }
+                                            }}
+                                            isOwn={isOwn}
+                                            markMessagesAsRead={handleMarkAsRead}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        )
+                    })
+                }
 
                 {/* solicitud de chat */}
-                {pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
-                    <div className="fixed bottom-20 left-0 right-0 bg-verdeA font-bold text-white p-4 ">
-                        <div className="container mx-auto flex  items-center p-2">
-                            <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
-                            <ButtonSmall
-                                text={"Aceptar solicitud"}
-                                className={"bg-verdeC hover:bg-RojoC"}
-                                action={handleAcceptRequest}
-                            />
+                {
+                    pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
+                        <div className="fixed bottom-20 left-0 right-0 bg-verdeA font-bold text-white p-4 ">
+                            <div className="container mx-auto flex  items-center p-2">
+                                <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
+                                <ButtonSmall
+                                    text={"Aceptar solicitud"}
+                                    className={"bg-verdeC hover:bg-RojoC"}
+                                    action={handleAcceptRequest}
+                                />
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
             </div >
 
             {/* Contenedor principal de la barra de mensaje */}
@@ -639,6 +647,38 @@ export default function Chat() {
                                    bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
                                     style={{ overflowY: 'hidden' }}
                                 />
+
+                            </div>
+
+                            <div className="flex items-end gap-2">
+                                <button
+                                    ref={emojiButtonRef}
+                                    onClick={handleEmojiButtonClick}
+                                    className="text-verdeD hover:text-RojoC transition-colors duration-200 p-2 rounded-full">
+                                    <BsEmojiSmile className="text-xl"
+                                    />
+                                </button>
+                                <div className="flex-1 min-h-[40px] flex items-end">
+                                    <textarea
+                                        ref={textareaRef}
+                                        value={message}
+                                        onChange={handleChange}
+                                        onKeyDown={handleKeyDown}
+                                        placeholder="Escribe un mensaje..."
+                                        rows={1}
+                                        className="w-full h-full p-2 text-Negro font-barolw text-sm resize-none
+                                   bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
+                                        style={{ overflowY: 'hidden' }}
+                                    />
+                                </div>
+
+                                <button
+                                    onClick={handleSendMessage}
+                                    disabled={message.trim() === ""}
+                                    className="bg-verdeA hover:bg-verdeD text-white align-center p-2 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <IoSend className="text-xl" />
+                                </button>
                             </div>
 
                             <button
@@ -648,26 +688,29 @@ export default function Chat() {
                             >
                                 <IoSend className="text-xl" />
                             </button>
-                        </div>
-                    )}
 
+                        </div >
+                    )
+                }
             </div >
 
             {/* Selector de Emojis */}
-            {showEmojiPicker && (
-                <div ref={emojiPickerRef} className="absolute bottom-20 left-4 z-50 shadow-lg rounded-lg overflow-hidden">
-                    <EmojiPicker
-                        onEmojiClick={onEmojiClick}
-                        height={350}
-                        width="100%"
-                        skinTonePickerLocation="PREVIEW"
-                        searchDisabled={false}
-                        lazyLoadEmojis={true}
-                        theme="light"
-                        emojiStyle="native"
-                    />
-                </div>
-            )}
+            {
+                showEmojiPicker && (
+                    <div ref={emojiPickerRef} className="absolute bottom-20 left-4 z-50 shadow-lg rounded-lg overflow-hidden">
+                        <EmojiPicker
+                            onEmojiClick={onEmojiClick}
+                            height={350}
+                            width="100%"
+                            skinTonePickerLocation="PREVIEW"
+                            searchDisabled={false}
+                            lazyLoadEmojis={true}
+                            theme="light"
+                            emojiStyle="native"
+                        />
+                    </div>
+                )
+            }
         </>
     );
 }

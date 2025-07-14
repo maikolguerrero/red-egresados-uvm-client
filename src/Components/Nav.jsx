@@ -87,109 +87,122 @@ function Nav() {
 
   return (
     <>
-      {/* Overlay para móvil */}
-      {isMobile && !isSidebar && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity duration-300 ease-in-out"
-          onClick={() => dispatch(toggleSidebar())}
-        />
-      )}
-
-      <nav className={`${(isMobile && isSidebar) ? "w-[0px] items-center" : ""} ${(!isMobile && isSidebar) ? "w-[60px] items-center" : "md:w-[200px] lg:w-[250px] absolute md:relative w-full"} flex flex-col border-r-2 bg-Gris ${!isMobile && "border-verdeD"} h-[89.5vh] text-verdeD transition-all duration-[400ms] z-10`}>
-        {(!isMobile || (isMobile && !isSidebar)) && (
-          <>
-            <div className="px-4 pt-3 flex justify-end relative transition-all duration-[400ms]">
-              <button
-                onClick={() => dispatch(toggleSidebar())}
-                className="rounded-full px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all group relative"
-              >
-                {isSidebar ? <FaArrowRightLong className="text-xl" /> : <FaArrowLeftLong className="text-xl" />}
-                {!isMobile && (
-                  <span className="absolute left-full ml-4 px-3 py-1 bg-verdeD text-Blanco text-sm font-barolw rounded-md shadow-lg whitespace-nowrap scale-0 group-hover:scale-100 origin-left transition-transform duration-200 z-20">
-                    {isSidebar ? "EXPANDIR" : "CONTRAER"}
-                  </span>
-                )}
-              </button>
-            </div>
-
-            <ul className="py-4 border-b border-verdeD ">
-              <NavItem
-                to="/home"
-                icon={<IoIosHome className="text-2xl" />}
-                text="PRINCIPAL"
-                isSidebar={isSidebar}
-                onClick={() => dispatch(toggleSidebar())}
-              />
-            </ul>
-            <ul className="py-4 border-b border-verdeD ">
-              <NavItem
-                to="/graduates"
-                icon={<FaGraduationCap className="text-2xl" />}
-                text="EGRESADOS"
-                isSidebar={isSidebar}
-                onClick={() => dispatch(toggleSidebar())}
-              />
-              <NavItem
-                to="/forums"
-                icon={<FaPeopleGroup className="text-2xl" />}
-                text="FOROS"
-                isSidebar={isSidebar}
-                onClick={() => dispatch(toggleSidebar())}
-              />
-              <NavItem
-                to="/projects"
-                icon={<PiProjectorScreenChartBold className="text-2xl" />}
-                text="PROYECTOS"
-                isSidebar={isSidebar}
-                onClick={() => dispatch(toggleSidebar())}
-              />
-              <NavItem
-                to="/events"
-                icon={<BsCalendarDate className="text-2xl" />}
-                text="EVENTOS"
-                isSidebar={isSidebar}
-                onClick={() => dispatch(toggleSidebar())}
-              />
-            </ul>
-
-            <ul className="py-4 border-b border-verdeD ">
-              <NavItem
-                to="/notifications"
-                icon={<IoIosNotifications className="text-2xl" />}
-                text="NOTIFICACIONES"
-                isSidebar={isSidebar}
-                badge={unreadCount}
-                onClick={() => dispatch(toggleSidebar())}
-              />
-              <NavItem
-                to="/config"
-                icon={<FaGear className="text-2xl" />}
-                text="CONFIGURACIÓN"
-                isSidebar={isSidebar}
-                onClick={() => dispatch(toggleSidebar())}
-              />
-              {role === "egresado" && (
-                <NavItem
-                  to="/my-profile"
-                  icon={<FaUser className="text-2xl" />}
-                  text="PERFIL"
-                  isSidebar={isSidebar}
-                  onClick={() => dispatch(toggleSidebar())}
-                />
-              )}
-              {(role === "admin" || role === "superadmin") && (
-                <NavItem
-                  to="/content-manager"
-                  icon={<MdEditDocument className="text-2xl" />}
-                  text="GESTOR DE CONTENIDO"
-                  isSidebar={isSidebar}
-                  onClick={() => dispatch(toggleSidebar())}
-                />
-              )}
-            </ul>
-          </>
+      <>
+        {/* Overlay para móvil - solo se muestra cuando el sidebar está abierto */}
+        {isMobile && (
+          <div
+            className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity duration-300 ease-in-out ${!isSidebar ? "opacity-50" : "opacity-0 pointer-events-none"
+              }`}
+            onClick={() => dispatch(toggleSidebar())}
+          />
         )}
-      </nav>
+
+        <nav
+          className={`${isMobile
+            ? `fixed top-0 left-0 h-full w-full ${!isSidebar ? "translate-x-0" : "-translate-x-full"
+            }`
+            : isSidebar
+              ? "w-[60px] items-center"
+              : "md:w-[200px] absolute md:relative w-full"
+            } flex flex-col border-r-2 bg-Gris ${!isMobile && "border-verdeD"
+            } h-[89.5vh] md:h-auto text-verdeD transition-all duration-300 ease-in-out z-20`}
+        >
+          {/* Contenido del sidebar */}
+          <div className="px-4 pt-3 flex justify-end">
+            <button
+              onClick={() => dispatch(toggleSidebar())}
+              className="rounded-full px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all group relative"
+            >
+              {isSidebar ? (
+                <FaArrowRightLong className="text-xl" />
+              ) : (
+                <FaArrowLeftLong className="text-xl" />
+              )}
+              {!isMobile && (
+                <span className="absolute left-full ml-4 px-3 py-1 bg-verdeD text-Blanco text-sm font-barolw rounded-md shadow-lg whitespace-nowrap scale-0 group-hover:scale-100 origin-left transition-transform duration-200 z-20">
+                  {isSidebar ? "EXPANDIR" : "CONTRAER"}
+                </span>
+              )}
+            </button>
+          </div>
+
+          <ul className="py-4 border-b border-verdeD">
+            <NavItem
+              to="/home"
+              icon={<IoIosHome className="text-2xl" />}
+              text="PRINCIPAL"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+          </ul>
+          <ul className="py-4 border-b border-verdeD">
+            <NavItem
+              to="/graduates"
+              icon={<FaGraduationCap className="text-2xl" />}
+              text="EGRESADOS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/forums"
+              icon={<FaPeopleGroup className="text-2xl" />}
+              text="FOROS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/projects"
+              icon={<PiProjectorScreenChartBold className="text-2xl" />}
+              text="PROYECTOS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/events"
+              icon={<BsCalendarDate className="text-2xl" />}
+              text="EVENTOS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+          </ul>
+
+          <ul className="py-4 border-b border-verdeD">
+            <NavItem
+              to="/notifications"
+              icon={<IoIosNotifications className="text-2xl" />}
+              text="NOTIFICACIONES"
+              isSidebar={isSidebar}
+              badge={unreadCount}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/config"
+              icon={<FaGear className="text-2xl" />}
+              text="CONFIGURACIÓN"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            {role === "egresado" && (
+              <NavItem
+                to="/my-profile"
+                icon={<FaUser className="text-2xl" />}
+                text="PERFIL"
+                isSidebar={isSidebar}
+                onClick={handleClickLink}
+              />
+            )}
+            {(role === "admin" || role === "superadmin") && (
+              <NavItem
+                to="/content-manager"
+                icon={<MdEditDocument className="text-2xl" />}
+                text="GESTOR DE CONTENIDO"
+                isSidebar={isSidebar}
+                onClick={handleClickLink}
+              />
+            )}
+          </ul>
+        </nav>
+      </>
     </>
   );
 }

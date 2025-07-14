@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import useIsMobile from '../hooks/useIsMobile';
 
 export default function NavItem({ to, icon, text, isSidebar, badge, onClick }) {
+    const isMobile = useIsMobile();
     return (
         <Link
             to={to}
@@ -21,7 +23,7 @@ export default function NavItem({ to, icon, text, isSidebar, badge, onClick }) {
             </p>
 
             {/* Tooltip que solo aparece cuando la sidebar está colapsada */}
-            {isSidebar && (
+            {(!isMobile && isSidebar) && (
                 <span className="absolute left-full ml-4 px-3 py-1 bg-verdeD text-Blanco text-sm font-barolw rounded-md shadow-lg whitespace-nowrap scale-0 group-hover:scale-100 origin-left transition-transform duration-200 z-20">
                     {text}
                 </span>

@@ -113,7 +113,7 @@ export function FormAddEvent({ eventSelect, type }) {
       tags: [...values.tags, tag],
     });
     setTag("");
-    enqueueSnackbar("Se agrego la etiqueta", typeInfo);
+    enqueueSnackbar("Se agregó la etiqueta", typeInfo);
   };
 
   const deleteTag = (key) => {
@@ -122,7 +122,7 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       tags: newTags,
     });
-    enqueueSnackbar("Se elimino la etiqueta", typeInfo);
+    enqueueSnackbar("Se eliminó la etiqueta", typeInfo);
   };
 
   const addOrganizer = (e) => {
@@ -137,7 +137,7 @@ export function FormAddEvent({ eventSelect, type }) {
       organizers: [...values.organizers, organizer],
     });
     setTag("");
-    enqueueSnackbar("Se agrego al organizador", typeInfo);
+    enqueueSnackbar("Se agregó al organizador", typeInfo);
   };
 
   const deleteOrganizer = (key) => {
@@ -146,7 +146,7 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       organizers: newOrg,
     });
-    enqueueSnackbar("Se elimino al organizador", typeInfo);
+    enqueueSnackbar("Se eliminó al organizador", typeInfo);
   };
 
   const addEspecial = (e) => {
@@ -161,7 +161,7 @@ export function FormAddEvent({ eventSelect, type }) {
       specialGuests: [...values.specialGuests, specialGuest],
     });
     setTag("");
-    enqueueSnackbar("Se agrego al invitado especial", typeInfo);
+    enqueueSnackbar("Se agregó al invitado especial", typeInfo);
   };
 
   const deleteEspecial = (key) => {
@@ -170,7 +170,7 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       specialGuests: newEspecial,
     });
-    enqueueSnackbar("Se elimino al invitado especial", typeInfo);
+    enqueueSnackbar("Se eliminó al invitado especial", typeInfo);
   };
 
   const handleInputChange = (e) => {
@@ -197,10 +197,10 @@ export function FormAddEvent({ eventSelect, type }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (values.title.trim() === "") {
-      return enqueueSnackbar("Debe tener titulo el evento", typeError);
+      return enqueueSnackbar("Debe tener título el evento", typeError);
     }
     if (values.description.trim() === "") {
-      return enqueueSnackbar("Debe tener descripcion el evento", typeError);
+      return enqueueSnackbar("Debe tener descripción el evento", typeError);
     }
     if (values.eventType.trim() === "") {
       return enqueueSnackbar("Debe especificar el tipo de evento", typeError);
@@ -212,20 +212,20 @@ export function FormAddEvent({ eventSelect, type }) {
     //     return enqueueSnackbar("Debe escribir el link virtual del evento o (no tiene)", typeError);
     // }
     if (values.capacity < 0) {
-      return enqueueSnackbar("Debes colocar una capacidad minima de 0", typeError);
+      return enqueueSnackbar("Debes colocar una capacidad mínima de 0", typeError);
     }
     if (values.startDate.trim() === "") {
       return enqueueSnackbar("Debes colocar una fecha de inicio", typeError);
     }
     if (values.endDate.trim() === "") {
-      return enqueueSnackbar("Debes colocar una fecha de finalizacion tentativa", typeError);
+      return enqueueSnackbar("Debes colocar una fecha de finalización tentativa", typeError);
     }
     // Validación de fechas
     if (!validateDates()) {
       return;
     }
     if (values.organizers.length === 0) {
-      return enqueueSnackbar("Debes tener minimo 1 organizador", typeError);
+      return enqueueSnackbar("Debes tener mínimo 1 organizador", typeError);
     }
 
     // Crear copia de values con las fechas formateadas
@@ -266,7 +266,7 @@ export function FormAddEvent({ eventSelect, type }) {
         <div className="flex flex-col gap-4">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Titulo del evento:
+              Título del evento:
             </Label>
             <input
               className={styles.input}
@@ -274,13 +274,13 @@ export function FormAddEvent({ eventSelect, type }) {
               name="title"
               value={values.title}
               onChange={handleInputChange}
-              placeholder="Titulo del evento..."
+              placeholder="Título del evento..."
             />
           </div>
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Descripcion del evento:
+              Descripción del evento:
             </Label>
             <textarea
               className={styles.input}
@@ -288,7 +288,7 @@ export function FormAddEvent({ eventSelect, type }) {
               name="description"
               value={values.description}
               onChange={handleInputChange}
-              placeholder={"Descripcion del evento..."}
+              placeholder={"Descripción del evento..."}
             ></textarea>
           </div>
 
@@ -315,7 +315,7 @@ export function FormAddEvent({ eventSelect, type }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Ubicacion del evento (opcional):
+              Ubicación del evento (opcional):
             </Label>
             <input
               className={styles.input}
@@ -323,7 +323,7 @@ export function FormAddEvent({ eventSelect, type }) {
               name="location"
               value={values.location}
               onChange={handleInputChange}
-              placeholder="Ubicacion del evento..."
+              placeholder="Ubicación del evento..."
             />
           </div>
 
@@ -384,8 +384,8 @@ export function FormAddEvent({ eventSelect, type }) {
                 value={values.certificate}
                 onChange={handleInputChange}
               >
-                <option value={true}>Con certificacion</option>
-                <option value={false}>Sin certificacion</option>
+                <option value={true}>Con certificación</option>
+                <option value={false}>Sin certificación</option>
               </select>
             </div>
           </div>
@@ -505,7 +505,7 @@ export function FormAddEvent({ eventSelect, type }) {
                 {values.organizers.length === 0 ? (
                   <>
                     <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
-                      No hay ningun organizador registrado...
+                      No hay ningún organizador registrado...
                     </h6>
                   </>
                 ) : (
@@ -539,7 +539,7 @@ export function FormAddEvent({ eventSelect, type }) {
                     name="specialGuest"
                     value={specialGuest}
                     onChange={(e) => setSpecialGuest(e.target.value)}
-                    placeholder="Organizador del evento..."
+                    placeholder="Invitado del evento..."
                   />
                   <button
                     type="button"
@@ -558,7 +558,7 @@ export function FormAddEvent({ eventSelect, type }) {
                 {values.specialGuests.length === 0 ? (
                   <>
                     <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
-                      No hay ningun invitado especial...
+                      No hay ningún invitado especial...
                     </h6>
                   </>
                 ) : (

@@ -31,8 +31,16 @@ function GraduatesProfile() {
             </>
           ) : (
             <>
-              <CardProfile profile={users.profile} />
-              <InfoProfile profile={users.profile} />
+              {!users?.profile || users?.profile?.user.role !== "egresado" ? (
+                <>
+                  <EntityNotFound entity="Egresado" entityPath="/graduates" />
+                </>
+              ) : (
+                <>
+                  <CardProfile profile={users.profile} />
+                  <InfoProfile profile={users.profile} />
+                </>
+              )}
             </>
           )}
         </>
