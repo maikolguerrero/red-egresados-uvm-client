@@ -1,9 +1,6 @@
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { CardProyect } from "../../Components/Card/CardProyect";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
 import { useEffect, useState } from "react";
-import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
 import { FormAddProyect } from "../../Components/Forms/Proyects/FormAddProyect";
@@ -84,82 +81,73 @@ function Proyects() {
   };
   return (
     <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
-
-      <main className="flex relative">
-        <Nav />
-        <div className="w-full px-3 py-12 md:px-4 lg:px-6 gap-8 flex flex-col items-center h-[89.5vh]  overflow-y-scroll overflow-x-auto">
-          <section className="w-full pb-8 border-b-2 border-verdeD">
-            <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
-              Menu de filtrado
-            </h3>
-            <FilterProyect values={values} setValues={setValues} />
-          </section>
-          {loading ? (
-            <section className="h-full flex justify-center items-center w-full">
-              <Loader />
-            </section>
-          ) : (
+      <section className="w-full pb-8 border-b-2 border-verdeD">
+        <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+          Menu de filtrado
+        </h3>
+        <FilterProyect values={values} setValues={setValues} />
+      </section>
+      {loading ? (
+        <section className="h-full flex justify-center items-center w-full">
+          <Loader />
+        </section>
+      ) : (
+        <>
+          {loader ? (
             <>
-              {loader ? (
-                <>
-                  <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
-                    <div className="relative h-full w-full flex justify-center items-center">
-                      <Loader />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
-              {proyects.length === 0 ? (
-                <>
-                  {" "}
-                  <h4 className="font-barolw flex items-start h-full justify-center text-lg font-semibold px-2 text-RojoC uppercase">
-                    No se encontraron proyectos con ese filtrado
-                  </h4>
-                </>
-              ) : (
-                <section className="flex flex-col gap-6">
-                  <div className="w-full gap-6 justify-center flex-wrap flex px-1 md:px-2 lg:px-6">
-                    {proyects.map((item) => (
-                      <CardProyect key={item.id} proyect={item} />
-                    ))}
-                  </div>
-
-                  {pagination.pages == 1 ? (
-                    <></>
-                  ) : (
-                    <div className="flex justify-center">
-                      <ThemeProvider theme={customTheme}>
-                        <Pagination
-                          theme={customTheme}
-                          className="border-verdeD"
-                          currentPage={pagination.page}
-                          totalPages={pagination.pages}
-                          onPageChange={onPageChange}
-                        />
-                      </ThemeProvider>
-                    </div>
-                  )}
-                </section>
-              )}
-
-              <div className="absolute right-8 bottom-6 flex flex-col gap-2">
-                <ButtonAdd setOpenModal={setOpendAddProyect} />
-                <ButtonMessages />
+              <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
+                <div className="relative h-full w-full flex justify-center items-center">
+                  <Loader />
+                </div>
               </div>
             </>
+          ) : (
+            <></>
           )}
-        </div>
-        <ModalNotHeader
-          openModal={openAddProyect}
-          setOpenModal={setOpendAddProyect}
-          size={"3xl"}
-          component={<FormAddProyect />}
-        />
-      </main>
+          {proyects.length === 0 ? (
+            <>
+              {" "}
+              <h4 className="font-barolw flex items-start h-full justify-center text-lg font-semibold px-2 text-RojoC uppercase">
+                No se encontraron proyectos con ese filtrado
+              </h4>
+            </>
+          ) : (
+            <section className="flex flex-col gap-6">
+              <div className="w-full gap-6 justify-center flex-wrap flex px-1 md:px-2 lg:px-6">
+                {proyects.map((item) => (
+                  <CardProyect key={item.id} proyect={item} />
+                ))}
+              </div>
+
+              {pagination.pages == 1 ? (
+                <></>
+              ) : (
+                <div className="flex justify-center">
+                  <ThemeProvider theme={customTheme}>
+                    <Pagination
+                      theme={customTheme}
+                      className="border-verdeD"
+                      currentPage={pagination.page}
+                      totalPages={pagination.pages}
+                      onPageChange={onPageChange}
+                    />
+                  </ThemeProvider>
+                </div>
+              )}
+            </section>
+          )}
+
+          <div className="absolute right-8 bottom-6 flex flex-col gap-2 mb-16">
+            <ButtonAdd setOpenModal={setOpendAddProyect} />
+          </div>
+        </>
+      )}
+      <ModalNotHeader
+        openModal={openAddProyect}
+        setOpenModal={setOpendAddProyect}
+        size={"3xl"}
+        component={<FormAddProyect />}
+      />
     </>
   );
 }

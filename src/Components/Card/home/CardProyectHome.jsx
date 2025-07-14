@@ -27,7 +27,7 @@ export function CardProyectHome({ proyect }) {
 
   return (
     <article onClick={(e) => {
-      navigate(`/proyects/${proyect.id}`)
+      navigate(`/projects/${proyect.id}`)
     }} className="flex h-full items-center justify-center p-2 hover:cursor-pointer">
       <div className="w-full h-full flex flex-col gap-2 bg-white hover:bg-slate-100 rounded-md p-3 border border-verdeC">
         <div className="flex gap-2 w-full h-auto flex-wrap mb-1">

@@ -182,7 +182,7 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
                                     onClick={handleCopy}
                                     className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 >
-                                    <BsCopy className="text-gray-500" />
+                                    <BsCopy className="text-gray-500 w-4 h-4" />
                                     Copiar
                                 </button>
 

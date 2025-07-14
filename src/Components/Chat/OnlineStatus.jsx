@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import socketService from '../../services/socket/socket.service';
 import { formatLastSeen } from '../../utils/dateUtils';
-import { Loader } from '../Loader';
-
 
 export default function OnlineStatus({ userId }) {
     const [status, setStatus] = useState({ isOnline: false, lastSeen: null });
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (!userId) return;
@@ -33,8 +30,6 @@ export default function OnlineStatus({ userId }) {
                 });
             } catch (error) {
                 console.error('Error fetching status:', error);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -61,14 +56,6 @@ export default function OnlineStatus({ userId }) {
         if (!date) return 'Desconectado';
         return formatLastSeen(date);
     };
-
-    if (loading) {
-        return (
-            <div className="text-xs font-barlow-semi-condensed text-gray-400">
-                <Loader />
-            </div>
-        );
-    }
 
     return (
         <div className="text-xs font-barlow-semi-condensed">

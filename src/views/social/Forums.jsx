@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
-import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { CardForum } from "../../Components/Card/CardForum";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
 import { FormAddForum } from "../../Components/Forms/Forum/FormAddForum";
 import { useDispatch, useSelector } from "react-redux";
@@ -75,82 +72,72 @@ function Forums() {
 
   return (
     <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
+      <article className="w-full pb-8 border-b-2 border-verdeD mb-8">
+        <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+          Menu de filtrado
+        </h3>
+        <FilterForums values={values} setValues={setValues} />
+      </article>
 
-      <main className="flex relative">
-        <Nav />
-
-        <section className="w-full px-3 py-12 md:px-4 lg:px-6 gap-4 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <article className="w-full pb-8 border-b-2 border-verdeD mb-8">
-            <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
-              Menu de filtrado
-            </h3>
-            <FilterForums values={values} setValues={setValues} />
-          </article>
-
-          {loading ? (
-            <section className="h-full flex justify-center items-center w-full">
-              <Loader />
-            </section>
+      {loading ? (
+        <section className="h-full flex justify-center items-center w-full">
+          <Loader />
+        </section>
+      ) : (
+        <>
+          {loader ? (
+            <>
+              <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
+                <div className="relative h-full w-full flex justify-center items-center">
+                  <Loader />
+                </div>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+          {forums.length === 0 ? (
+            <>
+              <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                No se encontraron foros con ese filtrado
+              </h4>
+            </>
           ) : (
             <>
-              {loader ? (
-                <>
-                  <div className="fixed bg-black bg-opacity-70 inset-x-0 top-0 z-[100] h-screen overflow-y-hidden overflow-x-hidden md:inset-0 md:h-full">
-                    <div className="relative h-full w-full flex justify-center items-center">
-                      <Loader />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
-              {forums.length === 0 ? (
-                <>
-                  <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                    No se encontraron foros con ese filtrado
-                  </h4>
-                </>
-              ) : (
-                <>
-                  <div className="flex flex-col gap-8 w-full px-1 md:px-2 lg:px-6">
-                    {forums.map((item) => (
-                      <CardForum forum={item} key={item.id} />
-                    ))}
-                  </div>
+              <div className="flex flex-col gap-8 w-full px-1 md:px-2 lg:px-6">
+                {forums.map((item) => (
+                  <CardForum forum={item} key={item.id} />
+                ))}
+              </div>
 
-                  {pagination.pages === 1 ? (
-                    <></>
-                  ) : (
-                    <ThemeProvider theme={customTheme}>
-                      <Pagination
-                        theme={customTheme}
-                        className="border-verdeD"
-                        currentPage={pagination.page}
-                        totalPages={pagination.pages}
-                        onPageChange={onPageChange}
-                      />
-                    </ThemeProvider>
-                  )}
-                </>
+              {pagination.pages === 1 ? (
+                <></>
+              ) : (
+                <ThemeProvider theme={customTheme}>
+                  <Pagination
+                    theme={customTheme}
+                    className="border-verdeD"
+                    currentPage={pagination.page}
+                    totalPages={pagination.pages}
+                    onPageChange={onPageChange}
+                  />
+                </ThemeProvider>
               )}
             </>
           )}
-        </section>
+        </>
+      )}
 
-        <div className="absolute flex flex-col gap-2 right-8 bottom-6">
-          <ButtonAdd setOpenModal={setOpendAddForum} />
-          <ButtonMessages />
-        </div>
+      <div className="absolute flex flex-col gap-2 right-8 bottom-6 mb-16">
+        <ButtonAdd setOpenModal={setOpendAddForum} />
+      </div>
 
-        <ModalNotHeader
-          openModal={openAddForum}
-          setOpenModal={setOpendAddForum}
-          size={"3xl"}
-          component={<FormAddForum />}
-        />
-      </main>
+      <ModalNotHeader
+        openModal={openAddForum}
+        setOpenModal={setOpendAddForum}
+        size={"3xl"}
+        component={<FormAddForum />}
+      />
     </>
   );
 }

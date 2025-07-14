@@ -51,7 +51,7 @@ export function CardBanner({
         return {
           icon: <PiProjectorScreenChartBold className="w-6 h-6" />,
           typeText: "PROYECTO",
-          baseRoute: "/proyects"
+          baseRoute: "/projects"
         };
       case 'new_report':
       case 'report_resolved':
@@ -113,7 +113,7 @@ export function CardBanner({
       navigate(`/events/${data.eventId}`);
     } else if (data?.projectId) {
       // Notificaciones de proyectos
-      navigate(`/proyects/${data.projectId}`);
+      navigate(`/projects/${data.projectId}`);
     } else {
       // Redirección genérica si no hay ID específico
       navigate(baseRoute);
@@ -138,50 +138,6 @@ export function CardBanner({
   if (!isVisible) return null;
 
   return (
-    // <Banner>
-    //   <div
-    //     className={`flex w-[calc(100%-2rem)] flex-col justify-between rounded-lg border ${!isRead ? "border-RojoC" : "border-verdeD"
-    //       } bg-Gris p-4 shadow-sm md:flex-row lg:max-w-7xl cursor-pointer`}
-    //     onClick={handleViewClick}
-    //   >
-    //     <div className="mb-3 mr-4 flex flex-col items-start md:mb-0 md:flex-row md:items-center">
-    //       <div className="mb-2 flex gap-3 items-center border-verdeC md:mb-0 md:mr-4 md:border-r md:pr-4">
-    //         {icon}
-    //         <span className="self-center whitespace-nowrap text-lg font-semibold md:pr-6">
-    //           {typeText}
-    //         </span>
-    //       </div>
-    //       <p className="flex items-center text-sm font-normal text-Negro">
-    //         {noti}
-    //       </p>
-    //       <p className="text-xs text-Negro text-right">
-    //         {formatNotification(createdAt)}
-    //       </p>
-    //     </div>
-    //     <div className="flex shrink-0 items-center gap-3">
-    //       {!isRead && (
-    //         <Badge color="failure" className="mr-2">
-    //           Nuevo
-    //         </Badge>
-    //       )}
-    //       <ButtonSmall
-    //         text={"Ver..."}
-    //         className={"bg-verdeC hover:bg-RojoC"}
-    //       />
-    //       <button
-    //         onClick={(e) => {
-    //           e.stopPropagation(); // Evita que se marque como leída al hacer clic en la X
-    //           handleDelete();
-    //         }}
-    //         className="border-0 bg-transparent text-RojoC hover:text-RojoB transition-colors"
-    //         aria-label="Eliminar notificación"
-    //       >
-    //         <HiX className="h-4 w-4" />
-    //       </button>
-    //     </div>
-    //   </div>
-    // </Banner>
-
     <Banner>
       <div
         className={`flex w-[calc(100%-2rem)] flex-col justify-between rounded-lg border ${!isRead ? "border-RojoC" : "border-verdeD"
@@ -189,7 +145,7 @@ export function CardBanner({
         onClick={handleViewClick}
       >
         <div className="mb-3 mr-4 flex flex-col items-start md:mb-0 md:flex-row md:items-center">
-          <div className="mb-2 flex gap-3 items-center border-verdeC md:mb-0 md:mr-4 md:border-r md:pr-4">
+          <div className={`mb-2 flex gap-3 items-center ${!isRead ? "border-RojoC" : "border-verdeD"} md:mb-0 md:mr-4 md:border-r md:pr-4`}>
             {icon}
             <span className="self-center whitespace-nowrap text-lg font-semibold md:pr-6">
               {typeText}
@@ -201,7 +157,7 @@ export function CardBanner({
               {noti}
             </p>
             {/* Fecha al lado, con estilos más discretos */}
-            <p className="text-xs text-GrisOscuro italic"> {/* Puedes usar 'text-gray-500' si no tienes GrisOscuro */}
+            <p className="text-xs text-gray-600 italic">
               {formatNotification(createdAt)}
             </p>
           </div>

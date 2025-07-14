@@ -213,7 +213,7 @@ export function CardProyect({ proyect }) {
       <div className="mt-6 flex gap-2">
         <ButtonSmall
           action={(e) => {
-            navigate(`/proyects/${proyect.id}`);
+            navigate(`/projects/${proyect.id}`);
           }}
           text={"Ver Detalles"}
           className={"bg-verdeC hover:bg-RojoC"}

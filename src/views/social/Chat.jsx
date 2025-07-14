@@ -7,18 +7,15 @@ import EmojiPicker from 'emoji-picker-react';
 import { enqueueSnackbar } from "notistack";
 import { throttle } from 'lodash';
 import { typeError, typeSuccess } from "../../models/alertModels";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
 import Message from "../../Components/Chat/Message";
 import OnlineStatus from "../../Components/Chat/OnlineStatus";
-import ButtonSmall from "../../Components/Buttons/buttonSmall";
+import ButtonSmall from "../../Components/Buttons/ButtonSmall";
 import { getProfile } from "../../services/users/usersService";
 import { getMessages, sendMessage } from "../../services/chat/chatService";
 import socketService from "../../services/socket/socket.service";
 import { setCurrentChat, addMessage, setMessagesRead, setMessageRead, updateMessages, removeMessage, replaceTempMessage, resetChat } from "../../features/chat/chatSlice";
 import { markMessagesAsRead } from "../../services/chat/chatService";
 import { formatDateHeader, groupMessagesByDate } from '../../utils/dateUtils';
-import useIsMobile from "../../hooks/useIsMobile";
 import { Loader } from "../../Components/Loader";
 
 export default function Chat() {
@@ -39,9 +36,7 @@ export default function Chat() {
     const emojiButtonRef = useRef(null);
     const emojiPickerRef = useRef(null);
 
-    // Nuevo estado para detectar si es un dispositivo móvil
-    const isMobile = useIsMobile();
-
+    // Nuevo estado para detectar si es un dispositivo de escritorio
     const userAgent = navigator.userAgent || window.opera;
     const isMobileUserAgent = /android|iphone|ipad|ipod|blackberry|windows phone/i.test(userAgent);
     const isDesktop = !isMobileUserAgent;
@@ -215,7 +210,7 @@ export default function Chat() {
                     username: profileResult.profile.user.username,
                     nombreCompleto: profileResult.profile?.nombreCompleto || profileResult.profile?.user?.fullName,
                     profilePicture: {
-                        url: profileResult.profile.user.profilePicture?.url || null
+                        url: profileResult?.profile?.user?.profilePicture?.url || null
                     }
                 };
 
@@ -467,103 +462,71 @@ export default function Chat() {
         }
     };
 
-    if (loading || !user) {
-        return (
-            <>
-                {!isMobile && (
-                    <>
-                        <Header />
-                        <div className="h-[10.5vh]"></div>
-                    </>
-                )}
-                <main className="flex relative">
-                    {!isMobile && (
-                        <Nav />
-                    )}
-                    <div className={`w-full ${isMobile ? 'h-[100vh]' : 'h-[89.5vh]'} flex items-center justify-center`}>
-                        <div className="flex items-center justify-center w-full">
-                            <Loader />
-                        </div>
-                    </div>
-                </main>
-            </>
-        );
-    }
-
     return (
         <>
-            {!isMobile && (
-                <>
-                    <Header />
-                    <div className="h-[10.5vh]"></div>
-                </>
-            )}
-
-            <main className="flex relative">
-                {!isMobile && (
-                    <Nav />
-                )}
-
-                <div className={`w-full ${isMobile ? 'h-[100vh]' : 'h-[89.5vh]'} flex flex-col`}>
-
-                    {/* Header del chat */}
-                    <div className="flex items-center justify-between p-4 border-b-2 border-verdeD bg-Gris">
-                        <div className="flex items-center gap-4">
-                            <button
-                                onClick={() => navigate(-1)}
-                                className="text-verdeD hover:text-RojoC transition-colors duration-200"
-                            >
-                                <BsArrowLeft className="text-xl" />
-                            </button>
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
-                                    {user.profilePicture.url ? (
-                                        <img
-                                            src={user.profilePicture.url}
-                                            alt={`${user.nombreCompleto}`}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-white font-bold">
-                                            {user?.nombreCompleto?.charAt(0)}
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="min-w-0">
-                                    <h3 className="font-barolw font-semibold text-Negro text-sm">
-                                        {user?.nombreCompleto}
-                                    </h3>
-                                    <p className="text-xs font-barlow-semi-condensed text-verdeD">
-                                        @{user?.username}
-                                    </p>
-                                    <OnlineStatus userId={user?.userId} />
-                                </div>
-                            </div>
+            {/* Header del chat */}
+            <div className="flex items-center justify-between p-4 border-b-2 border-verdeD bg-Gris">
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => navigate(-1)}
+                        className="text-verdeD hover:text-RojoC transition-colors duration-200"
+                    >
+                        <BsArrowLeft className="text-xl" />
+                    </button>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                            {user?.profilePicture?.url ? (
+                                <img
+                                    src={user?.profilePicture?.url}
+                                    alt={`${user?.nombreCompleto}`}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <span className="text-white font-bold">
+                                    {user?.nombreCompleto?.charAt(0)}
+                                </span>
+                            )}
                         </div>
-                        {/* <button className="text-verdeD hover:text-RojoC transition-colors duration-200">
+                        <div className="min-w-0">
+                            <h3 className="font-barolw font-semibold text-Negro text-sm">
+                                {user?.nombreCompleto}
+                            </h3>
+                            <p className="text-xs font-barlow-semi-condensed text-verdeD">
+                                @{user?.username}
+                            </p>
+                            <OnlineStatus userId={user?.userId} />
+                        </div>
+                    </div>
+                </div>
+                {/* <button className="text-verdeD hover:text-RojoC transition-colors duration-200">
                             <BsThreeDotsVertical className="text-xl" />
                         </button> */}
+            </div>
+
+            {/* Contenedor de la fecha flotante */}
+            {/* Se muestra solo si hay floatingDate Y showHeaderOnScroll es true */}
+            {floatingDate && showHeaderOnScroll && (
+                <div className="absolute w-full flex justify-center py-2 z-10 pointer-events-none"
+                    style={{ top: `${chatHeaderHeight + 10.5 * window.innerHeight / 100}px` }}>
+                    <div className="bg-Gris/80 backdrop-blur-sm text-Negro/70 text-xs font-medium px-3 py-1 rounded-full shadow-md">
+                        {formatDateHeader(floatingDate)}
                     </div>
+                </div>
+            )}
 
-                    {/* Contenedor de la fecha flotante */}
-                    {/* Se muestra solo si hay floatingDate Y showHeaderOnScroll es true */}
-                    {floatingDate && showHeaderOnScroll && (
-                        <div className="absolute w-full flex justify-center py-2 z-10 pointer-events-none"
-                            style={{ top: `${chatHeaderHeight + 10.5 * window.innerHeight / 100}px` }}>
-                            <div className="bg-Gris/80 backdrop-blur-sm text-Negro/70 text-xs font-medium px-3 py-1 rounded-full shadow-md">
-                                {formatDateHeader(floatingDate)}
-                            </div>
-                        </div>
-                    )}
+            {/* Área de mensajes */}
+            <div
+                ref={messagesContainerRef}
+                className="flex-1 p-4 overflow-y-auto bg-Blanco"
+            >
+                {loading && (
+                    <div className="flex items-center justify-center w-full h-full">
+                        <Loader />
+                    </div>
+                )}
 
-
-                    {/* Área de mensajes */}
-                    <div
-                        ref={messagesContainerRef}
-                        className="flex-1 p-4 overflow-y-auto bg-Blanco"
-                    >
-                        {/* Botón de prueba para cargar más mensajes */}
-                        {/* {hasMore && !loadingMore && (
+                {/* Botón de prueba para cargar más mensajes */}
+                {/* {hasMore && !loadingMore && (
                             <div className="flex justify-center mt-2">
                                 <button
                                     onClick={loadMoreMessages}
@@ -575,138 +538,136 @@ export default function Chat() {
                             </div>
                         )} */}
 
-                        {loadingMore && (
-                            <div className="flex justify-center py-2">
-                                <p className="text-sm text-gray-500">Cargando mensajes anteriores...</p>
-                            </div>
-                        )}
+                {loadingMore && (
+                    <div className="flex justify-center py-2">
+                        <p className="text-sm text-gray-500">Cargando mensajes anteriores...</p>
+                    </div>
+                )}
 
-                        {/* si no hay mensajes */}
-                        {groupedMessages.length === 0 && (
-                            <div className="flex flex-col items-center justify-center h-full w-full">
-                                <p className="text-xl font-bold text-verdeD text-center">
-                                    ¡Inicia una conversación!
-                                </p>
-                                <p className="text-sm font-bold text-verdeB text-center mt-2">
-                                    Puedes enviar un solo mensaje hasta que {user?.nombreCompleto} apruebe tu solicitud para iniciar la conversación
-                                </p>
-                            </div>
-                        )}
+                {/* si no hay mensajes */}
+                {(!loading && groupedMessages.length === 0) && (
+                    <div className="flex flex-col items-center justify-center h-full w-full">
+                        <p className="text-xl font-bold text-verdeD text-center">
+                            ¡Inicia una conversación!
+                        </p>
+                        <p className="text-sm font-bold text-verdeB text-center mt-2">
+                            Puedes enviar un solo mensaje hasta que {user?.nombreCompleto} apruebe tu solicitud para iniciar la conversación
+                        </p>
+                    </div>
+                )}
 
-                        {/* mensajes */}
-                        {groupedMessages.map((group) => {
-                            const dateKey = new Date(group.date).toISOString().split('T')[0];
-                            return (
-                                <div key={group.date} className="mb-4">
-                                    <div
-                                        ref={getDateRef(dateKey)} // Asignar la ref aquí
-                                        id={dateKey} // Asignar un ID para el IntersectionObserver
-                                        className="flex items-center justify-center my-4"
-                                    >
-                                        <div className="bg-Gris/50 text-Negro/70 text-xs font-medium px-3 py-1 rounded-full">
-                                            {formatDateHeader(group.date)}
-                                        </div>
-                                    </div>
-
-                                    {group.messages.map((msg) => {
-                                        const isOwn = msg.sender?.id === auth.id;
-                                        return (
-                                            <Message
-                                                key={msg.id}
-                                                message={{
-                                                    ...msg,
-                                                    sender: {
-                                                        ...msg.sender,
-                                                        nombreCompleto: msg.sender?.nombreCompleto || user?.nombreCompleto,
-                                                        username: msg.sender?.username,
-                                                        profilePicture: msg.sender?.profilePicture || {
-                                                            url: null
-                                                        }
-                                                    }
-                                                }}
-                                                isOwn={isOwn}
-                                                markMessagesAsRead={handleMarkAsRead}
-                                            />
-                                        );
-                                    })}
+                {/* mensajes */}
+                {groupedMessages.map((group) => {
+                    const dateKey = new Date(group.date).toISOString().split('T')[0];
+                    return (
+                        <div key={group.date} className="mb-4">
+                            <div
+                                ref={getDateRef(dateKey)} // Asignar la ref aquí
+                                id={dateKey} // Asignar un ID para el IntersectionObserver
+                                className="flex items-center justify-center my-4"
+                            >
+                                <div className="bg-Gris/50 text-Negro/70 text-xs font-medium px-3 py-1 rounded-full">
+                                    {formatDateHeader(group.date)}
                                 </div>
-                            )
-                        })}
+                            </div>
 
-                        {/* solicitud de chat */}
-                        {pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
-                            <div className="fixed bottom-20 left-0 right-0 bg-verdeA font-bold text-white p-4 ">
-                                <div className="container mx-auto flex  items-center p-2">
-                                    <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
-                                    <ButtonSmall
-                                        text={"Aceptar solicitud"}
-                                        className={"bg-verdeC hover:bg-RojoC"}
-                                        action={handleAcceptRequest}
+                            {group.messages.map((msg) => {
+                                const isOwn = msg.sender?.id === auth.id;
+                                return (
+                                    <Message
+                                        key={msg.id}
+                                        message={{
+                                            ...msg,
+                                            sender: {
+                                                ...msg.sender,
+                                                nombreCompleto: msg.sender?.nombreCompleto || user?.nombreCompleto,
+                                                username: msg.sender?.username,
+                                                profilePicture: msg.sender?.profilePicture || {
+                                                    url: null
+                                                }
+                                            }
+                                        }}
+                                        isOwn={isOwn}
+                                        markMessagesAsRead={handleMarkAsRead}
                                     />
-                                </div>
-                            </div>
-                        )}
-                    </div >
+                                );
+                            })}
+                        </div>
+                    )
+                })}
 
-                    {/* Contenedor principal de la barra de mensaje */}
-                    <div className={`p-4 border-t-2 border-verdeD bg-Gris`}>
-                        {!hasChatPermission && pendingRequest?.sender.id === auth.id ? (
-                            <div className="text-center text-sm text-verdeC">
-                                Esperando a que {user.nombreCompleto} acepte tu solicitud de chat
-                            </div>
-                        ) :
-                            (
-                                <div className="flex items-end gap-2">
-                                    <button
-                                        ref={emojiButtonRef}
-                                        onClick={handleEmojiButtonClick}
-                                        className="text-verdeD hover:text-RojoC transition-colors duration-200 p-2 rounded-full">
-                                        <BsEmojiSmile className="text-xl"
-                                        />
-                                    </button>
-                                    <div className="flex-1 min-h-[40px] flex items-end">
-                                        <textarea
-                                            ref={textareaRef}
-                                            value={message}
-                                            onChange={handleChange}
-                                            onKeyDown={handleKeyDown}
-                                            placeholder="Escribe un mensaje..."
-                                            rows={1}
-                                            className="w-full h-full p-2 text-Negro font-barolw text-sm resize-none
-                                   bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
-                                            style={{ overflowY: 'hidden' }}
-                                        />
-                                    </div>
-
-                                    <button
-                                        onClick={handleSendMessage}
-                                        disabled={message.trim() === ""}
-                                        className="bg-verdeA hover:bg-verdeD text-white align-center p-2 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        <IoSend className="text-xl" />
-                                    </button>
-                                </div>
-                            )}
-
-                    </div >
-
-                    {/* Selector de Emojis */}
-                    {showEmojiPicker && (
-                        <div ref={emojiPickerRef} className="absolute bottom-20 left-4 z-50 shadow-lg rounded-lg overflow-hidden">
-                            <EmojiPicker
-                                onEmojiClick={onEmojiClick}
-                                height={350}
-                                width="100%"
-                                skinTonePickerLocation="PREVIEW"
-                                searchDisabled={false}
-                                lazyLoadEmojis={true}
-                                theme="light"
-                                emojiStyle="native"
+                {/* solicitud de chat */}
+                {pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
+                    <div className="fixed bottom-20 left-0 right-0 bg-verdeA font-bold text-white p-4 ">
+                        <div className="container mx-auto flex  items-center p-2">
+                            <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
+                            <ButtonSmall
+                                text={"Aceptar solicitud"}
+                                className={"bg-verdeC hover:bg-RojoC"}
+                                action={handleAcceptRequest}
                             />
                         </div>
+                    </div>
+                )}
+            </div >
+
+            {/* Contenedor principal de la barra de mensaje */}
+            <div className={`p-4 border-t-2 border-verdeD bg-Gris`}>
+                {!hasChatPermission && pendingRequest?.sender.id === auth.id ? (
+                    <div className="text-center text-sm text-verdeC">
+                        Esperando a que {user.nombreCompleto} acepte tu solicitud de chat
+                    </div>
+                ) :
+                    (
+                        <div className="flex items-end gap-2">
+                            <button
+                                ref={emojiButtonRef}
+                                onClick={handleEmojiButtonClick}
+                                className="text-verdeD hover:text-RojoC transition-colors duration-200 p-2 rounded-full">
+                                <BsEmojiSmile className="text-xl"
+                                />
+                            </button>
+                            <div className="flex-1 min-h-[40px] flex items-end">
+                                <textarea
+                                    ref={textareaRef}
+                                    value={message}
+                                    onChange={handleChange}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Escribe un mensaje..."
+                                    rows={1}
+                                    className="w-full h-full p-2 text-Negro font-barolw text-sm resize-none
+                                   bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
+                                    style={{ overflowY: 'hidden' }}
+                                />
+                            </div>
+
+                            <button
+                                onClick={handleSendMessage}
+                                disabled={message.trim() === ""}
+                                className="bg-verdeA hover:bg-verdeD text-white align-center p-2 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <IoSend className="text-xl" />
+                            </button>
+                        </div>
                     )}
-                </div >
-            </main >
+
+            </div >
+
+            {/* Selector de Emojis */}
+            {showEmojiPicker && (
+                <div ref={emojiPickerRef} className="absolute bottom-20 left-4 z-50 shadow-lg rounded-lg overflow-hidden">
+                    <EmojiPicker
+                        onEmojiClick={onEmojiClick}
+                        height={350}
+                        width="100%"
+                        skinTonePickerLocation="PREVIEW"
+                        searchDisabled={false}
+                        lazyLoadEmojis={true}
+                        theme="light"
+                        emojiStyle="native"
+                    />
+                </div>
+            )}
         </>
     );
 }

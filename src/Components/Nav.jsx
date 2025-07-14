@@ -4,7 +4,6 @@ import { FaArrowLeftLong, FaArrowRightLong, FaGear, FaPeopleGroup } from "react-
 import { IoIosHome, IoIosNotifications } from "react-icons/io";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../features/sidebar/sidebarSlice";
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import socketService from "../services/socket/socket.service";
 import { getUnreadNotificationCount } from "../services/notifications/notificationService";
 import useIsMobile from "../hooks/useIsMobile";
 import { MdEditDocument } from "react-icons/md";
+import NavItem from "./NavItem";
 
 function Nav() {
   const role = useSelector((state) => state.auth.role);
@@ -87,75 +87,109 @@ function Nav() {
 
   return (
     <>
-      {
-        ((isMobile && !isSidebar) || !isMobile) && (
-          <nav className={`${isSidebar ? "w-[60px] items-center " : "md:w-[200px] lg:w-[250px] absolute md:relative w-full"} flex flex-col border-r-2 bg-Gris border-verdeD h-[89.5vh] text-verdeD transition-all duration-[400ms] z-10`}>
-            <div className="px-4 pt-3 flex justify-end">
-              <button className="h-full p-1" onClick={() => dispatch(toggleSidebar())}>
+      {/* Overlay para móvil */}
+      {isMobile && !isSidebar && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity duration-300 ease-in-out"
+          onClick={() => dispatch(toggleSidebar())}
+        />
+      )}
+
+      <nav className={`${(isMobile && isSidebar) ? "w-[0px] items-center" : ""} ${(!isMobile && isSidebar) ? "w-[60px] items-center" : "md:w-[200px] lg:w-[250px] absolute md:relative w-full"} flex flex-col border-r-2 bg-Gris ${!isMobile && "border-verdeD"} h-[89.5vh] text-verdeD transition-all duration-[400ms] z-10`}>
+        {(!isMobile || (isMobile && !isSidebar)) && (
+          <>
+            <div className="px-4 pt-3 flex justify-end relative transition-all duration-[400ms]">
+              <button
+                onClick={() => dispatch(toggleSidebar())}
+                className="rounded-full px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all group relative"
+              >
                 {isSidebar ? <FaArrowRightLong className="text-xl" /> : <FaArrowLeftLong className="text-xl" />}
+                {!isMobile && (
+                  <span className="absolute left-full ml-4 px-3 py-1 bg-verdeD text-Blanco text-sm font-barolw rounded-md shadow-lg whitespace-nowrap scale-0 group-hover:scale-100 origin-left transition-transform duration-200 z-20">
+                    {isSidebar ? "EXPANDIR" : "CONTRAER"}
+                  </span>
+                )}
               </button>
             </div>
 
             <ul className="py-4 border-b border-verdeD ">
-              <Link title="Principal" to={"/home"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <IoIosHome className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PRINCIPAL</p>
-              </Link>
+              <NavItem
+                to="/home"
+                icon={<IoIosHome className="text-2xl" />}
+                text="PRINCIPAL"
+                isSidebar={isSidebar}
+                onClick={() => dispatch(toggleSidebar())}
+              />
+            </ul>
+            <ul className="py-4 border-b border-verdeD ">
+              <NavItem
+                to="/graduates"
+                icon={<FaGraduationCap className="text-2xl" />}
+                text="EGRESADOS"
+                isSidebar={isSidebar}
+                onClick={() => dispatch(toggleSidebar())}
+              />
+              <NavItem
+                to="/forums"
+                icon={<FaPeopleGroup className="text-2xl" />}
+                text="FOROS"
+                isSidebar={isSidebar}
+                onClick={() => dispatch(toggleSidebar())}
+              />
+              <NavItem
+                to="/projects"
+                icon={<PiProjectorScreenChartBold className="text-2xl" />}
+                text="PROYECTOS"
+                isSidebar={isSidebar}
+                onClick={() => dispatch(toggleSidebar())}
+              />
+              <NavItem
+                to="/events"
+                icon={<BsCalendarDate className="text-2xl" />}
+                text="EVENTOS"
+                isSidebar={isSidebar}
+                onClick={() => dispatch(toggleSidebar())}
+              />
             </ul>
 
             <ul className="py-4 border-b border-verdeD ">
-              <Link title="Egresados" to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <FaGraduationCap className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EGRESADOS</p>
-              </Link>
-              <Link title="Foros" to={"/forums"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <FaPeopleGroup className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>FOROS</p>
-              </Link>
-              <Link title="Proyectos" to={"/proyects"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <PiProjectorScreenChartBold className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PROYECTOS</p>
-              </Link>
-              <Link title="Eventos" to={"/events"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <BsCalendarDate className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EVENTOS</p>
-              </Link>
-            </ul>
-
-            <ul className="py-4 border-b border-verdeD ">
-              <Link title="Notificaciones" to={"/notifications"} className="relative px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <IoIosNotifications className="text-2xl" />
-                {(unreadCount > 0) && (
-                  <span
-                    className="absolute left-8 top-0 -mt-1 bg-RojoC text-white text-[0.6rem] rounded-full w-5 h-5 flex items-center justify-center te z-10"
-                  >
-                    {unreadCount > 99 ? '99+' : unreadCount}
-                  </span>
-                )}
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>NOTIFICACIONES</p>
-              </Link>
-              <Link title="Configuración" to={"/config"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <FaGear className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>CONFIGURACIÓN</p>
-              </Link>
+              <NavItem
+                to="/notifications"
+                icon={<IoIosNotifications className="text-2xl" />}
+                text="NOTIFICACIONES"
+                isSidebar={isSidebar}
+                badge={unreadCount}
+                onClick={() => dispatch(toggleSidebar())}
+              />
+              <NavItem
+                to="/config"
+                icon={<FaGear className="text-2xl" />}
+                text="CONFIGURACIÓN"
+                isSidebar={isSidebar}
+                onClick={() => dispatch(toggleSidebar())}
+              />
               {role === "egresado" && (
-                <Link title="Perfil" to={"/my-profile"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                  <FaUser className="text-2xl" />
-                  <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PERFIL</p>
-                </Link>
+                <NavItem
+                  to="/my-profile"
+                  icon={<FaUser className="text-2xl" />}
+                  text="PERFIL"
+                  isSidebar={isSidebar}
+                  onClick={() => dispatch(toggleSidebar())}
+                />
               )}
-              {role === "admin" || role === "superadmin" ? (
-                <Link title="Gestor de Contenido" to={"/content-manager"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                  <MdEditDocument className="text-2xl" />
-                  <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>GESTOR DE CONTENIDO</p>
-                </Link>
-              ) : (
-                <></>
+              {(role === "admin" || role === "superadmin") && (
+                <NavItem
+                  to="/content-manager"
+                  icon={<MdEditDocument className="text-2xl" />}
+                  text="GESTOR DE CONTENIDO"
+                  isSidebar={isSidebar}
+                  onClick={() => dispatch(toggleSidebar())}
+                />
               )}
             </ul>
-          </nav>
-        )
-      }
+          </>
+        )}
+      </nav>
     </>
   );
 }
