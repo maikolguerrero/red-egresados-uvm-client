@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 function InfoProfile({ profile }) {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth)
+  const username = useSelector((state) => state.auth.username)
 
   const [openModal, setOpenModal] = useState(false);
   const [openEducation, setOpenEducation] = useState(false);
@@ -27,8 +28,8 @@ function InfoProfile({ profile }) {
   })
 
   useEffect(() => {
-    if (profile?.profile?.professional?.summary) {
-      let description = profile?.profile?.professional?.summary.split("\n\n");
+    if (profile?.profile?.professional?.summary?.value) {
+      let description = profile?.profile?.professional?.summary?.value.split("\n\n");
       setDesciption(description);
     }
   }, [profile])
@@ -37,6 +38,178 @@ function InfoProfile({ profile }) {
     navigate(`/chat/${profile?.user?.username}`);
   };
 
+  const handleSocialMedia = () => {
+    if (profile.user.username === username) {
+      if (
+        (profile?.profile?.socialMedia?.facebook.value === undefined ||
+          profile?.profile?.socialMedia?.facebook.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.whatsapp.value === undefined ||
+          profile?.profile?.socialMedia?.whatsapp.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.telegram.value === undefined ||
+          profile?.profile?.socialMedia?.telegram.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.instagram.value === undefined ||
+          profile?.profile?.socialMedia?.instagram.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.linkedin.value === undefined ||
+          profile?.profile?.socialMedia?.linkedin.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.youtube.value === undefined ||
+          profile?.profile?.socialMedia?.youtube.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.github.value === undefined ||
+          profile?.profile?.socialMedia?.github.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.x.value === undefined ||
+          profile?.profile?.socialMedia?.x.value.trim() === "")
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    if (
+      (profile?.profile?.socialMedia?.facebook.isPublic ||
+        profile?.profile?.socialMedia?.facebook.value === undefined ||
+        profile?.profile?.socialMedia?.facebook.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.whatsapp.isPublic ||
+        profile?.profile?.socialMedia?.whatsapp.value === undefined ||
+        profile?.profile?.socialMedia?.whatsapp.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.telegram.isPublic ||
+        profile?.profile?.socialMedia?.telegram.value === undefined ||
+        profile?.profile?.socialMedia?.telegram.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.instagram.isPublic === false ||
+        profile?.profile?.socialMedia?.instagram.value === undefined ||
+        profile?.profile?.socialMedia?.instagram.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.linkedin.isPublic ||
+        profile?.profile?.socialMedia?.linkedin.value === undefined ||
+        profile?.profile?.socialMedia?.linkedin.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.youtube.isPublic ||
+        profile?.profile?.socialMedia?.youtube.value === undefined ||
+        profile?.profile?.socialMedia?.youtube.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.github.isPublic ||
+        profile?.profile?.socialMedia?.github.value === undefined ||
+        profile?.profile?.socialMedia?.github.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.x.isPublic ||
+        profile?.profile?.socialMedia?.x.value === undefined ||
+        profile?.profile?.socialMedia?.x.value.trim() === "")
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleProfessional = () => {
+    if (profile?.user?.username === username) {
+      if (
+        profile?.profile?.professional?.summary.value === undefined ||
+        profile?.profile?.professional?.summary.value.trim() === ""
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    if (
+      profile?.profile?.professional?.summary.isPublic === false ||
+      profile?.profile?.professional?.summary.value === undefined ||
+      profile?.profile?.professional?.summary.value.trim() === ""
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handlePersonalData = () => {
+    if (profile?.user?.username === username) {
+      if (
+        (profile?.profile?.personalData?.birthDate.value === undefined ||
+          profile?.profile?.personalData?.birthDate.value.trim() === "") &&
+        (profile?.profile?.personalData?.location.value === undefined ||
+          profile?.profile?.personalData?.location.value.trim() === "") &&
+        (profile?.profile?.contact?.phone.value === undefined ||
+          profile?.profile?.contact?.phone.value.trim() === "") &&
+        (profile?.profile?.contact?.website.value === undefined ||
+          profile?.profile?.contact?.website.value.trim() === "") &&
+        (profile?.profile?.contact?.alternateEmail.value === undefined ||
+          profile?.profile?.contact?.alternateEmail.value.trim() === "")
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    if (
+      (profile?.profile?.personalData?.birthDate.isPublic === false ||
+        profile?.profile?.personalData?.birthDate.value === undefined ||
+        profile?.profile?.personalData?.birthDate.value.trim() === "") &&
+      (profile?.profile?.personalData?.location.isPublic === false ||
+        profile?.profile?.personalData?.location.value === undefined ||
+        profile?.profile?.personalData?.location.value.trim() === "") &&
+      (profile?.profile?.contact?.phone.isPublic === false ||
+        profile?.profile?.contact?.phone.value === undefined ||
+        profile?.profile?.contact?.phone.value.trim() === "") &&
+      (profile?.profile?.contact?.website.isPublic === false ||
+        profile?.profile?.contact?.website.value === undefined ||
+        profile?.profile?.contact?.website.value.trim() === "") &&
+      (profile?.profile?.contact?.alternateEmail.isPublic === false ||
+        profile?.profile?.contact?.alternateEmail.value === undefined ||
+        profile?.profile?.contact?.alternateEmail.value.trim() === "")
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleEducation = () => {
+    if (profile?.profile?.education?.items.length === 0) {
+      return true
+    }
+
+    if (profile.user.username === username) {
+      return false
+    }
+
+    if (profile?.profile?.education?.isPublic) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const handleExperience = () => {
+    if (profile?.profile?.experience?.items.length === 0) {
+      return true
+    }
+
+    if (profile.user.username === username) {
+      return false
+    }
+
+    if (profile?.profile?.experience?.isPublic) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  const handleCetification = () => {
+    if (profile?.profile?.certifications?.items.length === 0) {
+      return true
+    }
+
+    if (profile.user.username === username) {
+      return false
+    }
+
+    if (profile?.profile?.certifications?.isPublic) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   return (
     <>
       <div className="w-full lg:w-5/6 font-barolw flex flex-col bg-Gris border-[1.5px] p-4 border-verdeD gap-2 md:gap-3 lg:gap-5">
@@ -44,188 +217,285 @@ function InfoProfile({ profile }) {
           <h2 className="text-lg lg:text-xl font-barlow-semi-condensed font-bold uppercase border-b border-verdeD  w-full pb-1 px-2 mb-4">
             Perfil Personal
           </h2>
-          {(profile?.profile?.personalData || profile?.profile?.contact) && (
+          {handlePersonalData() && (
             <>
-              <h5 className="text-base lg:text-xl font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
                 Datos Personales
               </h5>
               <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
-                {profile?.profile?.personalData === undefined ||
-                profile?.profile?.personalData?.birthDate === undefined ||
-                profile?.profile?.personalData?.birthDate === null ||
-                profile?.profile?.personalData?.birthDate === "" ? (
-                  <></>
+                {profile?.profile?.personalData?.birthDate.isPublic ||
+                profile?.user?.username === username ? (
+                  <>
+                    {profile?.profile?.personalData?.birthDate.value ===
+                    undefined ? (
+                      <></>
+                    ) : (
+                      <p>
+                        <b>Nacimiento:</b>{" "}
+                        {
+                          profile?.profile?.personalData?.birthDate.value.split(
+                            "T"
+                          )[0]
+                        }
+                      </p>
+                    )}
+                  </>
                 ) : (
-                  <p>
-                    <b>Nacimiento:</b>{" "}
-                    {profile?.profile?.personalData?.birthDate.split("T")[0]}
-                  </p>
+                  <></>
                 )}
 
-                {profile?.profile?.personalData === undefined ||
-                profile?.profile?.personalData?.location === undefined ||
-                profile?.profile?.personalData?.location === "" ? (
-                  <></>
+                {profile?.profile?.personalData?.location.isPublic === true ||
+                profile?.user?.username === username ? (
+                  <>
+                    {profile?.profile?.personalData?.location.value ===
+                      undefined ||
+                    profile?.profile?.personalData?.location.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <p>
+                        <b>Ubicación:</b>{" "}
+                        {profile?.profile?.personalData?.location.value}
+                      </p>
+                    )}
+                  </>
                 ) : (
-                  <p>
-                    <b>Ubicación:</b> {profile?.profile?.personalData?.location}
-                  </p>
+                  <></>
                 )}
 
-                {profile?.profile?.contact === undefined ||
-                profile?.profile?.contact?.phone === undefined ||
-                profile?.profile?.contact?.phone === "" ? (
-                  <></>
+                {profile?.profile?.contact?.phone.isPublic === true ||
+                profile?.user?.username === username ? (
+                  <>
+                    {profile?.profile?.contact?.phone.value === undefined ||
+                    profile?.profile?.contact?.phone.value.trim() === "" ? (
+                      <></>
+                    ) : (
+                      <p>
+                        <b>Teléfono:</b>{" "}
+                        {profile?.profile?.contact?.phone.value}
+                      </p>
+                    )}
+                  </>
                 ) : (
-                  <p>
-                    <b>Teléfono:</b> {profile?.profile?.contact?.phone}
-                  </p>
+                  <></>
                 )}
 
-                {profile?.profile?.contact === undefined ||
-                profile?.profile?.contact?.website === undefined ||
-                profile?.profile?.contact?.website === "" ? (
-                  <></>
+                {profile?.profile?.contact?.website.isPublic === true ||
+                profile?.user?.username === username ? (
+                  <>
+                    {profile?.profile?.contact?.website.value === undefined ||
+                    profile?.profile?.contact?.website.value.trim() === "" ? (
+                      <></>
+                    ) : (
+                      <p>
+                        <b>Sitio Web:</b>{" "}
+                        {profile?.profile?.contact?.website.value}
+                      </p>
+                    )}
+                  </>
                 ) : (
-                  <p>
-                    <b>Sitio Web:</b> {profile?.profile?.contact?.website}
-                  </p>
+                  <></>
                 )}
 
-                {profile?.profile?.contact === undefined ||
-                profile?.profile?.contact?.alternateEmail === undefined ||
-                profile?.profile?.contact?.alternateEmail === "" ? (
-                  <></>
+                {profile?.profile?.contact?.alternateEmail.isPublic === true ||
+                profile?.user?.username === username ? (
+                  <>
+                    {profile?.profile?.contact?.alternateEmail.value ===
+                      undefined ||
+                    profile?.profile?.contact?.alternateEmail.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <p>
+                        <b>Correo Electrónico:</b>{" "}
+                        {profile?.profile?.contact?.alternateEmail.value}
+                      </p>
+                    )}
+                  </>
                 ) : (
-                  <p>
-                    <b>Correo Electrónico:</b>{" "}
-                    {profile?.profile?.contact?.alternateEmail}
-                  </p>
+                  <></>
                 )}
               </div>
             </>
           )}
         </div>
 
-        {profile?.profile?.professional?.summary && (
-          <div className="py-4 px-2 w-full">
-            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-              PERFIL PROFESIONAL
-            </h5>
+        {handleProfessional() && (
+            <div className="py-4 px-2 w-full">
+              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+                PERFIL PROFESIONAL
+              </h5>
 
-            <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
-              {description.map((item, key) => (
-                <>
-                  <p key={key}>{item}</p>
-                  <br />
-                </>
-              ))}
+              <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
+                {description.map((item, key) => (
+                  <>
+                    <p key={key}>{item}</p>
+                    <br />
+                  </>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {profile?.profile?.socialMedia === undefined ||
-        profile?.profile?.socialMedia?.instagram === undefined ||
-        profile?.profile?.socialMedia?.instagram === "" ? (
-          <></>
-        ) : (
+        {handleSocialMedia() ? (
           <div className="py-4 px-2 w-full">
             <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
               REDES SOCIALES
             </h5>
 
             <ul className="flex gap-2 text-white text-2xl px-2">
-              {profile?.profile?.socialMedia?.instagram === "" ||
-              profile?.profile?.socialMedia?.instagram === undefined ? (
-                <></>
+              {profile?.profile?.socialMedia?.instagram.isPublic === true ||
+              profile?.user?.username === username ? (
+                <>
+                  {profile?.profile?.socialMedia?.instagram.value === undefined ||
+                  profile?.profile?.socialMedia?.instagram.value.trim() === "" ? (
+                    <></>
+                  ) : (
+                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                      <a
+                        target="_blank"
+                        href={profile?.profile?.socialMedia?.instagram.value}
+                      >
+                        <FaInstagram />
+                      </a>
+                    </li>
+                  )}
+                </>
               ) : (
-                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a
-                    target="_blank"
-                    href={profile?.profile?.socialMedia?.instagram}
-                  >
-                    <FaInstagram />
-                  </a>
-                </li>
+                <></>
               )}
-              {profile?.profile?.socialMedia?.facebook === "" ||
-              profile?.profile?.socialMedia?.facebook === undefined ? (
-                <></>
+              {profile?.profile?.socialMedia?.facebook.isPublic === true ||
+              profile?.user?.username === username ? (
+                <>
+                  {profile?.profile?.socialMedia?.facebook.value === undefined ||
+                  profile?.profile?.socialMedia?.facebook.value.trim() === "" ? (
+                    <></>
+                  ) : (
+                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                      <a
+                        target="_blank"
+                        href={profile?.profile?.socialMedia?.facebook.value}
+                      >
+                        <FaFacebook />
+                      </a>
+                    </li>
+                  )}
+                </>
               ) : (
-                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a
-                    target="_blank"
-                    href={profile?.profile?.socialMedia?.facebook}
-                  >
-                    <FaFacebook />
-                  </a>
-                </li>
+                <></>
               )}
-              {profile?.profile?.socialMedia?.whatsapp === "" ||
-              profile?.profile?.socialMedia?.whatsapp === undefined ? (
-                <></>
+              {profile?.profile?.socialMedia?.whatsapp.isPublic === true ||
+              profile?.user?.username === username ? (
+                <>
+                  {profile?.profile?.socialMedia?.whatsapp.value === undefined ||
+                  profile?.profile?.socialMedia?.whatsapp.value.trim() === "" ? (
+                    <></>
+                  ) : (
+                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                      <a
+                        target="_blank"
+                        href={profile?.profile?.socialMedia?.whatsapp.value}
+                      >
+                        <FaWhatsapp />
+                      </a>
+                    </li>
+                  )}
+                </>
               ) : (
-                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a
-                    target="_blank"
-                    href={profile?.profile?.socialMedia?.whatsapp}
-                  >
-                    <FaWhatsapp />
-                  </a>
-                </li>
+                <></>
               )}
-              {profile?.profile?.socialMedia?.linkedin === "" ||
-              profile?.profile?.socialMedia?.linkedin === undefined ? (
-                <></>
+              {profile?.profile?.socialMedia?.linkedin.isPublic === true ||
+              profile?.user?.username === username ? (
+                <>
+                  {profile?.profile?.socialMedia?.linkedin.value === undefined ||
+                  profile?.profile?.socialMedia?.linkedin.value.trim() === "" ? (
+                    <></>
+                  ) : (
+                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                      <a
+                        target="_blank"
+                        href={profile?.profile?.socialMedia?.linkedin.value}
+                      >
+                        <FaLinkedin />
+                      </a>
+                    </li>
+                  )}
+                </>
               ) : (
-                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a
-                    target="_blank"
-                    href={profile?.profile?.socialMedia?.linkedin}
-                  >
-                    <FaLinkedin />
-                  </a>
-                </li>
+                <></>
               )}
-              {profile?.profile?.socialMedia?.youtube === "" ||
-              profile?.profile?.socialMedia?.youtube === undefined ? (
-                <></>
+              {profile?.profile?.socialMedia?.youtube.isPublic === true ||
+              profile?.user?.username === username ? (
+                <>
+                  {profile?.profile?.socialMedia?.youtube.value === undefined ||
+                  profile?.profile?.socialMedia?.youtube.value.trim() === "" ? (
+                    <></>
+                  ) : (
+                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                      <a
+                        target="_blank"
+                        href={profile?.profile?.socialMedia?.youtube.value}
+                      >
+                        <FaYoutube />
+                      </a>
+                    </li>
+                  )}
+                </>
               ) : (
-                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a
-                    target="_blank"
-                    href={profile?.profile?.socialMedia?.youtube}
-                  >
-                    <FaYoutube />
-                  </a>
-                </li>
+                <></>
               )}
-              {profile?.profile?.socialMedia?.github === "" ? (
-                <></>
+              {profile?.profile?.socialMedia?.github.isPublic === true ||
+              profile?.user?.username === username ? (
+                <>
+                  {profile?.profile?.socialMedia?.github.value === undefined ||
+                  profile?.profile?.socialMedia?.github.value.trim() === "" ? (
+                    <></>
+                  ) : (
+                    <>
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.github.value}
+                        >
+                          <FaGithub />
+                        </a>
+                      </li>
+                    </>
+                  )}
+                </>
               ) : (
-                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a
-                    target="_blank"
-                    href={profile?.profile?.socialMedia?.github}
-                  >
-                    <FaGithub />
-                  </a>
-                </li>
+                <></>
               )}
-              {profile?.profile?.socialMedia?.x === "" ? (
-                <></>
+              {profile?.profile?.socialMedia?.x.isPublic === true ||
+              profile?.user?.username === username ? (
+                <>
+                  {profile?.profile?.socialMedia?.x.value === undefined ||
+                  profile?.profile?.socialMedia?.x.value.trim() === "" ? (
+                    <></>
+                  ) : (
+                    <>
+                      {" "}
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.x.value}
+                        >
+                          <FaXTwitter />
+                        </a>
+                      </li>
+                    </>
+                  )}
+                </>
               ) : (
-                <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                  <a target="_blank" href={profile?.profile?.socialMedia?.x}>
-                    <FaXTwitter />
-                  </a>
-                </li>
+                <></>
               )}
             </ul>
           </div>
+        ) : (
+          <></>
         )}
 
-        {profile?.profile?.education?.length === 0 ? (
+        {handleEducation() ? (
           <></>
         ) : (
           <div className="py-4 px-2 w-full">
@@ -235,7 +505,7 @@ function InfoProfile({ profile }) {
 
             <div className="flex justify-between">
               <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                {profile?.profile?.education?.map((item, key) => (
+                {profile?.profile?.education?.items.map((item, key) => (
                   <li className="flex justify-between w-full" key={key}>
                     <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
                       {item.degree} -{" "}
@@ -263,7 +533,7 @@ function InfoProfile({ profile }) {
           </div>
         )}
 
-        {profile?.profile?.certifications?.length === 0 ? (
+        {handleCetification() ? (
           <></>
         ) : (
           <div className="py-4 px-2 w-full">
@@ -273,7 +543,7 @@ function InfoProfile({ profile }) {
 
             <div className="flex justify-between">
               <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                {profile?.profile?.certifications?.map((item, key) => (
+                {profile?.profile?.certifications?.items.map((item, key) => (
                   <li className="flex justify-between w-full" key={key}>
                     <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
                       {item.name} -{" "}
@@ -301,7 +571,7 @@ function InfoProfile({ profile }) {
           </div>
         )}
 
-        {profile?.profile?.experience?.length === 0 ? (
+        {handleExperience() ? (
           <></>
         ) : (
           <div className="py-4 px-2 w-full">
@@ -311,7 +581,7 @@ function InfoProfile({ profile }) {
 
             <div className="flex justify-between">
               <ul className="flex flex-col gap-1 w-full text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                {profile?.profile?.experience?.map((item, key) => (
+                {profile?.profile?.experience?.items.map((item, key) => (
                   <li className="flex justify-between w-full" key={key}>
                     <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
                       {item.position} -{" "}
