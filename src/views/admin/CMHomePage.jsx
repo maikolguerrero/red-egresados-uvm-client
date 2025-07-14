@@ -15,6 +15,8 @@ import { Loader } from "../../Components/Loader";
 import { FormCarrouselHome } from "../../Components/Forms/admin/home/FormCarrouselHome";
 import { getContentHome } from "../../services/admin/homeService";
 import { FormTextSectionHome } from "../../Components/Forms/admin/home/FormTextSectionHome";
+import PreviewF from "../../../public/PreviewF.png"
+import PreviewG from "../../../public/PreviewG.png"
 
 function CMHomePage() {
   const dispatch = useDispatch();
@@ -56,17 +58,40 @@ function CMHomePage() {
               <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase">
                 Selecciona una opción de configuración
               </h4>
-              <div className="flex flex-wrap justify-center gap-6">
-                <ButtonBig
-                  text={"Carrousel de Imágenes"}
-                  className={"bg-verdeC hover:bg-RojoC w-[250px]"}
-                  action={(e) => setModalCarrousel(true)}
-                />
-                <ButtonBig
-                  text={"Consejos de uso"}
-                  className={"bg-verdeB hover:bg-RojoC w-[250px]"}
-                  action={(e) => setModalWelcolmeS(true)}
-                />
+              <div className="flex flex-wrap justify-center gap-8">
+                <div className="w-[300px] flex flex-col gap-3">
+                  <ButtonBig
+                    text={"Carrousel de Imágenes"}
+                    className={"bg-verdeC hover:bg-RojoC w-full"}
+                    action={(e) => setModalCarrousel(true)}
+                  />
+                  <div className="flex flex-col gap-2">
+                    <h6 className="font-barlow-semi-condensed font-medium text-base w-full flex items-center justify-center">
+                      Visualización Previa
+                    </h6>
+                    <img
+                      className="rounded-md border border-verdeB"
+                      src={PreviewF}
+                    />
+                  </div>
+                </div>
+                <div className="w-[300px] flex flex-col gap-3">
+                  <ButtonBig
+                    text={"Consejos de uso"}
+                    className={"bg-verdeB hover:bg-RojoC w-full"}
+                    action={(e) => setModalWelcolmeS(true)}
+                  />
+                  <div className="flex flex-col gap-2">
+                    <h6 className="font-barlow-semi-condensed font-medium text-base w-full flex items-center justify-center">
+                      Visualización Previa
+                    </h6>
+                    <img
+                      className="rounded-md border border-verdeB"
+                      src={PreviewG}
+                    />
+                  </div>
+                </div>
+
                 {/*<ButtonBig
                   text={"Sección de texto e imágenes"}
                   className={"bg-verdeC hover:bg-RojoC"}

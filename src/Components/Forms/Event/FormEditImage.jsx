@@ -45,12 +45,12 @@ export function FormEditImage({ internal, event }) {
     <>
       <form className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          IMAGEN DEL EVENTO
+          IMÁGEN DEL EVENTO
         </h5>
         {!event.media[0] ? (
           <div className="flex flex-col gap-1">
             <Label className="mb-2 block" htmlFor="small-file-upload">
-              Selecciona la foto:
+              Selecciona la imágen:
             </Label>
             <FileInput
               onChange={onImageChange}
@@ -95,7 +95,7 @@ export function FormEditImage({ internal, event }) {
           <ButtonSmall
             action={handleSubmit}
             className={"bg-verdeA hover:bg-RojoC"}
-            text={"AGREGAR FOTO"}
+            text={"AGREGAR IMÁGEN"}
           />
         ) : (
           <ButtonSmall

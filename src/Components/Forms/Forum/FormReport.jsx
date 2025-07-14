@@ -47,6 +47,10 @@ export function FormReport({ threadId, idComment }) {
           reason: values.reason,
         })
       );
+      setValues({
+        description: "",
+        reason: "spam",
+      });
     } else {
       dispatch(
         addReport({
@@ -56,6 +60,10 @@ export function FormReport({ threadId, idComment }) {
           reason: values.reason,
         })
       );
+      setValues({
+        description: "",
+        reason: "spam",
+      });
     }
   };
 
@@ -86,7 +94,7 @@ export function FormReport({ threadId, idComment }) {
           </div>
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Descripcion:
+              Descripción:
             </Label>
             <textarea
               rows={6}
@@ -95,7 +103,7 @@ export function FormReport({ threadId, idComment }) {
               name="description"
               value={values.description}
               onChange={handleInputChange}
-              placeholder={"Descripcion del reporte..."}
+              placeholder={"Descripción del reporte..."}
             ></textarea>
           </div>
         </div>

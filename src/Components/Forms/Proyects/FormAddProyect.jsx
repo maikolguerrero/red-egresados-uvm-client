@@ -97,7 +97,7 @@ export function FormAddProyect({ proyect, type }) {
       tags: [...values.tags, tag],
     });
     setTag("");
-    enqueueSnackbar("Se agrego la etiqueta", typeInfo);
+    enqueueSnackbar("Se agregó la etiqueta", typeInfo);
   };
 
   const deleteTag = (key) => {
@@ -106,7 +106,7 @@ export function FormAddProyect({ proyect, type }) {
       ...values,
       tags: newTags,
     });
-    enqueueSnackbar("Se elimino la etiqueta", typeInfo);
+    enqueueSnackbar("Se eliminó la etiqueta", typeInfo);
   };
 
   const handleInputChange = (e) => {
@@ -120,23 +120,23 @@ export function FormAddProyect({ proyect, type }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.title.trim() === "") {
-      return enqueueSnackbar("Debe tener titulo el proyecto", typeError);
+      return enqueueSnackbar("Debe tener título el proyecto", typeError);
     }
     if (values.description.trim() === "") {
-      return enqueueSnackbar("Debe tener descripcion el proyecto", typeError);
+      return enqueueSnackbar("Debe tener descripción el proyecto", typeError);
     }
     if (values.startDate.trim() === "") {
       return enqueueSnackbar("Debe tener fecha de inicio el proyecto", typeError);
     }
     if (values.endDate.trim() === "") {
-      return enqueueSnackbar("Debe tener fecha de finalizacion tentativa el proyecto", typeError);
+      return enqueueSnackbar("Debe tener fecha de finalización tentativa el proyecto", typeError);
     }
     // Validación de fechas
     if (!validateDates()) {
       return;
     }
     if (values.endDate <= values.startDate) {
-      return enqueueSnackbar("La fecha de finalizacion debe ser mayor a la fecha de inicio del proyecto", typeError);
+      return enqueueSnackbar("La fecha de finalización debe ser mayor a la fecha de inicio del proyecto", typeError);
     }
 
     // Crear copia de values con las fechas formateadas
@@ -175,7 +175,7 @@ export function FormAddProyect({ proyect, type }) {
         <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Titulo del Proyecto:
+              Título del Proyecto:
             </Label>
             <input
               className={styles.input}
@@ -183,13 +183,13 @@ export function FormAddProyect({ proyect, type }) {
               name="title"
               value={values.title}
               onChange={handleInputChange}
-              placeholder="Titulo del proyecto..."
+              placeholder="Título del proyecto..."
             />
           </div>
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Descripcion del Proyecto:
+              Descripción del Proyecto:
             </Label>
             <textarea
               className={styles.input}
@@ -197,7 +197,7 @@ export function FormAddProyect({ proyect, type }) {
               name="description"
               value={values.description}
               onChange={handleInputChange}
-              placeholder="Descripcion del proyecto..."
+              placeholder="Descripción del proyecto..."
             ></textarea>
           </div>
 
@@ -218,7 +218,7 @@ export function FormAddProyect({ proyect, type }) {
 
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Fecha de Finalizacion:
+                Fecha de Finalización:
               </Label>
               <input
                 className={styles.input}

@@ -304,13 +304,14 @@ function FormProfessional() {
               ></textarea>
               <div className="flex items-center gap-2 mt-2">
                 <Checkbox
+                  className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
                   checked={valuesIsPublic.summary}
                   onChange={(e) =>
                     handleCheckChange("summary", !valuesIsPublic.summary)
                   }
                 />
-                <Label className="font-barlow-semi-condensed text-black">
-                  Hacer publico este contenido
+                <Label className="font-barlow-semi-condensed text-RojoC">
+                  Hacer público este contenido
                 </Label>
               </div>
             </div>
@@ -364,13 +365,14 @@ function FormProfessional() {
                   </ul>
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
                       checked={valuesIsPublic.skills}
                       onChange={(e) =>
                         handleCheckChange("skills", !valuesIsPublic.skills)
                       }
                     />
-                    <Label className="font-barlow-semi-condensed text-black">
-                      Hacer publico este contenido
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
                     </Label>
                   </div>
                 </>
@@ -430,6 +432,7 @@ function FormProfessional() {
                   </ul>
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
                       checked={valuesIsPublic.interests}
                       onChange={(e) =>
                         handleCheckChange(
@@ -438,8 +441,8 @@ function FormProfessional() {
                         )
                       }
                     />
-                    <Label className="font-barlow-semi-condensed text-black">
-                      Hacer publico este contenido
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
                     </Label>
                   </div>
                 </>
@@ -553,6 +556,7 @@ function FormProfessional() {
                   </ul>
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
                       checked={valuesIsPublic.education}
                       onChange={(e) =>
                         handleCheckChange(
@@ -561,8 +565,8 @@ function FormProfessional() {
                         )
                       }
                     />
-                    <Label className="font-barlow-semi-condensed text-black">
-                      Hacer publico este contenido
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
                     </Label>
                   </div>
                 </>
@@ -673,6 +677,7 @@ function FormProfessional() {
                   </ul>
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
                       checked={valuesIsPublic.certifications}
                       onChange={(e) =>
                         handleCheckChange(
@@ -681,8 +686,8 @@ function FormProfessional() {
                         )
                       }
                     />
-                    <Label className="font-barlow-semi-condensed text-black">
-                      Hacer publico este contenido
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
                     </Label>
                   </div>
                 </>
@@ -809,6 +814,7 @@ function FormProfessional() {
                   </ul>
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
                       checked={valuesIsPublic.experience}
                       onChange={(e) =>
                         handleCheckChange(
@@ -817,8 +823,8 @@ function FormProfessional() {
                         )
                       }
                     />
-                    <Label className="font-barlow-semi-condensed text-black">
-                      Hacer publico este contenido
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
                     </Label>
                   </div>
                 </>

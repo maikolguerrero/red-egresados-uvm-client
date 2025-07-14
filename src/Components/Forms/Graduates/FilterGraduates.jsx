@@ -72,7 +72,7 @@ function FilterGraduates({ values, setValues }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Ubicacion:
+              Ubicación:
             </Label>
             <input
               className={styles.input}
@@ -80,7 +80,7 @@ function FilterGraduates({ values, setValues }) {
               name="location"
               value={values.location}
               onChange={handleInputChange}
-              placeholder="Filtrar por ubicacion..."
+              placeholder="Filtrar por ubicación..."
             />
           </div>
         </div>

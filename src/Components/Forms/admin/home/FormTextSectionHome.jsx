@@ -89,7 +89,7 @@ export function FormTextSectionHome({home}) {
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Titulo:
+                Título:
               </Label>
               <input
                 className={styles.input}
@@ -97,7 +97,7 @@ export function FormTextSectionHome({home}) {
                 name="title"
                 value={values.title}
                 onChange={handleInputChange}
-                placeholder="Titulo del consejo..."
+                placeholder="Título del consejo..."
               />
             </div>
             <div className="w-full flex flex-col relative">

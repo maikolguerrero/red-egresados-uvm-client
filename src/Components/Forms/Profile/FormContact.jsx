@@ -203,7 +203,7 @@ function FormContact() {
     <>
       <form className="flex flex-col gap-8 w-full">
         <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>FOTO PERFIL</h4>
+          <h4 className={styles.subtitle_form}>FOTO DE PERFIL</h4>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col gap-3 items-center justify-center relative">
               <div className="flex relative">
@@ -276,7 +276,7 @@ function FormContact() {
                   placeholder="Fecha de nacimiento"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={valuesPersonalData?.birthDate.isPublic}
                   onChange={(e) => {
                     handleCheckChangePersonalData(
@@ -301,7 +301,7 @@ function FormContact() {
                   placeholder="Ubicación"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={valuesPersonalData?.location.isPublic}
                   onChange={(e) => {
                     handleCheckChangePersonalData(
@@ -332,7 +332,7 @@ function FormContact() {
                   placeholder="Teléfono"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values?.phone.isPublic}
                   onChange={(e) => {
                     handleCheckChange(
@@ -357,7 +357,7 @@ function FormContact() {
                   placeholder="Correo de contacto"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values?.alternateEmail.isPublic}
                   onChange={(e) => {
                     handleCheckChange(
@@ -382,7 +382,7 @@ function FormContact() {
                   placeholder="Sitio web"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values?.website.isPublic}
                   onChange={(e) => {
                     handleCheckChange(
@@ -413,7 +413,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.instagram.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -438,7 +438,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.facebook.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -463,7 +463,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.linkedin.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -488,7 +488,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.x.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -513,7 +513,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.youtube.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -538,7 +538,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.tiktok.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -563,7 +563,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.whatsapp.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -588,7 +588,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.telegram.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(
@@ -613,7 +613,7 @@ function FormContact() {
                   placeholder="Url de tu perfil"
                 />
                 <Checkbox
-                  className="w-6 h-6"
+                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={values2?.github.isPublic}
                   onChange={(e) => {
                     handleCheckChange2(

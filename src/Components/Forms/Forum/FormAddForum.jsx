@@ -102,7 +102,7 @@ export function FormAddForum({forum, type}) {
         <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Titulo:
+              Título:
             </Label>
             <input
               className={styles.input}
@@ -110,7 +110,7 @@ export function FormAddForum({forum, type}) {
               name="title"
               value={values.title}
               onChange={handleInputChange}
-              placeholder="Titulo del foro..."
+              placeholder="Título del foro..."
             />
           </div>
 
@@ -124,13 +124,13 @@ export function FormAddForum({forum, type}) {
               name="content"
               value={values.content}
               onChange={handleInputChange}
-              placeholder="Descripcion del foro..."
+              placeholder="Descripción del foro..."
             ></textarea>
           </div>
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Categoria:
+              Categoría:
             </Label>
             <select
               className={styles.input}
@@ -140,7 +140,7 @@ export function FormAddForum({forum, type}) {
               onChange={handleInputChange}
               placeholder="Titulo del foro..."
             >
-              <option value="">Selecciona una categoria...</option>
+              <option value="">Selecciona una categoría...</option>
               <option value="general">General</option>
               <option value="empleos">Empleos</option>
               <option value="eventos">Eventos</option>

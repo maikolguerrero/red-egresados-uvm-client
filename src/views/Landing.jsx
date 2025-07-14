@@ -136,7 +136,7 @@ function Landing() {
             <>
               {landing?.featuredSections?.map((item, key) => (
                 <section key={key} className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
-                  <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
+                  <h3 className="font-barlow-semi-condensed w-auto uppercase font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC px-3 text-Negro text-center">
                     {item.mainTitle}
                   </h3>
                   {item.subsections?.length === 0 ? (

@@ -218,7 +218,7 @@ export function InternalProject({ proyect }) {
                       ) : (
                         <article className="flex flex-col gap-6">
                           <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-                            Solicitudes de union
+                            Solicitudes de unión
                           </h5>
 
                           {proyect?.request === undefined ? (
@@ -226,7 +226,7 @@ export function InternalProject({ proyect }) {
                           ) : proyect?.request?.length === 0 ? (
                             <>
                               <h6 className="text-sm font-barolw font-semibold text-RojoC uppercase">
-                                No hay solicitudes de union actualmente
+                                No hay solicitudes de unión actualmente
                               </h6>
                             </>
                           ) : (
@@ -284,7 +284,7 @@ export function InternalProject({ proyect }) {
               <div className="bg-gris border border-verdeD px-5 py-3 rounded-md flex justify-between items-center">
                 {" "}
                 <p className="font-bold text-verdeD">
-                  Fecha de Finalizacion:{" "}
+                  Fecha de Finalización:{" "}
                   <span className="text-Negro font-medium">
                     {proyect?.endDate?.split("T")[0]}
                   </span>
@@ -344,7 +344,7 @@ export function InternalProject({ proyect }) {
                   onClick={handleCancelRequest}
                   className="text-xs px-3 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-800 font-barlow-semi-condensed font-medium uppercase"
                 >
-                  Cancelar Union
+                  Cancelar Unión
                 </button>
               ) : proyect.isPublic ? (
                 <button
@@ -358,7 +358,7 @@ export function InternalProject({ proyect }) {
                   onClick={handleRequest}
                   className="text-xs px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-800 font-barlow-semi-condensed font-medium uppercase"
                 >
-                  Solicitud de union al proyecto
+                  Solicitud de unión al proyecto
                 </button>
               )}
             </div>
