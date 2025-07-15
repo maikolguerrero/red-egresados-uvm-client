@@ -295,9 +295,7 @@ function App() {
       path: "/reset-password",
       element: (
         <ProtectedRoute>
-          <Layout>
             <ChangePassword />
-          </Layout>
         </ProtectedRoute >
       ),
     },
