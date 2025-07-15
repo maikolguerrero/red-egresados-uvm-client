@@ -100,8 +100,8 @@ function Events() {
             </>
           ) : (
             <>
-              <div className="flex flex-col gap-4 px-1 md:px-2 lg:px-6">
-                <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="flex flex-col gap-4 px-1 md:px-2 lg:px-6 w-full">
+                <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
                   {events.map((item) => (
                     <CardEvent key={item.id} event={item} />
                   ))}
