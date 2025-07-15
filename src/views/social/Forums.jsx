@@ -99,7 +99,7 @@ function Forums() {
           {forums.length === 0 ? (
             <>
               <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                No se encontraron foros con ese filtrado
+                No se encontraron hilos en el foro con ese filtrado
               </h4>
             </>
           ) : (

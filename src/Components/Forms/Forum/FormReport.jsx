@@ -1,12 +1,10 @@
 import { FileInput, Label } from "flowbite-react";
-import { enqueueSnackbar } from "notistack";
+import notify from "../../../utils/notifications";
 import { useState } from "react";
-import { typeError, typeInfo } from "../../../models/alertModels";
-import { IoIosAdd } from "react-icons/io";
-import { Skills } from "../../Skills";
+import { typeError } from "../../../models/alertModels";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
-import { addComment, addForum, addReport } from "../../../services/forum/forumService";
+import { addReport } from "../../../services/forum/forumService";
 
 let styles = {
   input:
@@ -34,10 +32,10 @@ export function FormReport({ threadId, idComment }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.reason.trim() === "") {
-      return enqueueSnackbar("Debe especificar el tipo de reporte", typeError);
+      return notify("Falta el tipo de reporte", typeError);
     }
     if (values.description.trim() === "") {
-      return enqueueSnackbar("Debe enviar la descripcion del reporte", typeError);
+      return notify("Falta la descripción del reporte", typeError);
     }
     if (idComment === undefined) {
       dispatch(
@@ -84,7 +82,7 @@ export function FormReport({ threadId, idComment }) {
               name="reason"
               value={values.reason}
               onChange={handleInputChange}
-              placeholder={"Descripcion del reporte..."}
+              placeholder={"Descripción del reporte..."}
             >
               <option value="spam">Spam</option>
               <option value="inappropriate">Inapropiado</option>

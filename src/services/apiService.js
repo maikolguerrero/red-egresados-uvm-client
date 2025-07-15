@@ -1,9 +1,8 @@
-// apiService.js
 import { URL_API } from "../config";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../models/alertModels";
 import store from "../app/store";
 import { logoutSesion } from "./auth/authService";
+import logger from "../utils/logger";
+import notify from "../utils/notifications";
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -64,7 +63,7 @@ export const apiFetch = async (url, options = {}) => {
         if (!refreshResponse.ok) {
           // Si el refresh falla, hacemos logout
           await dispatch(logoutSesion());
-          enqueueSnackbar("Tu sesión ha expirado. Por favor inicia sesión nuevamente.", typeError);
+          notify.error("Tu sesión ha expirado. Por favor inicia sesión nuevamente.", false);
           throw new Error("Failed to refresh token");
         }
 
@@ -90,7 +89,7 @@ export const apiFetch = async (url, options = {}) => {
 
     return data;
   } catch (error) {
-    console.error("API request failed:", error);
+    logger.error("API request failed:", error);
     throw error;
   }
 };

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import socketService from "../../services/socket/socket.service";
 import { useDispatch } from 'react-redux';
 import { setConversations as setReduxConversations } from '../../features/chat/chatSlice';
+import logger from "../../utils/logger";
 
 export function ButtonMessages() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,7 @@ export function ButtonMessages() {
       const { data } = await getConversations();
       updateConversations(data);
     } catch (error) {
-      console.error("Error fetching conversations:", error);
+      logger.error("Error al obtener conversaciones:", error);
     }
   };
 

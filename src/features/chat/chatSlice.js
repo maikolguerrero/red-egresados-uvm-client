@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getMessages, markMessagesAsRead } from "../../services/chat/chatService";
+import logger from "../../utils/logger";
 
 const chatSlice = createSlice({
     name: 'chat',
@@ -163,7 +164,7 @@ const chatSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getMessages.pending, (state) => {
-                console.log("Cargando mensajes...");
+                logger.log("Cargando mensajes...");
                 state.loading = true;
                 state.error = null;
             })
@@ -182,7 +183,7 @@ const chatSlice = createSlice({
                 state.hasMore = action.payload.hasMore;
             })
             .addCase(getMessages.rejected, (state, action) => {
-                console.error("Error cargando mensajes:", action.payload);
+                logger.error("Error cargando mensajes:", action.payload);
                 state.loading = false;
                 state.error = action.payload;
             })

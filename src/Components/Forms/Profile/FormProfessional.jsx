@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../Buttons/Button";
 import { Checkbox, Label } from "flowbite-react";
-import { FaCamera } from "react-icons/fa";
 import { IoIosAdd } from "react-icons/io";
 import { Skills } from "../../Skills";
 import { ItemBabge } from "../../Babge/ItemBabge";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeInfo } from "../../../models/alertModels";
+import notify from "../../../utils/notifications";
 import { updateProfile } from "../../../services/users/usersService";
 
 let styles = {
@@ -44,7 +42,7 @@ let defaultEx = {
   position: "",
   company: "",
   startDate: "",
-  endDate: "",
+  endDate: null,
   current: false,
   description: "",
 };
@@ -75,25 +73,25 @@ function FormProfessional() {
   const [valuesIsPublic, setValuesIsPublic] = useState(defaultIsPublic);
 
   useEffect(() => {
-    setSkills(profile.profile.professional.skills.values);
-    setInterests(profile.profile.professional.interests.values);
-    setEducation(profile.profile.education.items);
-    setCertifications(profile.profile.certifications.items);
-    setExperience(profile.profile.experience.items);
+    setSkills(profile?.profile?.professional?.skills?.values || []);
+    setInterests(profile?.profile?.professional?.interests?.values || []);
+    setEducation(profile?.profile?.education?.items || []);
+    setCertifications(profile?.profile?.certifications?.items || []);
+    setExperience(profile?.profile?.experience?.items || []);
     setValuesIsPublic({
-      summary: profile.profile.professional.summary.isPublic,
-      skills: profile.profile.professional.skills.isPublic,
-      interests: profile.profile.professional.interests.isPublic,
-      certifications: profile.profile.certifications.isPublic,
-      education: profile.profile.education.isPublic,
-      experience: profile.profile.experience.isPublic,
+      summary: profile?.profile?.professional?.summary?.isPublic || false,
+      skills: profile?.profile?.professional?.skills?.isPublic || false,
+      interests: profile?.profile?.professional?.interests?.isPublic || false,
+      certifications: profile?.profile?.certifications?.isPublic || false,
+      education: profile?.profile?.education?.isPublic || false,
+      experience: profile?.profile?.experience?.isPublic || false,
     });
 
     setValues({
       summary:
-        profile.profile.professional.summary.value === undefined
+        profile?.profile?.professional?.summary?.value === undefined
           ? ""
-          : profile.profile.professional.summary.value,
+          : profile?.profile?.professional?.summary?.value,
       skills: "",
       interests: "",
     });
@@ -101,35 +99,35 @@ function FormProfessional() {
 
   const addSkill = (e) => {
     if (values.skills.trim().length === 0) {
-      return enqueueSnackbar("No puedes agregar una habilidad sin escribirla", typeError)
+      return notify.error("Falta la habilidad", false)
     }
     setSkills([...skills, values.skills])
     setValues({
       ...values,
       "skills": "",
     });
-    enqueueSnackbar("Se agrego la habilidad (debes guardar cambios)", typeInfo)
+    notify("Agregada la habilidad (debes guardar cambios)", false)
   }
 
   const addInterest = (e) => {
     if (values.interests.trim().length === 0) {
-      return enqueueSnackbar("No puedes agregar un interes sin escribirlo", typeError)
+      return notify.error("Falta el interés personal", false)
     }
     setInterests([...interests, values.interests])
     setValues({
       ...values,
       "interests": "",
     });
-    enqueueSnackbar("Se agrego el interes personal (debes guardar cambios)", typeInfo)
+    notify("Agregado el interés personal (debes guardar cambios)", false)
   }
 
   const addEducation = (e) => {
-    if (valuesEd.institution.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
-    if (valuesEd.degree.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
-    if (valuesEd.fieldOfStudy.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
-    if (valuesEd.startYear === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
-    if (valuesEd.endYear === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
-    if (valuesEd.startYear > valuesEd.endYear) return enqueueSnackbar("No puedes escribir un año mayor al de finalizacion", typeError)
+    if (valuesEd?.institution?.trim().length === 0) return notify.error("Falta la institución", false)
+    if (valuesEd?.degree?.trim().length === 0) return notify.error("Falta el grado", false)
+    if (valuesEd?.fieldOfStudy?.trim().length === 0) return notify.error("Falta el campo de estudio", false)
+    if (valuesEd?.startYear === 0) return notify.error("Falta el año de inicio", false)
+    if (valuesEd?.endYear === 0) return notify.error("Falta el año de finalización", false)
+    if (valuesEd?.startYear > valuesEd?.endYear) return notify.error("El año de inicio debe ser menor al de finalización", false)
 
     setEducation([...education, valuesEd]);
     setValuesEd({
@@ -139,15 +137,15 @@ function FormProfessional() {
       startYear: 0,
       endYear: 0,
     });
-    enqueueSnackbar("Se agrego el nivel de educacion (debes guardar cambios)", typeInfo)
+    notify("Agregado el nivel de educación (debes guardar cambios)", false)
   }
 
   const addCertification = (e) => {
-    if (valuesCr.name.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
-    if (valuesCr.issuingOrganization.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
-    if (valuesCr.issueDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
-    if (valuesCr.credentialID.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
-    if (valuesCr.credentialURL.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
+    if (valuesCr?.name?.trim().length === 0) return notify.error("Falta el nombre del certificado", false)
+    if (valuesCr?.issuingOrganization?.trim().length === 0) return notify.error("Falta la organización que otorga el certificado", false)
+    if (valuesCr?.issueDate?.trim().length === 0) return notify.error("Falta la fecha de emisión del certificado", false)
+    if (valuesCr?.credentialID?.trim().length === 0) return notify.error("Falta el ID del certificado", false)
+    if (valuesCr?.credentialURL?.trim().length === 0) return notify.error("Falta la URL del certificado", false)
 
     setCertifications([...certifications, valuesCr]);
     setValuesCr({
@@ -157,57 +155,57 @@ function FormProfessional() {
       credentialID: "",
       credentialURL: "",
     });
-    enqueueSnackbar("Se agrego el certificado (debes guardar cambios)", typeInfo)
+    notify("Agregado el certificado (debes guardar cambios)", false)
   }
 
   const addExperiencie = (e) => {
-    if (valuesEx.company.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
-    if (valuesEx.position.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
-    if (valuesEx.description.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
-    if (valuesEx.startDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
-    if (valuesEx.endDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
-    if (valuesEx.startDate > valuesEx.endDate) return enqueueSnackbar("No puede ser mayor la fecha de inicio que la fecha de finalizacion", typeError)
+    if (valuesEx?.company?.trim().length === 0) return notify.error("Falta la empresa", false)
+    if (valuesEx?.position?.trim().length === 0) return notify.error("Falta el puesto", false)
+    if (valuesEx?.description?.trim().length === 0) return notify.error("Falta la descripción", false)
+    if (valuesEx?.startDate?.trim().length === 0) return notify.error("Falta la fecha de inicio", false)
+    // if (valuesEx.endDate.trim().length === 0) return notify.error("Falta la fecha de finalización", false)
+    if ((valuesEx.endDate !== undefined && valuesEx.endDate !== null && valuesEx.endDate !== "") && (valuesEx.startDate > valuesEx.endDate)) return notify.error("No puede ser mayor la fecha de inicio que la fecha de finalización", false)
 
     setExperience([...experience, valuesEx]);
     setValuesEx({
       position: "",
       company: "",
       startDate: "",
-      endDate: "",
+      endDate: null,
       current: false,
       description: "",
     });
-    enqueueSnackbar("Se agrego la experiencia (debes guardar cambios)", typeInfo)
+    notify("Agregado la experiencia (debes guardar cambios)", false)
   }
 
   const deleteSkill = (key) => {
     let newSkills = skills.filter((item) => item !== key)
     setSkills(newSkills)
-    enqueueSnackbar("Se elimino la habilidad (debes guardar cambios)", typeInfo)
+    notify("Eliminada la habilidad (debes guardar cambios)", false)
   }
 
   const deleteInterest = (key) => {
     let newInterest = interests.filter((item) => item !== key)
     setInterests(newInterest)
-    enqueueSnackbar("Se elimino el interes personal (debes guardar cambios)", typeInfo)
+    notify("Eliminado el interés personal (debes guardar cambios)", false)
   }
 
   const deleteEducation = (key) => {
     let newEducation = education.filter((item) => item.degree !== key)
     setEducation(newEducation)
-    enqueueSnackbar("Se elimino el nivel de educacion (debes guardar cambios)", typeInfo)
+    notify("Eliminado el nivel de educación (debes guardar cambios)", false)
   }
 
   const deleteCertification = (key) => {
     let newCertification = certifications.filter((item) => item.name !== key)
     setCertifications(newCertification)
-    enqueueSnackbar("Se elimino el certificado (debes guardar cambios)", typeInfo)
+    notify("Eliminado el certificado (debes guardar cambios)", false)
   }
 
   const deleteExperiencie = (key) => {
     let newExperiencie = experience.filter((item) => item.position !== key)
     setExperience(newExperiencie)
-    enqueueSnackbar("Se elimino la experiencia laboral (debes guardar cambios)", typeInfo)
+    notify("Eliminada la experiencia laboral (debes guardar cambios)", false)
   }
 
   const handleInputChange = (e) => {
@@ -251,35 +249,38 @@ function FormProfessional() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(valuesEx.endDate === null){
+      delete valuesEx.endDate
+    }
     let data = {
-      personalData: profile.profile.personalData,
-      contact: profile.profile.contact,
-      socialMedia: profile.profile.socialMedia,
+      personalData: profile?.profile?.personalData,
+      contact: profile?.profile?.contact,
+      socialMedia: profile?.profile?.socialMedia,
       professional: {
         summary: {
-          value: values.summary,
-          isPublic: valuesIsPublic.summary,
+          value: values?.summary,
+          isPublic: valuesIsPublic?.summary,
         },
         skills: {
           values: skills,
-          isPublic: valuesIsPublic.skills,
+          isPublic: valuesIsPublic?.skills,
         },
         interests: {
           values: interests,
-          isPublic: valuesIsPublic.interests,
+          isPublic: valuesIsPublic?.interests,
         },
       },
       experience: {
         items: experience,
-        isPublic: valuesIsPublic.experience,
+        isPublic: valuesIsPublic?.experience,
       },
       education: {
         items: education,
-        isPublic: valuesIsPublic.education,
+        isPublic: valuesIsPublic?.education,
       },
       certifications: {
         items: certifications,
-        isPublic: valuesIsPublic.certifications,
+        isPublic: valuesIsPublic?.certifications,
       },
     };
     dispatch(updateProfile(data))
@@ -307,9 +308,9 @@ function FormProfessional() {
               <div className="flex items-center gap-2 mt-2">
                 <Checkbox
                   className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                  checked={valuesIsPublic.summary}
+                  checked={valuesIsPublic?.summary}
                   onChange={(e) =>
-                    handleCheckChange("summary", !valuesIsPublic.summary)
+                    handleCheckChange("summary", !valuesIsPublic?.summary)
                   }
                 />
                 <Label className="font-barlow-semi-condensed text-RojoC">
@@ -332,7 +333,7 @@ function FormProfessional() {
                   className={styles.input}
                   type="text"
                   name="skills"
-                  value={values.skills}
+                  value={values?.skills}
                   onChange={handleInputChange}
                   placeholder="habilidad..."
                 />
@@ -368,9 +369,9 @@ function FormProfessional() {
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
                       className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                      checked={valuesIsPublic.skills}
+                      checked={valuesIsPublic?.skills}
                       onChange={(e) =>
-                        handleCheckChange("skills", !valuesIsPublic.skills)
+                        handleCheckChange("skills", !valuesIsPublic?.skills)
                       }
                     />
                     <Label className="font-barlow-semi-condensed text-RojoC">
@@ -395,7 +396,7 @@ function FormProfessional() {
                   className={styles.input}
                   type="text"
                   name="interests"
-                  value={values.interests}
+                  value={values?.interests}
                   onChange={handleInputChange}
                   placeholder="interes..."
                 />
@@ -423,7 +424,7 @@ function FormProfessional() {
                 <>
                   <ul className="flex gap-2">
                     {interests.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <Skills
                           key={key}
                           text={item}
@@ -435,11 +436,11 @@ function FormProfessional() {
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
                       className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                      checked={valuesIsPublic.interests}
+                      checked={valuesIsPublic?.interests}
                       onChange={(e) =>
                         handleCheckChange(
                           "interests",
-                          !valuesIsPublic.interests
+                          !valuesIsPublic?.interests
                         )
                       }
                     />
@@ -464,7 +465,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="institution"
-                value={valuesEd.institution}
+                value={valuesEd?.institution}
                 onChange={handleInputChange2}
                 placeholder="..."
               />
@@ -477,7 +478,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="degree"
-                value={valuesEd.degree}
+                value={valuesEd?.degree}
                 onChange={handleInputChange2}
                 placeholder="..."
               />
@@ -490,7 +491,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="fieldOfStudy"
-                value={valuesEd.fieldOfStudy}
+                value={valuesEd?.fieldOfStudy}
                 onChange={handleInputChange2}
                 placeholder="..."
               />
@@ -505,7 +506,7 @@ function FormProfessional() {
                   type="number"
                   name="startYear"
                   min={0}
-                  value={valuesEd.startYear}
+                  value={valuesEd?.startYear}
                   onChange={handleInputChange2}
                 />
               </div>
@@ -517,7 +518,7 @@ function FormProfessional() {
                   className={styles.input}
                   type="number"
                   name="endYear"
-                  value={valuesEd.endYear}
+                  value={valuesEd?.endYear}
                   min={0}
                   onChange={handleInputChange2}
                 />
@@ -547,10 +548,10 @@ function FormProfessional() {
                 <>
                   <ul className="flex flex-col gap-2">
                     {education.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <ItemBabge
                           key={key}
-                          text={item.degree}
+                          text={item?.degree}
                           onClick={deleteEducation}
                         />
                       </li>
@@ -559,11 +560,11 @@ function FormProfessional() {
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
                       className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                      checked={valuesIsPublic.education}
+                      checked={valuesIsPublic?.education}
                       onChange={(e) =>
                         handleCheckChange(
                           "education",
-                          !valuesIsPublic.education
+                          !valuesIsPublic?.education
                         )
                       }
                     />
@@ -588,7 +589,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="name"
-                value={valuesCr.name}
+                value={valuesCr?.name}
                 onChange={handleInputChange3}
                 placeholder="..."
               />
@@ -601,7 +602,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="issuingOrganization"
-                value={valuesCr.issuingOrganization}
+                value={valuesCr?.issuingOrganization}
                 onChange={handleInputChange3}
                 placeholder="..."
               />
@@ -614,7 +615,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="date"
                 name="issueDate"
-                value={valuesCr.issueDate}
+                value={valuesCr?.issueDate}
                 onChange={handleInputChange3}
               />
             </div>
@@ -627,7 +628,7 @@ function FormProfessional() {
                   className={styles.input}
                   type="text"
                   name="credentialID"
-                  value={valuesCr.credentialID}
+                  value={valuesCr?.credentialID}
                   onChange={handleInputChange3}
                 />
               </div>
@@ -639,7 +640,7 @@ function FormProfessional() {
                   className={styles.input}
                   type="text"
                   name="credentialURL"
-                  value={valuesCr.credentialURL}
+                  value={valuesCr?.credentialURL}
                   onChange={handleInputChange3}
                 />
               </div>
@@ -668,10 +669,10 @@ function FormProfessional() {
                 <>
                   <ul className="flex flex-col gap-2">
                     {certifications.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <ItemBabge
                           key={key}
-                          text={item.name}
+                          text={item?.name}
                           onClick={deleteCertification}
                         />
                       </li>
@@ -680,11 +681,11 @@ function FormProfessional() {
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
                       className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                      checked={valuesIsPublic.certifications}
+                      checked={valuesIsPublic?.certifications}
                       onChange={(e) =>
                         handleCheckChange(
                           "certifications",
-                          !valuesIsPublic.certifications
+                          !valuesIsPublic?.certifications
                         )
                       }
                     />
@@ -709,7 +710,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="company"
-                value={valuesEx.company}
+                value={valuesEx?.company}
                 onChange={handleInputChange4}
                 placeholder="..."
               />
@@ -722,7 +723,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="position"
-                value={valuesEx.position}
+                value={valuesEx?.position}
                 onChange={handleInputChange4}
                 placeholder="..."
               />
@@ -736,7 +737,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="description"
-                value={valuesEx.description}
+                value={valuesEx .description}
                 onChange={handleInputChange4}
                 placeholder="Descripción profesional..."
               ></textarea>
@@ -750,24 +751,24 @@ function FormProfessional() {
                   className={styles.input}
                   type="date"
                   name="startDate"
-                  value={valuesEx.startDate}
+                  value={valuesEx?.startDate}
                   onChange={handleInputChange4}
                 />
               </div>
               <div className="w-full flex flex-col relative">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Fecha de Finalización:
+                  Fecha de Finalización (opcional):
                 </Label>
                 <input
                   className={styles.input}
                   type="date"
                   name="endDate"
-                  value={valuesEx.endDate}
+                  value={valuesEx?.endDate}
                   onChange={handleInputChange4}
                 />
               </div>
             </div>
-            <div className="w-full flex flex-col relative">
+            {/* <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Sigo Actualmente:
               </Label>
@@ -780,7 +781,7 @@ function FormProfessional() {
                 <option value="false">No</option>
                 <option value="true">Si</option>
               </select>
-            </div>
+            </div> */}
             <button
               type="button"
               onClick={addExperiencie}
@@ -805,10 +806,10 @@ function FormProfessional() {
                 <>
                   <ul className="flex flex-col gap-2">
                     {experience.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <ItemBabge
                           key={key}
-                          text={item.position}
+                          text={item?.position}
                           onClick={deleteExperiencie}
                         />
                       </li>
@@ -817,11 +818,11 @@ function FormProfessional() {
                   <div className="flex items-center gap-2 mt-2">
                     <Checkbox
                       className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                      checked={valuesIsPublic.experience}
+                      checked={valuesIsPublic?.experience}
                       onChange={(e) =>
                         handleCheckChange(
                           "experience",
-                          !valuesIsPublic.experience
+                          !valuesIsPublic?.experience
                         )
                       }
                     />

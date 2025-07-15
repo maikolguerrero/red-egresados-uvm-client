@@ -42,6 +42,7 @@ import ManageGraduates from "./views/admin/ManageGraduates";
 import SendNotification from "./views/admin/SendNotification";
 import Error404 from "./views/Error404";
 import { Navigate } from "react-router-dom";
+import logger from "./utils/logger";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ function App() {
   const sessionActive = useSelector((state) => state.auth.sessionActive);
   const auth = useSelector((state) => state.auth);
   const checked = useSelector((state) => state.auth.checked);
+  
 
   const renderSessionActive = (Route) => {
     if (!checked) {
@@ -149,7 +151,7 @@ function App() {
       ),
     },
     {
-      path: "/forums",
+      path: "/forum",
       element: (
         <ProtectedRoute>
           <Layout>
@@ -159,7 +161,7 @@ function App() {
       ),
     },
     {
-      path: "/forums/:forum",
+      path: "/forum/:forum",
       element: (
         <ProtectedRoute>
           <Layout>
@@ -249,16 +251,6 @@ function App() {
       ),
     },
     {
-      path: "/my-profile",
-      element: (
-        <ProtectedRoute>
-          <Layout>
-            {renderSessionActive(MyProfile)}
-          </Layout>
-        </ProtectedRoute >
-      ),
-    },
-    {
       path: "/reset-password",
       element: (
         <ProtectedRoute>
@@ -305,31 +297,11 @@ function App() {
       ),
     },
     {
-      path: "/config/admins",
-      element: (
-        <ProtectedRoute>
-          <Layout>
-            {renderSessionActive(Admins)}
-          </Layout>
-        </ProtectedRoute >
-      ),
-    },
-    {
       path: "/config/graduates",
       element: (
         <ProtectedRoute>
           <Layout>
             {renderSessionActive(ManageGraduates)}
-          </Layout>
-        </ProtectedRoute >
-      ),
-    },
-    {
-      path: "/config/notification",
-      element: (
-        <ProtectedRoute>
-          <Layout>
-            {renderSessionActive(SendNotification)}
           </Layout>
         </ProtectedRoute >
       ),
@@ -365,41 +337,11 @@ function App() {
       ),
     },
     {
-      path: "/content-manager/landing",
-      element: (
-        <ProtectedRoute>
-          <Layout>
-            {renderSessionActive(CMLandingPage)}
-          </Layout>
-        </ProtectedRoute >
-      ),
-    },
-    {
       path: "/content-manager/home",
       element: (
         <ProtectedRoute>
           <Layout>
             {renderSessionActive(CMHomePage)}
-          </Layout>
-        </ProtectedRoute >
-      ),
-    },
-    {
-      path: "/content-manager/home",
-      element: (
-        <ProtectedRoute>
-          <Layout>
-            {renderSessionActive(CMHomePage)}
-          </Layout>
-        </ProtectedRoute >
-      ),
-    },
-    {
-      path: "/content-manager/academic-requests",
-      element: (
-        <ProtectedRoute>
-          <Layout>
-            {renderSessionActive(CMAcademicRequests)}
           </Layout>
         </ProtectedRoute >
       ),
@@ -441,7 +383,7 @@ function App() {
 
   useEffect(() => {
     // Iniciar el verificador de sesión
-    const cleanupSessionChecker = startSessionChecker();
+    // const cleanupSessionChecker = startSessionChecker();
 
     const initializeAuthAndSocket = async () => {
       try {
@@ -463,7 +405,7 @@ function App() {
           await socketService.manualDisconnect('not_authenticated');
         }
       } catch (error) {
-        console.error('Error inicializando:', error);
+        logger.error('Error inicializando:', error);
         if (isConnected) {
           await socketService.manualDisconnect('init_error');
         }
@@ -485,7 +427,12 @@ function App() {
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
-      cleanupSessionChecker();
+      // cleanupSessionChecker();
+      if (sessionActive) {
+        startSessionChecker();
+      }
+      // startSessionChecker();
+
       stopSessionChecker();
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };

@@ -1,7 +1,6 @@
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError, typeInfo } from "../../../../models/alertModels";
+import notify from "../../../../utils/notifications";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
 import { ItemBabge } from "../../../Babge/ItemBabge";
@@ -42,8 +41,8 @@ export function FormFaqs({landing}) {
   }
 
   const addQuestion = (e) => {
-      if (values.question.trim().length === 0) return enqueueSnackbar("Tienes que escribir la pregunta", typeError)
-      if (values.answer.trim().length === 0) return enqueueSnackbar("Tienes que escribir la respuesta", typeError)
+      if (values.question.trim().length === 0) return notify.error("Falta la pregunta", false)
+      if (values.answer.trim().length === 0) return notify.error("Falta la respuesta", false)
 
       setLandingContent({
         ...landingContent,
@@ -57,7 +56,7 @@ export function FormFaqs({landing}) {
         question: "",
         answer: "",
       });
-    enqueueSnackbar("Se agrego la pregunta frecuente (debes guardar cambios)", typeInfo)
+    notify.info("Agregada la pregunta frecuente (debes guardar cambios)", false)
   }
 
   const deleteQuestion = (key) => {
@@ -66,10 +65,7 @@ export function FormFaqs({landing}) {
       ...landingContent,
       ["faqs"]: newFaq,
     });
-    enqueueSnackbar(
-      "Se elimino ela pregunta frecuente (debes guardar cambios)",
-      typeInfo
-    );
+    notify.info("Eliminada la pregunta frecuente (debes guardar cambios)", false)
   };
 
   const handleSubmit = (e) => {

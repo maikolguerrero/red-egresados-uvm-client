@@ -7,9 +7,9 @@ import {
     BsTrash,
     BsCopy
 } from 'react-icons/bs';
-import { enqueueSnackbar } from 'notistack';
-import { typeSuccess } from '../../models/alertModels';
+import notify from '../../utils/notifications';
 import { formatTimeOnly } from '../../utils/dateUtils';
+import logger from '../../utils/logger';
 
 export default function Message({ message, isOwn, markMessagesAsRead }) {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -92,16 +92,16 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
     const handleCopy = async () => { // Hacemos la función asíncrona
         if (!navigator.clipboard) {
             // Fallback para navegadores antiguos o contextos no seguros
-            enqueueSnackbar("Tu navegador no soporta la función de copiado.", { variant: 'error' });
+            notify.error("Tu navegador no soporta la función para copiar el contenido del mensaje.", false);
             setMenuOpen(false);
             return;
         }
         try {
             await navigator.clipboard.writeText(message.content);
-            enqueueSnackbar("Mensaje copiado", typeSuccess);
+            notify.success("Mensaje copiado", false);
         } catch (err) {
-            console.error('Error al copiar el texto: ', err);
-            enqueueSnackbar("Error al copiar el mensaje.", { variant: 'error' });
+            logger.error('Error al copiar el texto: ', err);
+            notify.error("Error al copiar el mensaje.", false);
         } finally {
             setMenuOpen(false); // Cerrar el menú siempre, incluso si falla
         }

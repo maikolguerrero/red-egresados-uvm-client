@@ -7,11 +7,11 @@ import { BsCalendarDate } from "react-icons/bs";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
 import { useState } from "react";
 import { deleteNotification } from "../../services/notifications/notificationService";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { IoIosNotifications, IoMdWarning, IoIosInformationCircle } from "react-icons/io";
 import { BsExclamationOctagon } from "react-icons/bs";
 import { formatNotification } from "../../utils/dateUtils";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export function CardBanner({
   type,
@@ -38,7 +38,7 @@ export function CardBanner({
         return {
           icon: <FaPeopleGroup className="w-6 h-6" />,
           typeText: "FORO",
-          baseRoute: "/forums"
+          baseRoute: "/forum"
         };
       case 'event_reminder':
         return {
@@ -93,7 +93,7 @@ export function CardBanner({
       navigate(`/config/reports`);
     } else if (data?.threadId) {
       // Notificaciones relacionadas con foros
-      navigate(`/forums/${data.threadId}`);
+      navigate(`/forum/${data.threadId}`);
 
       // Scroll a comentario específico si existe
       if (data?.commentId) {
@@ -128,10 +128,10 @@ export function CardBanner({
       if (onDelete) {
         onDelete(notificationId, isRead);
       }
-      enqueueSnackbar("Notificación eliminada", typeSuccess);
+      notify.success("Notificación eliminada", true);
     } catch (error) {
-      enqueueSnackbar(error.message, typeError);
-      console.error("Error eliminando notificación:", error);
+      notify.error(error.message, true);
+      logger.error("Error eliminando notificación:", error);
     }
   };
 

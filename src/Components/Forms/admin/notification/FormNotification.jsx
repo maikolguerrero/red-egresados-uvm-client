@@ -3,8 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../../../models/alertModels";
+import notify from "../../../../utils/notifications";
 import { sendNotification } from "../../../../services/admin/sendNotificationService";
 
 let styles = {
@@ -32,7 +31,7 @@ export function FormNotification() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (values.message.trim() === "") {
-            return enqueueSnackbar("No puedes enviar una notificación vacía", typeError);
+            return notify.error("No puedes enviar una notificación vacía", false);
         }
 
         dispatch(sendNotification(values));

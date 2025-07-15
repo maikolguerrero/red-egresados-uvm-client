@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
+import notify from "../../utils/notifications";
 import { apiFetch } from "../apiService";
 
 export const addGraduatesPregrado = createAsyncThunk(
@@ -17,9 +16,9 @@ export const addGraduatesPregrado = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se agregaron los egresados de pregrado", typeSuccess)
+        notify.success("Agregados los egresados de pregrado", false)
         return {
-          message: "Se agregaron los egresados de pregrado",
+          message: "Agregados los egresados de pregrado",
           data: response
         };
       } else {
@@ -27,7 +26,7 @@ export const addGraduatesPregrado = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
 
@@ -48,9 +47,9 @@ export const addGraduatesPostgrado = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se agregaron los egresados de postgrado", typeSuccess)
+        notify.success("Agregados los egresados de postgrado", false)
         return {
-          message: "Se agregaron los egresados de postgrado",
+          message: "Agregados los egresados de postgrado",
           data: response
         };
       } else {
@@ -58,7 +57,7 @@ export const addGraduatesPostgrado = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   })

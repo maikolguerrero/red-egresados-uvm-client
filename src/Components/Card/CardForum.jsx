@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaCircle, FaComments, FaEllipsisV, FaRegComments, FaShare } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteForum, likeThreads } from "../../services/forum/forumService";
-import perfil from "../../../public/Perfil.jpg"
 import { useNavigate } from "react-router-dom";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { FormAddForum } from "../Forms/Forum/FormAddForum";
-import { enqueueSnackbar } from "notistack";
-import { typeSuccess } from "../../models/alertModels";
 import { URL_FRONTEND } from "../../config";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export function CardForum({ forum }) {
   const dispatch = useDispatch();
@@ -69,7 +67,7 @@ export function CardForum({ forum }) {
   }
 
   const handleView = (e) => {
-    navigate(`/forums/${forum.id}`)
+    navigate(`/forum/${forum.id}`)
   }
 
   const handleDelete = (e) => {
@@ -83,17 +81,15 @@ export function CardForum({ forum }) {
     // Hacemos la función asíncrona
     if (!navigator.clipboard) {
       // Fallback para navegadores antiguos o contextos no seguros
-      enqueueSnackbar("Tu navegador no soporta la función de compartir.", {
-        variant: "error",
-      });
+      notify.error("Tu navegador no soporta la función de compartir.", false);
       return;
     }
     try {
-      await navigator.clipboard.writeText(`${URL_FRONTEND}/forums/${forum.id}`);
-      enqueueSnackbar("Enlace copiado", typeSuccess);
+      await navigator.clipboard.writeText(`${URL_FRONTEND}/forum/${forum?.id}`);
+      notify.success("Enlace copiado", false);
     } catch (err) {
-      console.error("Error al copiar el texto: ", err);
-      enqueueSnackbar("Error al copiar el mensaje.", { variant: "error" });
+      logger.error("Error al copiar el texto: ", err);
+      notify.error("Error al copiar el mensaje.", false);
     }
   };
 
@@ -146,7 +142,7 @@ export function CardForum({ forum }) {
                 </div>
               )}
             >
-              {role === "admin" || role === "superadmin" ? (
+              {(role === "admin" || role === "superadmin") && forum?.author?.username !== username ? (
                 <></>
               ) : (
                 <DropdownItem>
@@ -193,7 +189,7 @@ export function CardForum({ forum }) {
             <img
               className="rounded-md mb-2 border border-verdeC"
               src={forum?.media?.[0]?.url}
-              alt="Multimedia del foro"
+              alt="Multimedia del Hilo"
             />
           </div>
         )

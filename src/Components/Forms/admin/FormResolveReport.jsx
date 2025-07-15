@@ -1,10 +1,9 @@
-import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError } from "../../../models/alertModels";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { resolveReport } from "../../../services/reports/reportsService";
+import notify from "../../../utils/notifications";
 
 let styles = {
   input:
@@ -45,10 +44,10 @@ export function FormResolveReport({ reportId }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.action.trim() === "") {
-      return enqueueSnackbar("Debe seleccionar una accion a realizar", typeError);
+      return notify.error("Falta seleccionar una acción a realizar", false);
     }
     if (values.message.trim() === "") {
-      return enqueueSnackbar("Debe escribir un mensaje", typeError);
+      return notify.error("Falta escribir un mensaje", false);
     }
     
     dispatch(resolveReport({

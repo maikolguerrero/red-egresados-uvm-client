@@ -1,7 +1,6 @@
 import { Label } from "flowbite-react";
-import { enqueueSnackbar } from "notistack";
+import notify from "../../../utils/notifications";
 import { useEffect, useState } from "react";
-import { typeError, typeInfo } from "../../../models/alertModels";
 import { IoIosAdd } from "react-icons/io";
 import { Skills } from "../../Skills";
 import ButtonSmall from "../../Buttons/ButtonSmall";
@@ -37,13 +36,13 @@ export function FormAddProyect({ proyect, type }) {
 
     // Validar que la fecha de inicio no sea pasada
     if (startDate < now) {
-      enqueueSnackbar("La fecha de inicio no puede ser una fecha pasada", typeError);
+      notify.error("La fecha de inicio no puede ser una fecha pasada", false);
       return false;
     }
 
     // Validar que la fecha de fin no sea anterior a la de inicio
     if (endDate < startDate) {
-      enqueueSnackbar("La fecha de fin no puede ser anterior a la de inicio", typeError);
+      notify.error("La fecha de fin no puede ser anterior a la de inicio", false);
       return false;
     }
 
@@ -74,30 +73,27 @@ export function FormAddProyect({ proyect, type }) {
       return;
     } else {
       setValues({
-        title: proyect.title,
-        description: proyect.description,
-        startDate: getFormattedDateForInput(proyect.startDate),
-        endDate: getFormattedDateForInput(proyect.endDate),
-        isPublic: proyect.isPublic,
-        status: proyect.status,
-        tags: proyect.tags,
+        title: proyect?.title,
+        description: proyect?.description,
+        startDate: getFormattedDateForInput(proyect?.startDate),
+        endDate: getFormattedDateForInput(proyect?.endDate),
+        isPublic: proyect?.isPublic,
+        status: proyect?.status,
+        tags: proyect?.tags,
       });
     }
   }, [proyect]);
 
   const addTag = (e) => {
     if (tag.trim().length === 0) {
-      return enqueueSnackbar(
-        "No puedes agregar la etiqueta sin escribirla",
-        typeError
-      );
+      return notify.error("Falta la etiqueta", false);
     }
     setValues({
       ...values,
       tags: [...values.tags, tag],
     });
     setTag("");
-    enqueueSnackbar("Se agregó la etiqueta", typeInfo);
+    notify.info("Agregada la etiqueta", false);
   };
 
   const deleteTag = (key) => {
@@ -106,7 +102,7 @@ export function FormAddProyect({ proyect, type }) {
       ...values,
       tags: newTags,
     });
-    enqueueSnackbar("Se eliminó la etiqueta", typeInfo);
+    notify.info("Eliminada la etiqueta", false);
   };
 
   const handleInputChange = (e) => {
@@ -120,23 +116,23 @@ export function FormAddProyect({ proyect, type }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.title.trim() === "") {
-      return enqueueSnackbar("Debe tener título el proyecto", typeError);
+      return notify.error("Falta el título", false);
     }
     if (values.description.trim() === "") {
-      return enqueueSnackbar("Debe tener descripción el proyecto", typeError);
+      return notify.error("Falta la descripción", false);
     }
     if (values.startDate.trim() === "") {
-      return enqueueSnackbar("Debe tener fecha de inicio el proyecto", typeError);
+      return notify.error("Falta la fecha de inicio", false);
     }
     if (values.endDate.trim() === "") {
-      return enqueueSnackbar("Debe tener fecha de finalización tentativa el proyecto", typeError);
+      return notify.error("Falta la fecha de finalización", false);
     }
     // Validación de fechas
     if (!validateDates()) {
       return;
     }
     if (values.endDate <= values.startDate) {
-      return enqueueSnackbar("La fecha de finalización debe ser mayor a la fecha de inicio del proyecto", typeError);
+      return notify.error("La fecha de finalización debe ser mayor a la fecha de inicio", false);
     }
 
     // Crear copia de values con las fechas formateadas
@@ -159,7 +155,7 @@ export function FormAddProyect({ proyect, type }) {
       });
     } else {
       dispatch(editProyect({
-        projectId: proyect.id,
+        projectId: proyect?.id,
         data: formData,
         type: type
       }));
@@ -309,7 +305,7 @@ export function FormAddProyect({ proyect, type }) {
                 ) : (
                   <ul className="flex gap-2">
                     {values.tags.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <Skills key={key} text={item} onClick={deleteTag} />
                       </li>
                     ))}

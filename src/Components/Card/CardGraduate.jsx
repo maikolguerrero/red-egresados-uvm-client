@@ -126,7 +126,7 @@ export function CardGraduate({ user }) {
             // }}
           >
             <h4 className="py-1 px-2 border-b-2 mb-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
-              Titulos obtenidos en la UVM
+              Títulos obtenidos en la UVM
             </h4>
             <ul className="list-inside flex flex-col gap-2 text-sm md:text-base">
               {user?.carrerasPregrado?.map((item, key) => (

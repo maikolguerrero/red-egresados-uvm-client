@@ -2,8 +2,7 @@ import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../../models/alertModels";
+import notify from "../../../utils/notifications";
 import { finishEventAdd } from "../../../features/events/eventsSlice";
 import { addPictureEvent } from "../../../services/events/eventsService";
 
@@ -31,7 +30,7 @@ export function FormAddPictureE({setOpenModal}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una foto para el Evento", typeError);
+      notify.error("No se ha seleccionado una imagen para el evento", false);
     } else {
       const formData = new FormData();
       formData.append("image", picture);

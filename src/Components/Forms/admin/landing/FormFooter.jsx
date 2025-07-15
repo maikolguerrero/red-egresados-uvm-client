@@ -1,10 +1,9 @@
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError } from "../../../../models/alertModels";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
 import { updateContentLanding } from "../../../../services/admin/landingService";
+import notify from "../../../../utils/notifications";
 
 let styles = {
   input:
@@ -21,7 +20,7 @@ export function FormFooter({landing}) {
   });
 
   useEffect(() => {
-    if (landing.footerText === undefined) {
+    if (landing?.footerText === undefined) {
       return;
     } else {
       setValues(landing);
@@ -39,7 +38,7 @@ export function FormFooter({landing}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.footerText.trim() === "") {
-      return enqueueSnackbar("No puedes actualizar un footer vacío", typeError);
+      return notify.error("Falta el footer", false);
     }
 
     dispatch(updateContentLanding(values));

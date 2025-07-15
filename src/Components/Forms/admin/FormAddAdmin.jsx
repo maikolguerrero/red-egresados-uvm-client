@@ -1,10 +1,8 @@
-import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError } from "../../../models/alertModels";
+import notify from "../../../utils/notifications";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../Buttons/ButtonSmall";
-import { resolveReport } from "../../../services/reports/reportsService";
 import { addAdmin } from "../../../services/admin/adminsService";
 
 let styles = {
@@ -36,19 +34,19 @@ export function FormAddAdmin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.fullName.trim() === "") {
-      return enqueueSnackbar("Se debe escribir el nombre", typeError);
+      return notify.error("Falta el nombre completo", false);
     }
     if (values.email.trim() === "") {
-      return enqueueSnackbar("Se debe escribir el correo", typeError);
+      return notify.error("Falta el correo electrónico", false);
     }
     if (values.username.trim() === "") {
-      return enqueueSnackbar("Se debe escribir el usuario", typeError);
+      return notify.error("Falta el nombre de usuario", false);
     }
     if (values.password.trim() === "") {
-      return enqueueSnackbar("Se debe escribir una contraseña", typeError);
+      return notify.error("Falta la contraseña", false);
     }
     if (values.password != values.confirmPassword) {
-      return enqueueSnackbar("Las contraseñas no son iguales", typeError);
+      return notify.error("Las contraseñas no coinciden", false);
     }
     
     dispatch(addAdmin(values))
@@ -89,7 +87,7 @@ export function FormAddAdmin() {
           </div>
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Usuario:
+              Nombre de usuario:
             </Label>
             <input
               className={styles.input}

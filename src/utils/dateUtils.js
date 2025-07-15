@@ -1,5 +1,6 @@
 import { format, isToday, isYesterday, isThisYear } from 'date-fns';
 import { es } from 'date-fns/locale';
+import logger from "./logger";
 
 /**
  * Formatea la fecha para mostrarla como cabecera en el chat
@@ -88,15 +89,6 @@ export const groupMessagesByDate = (messages) => {
   });
 };
 
-// /**
-//  * Formatea una fecha para mostrar solo la hora con AM/PM.
-//  * @param {Date | string} date - La fecha o cadena de fecha.
-//  * @returns {string} - La hora formateada (ej: "10:30 a. m.").
-//  */
-// export const formatTimeOnly = (date) => {
-//   const d = date instanceof Date ? date : new Date(date);
-//   return format(d, "h:mm 'a. m.'", { locale: es });
-// };
 /**
  * Formatea una fecha para mostrar solo la hora con AM/PM.
  * @param {Date | string} date - La fecha o cadena de fecha.
@@ -108,7 +100,7 @@ export const formatTimeOnly = (date) => {
 
   // Validar si la fecha es válida después de intentar crearla
   if (isNaN(d.getTime())) {
-    console.error("Fecha inválida proporcionada a formatTimeOnly:", date);
+    logger.error("Fecha inválida proporcionada a formatTimeOnly:", date);
     return "Hora inválida"; // O el mensaje de error que prefieras
   }
 
@@ -317,7 +309,7 @@ export const formatUTCDateToLocalAMPM = (utcDateString) => {
     const date = new Date(utcDateString);
 
     if (isNaN(date.getTime())) {
-      console.error('Fecha UTC inválida:', utcDateString);
+      logger.error('Fecha UTC inválida:', utcDateString);
       return { date: '', time: '' };
     }
 
@@ -336,7 +328,7 @@ export const formatUTCDateToLocalAMPM = (utcDateString) => {
       time: localTime
     };
   } catch (error) {
-    console.error('Error al formatear fecha UTC:', error);
+    logger.error('Error al formatear fecha UTC:', error);
     return { date: '', time: '' };
   }
 };

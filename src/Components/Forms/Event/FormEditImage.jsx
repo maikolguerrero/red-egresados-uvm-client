@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { addPictureEvent, deletePictureEvent } from "../../../services/events/eventsService";
+import notify from "../../../utils/notifications";
 
 let styles = {
   input:
@@ -27,7 +28,7 @@ export function FormEditImage({ internal, event }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una imagen para el evento", typeError);
+      notify.error("No se ha seleccionado una imagen para el evento", false);
     } else {
       const formData = new FormData();
       formData.append("image", picture);

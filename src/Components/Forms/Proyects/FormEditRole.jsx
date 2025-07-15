@@ -3,6 +3,7 @@ import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useEffect, useState } from "react";
 import { Label } from "flowbite-react";
 import { editRoleCollaborator } from "../../../services/proyects/proyectService";
+import notify from "../../../utils/notifications";
 
 let styles = {
   input:
@@ -42,16 +43,16 @@ export function FormEditRole({collaborator}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.newRole.trim() === "") {
-      return enqueueSnackbar("Debe seleccionar un rol valido", typeError);
+      return notify.error("Seleccionar un rol válido", false);
     }
     if (values.username.trim() === "") {
-      return enqueueSnackbar("Debe seleccionar un usuario valido", typeError);
+      return notify.error("Seleccionar un nombre de usuario válido", false);
     }
 
     dispatch(
       editRoleCollaborator({
         data: values,
-        projectId: proyect.id,
+        projectId: proyect?.id,
       })
     );
   };

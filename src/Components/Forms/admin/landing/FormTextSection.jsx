@@ -1,11 +1,10 @@
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError, typeInfo } from "../../../../models/alertModels";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
 import { ItemBabge } from "../../../Babge/ItemBabge";
 import { updateContentLanding } from "../../../../services/admin/landingService";
+import notify from "../../../../utils/notifications";
 
 let styles = {
   input:
@@ -42,8 +41,8 @@ export function FormTextSection({landing}) {
   }
 
   const addWelcomeSection = (e) => {
-      if (values.title.trim().length === 0) return enqueueSnackbar("Tienes que escribir el Título", typeError)
-      if (values.description.trim().length === 0) return enqueueSnackbar("Tienes que escribir la descripción", typeError)
+      if (values.title.trim().length === 0) return notify.error("Falta el Título", false)
+      if (values.description.trim().length === 0) return notify.error("Falta la descripción", false)
 
       setLandingContent({
         ...landingContent,
@@ -57,7 +56,7 @@ export function FormTextSection({landing}) {
         title: "",
         description: "",
       });
-    enqueueSnackbar("Se agregó la sección de bienvenida (debes guardar cambios)", typeInfo)
+    notify.info("Agregada la sección de bienvenida (debes guardar cambios)", false)
   }
 
   const deleteWelcomeSection = (key) => {
@@ -66,10 +65,7 @@ export function FormTextSection({landing}) {
       ...landingContent,
       ["welcomeSections"]: newWelcomeS,
     });
-    enqueueSnackbar(
-      "Se elimino la sección de bienvenida (debes guardar cambios)",
-      typeInfo
-    );
+    notify.info("Eliminada la sección de bienvenida (debes guardar cambios)", false)
   };
 
   const handleSubmit = (e) => {
@@ -88,7 +84,7 @@ export function FormTextSection({landing}) {
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Titulo:
+                Título:
               </Label>
               <input
                 className={styles.input}
@@ -96,7 +92,7 @@ export function FormTextSection({landing}) {
                 name="title"
                 value={values.title}
                 onChange={handleInputChange}
-                placeholder="Titulo de la sección..."
+                placeholder="Título de la sección..."
               />
             </div>
             <div className="w-full flex flex-col relative">

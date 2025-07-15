@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { URL_API } from "../../config";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
+import notify from "../../utils/notifications";
 
 export const verifyAlumni = createAsyncThunk(
   'alumni/verifyAlumni',
@@ -21,16 +20,16 @@ export const verifyAlumni = createAsyncThunk(
       
       if (data.success) {
         if (data.esEgresado) {
-          enqueueSnackbar("Egresado verificado", typeSuccess);
+          notify.success("Egresado verificado", true);
         } else {
-          enqueueSnackbar("No se encontró egresado con esta cédula", typeError);
+          notify.error("No se encontró al egresado con esta cédula", true);
         }
         return data;
       } else {
         return rejectWithValue(data.message || "Error al verificar egresado");
       }
     } catch (error) {
-      enqueueSnackbar(error.message, typeError);
+      notify.error(error.message, false);
       return rejectWithValue(error.message);
     }
   }

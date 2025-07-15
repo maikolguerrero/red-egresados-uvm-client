@@ -5,12 +5,9 @@ import NavLogin from "../Components/NavLogin";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { newPassword } from "../services/auth/authService";
-import Button from "../Components/Buttons/Button";
 import Header from "../Components/Header";
-import Nav from "../Components/Nav";
 import { Label } from "flowbite-react";
-import { typeError } from "../models/alertModels";
-import { enqueueSnackbar } from "notistack";
+import notify from "../utils/notifications";
 
 let styles = {
   input:
@@ -18,8 +15,6 @@ let styles = {
   subtitle_form:
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
-
-
 
 function ChangePassword() {
   const dispatch = useDispatch();
@@ -62,13 +57,13 @@ function ChangePassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!(values.newPassword == values.confirmNewPassword)) {
-      return enqueueSnackbar("Las contraseñas no coinciden", typeError);
+      return notify.error("Las contraseñas no coinciden", false);
     }
     if (values.newPassword.trim() === "") {
-      return enqueueSnackbar("Debes colocar la nueva contraseña", typeError);
+      return notify.error("Ingresa la nueva contraseña", false);
     }
     if (values.confirmNewPassword.trim() === "") {
-      return enqueueSnackbar("Debes confimar la nueva contraseña", typeError);
+      return notify.error("Confirma la nueva contraseña", false);
     }
     dispatch(newPassword(values));
     navigate("/login")

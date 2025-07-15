@@ -4,8 +4,7 @@ import { CardBanner } from "../../Components/Card/CardBanner";
 import { useDispatch, useSelector } from "react-redux";
 import { getNotifications, markNotificationAsRead, deleteNotification } from "../../services/notifications/notificationService";
 import socketService from "../../services/socket/socket.service";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../models/alertModels";
+import notify from "../../utils/notifications";
 import { decrementUnreadCount } from "../../features/notifications/notificationSlice";
 
 const customTheme = createTheme({
@@ -53,7 +52,7 @@ function Notifications() {
         setNotifications(response.data);
         setTotal(response.pagination.total);
       } catch (error) {
-        enqueueSnackbar(error.message, typeError);
+        notify.error(error.message, true);
       } finally {
         setLoading(false);
       }
@@ -98,7 +97,7 @@ function Notifications() {
         }
       }
     } catch (error) {
-      enqueueSnackbar(error.message, typeError);
+      notify.error(error.message, true);
     }
   };
 
@@ -125,7 +124,7 @@ function Notifications() {
         }
       }
     } catch (error) {
-      enqueueSnackbar(error.message, typeError);
+      notify.error(error.message, true);
       // Revertir cambios si hay error
       const response = await getNotifications(currentPage, perPage);
       setNotifications(response.data);
@@ -152,7 +151,6 @@ function Notifications() {
           ) : (
             <div className="w-full gap-6 justify-center flex-col flex">
               {notifications.map((item) => (
-                console.log("Notificación:", item),
                 <CardBanner
                   key={item.id}
                   noti={item.data.message}

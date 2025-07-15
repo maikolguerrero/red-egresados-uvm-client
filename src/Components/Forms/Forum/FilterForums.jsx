@@ -55,7 +55,7 @@ function FilterForums({ values, setValues }) {
         <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Categoría del Foro:
+              Categoría del Hilo:
             </Label>
             <select
               className={styles.input}
@@ -75,7 +75,7 @@ function FilterForums({ values, setValues }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Buscar Foro:
+              Buscar Hilo:
             </Label>
             <input
               className={styles.input}
@@ -83,7 +83,7 @@ function FilterForums({ values, setValues }) {
               name="search"
               value={values.search}
               onChange={handleInputChange}
-              placeholder="Filtrar por título del foro..."
+              placeholder="Filtrar por título del hilo..."
             />
           </div>
         </div>

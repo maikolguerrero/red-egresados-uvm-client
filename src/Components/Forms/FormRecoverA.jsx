@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../models/alertModels";
+import notify from "../../utils/notifications";
 import { changeRecoveryPassword } from "../../services/auth/changeEmailService";
 import { useDispatch } from "react-redux";
 
@@ -24,7 +23,7 @@ function FormRecoverA(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.emailOrUsername.trim() === "") {
-      return enqueueSnackbar("Debes escribir el email", typeError);
+      return notify.error("Falta el nombre de usuario o correo de tu cuenta", false);
     }
     dispatch(changeRecoveryPassword(values));
   };

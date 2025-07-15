@@ -1,10 +1,9 @@
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError } from "../../../../models/alertModels";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
 import { updateContentAcademicRequests, getContentAcademicRequests } from "../../../../services/admin/academicRequestsService";
+import notify from "../../../../utils/notifications";
 
 let styles = {
     input:
@@ -38,10 +37,10 @@ export function FormAcademicRequest({ academicRequests }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (values.text.trim() === "") {
-            return enqueueSnackbar("No puedes actualizar un texto vacío", typeError);
+            return notify.error("No puedes actualizar con un texto vacío", false);
         }
         if (values.email.trim() === "") {
-            return enqueueSnackbar("No puedes actualizar un email vacío", typeError);
+            return notify.error("No puedes actualizar con un email vacío", false);
         }
         const sendAcademicRequests = {
             academicRequests: {

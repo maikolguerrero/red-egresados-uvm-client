@@ -1,4 +1,5 @@
 import { apiFetch } from "../apiService";
+import logger from "../../utils/logger";
 
 export const getNotifications = async (page = 1, limit = 10) => {
     const response = await apiFetch(
@@ -41,7 +42,7 @@ export const deleteNotification = async (notificationId) => {
 
         return response;
     } catch (error) {
-        console.error("Error en deleteNotification:", error);
+        logger.error("Error en deleteNotification:", error);
         throw error;
     }
 };
@@ -61,7 +62,7 @@ export const getUnreadNotificationCount = async () => {
 
         return response.count || 0;
     } catch (error) {
-        console.error("Error en getUnreadNotificationCount:", error);
+        logger.error("Error en getUnreadNotificationCount:", error);
         throw error;
     }
 };

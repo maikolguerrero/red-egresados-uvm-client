@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { addAgenda, addEvent, addPictureEvent, deleteAgenda, deleteEvent, deletePictureEvent, editEvent, getEvent, searchEvent } from '../../services/events/eventsService';
-import { useSelector } from 'react-redux';
+import logger from '../../utils/logger';
 
 export const eventsSlice = createSlice({
   name: "forums",
@@ -78,7 +78,7 @@ export const eventsSlice = createSlice({
           state.events = newEvents;
         }
       }
-      
+
     });
     builder.addCase(addPictureEvent.rejected, (state, action) => {
       state.loading = false;
@@ -215,7 +215,7 @@ export const eventsSlice = createSlice({
     builder.addCase(deletePictureEvent.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      console.log(action.payload.internal)
+      logger.log(action.payload.internal);
       if (action.payload.internal) {
         state.eventSelect.media = []
       } else {

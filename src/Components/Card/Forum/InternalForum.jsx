@@ -2,22 +2,19 @@ import { useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaCircle, FaCommentMedical, FaComments, FaEllipsisV, FaRegComments, FaShare } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import perfil from "../../../../public/Perfil.jpg"
 import { deleteForum, likeThreads } from "../../../services/forum/forumService";
-import BadgeNormal from "../../Buttons/BadgeNormal";
 import { Badge, Dropdown, DropdownItem } from "flowbite-react";
 import { MdDelete, MdEdit, MdReportProblem } from "react-icons/md";
-import { TbMessageReportFilled } from "react-icons/tb";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 import { FormAddComment } from "../../Forms/Forum/FormAddComment";
 import { CardComment } from "./CardComment";
 import { FormAddForum } from "../../Forms/Forum/FormAddForum";
 import { FormReport } from "../../Forms/Forum/FormReport";
-import { enqueueSnackbar } from "notistack";
-import { typeSuccess } from "../../../models/alertModels";
 import { URL_FRONTEND } from "../../../config";
 import { useNavigate } from "react-router-dom";
 import EntityNotFound from "../../EntityNotFound";
+import logger from "../../../utils/logger";
+import notify from "../../../utils/notifications";
 
 export function InternalForum({ forum }) {
   const dispatch = useDispatch();
@@ -46,7 +43,7 @@ export function InternalForum({ forum }) {
     }
 
     let date = new Date();
-    let date2 = new Date(forum.createdAt);
+    let date2 = new Date(forum?.createdAt);
 
     let response = calcularDiferenciaFechas(date2, date);
     if (response.semanas >= 1) {
@@ -71,7 +68,7 @@ export function InternalForum({ forum }) {
   const handleLike = (e) => {
     dispatch(
       likeThreads({
-        id: forum.id,
+        id: forum?.id,
         type: "thread",
       })
     );
@@ -80,7 +77,7 @@ export function InternalForum({ forum }) {
   const handleDelete = (e) => {
     dispatch(
       deleteForum({
-        threadId: forum.id,
+        threadId: forum?.id,
       })
     );
   };
@@ -89,15 +86,15 @@ export function InternalForum({ forum }) {
   const handleShare = async () => { // Hacemos la función asíncrona
     if (!navigator.clipboard) {
       // Fallback para navegadores antiguos o contextos no seguros
-      enqueueSnackbar("Tu navegador no soporta la función de compartir.", { variant: 'error' });
+      notify.error("Tu navegador no soporta la función para copiar el enlace.", false);
       return;
     }
     try {
-      await navigator.clipboard.writeText(`${URL_FRONTEND}/forums/${forum.id}`);
-      enqueueSnackbar("Enlace copiado", typeSuccess);
+      await navigator.clipboard.writeText(`${URL_FRONTEND}/forum/${forum?.id}`);
+      notify.success("Enlace copiado", false);
     } catch (err) {
-      console.error('Error al copiar el texto: ', err);
-      enqueueSnackbar("Error al copiar el mensaje.", { variant: 'error' });
+      logger.error('Error al copiar el texto: ', err);
+      notify.error("Error al copiar el mensaje.", false);
     }
   };
 
@@ -107,7 +104,7 @@ export function InternalForum({ forum }) {
 
   return (
     <>
-      {forum.id === undefined ? (
+      {forum?.id === undefined ? (
         <>
           <EntityNotFound entity="Hilo" entityPath="/forums" />
         </>
@@ -120,7 +117,7 @@ export function InternalForum({ forum }) {
                   // Si no hay foto de perfil, muestra la inicial del username
                   <div className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
                     <span className="text-white text-base md:text-lg xl:text-xl font-bold uppercase">
-                      {forum.author.username?.charAt(0).toUpperCase()}
+                      {forum?.author?.username?.charAt(0).toUpperCase()}
                     </span>
                   </div>
                 ) : (
@@ -139,12 +136,12 @@ export function InternalForum({ forum }) {
                     {type}
                   </p>
                   <p className="flex gap-2 text-Negro font-medium uppercase font-barolw text-xs md:text-sm xl:text-base items-center">
-                    {forum.category}
+                    {forum?.category}
                   </p>
                 </div>
               </div>
 
-              {forum.author.username === username || role === "admin" || role === "superadmin" ? (
+              {forum?.author?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
                   <Dropdown
                     inline
@@ -156,7 +153,7 @@ export function InternalForum({ forum }) {
                       </div>
                     )}
                   >
-                    {role === "admin" || role === "superadmin" ? (
+                    {(role === "admin" || role === "superadmin") && forum?.author?.username !== username ? (
                       <></>
                     ) : (
                       <DropdownItem>

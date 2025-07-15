@@ -1,11 +1,10 @@
 import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { enqueueSnackbar } from "notistack";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
 import { ModalNotHeader } from "../../../Modals/ModalNotHeader";
 import { ErrorsDetailsModal } from "./ErrorsDetailsModal";
-import { typeError } from "../../../../models/alertModels";
+import notify from "../../../../utils/notifications";
 import { addGraduatesPostgrado } from "../../../../services/admin/graduatesService";
 import { useSelector } from "react-redux";
 import { ThemeProvider, createTheme } from 'flowbite-react';
@@ -55,7 +54,7 @@ export function FormEgresadoPostgrado() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!file) {
-            enqueueSnackbar("No se ha seleccionado una archivo", typeError);
+            notify.error("No se ha seleccionado una archivo", false);
         } else {
             const formData = new FormData();
             formData.append("file", file);

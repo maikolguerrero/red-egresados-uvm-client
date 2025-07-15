@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { apiFetch } from "../apiService";
+import notify from "../../utils/notifications";
 
 export const getContentStats = createAsyncThunk(
   "statsSlice/getContentStats", // Nombre de la acción
@@ -16,9 +15,9 @@ export const getContentStats = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargo el contenido landing", typeSuccess)
+        notify.success("Cargaron las estadísticas", true)
         return {
-          message: "Se cargo el contenido landing",
+          message: "Cargaron las estadísticas",
           stats: response.data
         };
       } else {
@@ -26,7 +25,7 @@ export const getContentStats = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

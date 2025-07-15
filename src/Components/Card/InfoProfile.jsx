@@ -626,8 +626,8 @@ function InfoProfile({ profile }) {
                         </button>
                       </p>{" "}
                       <span className="text-verdeD text-sm font-semibold">
-                        {item?.startDate?.split("T")[0]} hasta{" "}
-                        {item?.endDate?.split("T")[0]}
+                        {item?.startDate?.split("T")[0]} /{" "}
+                        {item?.endDate === undefined || item?.endDate === null ? " Actualidad" : item?.endDate?.split("T")[0]}
                       </span>
                     </li>
                   ))}

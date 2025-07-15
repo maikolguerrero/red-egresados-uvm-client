@@ -1,11 +1,9 @@
 import { Label } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../../models/alertModels";
+import notify from "../../../utils/notifications";
 import { forgotPassword } from "../../../services/auth/authService";
-import { changeRecoveryEmail } from "../../../services/auth/changeEmailService";
 
 let defaultValues = {
   "emailOrUsername": ""
@@ -40,10 +38,10 @@ function FormResetPassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.emailOrUsername.trim() === "") {
-      return enqueueSnackbar("Debes ingresar el nombre de usuario o correo de tu cuenta", typeError);
+      return notify.error("Falta el nombre de usuario o correo de tu cuenta", false);
     }
     if (!validarEmailOUsername(values.emailOrUsername)) {
-      return enqueueSnackbar("Tu correo electrónico no es válido", typeError);
+      return notify.error("Correo electrónico no válido", false);
     }
 
     dispatch(forgotPassword(values))

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
 import { Bounce, ToastContainer } from 'react-toastify';
-import { typeError } from "../../models/alertModels";
 import { useDispatch } from "react-redux";
 import { postData } from "../../services/auth/authService";
-import { enqueueSnackbar } from "notistack";
+import notify from "../../utils/notifications";
+
 let styles = {
   input:
     "w-full px-3 py-1.5 text-xs md:text-sm font-barolw rounded-lg border border-verdeA border-b-2",
@@ -51,7 +51,7 @@ function FormRegister(props) {
 
       dispatch(postData(values))
     } else {
-      enqueueSnackbar("Contraseñas no coinciden", typeError);
+      notify.error("Contraseñas no coinciden", false);
     }
   }
 

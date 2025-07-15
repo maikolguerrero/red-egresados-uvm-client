@@ -1,11 +1,8 @@
 import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import notify from "../../../../utils/notifications";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../../../models/alertModels";
-import { addPictureForum } from "../../../../services/forum/forumService";
-import { finish } from "../../../../features/forums/forumsSlice";
 import { addMediaSubSection, deleteMediaSubSection } from "../../../../services/admin/landingService";
 
 let styles = {
@@ -31,7 +28,7 @@ export function FormAddPictureSubSection({ sectionIndex, subsectionIndex, image,
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una foto para la subsección", typeError);
+      notify.error("No se ha seleccionado una imagen para la subsección", false);
     } else {
       const formData = new FormData();
       formData.append("file", picture);
@@ -50,12 +47,12 @@ export function FormAddPictureSubSection({ sectionIndex, subsectionIndex, image,
     <>
       <form className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          Agregar Foto al subtitulo
+          Agregar Imagen al Subtítulo
         </h5>
         {!image ? (
           <div className="flex flex-col gap-1">
             <Label className="mb-2 block" htmlFor="small-file-upload">
-              Selecciona la foto:
+              Selecciona la imagen:
             </Label>
             <FileInput
               onChange={onImageChange}
@@ -100,7 +97,7 @@ export function FormAddPictureSubSection({ sectionIndex, subsectionIndex, image,
           <ButtonSmall
             action={handleSubmit}
             className={"bg-verdeA hover:bg-RojoC"}
-            text={"AGREGAR FOTO"}
+            text={"AGREGAR IMAGEN"}
           />
         ) : (
           <ButtonSmall

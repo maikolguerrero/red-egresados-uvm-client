@@ -84,7 +84,7 @@ function FilterProyect({ values, setValues }) {
               name="search"
               value={values.search}
               onChange={handleInputChange}
-              placeholder="Filtrar por titulo del proyecto..."
+              placeholder="Filtrar por título del proyecto..."
             />
           </div>
 
