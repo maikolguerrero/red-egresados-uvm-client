@@ -148,6 +148,7 @@ function Nav() {
               to="/forum"
               icon={<FaPeopleGroup className="text-2xl" />}
               text="FORO"
+
               isSidebar={isSidebar}
               onClick={handleClickLink}
             />

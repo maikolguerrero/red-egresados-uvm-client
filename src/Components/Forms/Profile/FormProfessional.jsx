@@ -99,35 +99,35 @@ function FormProfessional() {
 
   const addSkill = (e) => {
     if (values.skills.trim().length === 0) {
-      return notify.error("Falta la habilidad", false)
+      return notify.error("Falta la habilidad", false);
     }
     setSkills([...skills, values.skills])
     setValues({
       ...values,
       "skills": "",
     });
-    notify("Agregada la habilidad (debes guardar cambios)", false)
+    notify("Agregada la habilidad (debes guardar cambios)", false);
   }
 
   const addInterest = (e) => {
     if (values.interests.trim().length === 0) {
-      return notify.error("Falta el interés personal", false)
+      return notify.error("Falta el interés personal", false);
     }
     setInterests([...interests, values.interests])
     setValues({
       ...values,
       "interests": "",
     });
-    notify("Agregado el interés personal (debes guardar cambios)", false)
+    notify("Agregado el interés personal (debes guardar cambios)", false);
   }
 
   const addEducation = (e) => {
-    if (valuesEd?.institution?.trim().length === 0) return notify.error("Falta la institución", false)
-    if (valuesEd?.degree?.trim().length === 0) return notify.error("Falta el grado", false)
-    if (valuesEd?.fieldOfStudy?.trim().length === 0) return notify.error("Falta el campo de estudio", false)
-    if (valuesEd?.startYear === 0) return notify.error("Falta el año de inicio", false)
-    if (valuesEd?.endYear === 0) return notify.error("Falta el año de finalización", false)
-    if (valuesEd?.startYear > valuesEd?.endYear) return notify.error("El año de inicio debe ser menor al de finalización", false)
+    if (valuesEd?.institution?.trim().length === 0) return notify.error("Falta la institución", false);
+    if (valuesEd?.degree?.trim().length === 0) return notify.error("Falta el grado", false);
+    if (valuesEd?.fieldOfStudy?.trim().length === 0) return notify.error("Falta el campo de estudio", false);
+    if (valuesEd?.startYear === 0) return notify.error("Falta el año de inicio", false);
+    if (valuesEd?.endYear === 0) return notify.error("Falta el año de finalización", false);
+    if (valuesEd?.startYear > valuesEd?.endYear) return notify.error("El año de inicio debe ser menor al de finalización", false);
 
     setEducation([...education, valuesEd]);
     setValuesEd({
@@ -137,15 +137,15 @@ function FormProfessional() {
       startYear: 0,
       endYear: 0,
     });
-    notify("Agregado el nivel de educación (debes guardar cambios)", false)
+    notify("Agregado el nivel de educación (debes guardar cambios)", false);
   }
 
   const addCertification = (e) => {
-    if (valuesCr?.name?.trim().length === 0) return notify.error("Falta el nombre del certificado", false)
-    if (valuesCr?.issuingOrganization?.trim().length === 0) return notify.error("Falta la organización que otorga el certificado", false)
-    if (valuesCr?.issueDate?.trim().length === 0) return notify.error("Falta la fecha de emisión del certificado", false)
-    if (valuesCr?.credentialID?.trim().length === 0) return notify.error("Falta el ID del certificado", false)
-    if (valuesCr?.credentialURL?.trim().length === 0) return notify.error("Falta la URL del certificado", false)
+    if (valuesCr?.name?.trim().length === 0) return notify.error("Falta el nombre del certificado", false);
+    if (valuesCr?.issuingOrganization?.trim().length === 0) return notify.error("Falta la organización que otorga el certificado", false);
+    if (valuesCr?.issueDate?.trim().length === 0) return notify.error("Falta la fecha de emisión del certificado", false);
+    if (valuesCr?.credentialID?.trim().length === 0) return notify.error("Falta el ID del certificado", false);
+    if (valuesCr?.credentialURL?.trim().length === 0) return notify.error("Falta la URL del certificado", false);
 
     setCertifications([...certifications, valuesCr]);
     setValuesCr({
@@ -155,16 +155,16 @@ function FormProfessional() {
       credentialID: "",
       credentialURL: "",
     });
-    notify("Agregado el certificado (debes guardar cambios)", false)
+    notify("Agregado el certificado (debes guardar cambios)", false);
   }
 
   const addExperiencie = (e) => {
-    if (valuesEx?.company?.trim().length === 0) return notify.error("Falta la empresa", false)
-    if (valuesEx?.position?.trim().length === 0) return notify.error("Falta el puesto", false)
-    if (valuesEx?.description?.trim().length === 0) return notify.error("Falta la descripción", false)
-    if (valuesEx?.startDate?.trim().length === 0) return notify.error("Falta la fecha de inicio", false)
+    if (valuesEx?.company?.trim().length === 0) return notify.error("Falta la empresa", false);
+    if (valuesEx?.position?.trim().length === 0) return notify.error("Falta el puesto", false);
+    if (valuesEx?.description?.trim().length === 0) return notify.error("Falta la descripción", false);
+    if (valuesEx?.startDate?.trim().length === 0) return notify.error("Falta la fecha de inicio", false);
     // if (valuesEx.endDate.trim().length === 0) return notify.error("Falta la fecha de finalización", false)
-    if ((valuesEx.endDate !== undefined && valuesEx.endDate !== null && valuesEx.endDate !== "") && (valuesEx.startDate > valuesEx.endDate)) return notify.error("No puede ser mayor la fecha de inicio que la fecha de finalización", false)
+    if ((valuesEx.endDate !== undefined && valuesEx.endDate !== null && valuesEx.endDate !== "") && (valuesEx.startDate > valuesEx.endDate)) return notify.error("No puede ser mayor la fecha de inicio que la fecha de finalización", false);
 
     setExperience([...experience, valuesEx]);
     setValuesEx({
@@ -175,37 +175,37 @@ function FormProfessional() {
       current: false,
       description: "",
     });
-    notify("Agregado la experiencia (debes guardar cambios)", false)
+    notify("Agregado la experiencia (debes guardar cambios)", false);
   }
 
   const deleteSkill = (key) => {
     let newSkills = skills.filter((item) => item !== key)
     setSkills(newSkills)
-    notify("Eliminada la habilidad (debes guardar cambios)", false)
+    notify("Eliminada la habilidad (debes guardar cambios)", false);
   }
 
   const deleteInterest = (key) => {
     let newInterest = interests.filter((item) => item !== key)
     setInterests(newInterest)
-    notify("Eliminado el interés personal (debes guardar cambios)", false)
+    notify("Eliminado el interés personal (debes guardar cambios)", false);
   }
 
   const deleteEducation = (key) => {
     let newEducation = education.filter((item) => item.degree !== key)
     setEducation(newEducation)
-    notify("Eliminado el nivel de educación (debes guardar cambios)", false)
+    notify("Eliminado el nivel de educación (debes guardar cambios)", false);
   }
 
   const deleteCertification = (key) => {
     let newCertification = certifications.filter((item) => item.name !== key)
     setCertifications(newCertification)
-    notify("Eliminado el certificado (debes guardar cambios)", false)
+    notify("Eliminado el certificado (debes guardar cambios)", false);
   }
 
   const deleteExperiencie = (key) => {
     let newExperiencie = experience.filter((item) => item.position !== key)
     setExperience(newExperiencie)
-    notify("Eliminada la experiencia laboral (debes guardar cambios)", false)
+    notify("Eliminada la experiencia laboral (debes guardar cambios)", false) 
   }
 
   const handleInputChange = (e) => {
@@ -249,7 +249,7 @@ function FormProfessional() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(valuesEx.endDate === null){
+    if (valuesEx.endDate === null) {
       delete valuesEx.endDate
     }
     let data = {
@@ -361,7 +361,7 @@ function FormProfessional() {
                 <>
                   <ul className="flex gap-2">
                     {skills.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <Skills key={key} text={item} onClick={deleteSkill} />
                       </li>
                     ))}
@@ -737,7 +737,7 @@ function FormProfessional() {
                 className={styles.input}
                 type="text"
                 name="description"
-                value={valuesEx .description}
+                value={valuesEx.description}
                 onChange={handleInputChange4}
                 placeholder="Descripción profesional..."
               ></textarea>

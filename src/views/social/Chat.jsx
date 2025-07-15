@@ -608,7 +608,6 @@ export default function Chat() {
                                    bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
                                     style={{ overflowY: 'hidden' }}
                                 />
-
                             </div>
 
                             <button

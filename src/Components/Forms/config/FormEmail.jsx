@@ -75,14 +75,14 @@ function FormEmail() {
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
               Nuevo correo electrónico:
             </Label>
-            <textarea
+            <input
               className={styles.input}
               type="email"
               name="newEmail"
               value={values.newEmail}
               onChange={handleInputChange}
               placeholder="Nuevo correo..."
-            ></textarea>
+            />
           </div>
         </div>
         <ButtonSmall

@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 function InfoProfile({ profile }) {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth)
+  const role = useSelector((state) => state.auth.role)
   const username = useSelector((state) => state.auth.username)
 
   const [openModal, setOpenModal] = useState(false);
@@ -39,7 +40,7 @@ function InfoProfile({ profile }) {
   };
 
   const handleSocialMedia = () => {
-    if (profile.user.username === username) {
+    if (profile.user.username === username || role === "admin" || role === "superadmin") {
       if (
         (profile?.profile?.socialMedia?.facebook?.value === undefined ||
           profile?.profile?.socialMedia?.facebook?.value.trim() === "") &&
@@ -97,7 +98,7 @@ function InfoProfile({ profile }) {
   };
 
   const handleProfessional = () => {
-    if (profile?.user?.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       if (
         profile?.profile?.professional?.summary?.value === undefined ||
         profile?.profile?.professional?.summary?.value.trim() === ""
@@ -120,7 +121,7 @@ function InfoProfile({ profile }) {
   };
 
   const handlePersonalData = () => {
-    if (profile?.user?.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       if (
         (profile?.profile?.personalData?.birthDate?.value === undefined ||
           profile?.profile?.personalData?.birthDate?.value.trim() === "") &&
@@ -167,7 +168,7 @@ function InfoProfile({ profile }) {
       return true
     }
 
-    if (profile?.user?.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       return false
     }
 
@@ -183,7 +184,7 @@ function InfoProfile({ profile }) {
       return true
     }
 
-    if (profile?.user?.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       return false
     }
 
@@ -199,7 +200,7 @@ function InfoProfile({ profile }) {
       return true
     }
 
-    if (profile?.user?.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       return false
     }
 
@@ -224,7 +225,10 @@ function InfoProfile({ profile }) {
               </h5>
               <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
                 {profile?.profile?.personalData?.birthDate?.isPublic ||
-                  profile?.user?.username === username ? (
+
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.personalData?.birthDate?.value ===
                       undefined ? (
@@ -246,7 +250,9 @@ function InfoProfile({ profile }) {
                 }
 
                 {profile?.profile?.personalData?.location?.isPublic === true ||
-                  profile?.user?.username === username ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.personalData?.location?.value ===
                       undefined ||
@@ -266,7 +272,9 @@ function InfoProfile({ profile }) {
                 }
 
                 {profile?.profile?.contact?.phone?.isPublic === true ||
-                  profile?.user?.username === username ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.contact?.phone?.value === undefined ||
                       profile?.profile?.contact?.phone?.value.trim() === "" ? (
@@ -284,7 +292,9 @@ function InfoProfile({ profile }) {
                 }
 
                 {profile?.profile?.contact?.website?.isPublic === true ||
-                  profile?.user?.username === username ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.contact?.website?.value === undefined ||
                       profile?.profile?.contact?.website?.value.trim() === "" ? (
@@ -301,9 +311,10 @@ function InfoProfile({ profile }) {
                 )
                 }
 
-
                 {profile?.profile?.contact?.alternateEmail?.isPublic === true ||
-                  profile?.user?.username === username ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.contact?.alternateEmail?.value ===
                       undefined ||
@@ -335,49 +346,53 @@ function InfoProfile({ profile }) {
 
             <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
               {description.map((item, key) => (
-                <>
-                  <p key={key}>{item}</p>
+                <div key={key}>
+                  <p>{item}</p>
                   <br />
-                </>
+                </div>
               ))}
             </div>
           </div>
         )}
 
-        {handleSocialMedia() ? (
-          <div className="py-4 px-2 w-full">
-            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-              REDES SOCIALES
-            </h5>
+        {
+          handleSocialMedia() ? (
+            <div className="py-4 px-2 w-full">
+              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+                REDES SOCIALES
+              </h5>
 
-            <ul className="flex gap-2 text-white text-2xl px-2">
-              {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
-                profile?.user?.username === username ? (
-                <>
-                  {profile?.profile?.socialMedia?.instagram?.value === undefined ||
-                    profile?.profile?.socialMedia?.instagram?.value.trim() === "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.instagram?.value}
-                      >
-                        <FaInstagram />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )
-              }
-              {
-                profile?.profile?.socialMedia?.facebook?.isPublic === true ||
-                  profile?.user?.username === username ? (
+              <ul className="flex gap-2 text-white text-2xl px-2">
+                {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                   <>
-                    {profile?.profile?.socialMedia?.facebook?.value === undefined ||
-                      profile?.profile?.socialMedia?.facebook?.value.trim() === "" ? (
+                    {profile?.profile?.socialMedia?.instagram?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.instagram?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.instagram?.value}
+                        >
+                          <FaInstagram />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {profile?.profile?.socialMedia?.facebook?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.facebook?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.facebook?.value.trim() ===
+                      "" ? (
                       <></>
                     ) : (
                       <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
@@ -392,14 +407,15 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )
-              }
-              {
-                profile?.profile?.socialMedia?.whatsapp?.isPublic === true ||
-                  profile?.user?.username === username ? (
+                )}
+
+                {profile?.profile?.socialMedia?.whatsapp?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                   <>
-                    {profile?.profile?.socialMedia?.whatsapp?.value === undefined ||
-                      profile?.profile?.socialMedia?.whatsapp?.value.trim() === "" ? (
+                    {profile?.profile?.socialMedia?.whatsapp?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.whatsapp?.value.trim() ===
+                      "" ? (
                       <></>
                     ) : (
                       <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
@@ -414,55 +430,56 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )
-              }
+                )}
 
-              {profile?.profile?.socialMedia?.linkedin?.isPublic === true ||
-                profile?.user?.username === username ? (
-                <>
-                  {profile?.profile?.socialMedia?.linkedin?.value === undefined ||
-                    profile?.profile?.socialMedia?.linkedin?.value.trim() === "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.linkedin?.value}
-                      >
-                        <FaLinkedin />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )
-              }
+                {profile?.profile?.socialMedia?.linkedin?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.linkedin?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.linkedin?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.linkedin?.value}
+                        >
+                          <FaLinkedin />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
 
-              {profile?.profile?.socialMedia?.youtube?.isPublic === true ||
-                profile?.user?.username === username ? (
-                <>
-                  {profile?.profile?.socialMedia?.youtube?.value === undefined ||
-                    profile?.profile?.socialMedia?.youtube?.value.trim() === "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.youtube.value}
-                      >
-                        <FaYoutube />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )
-              }
-              {
-                profile?.profile?.socialMedia?.github?.isPublic === true ||
-                  profile?.user?.username === username ? (
+                {profile?.profile?.socialMedia?.youtube?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.youtube?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.youtube?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.youtube.value}
+                        >
+                          <FaYoutube />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {profile?.profile?.socialMedia?.github?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                   <>
                     {profile?.profile?.socialMedia?.github?.value === undefined ||
                       profile?.profile?.socialMedia?.github?.value.trim() === "" ? (
@@ -482,87 +499,69 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )
-              }
-              {
-                profile?.profile?.socialMedia?.x?.isPublic === true ||
-                  profile?.user?.username === username ? (
+                )}
+                {profile?.profile?.socialMedia?.x?.isPublic === true ||
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.socialMedia?.x?.value === undefined ||
                       profile?.profile?.socialMedia?.x?.value.trim() === "" ? (
                       <></>
                     ) : (
-                      <>
-                        {" "}
-                        <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                          <a
-                            target="_blank"
-                            href={profile?.profile?.socialMedia?.x?.value}
-                          >
-                            <FaXTwitter />
-                          </a>
-                        </li>
-                      </>
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.x?.value}
+                        >
+                          <FaXTwitter />
+                        </a>
+                      </li>
                     )}
                   </>
                 ) : (
                   <></>
-                )
-              }
-            </ul >
-          </div >
-        ) : (
-          <></>
-        )
-        }
+                )}
 
-        {
-          handleEducation() ? (
-            <></>
-          ) : (
-            <div className="py-4 px-2 w-full">
-              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-                EDUCACIÓN
-              </h5>
-
-              <div className="flex justify-between">
-                <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                  {profile?.profile?.education?.items.map((item, key) => (
-                    <li className="flex justify-between w-full" key={key}>
-                      <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
-                        {item.degree} -{" "}
-                        <button
-                          onClick={(e) => {
-                            setValues({
-                              education: item,
-                              certification: {},
-                              experience: {},
-                            });
-                            setOpenEducation(true);
-                          }}
-                          className="text-RojoC"
+                {profile?.profile?.socialMedia?.x?.isPublic === true ||
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.x?.value === undefined ||
+                      profile?.profile?.socialMedia?.x?.value.trim() === "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.x?.value}
                         >
-                          Detalles
-                        </button>
-                      </p>{" "}
-                      <span className="text-verdeD text-sm font-semibold">
-                        {item.startYear} - {item.endYear}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                          <FaXTwitter />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+              </ul>
             </div>
+          ) : (
+            <></>
           )
         }
 
+        {/* </div> */}
+
         {
-          handleCetification() ? (
+          handleExperience() ? (
             <></>
           ) : (
             <div className="py-4 px-2 w-full">
               <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-                CERTIFICADOS
+                EXPERIENCIA LABORAL
               </h5>
 
               <div className="flex justify-between">
@@ -596,67 +595,84 @@ function InfoProfile({ profile }) {
           )
         }
 
-        {
-          handleExperience() ? (
-            <></>
-          ) : (
-            <div className="py-4 px-2 w-full">
-              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-                EXPERIENCIA LABORAL
-              </h5>
+        {handleExperience() ? (
+          <></>
+        ) : (
+          <div className="py-4 px-2 w-full">
+            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+              EXPERIENCIA LABORAL
+            </h5>
 
-              <div className="flex justify-between">
-                <ul className="flex flex-col gap-1 w-full text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                  {profile?.profile?.experience?.items.map((item, key) => (
-                    <li className="flex justify-between w-full" key={key}>
-                      <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
-                        {item.position} -{" "}
-                        <button
-                          onClick={(e) => {
-                            setValues({
-                              education: {},
-                              certification: {},
-                              experience: item,
-                            });
-                            setOpenExp(true);
-                          }}
-                          className="text-RojoC"
-                        >
-                          Detalles
-                        </button>
-                      </p>{" "}
-                      <span className="text-verdeD text-sm font-semibold">
-                        {item?.startDate?.split("T")[0]} /{" "}
-                        {item?.endDate === undefined || item?.endDate === null ? " Actualidad" : item?.endDate?.split("T")[0]}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="flex justify-between">
+              <ul className="flex flex-col gap-1 w-full text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
+                {profile?.profile?.experience?.items.map((item, key) => (
+                  <li className="flex justify-between w-full" key={key}>
+                    <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
+                      {item.position} -{" "}
+                      <button
+                        onClick={(e) => {
+                          setValues({
+                            education: {},
+                            certification: {},
+                            experience: item,
+                          });
+                          setOpenExp(true);
+                        }}
+                        className="text-RojoC"
+                      >
+                        Detalles
+                      </button>
+                    </p>{" "}
+                    <span className="text-verdeD text-sm font-semibold">
+                      {item?.startDate?.split("T")[0]} /{" "}
+                      {item?.endDate === undefined || item?.endDate === null ? " Actualidad" : item?.endDate?.split("T")[0]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          )
-        }
+          </div>
+        )}
 
-        {
-          profile?.user?.username === auth?.username ? (
-            <div className="py-4 px-2 w-full">
-              <Button
-                action={(e) => {
-                  setOpenModal(true);
-                }}
-                text={"EDITAR PERFIL"}
-              />
-            </div>
-          ) : (
-            <div className="py-4 px-2 w-full">
-              <Button
-                text={"Enviar Mensaje"}
-                className={"bg-verdeC hover:bg-RojoC"}
-                action={startChat}
-              />
-            </div>
-          )
-        }
+        {profile?.user?.username === auth?.username ? (
+          <div className="py-4 px-2 w-full flex gap-3 flex-wrap">
+            <Button
+              action={(e) => {
+                setOpenModal(true);
+              }}
+              text={"EDITAR PERFIL"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/forums/personal/${auth.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"MIS FOROS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal/${auth.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"MIS PROYECTOS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal-colaborator/${auth.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"MIS COLABORACIONES"}
+            />
+          </div>
+        ) : (
+          <div className="py-4 px-2 w-full">
+            <Button
+              text={"Enviar Mensaje"}
+              className={"bg-verdeC hover:bg-RojoC"}
+              action={startChat}
+            />
+          </div>
+        )}
 
         <ModalNotHeader
           openModal={openModal}

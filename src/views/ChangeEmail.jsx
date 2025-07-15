@@ -6,9 +6,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { changeEmail } from "../services/auth/changeEmailService";
 import Button from "../Components/Buttons/Button";
+import Header from "../Components/Header";
 
 function ChangeEmail() {
   const dispatch = useDispatch();
+  const role = useSelector((state) => state.auth.role)
   const changeEmailNew = useSelector((state) => state.auth.changeEmail)
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ function ChangeEmail() {
 
   return (
     <>
-      <NavLogin />
+      {role === "" ? <NavLogin /> : <Header />}
       <main className="bg-Blanco h-[100vh] flex items-center justify-center">
         <section className="bg-Gris w-[80%] md:w-[60%] lg:w-[40%] h-auto rounded-xl border-verdeC border-2 py-8 px-6 flex flex-col items-center gap-10">
           <h2 className="text-verdeC text-2xl text-center font-barlow-semi-condensed font-bold">
@@ -43,7 +45,11 @@ function ChangeEmail() {
             <a className="text-RojoC">usuario</a>.
           </p>
           <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
-            <Button action={handleHome} className={"w-full"} text="REGRESESAR A HOME" />
+            <Button
+              action={handleHome}
+              className={"w-full"}
+              text="REGRESESAR A HOME"
+            />
           </div>
         </section>
       </main>

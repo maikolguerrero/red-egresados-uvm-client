@@ -43,6 +43,9 @@ import SendNotification from "./views/admin/SendNotification";
 import Error404 from "./views/Error404";
 import { Navigate } from "react-router-dom";
 import logger from "./utils/logger";
+import ForumsPersonals from "./views/social/ForumsPersonals";
+import ProyectsPersonals from "./views/social/ProyectsPersonals";
+import ProyectsPersonalsColaborator from "./views/social/ProyectsPersonalsColaborator";
 
 function App() {
   const dispatch = useDispatch();
@@ -50,7 +53,7 @@ function App() {
   const sessionActive = useSelector((state) => state.auth.sessionActive);
   const auth = useSelector((state) => state.auth);
   const checked = useSelector((state) => state.auth.checked);
-  
+
 
   const renderSessionActive = (Route) => {
     if (!checked) {
@@ -161,6 +164,16 @@ function App() {
       ),
     },
     {
+      path: "/forums/personal/:username",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(ForumsPersonals)}
+          </Layout>
+        </ProtectedRoute>
+      ),
+    },
+    {
       path: "/forum/:forum",
       element: (
         <ProtectedRoute>
@@ -191,21 +204,31 @@ function App() {
       ),
     },
     {
-      path: "/events/:event",
-      element: (
-        <ProtectedRoute>
-          <Layout>
-            {renderSessionActive(EventView)}
-          </Layout>
-        </ProtectedRoute >
-      ),
-    },
-    {
       path: "/projects",
       element: (
         <ProtectedRoute>
           <Layout>
             {renderSessionActive(Proyects)}
+          </Layout>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/projects/personal/:username",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(ProyectsPersonals)}
+          </Layout>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/projects/personal-colaborator/:username",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(ProyectsPersonalsColaborator)}
           </Layout>
         </ProtectedRoute>
       ),
@@ -254,9 +277,7 @@ function App() {
       path: "/reset-password",
       element: (
         <ProtectedRoute>
-          <Layout>
-            <ChangePassword />
-          </Layout>
+          <ChangePassword />
         </ProtectedRoute >
       ),
     },

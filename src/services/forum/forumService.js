@@ -114,6 +114,7 @@ export const searchForum = createAsyncThunk(
         `/api/forum/threads?page=${data.page}&limit=${data.limit}${data.category === null || data.category === undefined ? "" : "&category=" + data.category
         }${data.search === null || data.search === undefined ? "" : "&search=" + data.search
         }${!data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
+        }${!data.username || data.username === undefined ? "" : "&username=" + data.username
         }`,
         {
           method: "GET",

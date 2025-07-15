@@ -1,4 +1,4 @@
-export function CardExperience({data}) {
+export function CardExperience({ data }) {
   return (
     <>
       <article className="p-3">
@@ -27,8 +27,8 @@ export function CardExperience({data}) {
             <b>Continua actualmente:</b>{" "}
             <span className="text-Negro font-semibold">{data?.current ? "SI" : "NO"}</span>
           </h5> */}
-        </div>
-      </article>
+        </div >
+      </article >
     </>
   );
 }

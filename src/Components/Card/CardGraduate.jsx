@@ -1,7 +1,7 @@
 import { Card, Dropdown, DropdownItem } from "flowbite-react";
 import ButtonSmall from "../Buttons/ButtonSmall";
 import perfil from "../../../public/Perfil.jpg"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
@@ -24,24 +24,32 @@ export function CardGraduate({ user }) {
     <>
       <Card className="w-[275px] bg-Gris border-verdeD">
         <div className="flex justify-end px-4 pt-4">
-          {/* <Dropdown inline label="">
+          {<Dropdown inline label="">
           <DropdownItem>
-            <a
-              href="#"
+            <Link
+              to={`/projects/personal/${user.username}`}
               className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
             >
-              Proyectos
-            </a>
+              SUS PROYECTOS
+            </Link>
           </DropdownItem>
           <DropdownItem>
-            <a
-              href="#"
+            <Link
+              to={`/projects/personal-colaborator/${user.username}`}
               className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
             >
-              Foros
-            </a>
+              SUS COLABORACIONES
+            </Link>
           </DropdownItem>
-        </Dropdown> */}
+          <DropdownItem>
+            <Link
+              to={`/forums/personal/${user.username}`}
+              className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
+            >
+              SUS FOROS
+            </Link>
+          </DropdownItem>
+        </Dropdown>}
         </div>
         <div className="flex flex-col items-center text-center pb-10">
           {user?.profilePicture?.url === null ? (

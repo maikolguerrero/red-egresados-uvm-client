@@ -21,6 +21,7 @@ export const addEvent = createAsyncThunk(
 
       if (response.success) {
         notify.success("Creado el evento sin imagen", false);
+
         return {
           message: "Creado el evento sin imagen",
           data: response.data

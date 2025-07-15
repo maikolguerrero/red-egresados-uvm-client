@@ -30,7 +30,7 @@ export default function OnlineStatus({ userId }) {
                     lastSeen
                 });
             } catch (error) {
-                logger.error('Error fetching status:', error);
+                logger.error('Error obteniendo el estado del usuario:', error);
             }
         };
 
