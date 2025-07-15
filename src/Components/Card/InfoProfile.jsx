@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 function InfoProfile({ profile }) {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth)
+  const role = useSelector((state) => state.auth.role)
   const username = useSelector((state) => state.auth.username)
 
   const [openModal, setOpenModal] = useState(false);
@@ -39,24 +40,24 @@ function InfoProfile({ profile }) {
   };
 
   const handleSocialMedia = () => {
-    if (profile.user.username === username) {
+    if (profile.user.username === username || role === "admin" || role === "superadmin") {
       if (
-        (profile?.profile?.socialMedia?.facebook.value === undefined ||
-          profile?.profile?.socialMedia?.facebook.value.trim() === "") &&
-        (profile?.profile?.socialMedia?.whatsapp.value === undefined ||
-          profile?.profile?.socialMedia?.whatsapp.value.trim() === "") &&
-        (profile?.profile?.socialMedia?.telegram.value === undefined ||
-          profile?.profile?.socialMedia?.telegram.value.trim() === "") &&
-        (profile?.profile?.socialMedia?.instagram.value === undefined ||
-          profile?.profile?.socialMedia?.instagram.value.trim() === "") &&
-        (profile?.profile?.socialMedia?.linkedin.value === undefined ||
-          profile?.profile?.socialMedia?.linkedin.value.trim() === "") &&
-        (profile?.profile?.socialMedia?.youtube.value === undefined ||
-          profile?.profile?.socialMedia?.youtube.value.trim() === "") &&
-        (profile?.profile?.socialMedia?.github.value === undefined ||
-          profile?.profile?.socialMedia?.github.value.trim() === "") &&
-        (profile?.profile?.socialMedia?.x.value === undefined ||
-          profile?.profile?.socialMedia?.x.value.trim() === "")
+        (profile?.profile?.socialMedia?.facebook?.value === undefined ||
+          profile?.profile?.socialMedia?.facebook?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.whatsapp?.value === undefined ||
+          profile?.profile?.socialMedia?.whatsapp?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.telegram?.value === undefined ||
+          profile?.profile?.socialMedia?.telegram?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.instagram?.value === undefined ||
+          profile?.profile?.socialMedia?.instagram?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.linkedin?.value === undefined ||
+          profile?.profile?.socialMedia?.linkedin?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.youtube?.value === undefined ||
+          profile?.profile?.socialMedia?.youtube?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.github?.value === undefined ||
+          profile?.profile?.socialMedia?.github?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.x?.value === undefined ||
+          profile?.profile?.socialMedia?.x?.value.trim() === "")
       ) {
         return false;
       } else {
@@ -65,30 +66,30 @@ function InfoProfile({ profile }) {
     }
 
     if (
-      (profile?.profile?.socialMedia?.facebook.isPublic ||
-        profile?.profile?.socialMedia?.facebook.value === undefined ||
-        profile?.profile?.socialMedia?.facebook.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.whatsapp.isPublic ||
-        profile?.profile?.socialMedia?.whatsapp.value === undefined ||
-        profile?.profile?.socialMedia?.whatsapp.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.telegram.isPublic ||
-        profile?.profile?.socialMedia?.telegram.value === undefined ||
-        profile?.profile?.socialMedia?.telegram.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.instagram.isPublic === false ||
-        profile?.profile?.socialMedia?.instagram.value === undefined ||
-        profile?.profile?.socialMedia?.instagram.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.linkedin.isPublic ||
-        profile?.profile?.socialMedia?.linkedin.value === undefined ||
-        profile?.profile?.socialMedia?.linkedin.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.youtube.isPublic ||
-        profile?.profile?.socialMedia?.youtube.value === undefined ||
-        profile?.profile?.socialMedia?.youtube.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.github.isPublic ||
-        profile?.profile?.socialMedia?.github.value === undefined ||
-        profile?.profile?.socialMedia?.github.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.x.isPublic ||
-        profile?.profile?.socialMedia?.x.value === undefined ||
-        profile?.profile?.socialMedia?.x.value.trim() === "")
+      (profile?.profile?.socialMedia?.facebook?.isPublic ||
+        profile?.profile?.socialMedia?.facebook?.value === undefined ||
+        profile?.profile?.socialMedia?.facebook?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.whatsapp?.isPublic ||
+        profile?.profile?.socialMedia?.whatsapp?.value === undefined ||
+        profile?.profile?.socialMedia?.whatsapp?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.telegram?.isPublic ||
+        profile?.profile?.socialMedia?.telegram?.value === undefined ||
+        profile?.profile?.socialMedia?.telegram?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.instagram?.isPublic === false ||
+        profile?.profile?.socialMedia?.instagram?.value === undefined ||
+        profile?.profile?.socialMedia?.instagram?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.linkedin?.isPublic ||
+        profile?.profile?.socialMedia?.linkedin?.value === undefined ||
+        profile?.profile?.socialMedia?.linkedin?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.youtube?.isPublic ||
+        profile?.profile?.socialMedia?.youtube?.value === undefined ||
+        profile?.profile?.socialMedia?.youtube?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.github?.isPublic ||
+        profile?.profile?.socialMedia?.github?.value === undefined ||
+        profile?.profile?.socialMedia?.github?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.x?.isPublic ||
+        profile?.profile?.socialMedia?.x?.value === undefined ||
+        profile?.profile?.socialMedia?.x?.value.trim() === "")
     ) {
       return false;
     } else {
@@ -97,10 +98,10 @@ function InfoProfile({ profile }) {
   };
 
   const handleProfessional = () => {
-    if (profile?.user?.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       if (
-        profile?.profile?.professional?.summary.value === undefined ||
-        profile?.profile?.professional?.summary.value.trim() === ""
+        profile?.profile?.professional?.summary?.value === undefined ||
+        profile?.profile?.professional?.summary?.value.trim() === ""
       ) {
         return false;
       } else {
@@ -109,9 +110,9 @@ function InfoProfile({ profile }) {
     }
 
     if (
-      profile?.profile?.professional?.summary.isPublic === false ||
-      profile?.profile?.professional?.summary.value === undefined ||
-      profile?.profile?.professional?.summary.value.trim() === ""
+      profile?.profile?.professional?.summary?.isPublic === false ||
+      profile?.profile?.professional?.summary?.value === undefined ||
+      profile?.profile?.professional?.summary?.value.trim() === ""
     ) {
       return false;
     } else {
@@ -120,18 +121,18 @@ function InfoProfile({ profile }) {
   };
 
   const handlePersonalData = () => {
-    if (profile?.user?.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       if (
-        (profile?.profile?.personalData?.birthDate.value === undefined ||
-          profile?.profile?.personalData?.birthDate.value.trim() === "") &&
-        (profile?.profile?.personalData?.location.value === undefined ||
-          profile?.profile?.personalData?.location.value.trim() === "") &&
-        (profile?.profile?.contact?.phone.value === undefined ||
-          profile?.profile?.contact?.phone.value.trim() === "") &&
-        (profile?.profile?.contact?.website.value === undefined ||
-          profile?.profile?.contact?.website.value.trim() === "") &&
-        (profile?.profile?.contact?.alternateEmail.value === undefined ||
-          profile?.profile?.contact?.alternateEmail.value.trim() === "")
+        (profile?.profile?.personalData?.birthDate?.value === undefined ||
+          profile?.profile?.personalData?.birthDate?.value.trim() === "") &&
+        (profile?.profile?.personalData?.location?.value === undefined ||
+          profile?.profile?.personalData?.location?.value.trim() === "") &&
+        (profile?.profile?.contact?.phone?.value === undefined ||
+          profile?.profile?.contact?.phone?.value.trim() === "") &&
+        (profile?.profile?.contact?.website?.value === undefined ||
+          profile?.profile?.contact?.website?.value.trim() === "") &&
+        (profile?.profile?.contact?.alternateEmail?.value === undefined ||
+          profile?.profile?.contact?.alternateEmail?.value.trim() === "")
       ) {
         return false;
       } else {
@@ -140,21 +141,21 @@ function InfoProfile({ profile }) {
     }
 
     if (
-      (profile?.profile?.personalData?.birthDate.isPublic === false ||
-        profile?.profile?.personalData?.birthDate.value === undefined ||
-        profile?.profile?.personalData?.birthDate.value.trim() === "") &&
-      (profile?.profile?.personalData?.location.isPublic === false ||
-        profile?.profile?.personalData?.location.value === undefined ||
-        profile?.profile?.personalData?.location.value.trim() === "") &&
-      (profile?.profile?.contact?.phone.isPublic === false ||
-        profile?.profile?.contact?.phone.value === undefined ||
-        profile?.profile?.contact?.phone.value.trim() === "") &&
-      (profile?.profile?.contact?.website.isPublic === false ||
-        profile?.profile?.contact?.website.value === undefined ||
-        profile?.profile?.contact?.website.value.trim() === "") &&
-      (profile?.profile?.contact?.alternateEmail.isPublic === false ||
-        profile?.profile?.contact?.alternateEmail.value === undefined ||
-        profile?.profile?.contact?.alternateEmail.value.trim() === "")
+      (profile?.profile?.personalData?.birthDate?.isPublic === false ||
+        profile?.profile?.personalData?.birthDate?.value === undefined ||
+        profile?.profile?.personalData?.birthDate?.value.trim() === "") &&
+      (profile?.profile?.personalData?.location?.isPublic === false ||
+        profile?.profile?.personalData?.location?.value === undefined ||
+        profile?.profile?.personalData?.location?.value.trim() === "") &&
+      (profile?.profile?.contact?.phone?.isPublic === false ||
+        profile?.profile?.contact?.phone?.value === undefined ||
+        profile?.profile?.contact?.phone?.value.trim() === "") &&
+      (profile?.profile?.contact?.website?.isPublic === false ||
+        profile?.profile?.contact?.website?.value === undefined ||
+        profile?.profile?.contact?.website?.value.trim() === "") &&
+      (profile?.profile?.contact?.alternateEmail?.isPublic === false ||
+        profile?.profile?.contact?.alternateEmail?.value === undefined ||
+        profile?.profile?.contact?.alternateEmail?.value.trim() === "")
     ) {
       return false;
     } else {
@@ -163,11 +164,11 @@ function InfoProfile({ profile }) {
   };
 
   const handleEducation = () => {
-    if (profile?.profile?.education?.items.length === 0) {
+    if (profile?.profile?.education?.items?.length === 0) {
       return true
     }
 
-    if (profile.user.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       return false
     }
 
@@ -179,11 +180,11 @@ function InfoProfile({ profile }) {
   }
 
   const handleExperience = () => {
-    if (profile?.profile?.experience?.items.length === 0) {
+    if (profile?.profile?.experience?.items?.length === 0) {
       return true
     }
 
-    if (profile.user.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       return false
     }
 
@@ -195,11 +196,11 @@ function InfoProfile({ profile }) {
   }
 
   const handleCetification = () => {
-    if (profile?.profile?.certifications?.items.length === 0) {
+    if (profile?.profile?.certifications?.items?.length === 0) {
       return true
     }
 
-    if (profile.user.username === username) {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       return false
     }
 
@@ -223,17 +224,19 @@ function InfoProfile({ profile }) {
                 Datos Personales
               </h5>
               <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
-                {profile?.profile?.personalData?.birthDate.isPublic ||
-                profile?.user?.username === username ? (
+                {profile?.profile?.personalData?.birthDate?.isPublic ||
+                profile?.user?.username === username ||
+                role === "admin" ||
+                role === "superadmin" ? (
                   <>
-                    {profile?.profile?.personalData?.birthDate.value ===
+                    {profile?.profile?.personalData?.birthDate?.value ===
                     undefined ? (
                       <></>
                     ) : (
                       <p>
                         <b>Nacimiento:</b>{" "}
                         {
-                          profile?.profile?.personalData?.birthDate.value.split(
+                          profile?.profile?.personalData?.birthDate?.value.split(
                             "T"
                           )[0]
                         }
@@ -244,18 +247,20 @@ function InfoProfile({ profile }) {
                   <></>
                 )}
 
-                {profile?.profile?.personalData?.location.isPublic === true ||
-                profile?.user?.username === username ? (
+                {profile?.profile?.personalData?.location?.isPublic === true ||
+                profile?.user?.username === username ||
+                role === "admin" ||
+                role === "superadmin" ? (
                   <>
-                    {profile?.profile?.personalData?.location.value ===
+                    {profile?.profile?.personalData?.location?.value ===
                       undefined ||
-                    profile?.profile?.personalData?.location.value.trim() ===
+                    profile?.profile?.personalData?.location?.value.trim() ===
                       "" ? (
                       <></>
                     ) : (
                       <p>
                         <b>Ubicación:</b>{" "}
-                        {profile?.profile?.personalData?.location.value}
+                        {profile?.profile?.personalData?.location?.value}
                       </p>
                     )}
                   </>
@@ -263,16 +268,18 @@ function InfoProfile({ profile }) {
                   <></>
                 )}
 
-                {profile?.profile?.contact?.phone.isPublic === true ||
-                profile?.user?.username === username ? (
+                {profile?.profile?.contact?.phone?.isPublic === true ||
+                profile?.user?.username === username ||
+                role === "admin" ||
+                role === "superadmin" ? (
                   <>
-                    {profile?.profile?.contact?.phone.value === undefined ||
-                    profile?.profile?.contact?.phone.value.trim() === "" ? (
+                    {profile?.profile?.contact?.phone?.value === undefined ||
+                    profile?.profile?.contact?.phone?.value.trim() === "" ? (
                       <></>
                     ) : (
                       <p>
                         <b>Teléfono:</b>{" "}
-                        {profile?.profile?.contact?.phone.value}
+                        {profile?.profile?.contact?.phone?.value}
                       </p>
                     )}
                   </>
@@ -280,16 +287,18 @@ function InfoProfile({ profile }) {
                   <></>
                 )}
 
-                {profile?.profile?.contact?.website.isPublic === true ||
-                profile?.user?.username === username ? (
+                {profile?.profile?.contact?.website?.isPublic === true ||
+                profile?.user?.username === username ||
+                role === "admin" ||
+                role === "superadmin" ? (
                   <>
-                    {profile?.profile?.contact?.website.value === undefined ||
-                    profile?.profile?.contact?.website.value.trim() === "" ? (
+                    {profile?.profile?.contact?.website?.value === undefined ||
+                    profile?.profile?.contact?.website?.value.trim() === "" ? (
                       <></>
                     ) : (
                       <p>
                         <b>Sitio Web:</b>{" "}
-                        {profile?.profile?.contact?.website.value}
+                        {profile?.profile?.contact?.website?.value}
                       </p>
                     )}
                   </>
@@ -297,18 +306,20 @@ function InfoProfile({ profile }) {
                   <></>
                 )}
 
-                {profile?.profile?.contact?.alternateEmail.isPublic === true ||
-                profile?.user?.username === username ? (
+                {profile?.profile?.contact?.alternateEmail?.isPublic === true ||
+                profile?.user?.username === username ||
+                role === "admin" ||
+                role === "superadmin" ? (
                   <>
-                    {profile?.profile?.contact?.alternateEmail.value ===
+                    {profile?.profile?.contact?.alternateEmail?.value ===
                       undefined ||
-                    profile?.profile?.contact?.alternateEmail.value.trim() ===
+                    profile?.profile?.contact?.alternateEmail?.value.trim() ===
                       "" ? (
                       <></>
                     ) : (
                       <p>
                         <b>Correo Electrónico:</b>{" "}
-                        {profile?.profile?.contact?.alternateEmail.value}
+                        {profile?.profile?.contact?.alternateEmail?.value}
                       </p>
                     )}
                   </>
@@ -321,21 +332,21 @@ function InfoProfile({ profile }) {
         </div>
 
         {handleProfessional() && (
-            <div className="py-4 px-2 w-full">
-              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-                PERFIL PROFESIONAL
-              </h5>
+          <div className="py-4 px-2 w-full">
+            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+              PERFIL PROFESIONAL
+            </h5>
 
-              <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
-                {description.map((item, key) => (
-                  <>
-                    <p key={key}>{item}</p>
-                    <br />
-                  </>
-                ))}
-              </div>
+            <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
+              {description.map((item, key) => (
+                <>
+                  <p key={key}>{item}</p>
+                  <br />
+                </>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
         {handleSocialMedia() ? (
           <div className="py-4 px-2 w-full">
@@ -344,17 +355,19 @@ function InfoProfile({ profile }) {
             </h5>
 
             <ul className="flex gap-2 text-white text-2xl px-2">
-              {profile?.profile?.socialMedia?.instagram.isPublic === true ||
-              profile?.user?.username === username ? (
+              {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
+              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
-                  {profile?.profile?.socialMedia?.instagram.value === undefined ||
-                  profile?.profile?.socialMedia?.instagram.value.trim() === "" ? (
+                  {profile?.profile?.socialMedia?.instagram?.value ===
+                    undefined ||
+                  profile?.profile?.socialMedia?.instagram?.value.trim() ===
+                    "" ? (
                     <></>
                   ) : (
                     <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                       <a
                         target="_blank"
-                        href={profile?.profile?.socialMedia?.instagram.value}
+                        href={profile?.profile?.socialMedia?.instagram?.value}
                       >
                         <FaInstagram />
                       </a>
@@ -364,17 +377,19 @@ function InfoProfile({ profile }) {
               ) : (
                 <></>
               )}
-              {profile?.profile?.socialMedia?.facebook.isPublic === true ||
-              profile?.user?.username === username ? (
+              {profile?.profile?.socialMedia?.facebook?.isPublic === true ||
+              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
-                  {profile?.profile?.socialMedia?.facebook.value === undefined ||
-                  profile?.profile?.socialMedia?.facebook.value.trim() === "" ? (
+                  {profile?.profile?.socialMedia?.facebook?.value ===
+                    undefined ||
+                  profile?.profile?.socialMedia?.facebook?.value.trim() ===
+                    "" ? (
                     <></>
                   ) : (
                     <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                       <a
                         target="_blank"
-                        href={profile?.profile?.socialMedia?.facebook.value}
+                        href={profile?.profile?.socialMedia?.facebook?.value}
                       >
                         <FaFacebook />
                       </a>
@@ -384,17 +399,19 @@ function InfoProfile({ profile }) {
               ) : (
                 <></>
               )}
-              {profile?.profile?.socialMedia?.whatsapp.isPublic === true ||
-              profile?.user?.username === username ? (
+              {profile?.profile?.socialMedia?.whatsapp?.isPublic === true ||
+              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
-                  {profile?.profile?.socialMedia?.whatsapp.value === undefined ||
-                  profile?.profile?.socialMedia?.whatsapp.value.trim() === "" ? (
+                  {profile?.profile?.socialMedia?.whatsapp?.value ===
+                    undefined ||
+                  profile?.profile?.socialMedia?.whatsapp?.value.trim() ===
+                    "" ? (
                     <></>
                   ) : (
                     <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                       <a
                         target="_blank"
-                        href={profile?.profile?.socialMedia?.whatsapp.value}
+                        href={profile?.profile?.socialMedia?.whatsapp?.value}
                       >
                         <FaWhatsapp />
                       </a>
@@ -404,17 +421,20 @@ function InfoProfile({ profile }) {
               ) : (
                 <></>
               )}
-              {profile?.profile?.socialMedia?.linkedin.isPublic === true ||
-              profile?.user?.username === username ? (
+
+              {profile?.profile?.socialMedia?.linkedin?.isPublic === true ||
+              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
-                  {profile?.profile?.socialMedia?.linkedin.value === undefined ||
-                  profile?.profile?.socialMedia?.linkedin.value.trim() === "" ? (
+                  {profile?.profile?.socialMedia?.linkedin?.value ===
+                    undefined ||
+                  profile?.profile?.socialMedia?.linkedin?.value.trim() ===
+                    "" ? (
                     <></>
                   ) : (
                     <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                       <a
                         target="_blank"
-                        href={profile?.profile?.socialMedia?.linkedin.value}
+                        href={profile?.profile?.socialMedia?.linkedin?.value}
                       >
                         <FaLinkedin />
                       </a>
@@ -424,11 +444,14 @@ function InfoProfile({ profile }) {
               ) : (
                 <></>
               )}
-              {profile?.profile?.socialMedia?.youtube.isPublic === true ||
-              profile?.user?.username === username ? (
+
+              {profile?.profile?.socialMedia?.youtube?.isPublic === true ||
+              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
-                  {profile?.profile?.socialMedia?.youtube.value === undefined ||
-                  profile?.profile?.socialMedia?.youtube.value.trim() === "" ? (
+                  {profile?.profile?.socialMedia?.youtube?.value ===
+                    undefined ||
+                  profile?.profile?.socialMedia?.youtube?.value.trim() ===
+                    "" ? (
                     <></>
                   ) : (
                     <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
@@ -444,11 +467,11 @@ function InfoProfile({ profile }) {
               ) : (
                 <></>
               )}
-              {profile?.profile?.socialMedia?.github.isPublic === true ||
-              profile?.user?.username === username ? (
+              {profile?.profile?.socialMedia?.github?.isPublic === true ||
+              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
-                  {profile?.profile?.socialMedia?.github.value === undefined ||
-                  profile?.profile?.socialMedia?.github.value.trim() === "" ? (
+                  {profile?.profile?.socialMedia?.github?.value === undefined ||
+                  profile?.profile?.socialMedia?.github?.value.trim() === "" ? (
                     <></>
                   ) : (
                     <>
@@ -466,11 +489,11 @@ function InfoProfile({ profile }) {
               ) : (
                 <></>
               )}
-              {profile?.profile?.socialMedia?.x.isPublic === true ||
-              profile?.user?.username === username ? (
+              {profile?.profile?.socialMedia?.x?.isPublic === true ||
+              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                 <>
-                  {profile?.profile?.socialMedia?.x.value === undefined ||
-                  profile?.profile?.socialMedia?.x.value.trim() === "" ? (
+                  {profile?.profile?.socialMedia?.x?.value === undefined ||
+                  profile?.profile?.socialMedia?.x?.value.trim() === "" ? (
                     <></>
                   ) : (
                     <>
@@ -478,7 +501,7 @@ function InfoProfile({ profile }) {
                       <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                         <a
                           target="_blank"
-                          href={profile?.profile?.socialMedia?.x.value}
+                          href={profile?.profile?.socialMedia?.x?.value}
                         >
                           <FaXTwitter />
                         </a>
@@ -562,7 +585,7 @@ function InfoProfile({ profile }) {
                       </button>
                     </p>{" "}
                     <span className="text-verdeD text-sm font-semibold">
-                      {item.issueDate.split("T")[0]}
+                      {item?.issueDate?.split("T")[0]}
                     </span>
                   </li>
                 ))}
@@ -600,8 +623,8 @@ function InfoProfile({ profile }) {
                       </button>
                     </p>{" "}
                     <span className="text-verdeD text-sm font-semibold">
-                      {item.startDate.split("T")[0]} hasta{" "}
-                      {item.endDate.split("T")[0]}
+                      {item?.startDate?.split("T")[0]} hasta{" "}
+                      {item?.endDate?.split("T")[0]}
                     </span>
                   </li>
                 ))}
@@ -610,13 +633,34 @@ function InfoProfile({ profile }) {
           </div>
         )}
 
-        {profile?.user?.username === auth.username ? (
-          <div className="py-4 px-2 w-full">
+        {profile?.user?.username === auth?.username ? (
+          <div className="py-4 px-2 w-full flex gap-3 flex-wrap">
             <Button
               action={(e) => {
                 setOpenModal(true);
               }}
               text={"EDITAR PERFIL"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/forums/personal/${auth.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"MIS FOROS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal/${auth.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"MIS PROYECTOS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal-colaborator/${auth.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"MIS COLABORACIONES"}
             />
           </div>
         ) : (

@@ -146,7 +146,7 @@ function FormContact() {
     });
   };
 
-    const handleCheckChange = (name, value) => {
+  const handleCheckChange = (name, value) => {
     setValues({
       ...values,
       [name]: {
@@ -167,7 +167,7 @@ function FormContact() {
     });
   };
 
-    const handleCheckChange2 = (name, value) => {
+  const handleCheckChange2 = (name, value) => {
     setValues2({
       ...values2,
       [name]: {

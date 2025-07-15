@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { CardGraduate } from "../../Components/Card/CardGraduate";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
-import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../services/users/usersService";
 import FilterGraduates from "../../Components/Forms/Graduates/FilterGraduates";
@@ -74,71 +71,56 @@ function Graduates() {
       })
     );
   }
-    
 
   return (
-    <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
+    <div className="flex flex-col gap-6 items-center w-full">
+      <section className="w-full pb-6 mb-8 border-b-2 border-verdeD">
+        <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+          Menu de filtrado
+        </h3>
+        <FilterGraduates values={values} setValues={setValues} />
+      </section>
 
-      <main className="flex relative">
-        <Nav />
-        <div className="w-full px-3 py-12 md:px-6 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <div className="flex flex-col gap-6 items-center w-full">
-            <section className="w-full pb-6 mb-8 border-b-2 border-verdeD">
-              <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
-                Menu de filtrado
-              </h3>
-              <FilterGraduates values={values} setValues={setValues} />
-            </section>
-
-            {loading ? (
-              <section className="h-full flex justify-center items-center w-full">
-                <Loader />
+      {loading ? (
+        <section className="h-full flex justify-center items-center w-full">
+          <Loader />
+        </section>
+      ) : (
+        <>
+          {users.length === 0 ? (
+            <>
+              <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                No se encontraron egresados con ese filtrado
+              </h4>
+            </>
+          ) : (
+            <>
+              <section className="flex gap-6 flex-wrap justify-center">
+                {users.map((item, key) => (
+                  <CardGraduate user={item} key={item.id} />
+                ))}
               </section>
-            ) : (
-              <>
-                {users.length === 0 ? (
-                  <>
-                    <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                      No se encontraron egresados con ese filtrado
-                    </h4>
-                  </>
-                ) : (
-                  <>
-                    <section className="flex gap-6 flex-wrap justify-center">
-                      {users.map((item, key) => (
-                        <CardGraduate user={item} key={item.id} />
-                      ))}
-                    </section>
 
-                    {pages == 1 ? (
-                      <></>
-                    ) : (
-                      <div className="flex overflow-x-auto sm:justify-center">
-                        <ThemeProvider theme={customTheme}>
-                          <Pagination
-                            theme={customTheme}
-                            className="border-verdeD"
-                            currentPage={page}
-                            totalPages={pages}
-                            onPageChange={onPageChange}
-                          />
-                        </ThemeProvider>
-                      </div>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className="absolute right-8 bottom-6">
-          <ButtonMessages />
-        </div>
-      </main>
-    </>
+              {pages == 1 ? (
+                <></>
+              ) : (
+                <div className="flex overflow-x-auto sm:justify-center">
+                  <ThemeProvider theme={customTheme}>
+                    <Pagination
+                      theme={customTheme}
+                      className="border-verdeD"
+                      currentPage={page}
+                      totalPages={pages}
+                      onPageChange={onPageChange}
+                    />
+                  </ThemeProvider>
+                </div>
+              )}
+            </>
+          )}
+        </>
+      )}
+    </div>
   );
 }
 

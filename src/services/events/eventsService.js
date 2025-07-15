@@ -20,13 +20,15 @@ export const addEvent = createAsyncThunk(
       );
 
       if (response.success) {
+        alert("ok")
         enqueueSnackbar("Se ha creado el evento sin foto", typeSuccess)
         return {
           message: "Se ha creado el evento sin foto",
           data: response.data
         };
       } else {
-        throw `${response.message}`;
+        throw `${response.metadata.errors[0].message}`;
+
       }
     } catch (error) {
       // Gestionar errores
@@ -189,7 +191,7 @@ export const editEvent = createAsyncThunk(
           type: data.type
         };
       } else {
-        throw `${response.message}`;
+        throw `${response.metadata.errors[0].message}`;
       }
 
     } catch (error) {

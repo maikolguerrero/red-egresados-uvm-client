@@ -38,32 +38,23 @@ const customTheme = createTheme({
   },
 });
 
-let defaultValues = {
-  status: "",
-  search: "",
-  username: "",
-};
-
-function Proyects() {
+function ProyectsPersonalsColaborator() {
   const pagination = useSelector((state) => state.proyects.pagination);
   const proyects = useSelector((state) => state.proyects.proyects);
   const loading = useSelector((state) => state.proyects.loadingPage);
   const loader = useSelector((state) => state.proyects.loading);
+  const username = useSelector((state) => state.auth.username);
   const dispatch = useDispatch();
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(8);
-  const [values, setValues] = useState(defaultValues);
-
-  const max = Math.ceil(data.length / perPage);
-
-  const [openAddProyect, setOpendAddProyect] = useState(false);
+  const currentPath = location.pathname; // Acceder a la ruta actual
 
   useEffect(() => {
     dispatch(
       searchProyect({
         page: 1,
         limit: 8,
+        isPersonal: false,
+        username: currentPath.split("/")[3]
       })
     );
   }, []);
@@ -73,20 +64,13 @@ function Proyects() {
       searchProyect({
         page: page,
         limit: pagination.limit,
-        status: values.status.trim() === "" ? null : values.status,
-        search: values.search.trim() === "" ? null : values.search,
-        username: values.username.trim() === "" ? null : values.username,
+        isPersonal: false,
+        username: currentPath.split("/")[3],
       })
     );
   };
   return (
     <>
-      <section className="w-full pb-8 border-b-2 border-verdeD">
-        <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
-          Menu de filtrado
-        </h3>
-        <FilterProyect values={values} setValues={setValues} />
-      </section>
       {loading ? (
         <section className="h-full flex justify-center items-center w-full">
           <Loader />
@@ -106,13 +90,31 @@ function Proyects() {
           )}
           {proyects.length === 0 ? (
             <>
-              {" "}
-              <h4 className="font-barolw flex items-start h-full justify-center text-lg font-semibold px-2 text-RojoC uppercase">
-                No se encontraron proyectos con ese filtrado
-              </h4>
+              {username === currentPath.split("/")[3] ? (
+                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                  No has colaborado en proyectos todavía
+                </h4>
+              ) : (
+                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                  El usuario no ha colaborado en proyectos todavía
+                </h4>
+              )}
             </>
           ) : (
             <section className="flex flex-col gap-6">
+              {username === currentPath.split("/")[3] ? (
+                <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase mb-6">
+                  Proyectos que has colaborado
+                </h4>
+              ) : (
+                <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase mb-6">
+                  Proyectos que ha colaborado el usuario:{" "}
+                  <span className="text-RojoC lowercase">
+                    {currentPath.split("/")[3]}
+                  </span>
+                </h4>
+              )}
+
               <div className="w-full gap-6 justify-center flex-wrap flex px-1 md:px-2 lg:px-6">
                 {proyects.map((item) => (
                   <CardProyect key={item.id} proyect={item} />
@@ -136,20 +138,10 @@ function Proyects() {
               )}
             </section>
           )}
-
-          <div className="absolute right-8 bottom-6 flex flex-col gap-2 mb-16">
-            <ButtonAdd setOpenModal={setOpendAddProyect} />
-          </div>
         </>
       )}
-      <ModalNotHeader
-        openModal={openAddProyect}
-        setOpenModal={setOpendAddProyect}
-        size={"3xl"}
-        component={<FormAddProyect />}
-      />
     </>
   );
 }
 
-export default Proyects;
+export default ProyectsPersonalsColaborator;

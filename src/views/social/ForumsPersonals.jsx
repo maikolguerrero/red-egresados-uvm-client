@@ -36,26 +36,22 @@ const customTheme = createTheme({
   },
 });
 
-let defaultValues = {
-  category: "",
-  search: ""
-};
-
-function Forums() {
+function ForumsPersonals() {
   const pagination = useSelector((state) => state.forums.pagination);
   const forums = useSelector((state) => state.forums.forums);
   const loading = useSelector((state) => state.forums.loadingPage);
   const loader = useSelector((state) => state.forums.loading);
+  const username = useSelector((state) => state.auth.username);
   const dispatch = useDispatch();
 
-  const [openAddForum, setOpendAddForum] = useState(false);
-  const [values, setValues] = useState(defaultValues);
+  const currentPath = location.pathname; // Acceder a la ruta actual
 
   useEffect(() => {
     dispatch(
       searchForum({
         page: 1,
         limit: 10,
+        username: currentPath.split("/")[3]
       })
     );
   }, []);
@@ -65,20 +61,12 @@ function Forums() {
       searchForum({
         page: page,
         limit: pagination.limit,
-        category: values.category.trim() === "" ? null : values.category,
-        search: values.search.trim() === "" ? null : values.search,
+        username: currentPath.split("/")[3]
       })
     );
 
   return (
     <>
-      <article className="w-full pb-8 border-b-2 border-verdeD mb-8">
-        <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
-          Menu de filtrado
-        </h3>
-        <FilterForums values={values} setValues={setValues} />
-      </article>
-
       {loading ? (
         <section className="h-full flex justify-center items-center w-full">
           <Loader />
@@ -98,12 +86,31 @@ function Forums() {
           )}
           {forums.length === 0 ? (
             <>
-              <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                No se encontraron foros con ese filtrado
-              </h4>
+              {username === currentPath.split("/")[3] ? (
+                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                  No has creado foros todavía
+                </h4>
+              ) : (
+                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                  El usuario no ha creado foros todavía
+                </h4>
+              )}
             </>
           ) : (
             <>
+              {username === currentPath.split("/")[3] ? (
+                <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase mb-6">
+                  Foros creados por ti
+                </h4>
+              ) : (
+                <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase mb-6">
+                  Foros creados por el usuario:{" "}
+                  <span className="text-RojoC lowercase">
+                    {currentPath.split("/")[3]}
+                  </span>
+                </h4>
+              )}
+
               <div className="flex flex-col gap-8 w-full px-1 md:px-2 lg:px-6">
                 {forums.map((item) => (
                   <CardForum forum={item} key={item.id} />
@@ -127,19 +134,8 @@ function Forums() {
           )}
         </>
       )}
-
-      <div className="absolute flex flex-col gap-2 right-8 bottom-6 mb-16">
-        <ButtonAdd setOpenModal={setOpendAddForum} />
-      </div>
-
-      <ModalNotHeader
-        openModal={openAddForum}
-        setOpenModal={setOpendAddForum}
-        size={"3xl"}
-        component={<FormAddForum />}
-      />
     </>
   );
 }
 
-export default Forums;
+export default ForumsPersonals;

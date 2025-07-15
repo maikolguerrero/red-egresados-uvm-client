@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 function CardProfile({ profile }) {
   const username = useSelector((state) => state.auth.username)
+  const role = useSelector((state) => state.auth.role)
   const [anchoPantalla, setAnchoPantalla] = useState(window.innerWidth);
 
   const [openModal, setOpenModal] = useState(false)
@@ -83,7 +84,9 @@ function CardProfile({ profile }) {
 
           {/* Habilidades e Intereses */}
           <div className="flex gap-1 md:gap-2 flex-wrap">
-            {profile.user.username === username ? (
+            {profile?.user?.username === username ||
+            role === "admin" ||
+            role === "superadmin" ? (
               <>
                 {" "}
                 {profile?.profile?.professional?.skills?.values.length === 0 ? (
@@ -115,7 +118,9 @@ function CardProfile({ profile }) {
               </>
             )}
 
-            {profile.user.username === username ? (
+            {profile?.user?.username === username ||
+            role === "admin" ||
+            role === "superadmin" ? (
               <>
                 {profile?.profile?.professional?.interests?.values.length ===
                 0 ? (
@@ -133,7 +138,9 @@ function CardProfile({ profile }) {
             ) : (
               <>
                 {profile?.profile?.professional?.interests?.values.length ===
-                0 || profile?.profile?.professional?.interests?.isPublic === false ? (
+                  0 ||
+                profile?.profile?.professional?.interests?.isPublic ===
+                  false ? (
                   <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
                 ) : (
                   <button

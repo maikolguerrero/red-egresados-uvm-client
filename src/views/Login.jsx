@@ -1,4 +1,3 @@
-import { Bounce, ToastContainer } from "react-toastify";
 import Footer from "../Components/Footer";
 import FormLogin from "../Components/Forms/FormLogin";
 import NavLogin from "../Components/NavLogin";
@@ -20,19 +19,6 @@ function Login() {
       </main>
 
       <Footer />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
     </>
   );
 }

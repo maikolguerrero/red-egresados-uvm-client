@@ -20,7 +20,7 @@ let styles = {
 
 let defaultValues = {
   "summary": "",
-  "skills" : "",
+  "skills": "",
   "interests": "",
 };
 
@@ -71,6 +71,7 @@ function FormProfessional() {
   const [valuesEd, setValuesEd] = useState(defaultEd);
   const [valuesCr, setValuesCr] = useState(defaultCr);
   const [valuesEx, setValuesEx] = useState(defaultEx);
+
   const [valuesIsPublic, setValuesIsPublic] = useState(defaultIsPublic);
 
   useEffect(() => {
@@ -87,6 +88,7 @@ function FormProfessional() {
       education: profile.profile.education.isPublic,
       experience: profile.profile.experience.isPublic,
     });
+
     setValues({
       summary:
         profile.profile.professional.summary.value === undefined
@@ -128,7 +130,7 @@ function FormProfessional() {
     if (valuesEd.startYear === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
     if (valuesEd.endYear === 0) return enqueueSnackbar("Tienes que llenar los campos de educacion", typeError)
     if (valuesEd.startYear > valuesEd.endYear) return enqueueSnackbar("No puedes escribir un año mayor al de finalizacion", typeError)
-    
+
     setEducation([...education, valuesEd]);
     setValuesEd({
       institution: "",
@@ -146,7 +148,7 @@ function FormProfessional() {
     if (valuesCr.issueDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
     if (valuesCr.credentialID.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
     if (valuesCr.credentialURL.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de certicado", typeError)
-      
+
     setCertifications([...certifications, valuesCr]);
     setValuesCr({
       name: "",
@@ -165,7 +167,7 @@ function FormProfessional() {
     if (valuesEx.startDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
     if (valuesEx.endDate.trim().length === 0) return enqueueSnackbar("Tienes que llenar los campos de experiencia", typeError)
     if (valuesEx.startDate > valuesEx.endDate) return enqueueSnackbar("No puede ser mayor la fecha de inicio que la fecha de finalizacion", typeError)
-    
+
     setExperience([...experience, valuesEx]);
     setValuesEx({
       position: "",

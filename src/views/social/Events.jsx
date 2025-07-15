@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { CardEvent } from "../../Components/Card/CardEvent";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
-import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
 import { useDispatch, useSelector } from "react-redux";
 import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
@@ -12,8 +9,6 @@ import { FormAddPictureE } from "../../Components/Forms/Event/FormAddPictureE";
 import { searchEvent } from "../../services/events/eventsService";
 import FilterEvents from "../../Components/Forms/Event/FilterEvents";
 import { Loader } from "../../Components/Loader";
-
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 const customTheme = createTheme({
   base: "",
@@ -83,85 +78,74 @@ function Events() {
 
   return (
     <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
+      <section className="w-full flex flex-col pb-8 border-b-2 border-verdeD">
+        <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+          Menu de filtrado
+        </h3>
+        <FilterEvents values={values} setValues={setValues} />
+      </section>
 
-      <main className="flex relative">
-        <Nav />
-        <div className="w-full px-3 py-12 md:px-4 lg:px-6 gap-14 flex flex-col h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          <section className="w-full flex flex-col pb-8 border-b-2 border-verdeD">
-            <h3 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
-              Menu de filtrado
-            </h3>
-            <FilterEvents values={values} setValues={setValues} />
-          </section>
-
-          {loading ? (
-            <section className="h-full flex justify-center items-center w-full">
-              <Loader />
-            </section>
+      {loading ? (
+        <section className="h-full flex justify-center items-center w-full">
+          <Loader />
+        </section>
+      ) : (
+        <>
+          {events.length === 0 ? (
+            <>
+              {" "}
+              <h4 className="font-barolw flex items-start h-full justify-center text-lg font-semibold px-2 text-RojoC uppercase">
+                No se encontraron eventos con ese filtrado
+              </h4>
+            </>
           ) : (
             <>
-              {events.length === 0 ? (
-                <>
-                  {" "}
-                  <h4 className="font-barolw flex items-start h-full justify-center text-lg font-semibold px-2 text-RojoC uppercase">
-                    No se encontraron eventos con ese filtrado
-                  </h4>
-                </>
-              ) : (
-                <>
-                  <div className="flex flex-col gap-4 px-1 md:px-2 lg:px-6">
-                    <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      {events.map((item) => (
-                        <CardEvent key={item.id} event={item} />
-                      ))}
-                    </section>
+              <div className="flex flex-col gap-4 px-1 md:px-2 lg:px-6">
+                <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {events.map((item) => (
+                    <CardEvent key={item.id} event={item} />
+                  ))}
+                </section>
 
-                    {pagination.pages == 1 ? (
-                      <></>
-                    ) : (
-                      <div className="flex overflow-x-auto sm:justify-center">
-                        <ThemeProvider theme={customTheme}>
-                          <Pagination
-                            theme={customTheme}
-                            className="border-verdeD"
-                            currentPage={pagination.page}
-                            totalPages={pagination.pages}
-                            onPageChange={onPageChange}
-                          />
-                        </ThemeProvider>
-                      </div>
-                    )}
+                {pagination.pages == 1 ? (
+                  <></>
+                ) : (
+                  <div className="flex overflow-x-auto sm:justify-center">
+                    <ThemeProvider theme={customTheme}>
+                      <Pagination
+                        theme={customTheme}
+                        className="border-verdeD"
+                        currentPage={pagination.page}
+                        totalPages={pagination.pages}
+                        onPageChange={onPageChange}
+                      />
+                    </ThemeProvider>
                   </div>
-                </>
-              )}
+                )}
+              </div>
             </>
           )}
-        </div>
+        </>
+      )}
 
-        <div className="absolute right-8 bottom-6 flex flex-col gap-2">
-          {role === "egresado" ? (
-            <></>
+      {role === "admin" || role === "superadmin" && (
+        <div className="absolute flex flex-col gap-2 right-8 bottom-6 mb-16">
+          <ButtonAdd setOpenModal={setOpendAddEvent} />
+        </div>
+      )}
+
+      <ModalNotHeader
+        openModal={openAddEvent}
+        setOpenModal={setOpendAddEvent}
+        size={"3xl"}
+        component={
+          passed === 0 ? (
+            <FormAddEvent />
           ) : (
-            <ButtonAdd setOpenModal={setOpendAddEvent} />
-          )}
-          <ButtonMessages />
-        </div>
-
-        <ModalNotHeader
-          openModal={openAddEvent}
-          setOpenModal={setOpendAddEvent}
-          size={"3xl"}
-          component={
-            passed === 0 ? (
-              <FormAddEvent />
-            ) : (
-              <FormAddPictureE setOpenModal={setOpendAddEvent} />
-            )
-          }
-        />
-      </main>
+            <FormAddPictureE setOpenModal={setOpendAddEvent} />
+          )
+        }
+      />
     </>
   );
 }

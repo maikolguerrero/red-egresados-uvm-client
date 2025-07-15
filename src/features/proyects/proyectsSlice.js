@@ -139,6 +139,7 @@ export const proyectsSlice = createSlice({
         if (state.proyects[i].id === action.payload.projectId) {
           let editProyect = state.proyects[i];
           editProyect.isCollaborator = true;
+          editProyect.collaborators = [...editProyect.collaborators, action.payload.collaborators]
           newProjects.push(editProyect);
         } else {
           newProjects.push(state.proyects[i]);

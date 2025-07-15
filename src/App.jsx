@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { startSessionChecker, stopSessionChecker } from "./services/refreshToken/sessionInterceptor";
+import Layout from "./Components/Layout";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Recover from "./views/Recover";
@@ -39,7 +40,11 @@ import Admins from "./views/admin/Admins";
 import RecoveryEmail from "./views/RecoveryEmail";
 import ManageGraduates from "./views/admin/ManageGraduates";
 import SendNotification from "./views/admin/SendNotification";
+import Error404 from "./views/Error404";
 import { Navigate } from "react-router-dom";
+import ForumsPersonals from "./views/social/ForumsPersonals";
+import ProyectsPersonals from "./views/social/ProyectsPersonals";
+import ProyectsPersonalsColaborator from "./views/social/ProyectsPersonalsColaborator";
 
 function App() {
   const dispatch = useDispatch();
@@ -49,10 +54,10 @@ function App() {
   const checked = useSelector((state) => state.auth.checked);
 
   const renderSessionActive = (Route) => {
-    if(!checked){
+    if (!checked) {
       return <Navigate to={window.location.pathname} />;
     }
-    if(sessionActive){
+    if (sessionActive) {
       return <Route />;
     }
     return <Navigate to="/" />;
@@ -120,7 +125,9 @@ function App() {
       path: "/home",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Home)}
+          <Layout>
+            {renderSessionActive(Home)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -128,7 +135,9 @@ function App() {
       path: "/graduates",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Graduates)}
+          <Layout>
+            {renderSessionActive(Graduates)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -136,7 +145,9 @@ function App() {
       path: "/graduates/:username",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(GraduatesProfile)}
+          <Layout>
+            {renderSessionActive(GraduatesProfile)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -144,7 +155,19 @@ function App() {
       path: "/forums",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Forums)}
+          <Layout>
+            {renderSessionActive(Forums)}
+          </Layout>
+        </ProtectedRoute>
+      ),
+    },
+      {
+      path: "/forums/personal/:username",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(ForumsPersonals)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -152,7 +175,9 @@ function App() {
       path: "/forums/:forum",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(ForumView)}
+          <Layout>
+            {renderSessionActive(ForumView)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -160,7 +185,9 @@ function App() {
       path: "/events",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Events)}
+          <Layout>
+            {renderSessionActive(Events)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -168,23 +195,59 @@ function App() {
       path: "/events/:event",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(EventView)}
+          <Layout>
+            {renderSessionActive(EventView)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/events/:event",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(EventView)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/projects",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(Proyects)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
     {
-      path: "/proyects",
+      path: "/projects/personal/:username",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Proyects)}
+          <Layout>
+            {renderSessionActive(ProyectsPersonals)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
     {
-      path: "/proyects/:proyect",
+      path: "/projects/personal-colaborator/:username",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(ProjectView)}
+          <Layout>
+            {renderSessionActive(ProyectsPersonalsColaborator)}
+          </Layout>
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/projects/:project",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(ProjectView)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
@@ -192,32 +255,50 @@ function App() {
       path: "/notifications",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Notifications)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(Notifications)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/config",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Config)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(Config)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/my-profile",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(MyProfile)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(MyProfile)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/my-profile",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(MyProfile)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/reset-password",
       element: (
         <ProtectedRoute>
-          <ChangePassword />
-        </ProtectedRoute>
+          <Layout>
+            <ChangePassword />
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
@@ -225,7 +306,7 @@ function App() {
       element: (
         <ProtectedRoute>
           <Verifycation />
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
@@ -233,88 +314,153 @@ function App() {
       element: (
         <ProtectedRoute>
           <ChangeEmail />
-        </ProtectedRoute>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/config/reports",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Reports)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(Reports)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/config/admins",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Admins)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(Admins)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/config/admins",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(Admins)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/config/graduates",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(ManageGraduates)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(ManageGraduates)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/config/notification",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(SendNotification)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(SendNotification)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/config/notification",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(SendNotification)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/content-manager",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(ContentManager)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(ContentManager)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/content-manager/landing",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(CMLandingPage)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMLandingPage)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/content-manager/landing",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMLandingPage)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/content-manager/home",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(CMHomePage)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMHomePage)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/content-manager/home",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMHomePage)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/content-manager/academic-requests",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(CMAcademicRequests)}
-        </ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMAcademicRequests)}
+          </Layout>
+        </ProtectedRoute >
+      ),
+    },
+    {
+      path: "/content-manager/academic-requests",
+      element: (
+        <ProtectedRoute>
+          <Layout>
+            {renderSessionActive(CMAcademicRequests)}
+          </Layout>
+        </ProtectedRoute >
       ),
     },
     {
       path: "/chat/:username",
       element: (
         <ProtectedRoute>
-          {renderSessionActive(Chat)}
+          <Layout>
+            {renderSessionActive(Chat)}
+          </Layout>
         </ProtectedRoute>
       ),
     },
     {
       path: "*",
       element: (
-        <h2 className="text-3xl font-bold underline font-barlow-condensed">
-          {" "}
-          Pagina de Error
-        </h2>
+        <Error404 />
       ),
     },
   ]);
@@ -323,9 +469,7 @@ function App() {
     dispatch(verifySesion());
     dispatch(getContentFooter());
     dispatch(getContentAcademicRequests());
-    // dispatch(verifySesion());
     // await dispatch(verifySesion()).unwrap();
-
   }, []);
 
   useEffect(() => {

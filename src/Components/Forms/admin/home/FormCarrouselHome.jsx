@@ -15,7 +15,7 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
-export function FormCarrouselHome({home}) {
+export function FormCarrouselHome({ home }) {
   const dispatch = useDispatch();
 
   const [picture, setPicture] = useState("");

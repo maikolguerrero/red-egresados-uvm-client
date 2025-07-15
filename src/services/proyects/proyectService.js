@@ -54,6 +54,8 @@ export const searchProyect = createAsyncThunk(
             data.username === null || data.username === undefined ? "" : "&username=" + data.username
           }${
             !data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
+          }${
+            !data.isPersonal || data.isPersonal === undefined ? "" : "&isPersonal=" + data.isPersonal
           }`,
         {
           method: "GET",
@@ -223,7 +225,8 @@ export const joinProyect = createAsyncThunk(
         enqueueSnackbar("Te uniste al proyecto", typeSuccess)
         return {
           message: "Te uniste al proyecto",
-          projectId: data.projectId
+          projectId: data.projectId,
+          collaborators: response.data
         }
       } else {
         throw `${response.message}`;

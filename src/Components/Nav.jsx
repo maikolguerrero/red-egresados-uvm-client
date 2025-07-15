@@ -4,7 +4,6 @@ import { FaArrowLeftLong, FaArrowRightLong, FaGear, FaPeopleGroup } from "react-
 import { IoIosHome, IoIosNotifications } from "react-icons/io";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toggleSidebar } from "../features/sidebar/sidebarSlice";
 import { useEffect, useState } from "react";
@@ -12,6 +11,7 @@ import socketService from "../services/socket/socket.service";
 import { getUnreadNotificationCount } from "../services/notifications/notificationService";
 import useIsMobile from "../hooks/useIsMobile";
 import { MdEditDocument } from "react-icons/md";
+import NavItem from "./NavItem";
 
 function Nav() {
   const role = useSelector((state) => state.auth.role);
@@ -87,75 +87,122 @@ function Nav() {
 
   return (
     <>
-      {
-        ((isMobile && !isSidebar) || !isMobile) && (
-          <nav className={`${isSidebar ? "w-[60px] items-center " : "md:w-[200px] lg:w-[250px] absolute md:relative w-full"} flex flex-col border-r-2 bg-Gris border-verdeD h-[89.5vh] text-verdeD transition-all duration-[400ms] z-10`}>
-            <div className="px-4 pt-3 flex justify-end">
-              <button className="h-full p-1" onClick={() => dispatch(toggleSidebar())}>
-                {isSidebar ? <FaArrowRightLong className="text-xl" /> : <FaArrowLeftLong className="text-xl" />}
-              </button>
-            </div>
+      <>
+        {/* Overlay para móvil - solo se muestra cuando el sidebar está abierto */}
+        {isMobile && (
+          <div
+            className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity duration-300 ease-in-out ${!isSidebar ? "opacity-50" : "opacity-0 pointer-events-none"
+              }`}
+            onClick={() => dispatch(toggleSidebar())}
+          />
+        )}
 
-            <ul className="py-4 border-b border-verdeD ">
-              <Link title="Principal" to={"/home"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <IoIosHome className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PRINCIPAL</p>
-              </Link>
-            </ul>
-
-            <ul className="py-4 border-b border-verdeD ">
-              <Link title="Egresados" to={"/graduates"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <FaGraduationCap className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EGRESADOS</p>
-              </Link>
-              <Link title="Foros" to={"/forums"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <FaPeopleGroup className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>FOROS</p>
-              </Link>
-              <Link title="Proyectos" to={"/proyects"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <PiProjectorScreenChartBold className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PROYECTOS</p>
-              </Link>
-              <Link title="Eventos" to={"/events"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <BsCalendarDate className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>EVENTOS</p>
-              </Link>
-            </ul>
-
-            <ul className="py-4 border-b border-verdeD ">
-              <Link title="Notificaciones" to={"/notifications"} className="relative px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <IoIosNotifications className="text-2xl" />
-                {(unreadCount > 0) && (
-                  <span
-                    className="absolute left-8 top-0 -mt-1 bg-RojoC text-white text-[0.6rem] rounded-full w-5 h-5 flex items-center justify-center te z-10"
-                  >
-                    {unreadCount > 99 ? '99+' : unreadCount}
-                  </span>
-                )}
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>NOTIFICACIONES</p>
-              </Link>
-              <Link title="Configuración" to={"/config"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                <FaGear className="text-2xl" />
-                <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>CONFIGURACIÓN</p>
-              </Link>
-              {role === "egresado" && (
-                <Link title="Perfil" to={"/my-profile"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                  <FaUser className="text-2xl" />
-                  <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>PERFIL</p>
-                </Link>
-              )}
-              {role === "admin" || role === "superadmin" ? (
-                <Link title="Gestor de Contenido" to={"/content-manager"} className="px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all" onClick={handleClickLink}>
-                  <MdEditDocument className="text-2xl" />
-                  <p className={`${isSidebar ? "hidden" : "visible"} font-barolw font-bold text-sm`}>GESTOR DE CONTENIDO</p>
-                </Link>
+        <nav
+          className={`${isMobile
+            ? `fixed top-0 left-0 h-full w-full ${!isSidebar ? "translate-x-0" : "-translate-x-full"
+            }`
+            : isSidebar
+              ? "w-[60px] items-center"
+              : "md:w-[200px] absolute md:relative w-full"
+            } flex flex-col border-r-2 bg-Gris ${!isMobile && "border-verdeD"
+            } h-[89.5vh] md:h-auto text-verdeD transition-all duration-300 ease-in-out z-20`}
+        >
+          {/* Contenido del sidebar */}
+          <div className="px-4 pt-3 flex justify-end">
+            <button
+              onClick={() => dispatch(toggleSidebar())}
+              className="rounded-full px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all group relative"
+            >
+              {isSidebar ? (
+                <FaArrowRightLong className="text-xl" />
               ) : (
-                <></>
+                <FaArrowLeftLong className="text-xl" />
               )}
-            </ul>
-          </nav>
-        )
-      }
+              {!isMobile && (
+                <span className="absolute left-full ml-4 px-3 py-1 bg-verdeD text-Blanco text-sm font-barolw rounded-md shadow-lg whitespace-nowrap scale-0 group-hover:scale-100 origin-left transition-transform duration-200 z-20">
+                  {isSidebar ? "EXPANDIR" : "CONTRAER"}
+                </span>
+              )}
+            </button>
+          </div>
+
+          <ul className="py-4 border-b border-verdeD">
+            <NavItem
+              to="/home"
+              icon={<IoIosHome className="text-2xl" />}
+              text="PRINCIPAL"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+          </ul>
+          <ul className="py-4 border-b border-verdeD">
+            <NavItem
+              to="/graduates"
+              icon={<FaGraduationCap className="text-2xl" />}
+              text="EGRESADOS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/forums"
+              icon={<FaPeopleGroup className="text-2xl" />}
+              text="FOROS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/projects"
+              icon={<PiProjectorScreenChartBold className="text-2xl" />}
+              text="PROYECTOS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/events"
+              icon={<BsCalendarDate className="text-2xl" />}
+              text="EVENTOS"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+          </ul>
+
+          <ul className="py-4 border-b border-verdeD">
+            <NavItem
+              to="/notifications"
+              icon={<IoIosNotifications className="text-2xl" />}
+              text="NOTIFICACIONES"
+              isSidebar={isSidebar}
+              badge={unreadCount}
+              onClick={handleClickLink}
+            />
+            <NavItem
+              to="/config"
+              icon={<FaGear className="text-2xl" />}
+              text="CONFIGURACIÓN"
+              isSidebar={isSidebar}
+              onClick={handleClickLink}
+            />
+            {role === "egresado" && (
+              <NavItem
+                to="/my-profile"
+                icon={<FaUser className="text-2xl" />}
+                text="PERFIL"
+                isSidebar={isSidebar}
+                onClick={handleClickLink}
+              />
+            )}
+            {(role === "admin" || role === "superadmin") && (
+              <NavItem
+                to="/content-manager"
+                icon={<MdEditDocument className="text-2xl" />}
+                text="GESTOR DE CONTENIDO"
+                isSidebar={isSidebar}
+                onClick={handleClickLink}
+              />
+            )}
+          </ul>
+        </nav>
+      </>
     </>
   );
 }

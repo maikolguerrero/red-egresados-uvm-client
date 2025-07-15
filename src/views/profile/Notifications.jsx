@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
 import { CardBanner } from "../../Components/Card/CardBanner";
-import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useDispatch, useSelector } from "react-redux";
-import { getNotifications, markNotificationAsRead, deleteNotification, getUnreadNotificationCount } from "../../services/notifications/notificationService";
+import { getNotifications, markNotificationAsRead, deleteNotification } from "../../services/notifications/notificationService";
 import socketService from "../../services/socket/socket.service";
 import { enqueueSnackbar } from "notistack";
 import { typeError } from "../../models/alertModels";
@@ -42,7 +39,7 @@ const customTheme = createTheme({
 function Notifications() {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(8);
+  const [perPage, setPerPage] = useState(10);
   const [notifications, setNotifications] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -138,65 +135,53 @@ function Notifications() {
 
   return (
     <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
+      {loading ? (
+        <div className="w-full flex justify-center">
+          <p>Cargando notificaciones...</p>
+        </div>
+      ) : (
+        <>
 
-      <main className="flex relative">
-        <Nav />
-        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-scroll overflow-x-auto">
-          {loading ? (
-            <div className="w-full flex justify-center">
-              <p>Cargando notificaciones...</p>
+          {/* sin notificaciones */}
+          {notifications.length === 0 ? (
+            <div className="w-full flex justify-center items-center">
+              <div className="bg-Gris p-4 rounded-lg shadow-sm">
+                <p className="text-center font-barolw text-lg">No tienes notificaciones</p>
+              </div>
             </div>
           ) : (
-            <>
-
-              {/* sin notificaciones */}
-              {notifications.length === 0 ? (
-                <div className="w-full flex justify-center items-center">
-                  <div className="bg-Gris p-4 rounded-lg shadow-sm">
-                    <p className="text-center font-barolw text-lg">No tienes notificaciones</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="w-full gap-6 justify-center flex-col flex">
-                  {notifications.map((item) => (
-                    console.log("Notificación:", item),
-                    <CardBanner
-                      key={item.id}
-                      noti={item.data.message}
-                      type={item.type}
-                      createdAt={item.createdAt}
-                      isRead={item.read}
-                      onMarkAsRead={() => handleMarkAsRead(item.id)}
-                      notificationId={item.id}
-                      onDelete={handleDeleteNotification}
-                      data={item.data} // Pasa todos los datos de la notificación
-                    />
-                  ))}
-                </div>
-              )}
-              {max > 1 && (
-                <div className="flex justify-center">
-                  <ThemeProvider theme={customTheme}>
-                    <Pagination
-                      theme={customTheme}
-                      className="border-verdeD"
-                      currentPage={currentPage}
-                      totalPages={max}
-                      onPageChange={onPageChange}
-                    />
-                  </ThemeProvider>
-                </div>
-              )}
-            </>
+            <div className="w-full gap-6 justify-center flex-col flex">
+              {notifications.map((item) => (
+                console.log("Notificación:", item),
+                <CardBanner
+                  key={item.id}
+                  noti={item.data.message}
+                  type={item.type}
+                  createdAt={item.createdAt}
+                  isRead={item.read}
+                  onMarkAsRead={() => handleMarkAsRead(item.id)}
+                  notificationId={item.id}
+                  onDelete={handleDeleteNotification}
+                  data={item.data} // Pasa todos los datos de la notificación
+                />
+              ))}
+            </div>
           )}
-        </section>
-
-        <div className="absolute right-8 bottom-6">
-          <ButtonMessages />
-        </div>
-      </main>
+          {max > 1 && (
+            <div className="flex justify-center">
+              <ThemeProvider theme={customTheme}>
+                <Pagination
+                  theme={customTheme}
+                  className="border-verdeD"
+                  currentPage={currentPage}
+                  totalPages={max}
+                  onPageChange={onPageChange}
+                />
+              </ThemeProvider>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 }

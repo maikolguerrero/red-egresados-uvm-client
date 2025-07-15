@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
-import { CardBanner } from "../../Components/Card/CardBanner";
-import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useDispatch, useSelector } from "react-redux";
-import { getNotifications, markNotificationAsRead, deleteNotification, getUnreadNotificationCount } from "../../services/notifications/notificationService";
-import socketService from "../../services/socket/socket.service";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../models/alertModels";
-import { decrementUnreadCount } from "../../features/notifications/notificationSlice";
-import { useNavigate } from "react-router-dom";
 import { searchReport } from "../../services/reports/reportsService";
 import { Loader } from "../../Components/Loader";
-import { HiX } from "react-icons/hi";
 import CardReport from "../../Components/Card/CardReport";
 import FilterReport from "../../Components/Forms/admin/FilterReport";
 
@@ -100,76 +89,62 @@ function Reports() {
       })
     );
   };
-      
-
 
   return (
     <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
+      <article className="w-full pb-8 border-b-2 border-verdeD mb-8">
+        <h3 className="font-barolw text-lg font-semibold px-3 py-1 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
+          Menu de filtrado
+        </h3>
+        <FilterReport values={values} setValues={setValues} />
+      </article>
 
-      <main className="flex relative">
-        <Nav />
-        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-auto overflow-x-auto">
-          <article className="w-full pb-8 border-b-2 border-verdeD mb-8">
-            <h3 className="font-barolw text-lg font-semibold px-3 py-1 text-RojoC mb-4 border-b-2 border-verdeD uppercase">
-              Menu de filtrado
-            </h3>
-            <FilterReport values={values} setValues={setValues} />
-          </article>
-          
-          {loading ? (
-            <div className="w-full h-full items-center flex justify-center">
-              <Loader />
+      {loading ? (
+        <div className="w-full h-full items-center flex justify-center">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          {/* sin notificaciones */}
+          {reports.length === 0 ? (
+            <div className="w-full flex justify-center items-center">
+              <div className="bg-Gris p-4 rounded-lg shadow-sm">
+                <p className="text-center font-barolw text-lg">
+                  No hay reportes
+                </p>
+              </div>
             </div>
+          ) : reports.length === 0 ? (
+            <>
+              <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
+                No se encontraron reportes con ese filtrado
+              </h4>
+            </>
           ) : (
             <>
-              {/* sin notificaciones */}
-              {reports.length === 0 ? (
-                <div className="w-full flex justify-center items-center">
-                  <div className="bg-Gris p-4 rounded-lg shadow-sm">
-                    <p className="text-center font-barolw text-lg">
-                      No hay reportes
-                    </p>
-                  </div>
-                </div>
-              ) : reports.length === 0 ? (
-                <>
-                  <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                    No se encontraron reportes con ese filtrado
-                  </h4>
-                </>
-              ) : (
-                <>
-                  <div className="w-full gap-6 justify-center flex-col flex">
-                    {reports.map((item, key) => (
-                      <CardReport key={key} item={item} />
-                    ))}
-                  </div>
+              <div className="w-full gap-6 justify-center flex-col flex">
+                {reports.map((item, key) => (
+                  <CardReport key={key} item={item} />
+                ))}
+              </div>
 
-                  {pagination.pages === 1 ? (
-                    <></>
-                  ) : (
-                    <ThemeProvider theme={customTheme2}>
-                      <Pagination
-                        theme={customTheme2}
-                        className="border-verdeD"
-                        currentPage={pagination.page}
-                        totalPages={pagination.pages}
-                        onPageChange={onPageChange}
-                      />
-                    </ThemeProvider>
-                  )}
-                </>
+              {pagination.pages === 1 ? (
+                <></>
+              ) : (
+                <ThemeProvider theme={customTheme2}>
+                  <Pagination
+                    theme={customTheme2}
+                    className="border-verdeD"
+                    currentPage={pagination.page}
+                    totalPages={pagination.pages}
+                    onPageChange={onPageChange}
+                  />
+                </ThemeProvider>
               )}
             </>
           )}
-        </section>
-
-        <div className="absolute right-8 bottom-6">
-          <ButtonMessages />
-        </div>
-      </main>
+        </>
+      )}
     </>
   );
 }

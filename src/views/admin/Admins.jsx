@@ -1,21 +1,7 @@
 import { useEffect, useState } from "react";
 import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
-import { CardBanner } from "../../Components/Card/CardBanner";
-import { ButtonMessages } from "../../Components/Buttons/buttonMessages";
 import { useDispatch, useSelector } from "react-redux";
-import { getNotifications, markNotificationAsRead, deleteNotification, getUnreadNotificationCount } from "../../services/notifications/notificationService";
-import socketService from "../../services/socket/socket.service";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../models/alertModels";
-import { decrementUnreadCount } from "../../features/notifications/notificationSlice";
-import { useNavigate } from "react-router-dom";
-import { searchReport } from "../../services/reports/reportsService";
 import { Loader } from "../../Components/Loader";
-import { HiX } from "react-icons/hi";
-import CardReport from "../../Components/Card/CardReport";
-import FilterReport from "../../Components/Forms/admin/FilterReport";
 import { getAdmins } from "../../services/admin/adminsService";
 import { CardAdmin } from "../../Components/Card/CardAdmin";
 import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
@@ -106,88 +92,76 @@ function Admins() {
       })
     );
   };
-      
+
 
 
   return (
     <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
-
-      <main className="flex relative">
-        <Nav />
-        <section className="w-full px-3 py-12 md:px-6 lg:px-16 gap-8 flex flex-col items-center h-[89.5vh] overflow-y-auto overflow-x-auto">
-
-          {loading ? (
-            <div className="w-full h-full items-center flex justify-center">
-              <Loader />
+      {loading ? (
+        <div className="w-full h-full items-center flex justify-center">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          {/* sin notificaciones */}
+          {admins.length === 0 ? (
+            <div className="w-full flex justify-center items-center">
+              <div className="bg-Gris p-4 rounded-lg shadow-sm">
+                <p className="text-center font-barolw text-lg">
+                  No hay admins
+                </p>
+              </div>
             </div>
+          ) : admins.length === 0 ? (
+            <>
+              <div className="w-full flex justify-center items-center">
+                <div className="bg-Gris p-4 rounded-lg shadow-sm">
+                  <p className="text-center font-barolw text-lg">
+                    No se encontraron admins con ese filtrado
+                  </p>
+                </div>
+              </div>
+            </>
           ) : (
             <>
-              {/* sin notificaciones */}
-              {admins.length === 0 ? (
-                <div className="w-full flex justify-center items-center">
-                  <div className="bg-Gris p-4 rounded-lg shadow-sm">
-                    <p className="text-center font-barolw text-lg">
-                      No hay admins
-                    </p>
-                  </div>
-                </div>
-              ) : admins.length === 0 ? (
-                <>
-                  <div className="w-full flex justify-center items-center">
-                    <div className="bg-Gris p-4 rounded-lg shadow-sm">
-                      <p className="text-center font-barolw text-lg">
-                        No se encontraron admins con ese filtrado
-                      </p>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="w-full gap-6 justify-center flex-row flex">
-                    {admins.map((item, key) => (
-                      <CardAdmin key={key} admin={item} />
-                    ))}
-                  </div>
+              <div className="w-full gap-6 justify-center flex-row flex">
+                {admins.map((item, key) => (
+                  <CardAdmin key={key} admin={item} />
+                ))}
+              </div>
 
-                  {pagination.pages == 1 ? (
-                    <></>
-                  ) : (
-                    <ThemeProvider theme={customTheme2}>
-                      <Pagination
-                        theme={customTheme2}
-                        className="border-verdeD"
-                        currentPage={pagination.page}
-                        totalPages={pagination.pages}
-                        onPageChange={onPageChange}
-                      />
-                    </ThemeProvider>
-                  )}
-                </>
+              {pagination.pages == 1 ? (
+                <></>
+              ) : (
+                <ThemeProvider theme={customTheme2}>
+                  <Pagination
+                    theme={customTheme2}
+                    className="border-verdeD"
+                    currentPage={pagination.page}
+                    totalPages={pagination.pages}
+                    onPageChange={onPageChange}
+                  />
+                </ThemeProvider>
               )}
             </>
           )}
-        </section>
+        </>
+      )}
 
-        <div className="absolute flex flex-col gap-2 right-8 bottom-6">
-          {role === "superadmin" ? (
-            <ButtonAdd setOpenModal={setOpenAddAdmin} />
-          ) : (
-            <></>
-          )}
-          <ButtonMessages />
-        </div>
+      <div className="absolute flex flex-col gap-2 right-8 bottom-6 mb-16">
+        {role === "superadmin" && (
+          <ButtonAdd setOpenModal={setOpenAddAdmin} />
+        )}
+      </div>
 
-        <ModalNotHeader
-          openModal={openAddAdmin}
-          setOpenModal={setOpenAddAdmin}
-          size={"3xl"}
-          component={
-            <FormAddAdmin />
-          }
-        />
-      </main>
+      <ModalNotHeader
+        openModal={openAddAdmin}
+        setOpenModal={setOpenAddAdmin}
+        size={"3xl"}
+        component={
+          <FormAddAdmin />
+        }
+      />
     </>
   );
 }
