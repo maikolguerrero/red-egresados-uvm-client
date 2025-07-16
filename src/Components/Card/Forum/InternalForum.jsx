@@ -180,13 +180,20 @@ export function InternalForum({ forum }) {
               )}
             </div>
 
-            <div className="flex flex-col gap-1 px-1">
+            <div className="flex flex-col gap-1">
               <ul className="flex gap-2 mb-3">
-                {forum?.tags?.map((item, key) => (
-                  <li key={key}>
-                    <Badge color="success">{item}</Badge>
-                  </li>
-                ))}
+                {forum?.tags?.length > 0 && (
+                  <ul className="flex flex-wrap mb-2 gap-2 overflow-x-auto pb-1">
+                    {forum?.tags?.map((item, key) => (
+                      <li
+                        className="py-1 px-3 rounded-full font-medium font-barolw bg-verdeC text-Blanco whitespace-nowrap text-xs sm:text-sm"
+                        key={key}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </ul>
               <h4 className="text-Negro font-barolw font-medium text-base md:text-lg xl:text-xl mb-1">
                 {forum?.title}

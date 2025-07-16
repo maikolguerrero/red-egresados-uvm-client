@@ -1,4 +1,3 @@
-
 import {
     Table,
     TableBody,
@@ -7,9 +6,9 @@ import {
     TableHeadCell,
     TableRow,
     Badge,
-    Pagination
 } from "flowbite-react";
 import { useState } from "react";
+import Paginations from "../../../Paginations";
 
 export function ErrorsDetailsModal({ errors = [] }) {
     // Configuración de paginación
@@ -78,13 +77,10 @@ export function ErrorsDetailsModal({ errors = [] }) {
             {/* Paginación simple */}
             {totalPages > 1 && (
                 <div className="flex justify-center mt-2">
-                    <Pagination
+                    <Paginations
                         currentPage={currentPage}
                         totalPages={totalPages}
                         onPageChange={onPageChange}
-                        layout="pagination"
-                        showIcons={false}
-                        className="p-2"
                     />
                 </div>
             )}

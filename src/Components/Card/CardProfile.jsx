@@ -89,9 +89,7 @@ function CardProfile({ profile }) {
               role === "superadmin" ? (
               <>
                 {" "}
-                {profile?.profile?.professional?.skills?.values.length === 0 ? (
-                  <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
-                ) : (
+                {profile?.profile?.professional?.skills?.values.length > 0 && (
                   <button
                     onClick={(e) => setOpenModal(true)}
                     className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
@@ -124,7 +122,8 @@ function CardProfile({ profile }) {
               <>
                 {profile?.profile?.professional?.interests?.values.length ===
                   0 ? (
-                  <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  // <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  <></>
                 ) : (
                   <button
                     onClick={(e) => setOpenModal2(true)}
@@ -141,7 +140,8 @@ function CardProfile({ profile }) {
                   0 ||
                   profile?.profile?.professional?.interests?.isPublic ===
                   false ? (
-                  <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  // <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  <></>
                 ) : (
                   <button
                     onClick={(e) => setOpenModal2(true)}
@@ -168,9 +168,13 @@ function CardProfile({ profile }) {
               HABILIDADES PROFESIONALES
             </h4>
             <div className="flex gap-2">
-              {profile?.profile?.professional?.skills?.values.map(
-                (item, key) => (
-                  <BadgeNormal color="bg-verdeD" text={item} key={key} />
+              {profile?.profile?.professional?.skills?.length === 0 ? (
+                <></>
+              ) : (
+                profile?.profile?.professional?.skills?.values.map(
+                  (item, key) => (
+                    <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                  )
                 )
               )}
             </ div >
@@ -178,7 +182,7 @@ function CardProfile({ profile }) {
         }
       />
 
-      < ModalNotHeader
+      <ModalNotHeader
         size={"sm"}
         openModal={openModal2}
         setOpenModal={setOpenModal2}
@@ -188,9 +192,13 @@ function CardProfile({ profile }) {
               INTERESES PERSONALES
             </h4>
             <div className="flex gap-2">
-              {profile?.profile?.professional?.interests?.values.map(
-                (item, key) => (
-                  <BadgeNormal color="bg-verdeD" text={item} key={key} />
+              {profile?.profile?.professional?.interests?.length === 0 ? (
+                <></>
+              ) : (
+                profile?.profile?.professional?.interests?.values.map(
+                  (item, key) => (
+                    <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                  )
                 )
               )}
             </div >
@@ -198,7 +206,7 @@ function CardProfile({ profile }) {
         }
       />
 
-      < ModalNotHeader
+      <ModalNotHeader
         size={"xl"}
         openModal={openModal3}
         setOpenModal={setOpenModal3}

@@ -106,7 +106,7 @@ function FormProfessional() {
       ...values,
       "skills": "",
     });
-    notify("Agregada la habilidad (debes guardar cambios)", false);
+    notify.info("Agregada la habilidad (debes guardar cambios)", false);
   }
 
   const addInterest = (e) => {
@@ -118,7 +118,7 @@ function FormProfessional() {
       ...values,
       "interests": "",
     });
-    notify("Agregado el interés personal (debes guardar cambios)", false);
+    notify.info("Agregado el interés personal (debes guardar cambios)", false);
   }
 
   const addEducation = (e) => {

@@ -35,10 +35,10 @@ export function FormAddProyect({ proyect, type }) {
     const endDate = new Date(values.endDate).toISOString();
 
     // Validar que la fecha de inicio no sea pasada
-    if (startDate < now) {
-      notify.error("La fecha de inicio no puede ser una fecha pasada", false);
-      return false;
-    }
+    // if (startDate < now) {
+    //   notify.error("La fecha de inicio no puede ser una fecha pasada", false);
+    //   return false;
+    // }
 
     // Validar que la fecha de fin no sea anterior a la de inicio
     if (endDate < startDate) {
@@ -205,7 +205,7 @@ export function FormAddProyect({ proyect, type }) {
               <input
                 className={styles.input}
                 type="date"
-                min={toLocalDateTimeString(new Date().toISOString())}
+                // min={toLocalDateTimeString(new Date().toISOString())}
                 name="startDate"
                 value={values.startDate}
                 onChange={handleInputChange}
@@ -219,7 +219,7 @@ export function FormAddProyect({ proyect, type }) {
               <input
                 className={styles.input}
                 type="date"
-                min={toLocalDateTimeString(new Date().toISOString())}
+                // min={toLocalDateTimeString(new Date().toISOString())}
                 name="endDate"
                 value={values.endDate}
                 onChange={handleInputChange}

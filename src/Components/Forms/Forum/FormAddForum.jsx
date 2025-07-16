@@ -176,7 +176,7 @@ export function FormAddForum({ forum, type }) {
 
               <div className="flex flex-col">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Lista de Habilidades:
+                  Lista de Etiquetas:
                 </Label>
                 {values.tags.length === 0 ? (
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium">

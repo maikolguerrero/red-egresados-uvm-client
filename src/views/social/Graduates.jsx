@@ -1,37 +1,10 @@
 import { useEffect, useState } from "react";
 import { CardGraduate } from "../../Components/Card/CardGraduate";
-import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../services/users/usersService";
 import FilterGraduates from "../../Components/Forms/Graduates/FilterGraduates";
 import { Loader } from "../../Components/Loader";
-
-const customTheme = createTheme({
-  base: "",
-  layout: {
-    table: {
-      base: "text-sm text-gray-700",
-      span: "font-semibold text-gray-900",
-    },
-  },
-  pages: {
-    base: "xs:mt-0 mt-2 inline-flex items-center -space-x-px",
-    showIcon: "inline-flex",
-    previous: {
-      base: "ml-0 rounded-l-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    next: {
-      base: "rounded-r-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    selector: {
-      base: "w-12 border border-verdeD bg-Gris py-2 leading-tight text-Negro enabled:hover:bg-white enabled:hover:text-verdeD",
-      active: "bg-cyan-50 text-RojoC hover:bg-white hover:text-verdeD",
-      disabled: "cursor-not-allowed opacity-50",
-    },
-  },
-});
+import Paginations from "../../Components/Paginations";
 
 let defaultValues = {
   query: "",
@@ -96,24 +69,18 @@ function Graduates() {
           ) : (
             <>
               <section className="flex gap-6 flex-wrap justify-center">
-                {users.map((item, key) => (
+                {users.map((item) => (
                   <CardGraduate user={item} key={item.id} />
                 ))}
               </section>
 
-              {pages == 1 ? (
-                <></>
-              ) : (
+              {pages > 1 && (
                 <div className="flex overflow-x-auto sm:justify-center">
-                  <ThemeProvider theme={customTheme}>
-                    <Pagination
-                      theme={customTheme}
-                      className="border-verdeD"
-                      currentPage={page}
-                      totalPages={pages}
-                      onPageChange={onPageChange}
-                    />
-                  </ThemeProvider>
+                  <Paginations
+                    currentPage={page}
+                    totalPages={pages}
+                    onPageChange={onPageChange}
+                  />
                 </div>
               )}
             </>

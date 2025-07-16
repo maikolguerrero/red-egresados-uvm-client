@@ -1,4 +1,4 @@
-import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaWhatsapp, FaYoutube } from "react-icons/fa"
+import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTiktok, FaWhatsapp, FaYoutube } from "react-icons/fa"
 import Button from "../Buttons/Button";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ function InfoProfile({ profile }) {
   };
 
   const handleSocialMedia = () => {
-    if (profile.user.username === username || role === "admin" || role === "superadmin") {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       if (
         (profile?.profile?.socialMedia?.facebook?.value === undefined ||
           profile?.profile?.socialMedia?.facebook?.value.trim() === "") &&
@@ -57,7 +57,9 @@ function InfoProfile({ profile }) {
         (profile?.profile?.socialMedia?.github?.value === undefined ||
           profile?.profile?.socialMedia?.github?.value.trim() === "") &&
         (profile?.profile?.socialMedia?.x?.value === undefined ||
-          profile?.profile?.socialMedia?.x?.value.trim() === "")
+          profile?.profile?.socialMedia?.x?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.tiktok?.value === undefined ||
+          profile?.profile?.socialMedia?.tiktok?.value.trim() === "")
       ) {
         return false;
       } else {
@@ -89,7 +91,10 @@ function InfoProfile({ profile }) {
         profile?.profile?.socialMedia?.github?.value.trim() === "") &&
       (profile?.profile?.socialMedia?.x?.isPublic ||
         profile?.profile?.socialMedia?.x?.value === undefined ||
-        profile?.profile?.socialMedia?.x?.value.trim() === "")
+        profile?.profile?.socialMedia?.x?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.tiktok?.isPublic ||
+        profile?.profile?.socialMedia?.tiktok?.value === undefined ||
+        profile?.profile?.socialMedia?.tiktok?.value.trim() === "")
     ) {
       return false;
     } else {
@@ -362,7 +367,8 @@ function InfoProfile({ profile }) {
                 REDES SOCIALES
               </h5>
 
-              <ul className="flex gap-2 text-white text-2xl px-2">
+              <ul className="flex gap-2 flex-wrap justify-center text-white text-2xl px-2 ">
+                {/* <section className="flex gap-6 flex-wrap justify-center"> */}
                 {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
                   profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
                   <>
@@ -523,21 +529,21 @@ function InfoProfile({ profile }) {
                   <></>
                 )}
 
-                {profile?.profile?.socialMedia?.x?.isPublic === true ||
+                {profile?.profile?.socialMedia?.tiktok?.isPublic === true ||
                   profile?.user?.username === username ||
                   role === "admin" ||
                   role === "superadmin" ? (
                   <>
-                    {profile?.profile?.socialMedia?.x?.value === undefined ||
-                      profile?.profile?.socialMedia?.x?.value.trim() === "" ? (
+                    {profile?.profile?.socialMedia?.tiktok?.value === undefined ||
+                      profile?.profile?.socialMedia?.tiktok?.value.trim() === "" ? (
                       <></>
                     ) : (
                       <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                         <a
                           target="_blank"
-                          href={profile?.profile?.socialMedia?.x?.value}
+                          href={profile?.profile?.socialMedia?.tiktok?.value}
                         >
-                          <FaXTwitter />
+                          <FaTiktok />
                         </a>
                       </li>
                     )}
@@ -552,8 +558,6 @@ function InfoProfile({ profile }) {
             <></>
           )
         }
-
-        {/* </div> */}
 
         {
           handleExperience() ? (
@@ -635,7 +639,7 @@ function InfoProfile({ profile }) {
         )}
 
         {profile?.user?.username === auth?.username ? (
-          <div className="py-4 px-2 w-full flex gap-3 flex-wrap">
+          <div className="py-4 px-2 w-full flex gap-3 flex-wrap justify-center">
             <Button
               action={(e) => {
                 setOpenModal(true);
@@ -644,32 +648,54 @@ function InfoProfile({ profile }) {
             />
             <Button
               action={(e) => {
-                navigate(`/forums/personal/${auth.username}`)
+                navigate(`/forums/personal/${auth?.username}`)
               }}
               className={"bg-verdeC"}
-              text={"MIS FOROS"}
+              text={"MIS HILOS DE FOROS"}
             />
             <Button
               action={(e) => {
-                navigate(`/projects/personal/${auth.username}`)
+                navigate(`/projects/personal/${auth?.username}`)
               }}
               className={"bg-verdeC"}
               text={"MIS PROYECTOS"}
             />
             <Button
               action={(e) => {
-                navigate(`/projects/personal-colaborator/${auth.username}`)
+                navigate(`/projects/personal-colaborator/${auth?.username}`)
               }}
               className={"bg-verdeC"}
               text={"MIS COLABORACIONES"}
             />
           </div>
         ) : (
-          <div className="py-4 px-2 w-full">
+          <div className="py-4 px-2 w-full flex gap-3 flex-wrap justify-center">
+
             <Button
-              text={"Enviar Mensaje"}
-              className={"bg-verdeC hover:bg-RojoC"}
+              text={"ENVIAR MENSAJE"}
+              className={"bg-verdeA hover:bg-RojoC"}
               action={startChat}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/forums/personal/${profile?.user?.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"VER HILOS DE FOROS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal/${profile?.user?.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"VER PROYECTOS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal-colaborator/${profile?.user?.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"VER COLABORACIONES"}
             />
           </div>
         )}

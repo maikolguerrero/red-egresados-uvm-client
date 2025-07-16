@@ -1,40 +1,9 @@
-import { useEffect, useState } from "react";
-import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
+import { useEffect } from "react";
 import { CardForum } from "../../Components/Card/CardForum";
-import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
-import { FormAddForum } from "../../Components/Forms/Forum/FormAddForum";
 import { useDispatch, useSelector } from "react-redux";
 import { searchForum } from "../../services/forum/forumService";
-import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
-import FilterForums from "../../Components/Forms/Forum/FilterForums";
 import { Loader } from "../../Components/Loader";
-
-const customTheme = createTheme({
-  base: "",
-  layout: {
-    table: {
-      base: "text-sm text-gray-700",
-      span: "font-semibold text-gray-900",
-    },
-  },
-  pages: {
-    base: "xs:mt-0 mt-2 inline-flex items-center -space-x-px",
-    showIcon: "inline-flex",
-    previous: {
-      base: "ml-0 rounded-l-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    next: {
-      base: "rounded-r-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    selector: {
-      base: "w-12 border border-verdeD bg-Gris py-2 leading-tight text-Negro enabled:hover:bg-white enabled:hover:text-verdeD",
-      active: "bg-cyan-50 text-RojoC hover:bg-white hover:text-verdeD",
-      disabled: "cursor-not-allowed opacity-50",
-    },
-  },
-});
+import Paginations from "../../Components/Paginations";
 
 function ForumsPersonals() {
   const pagination = useSelector((state) => state.forums.pagination);
@@ -100,13 +69,13 @@ function ForumsPersonals() {
             <>
               {username === currentPath.split("/")[3] ? (
                 <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase mb-6">
-                  Foros creados por ti
+                  Hilos del foro creados por ti
                 </h4>
               ) : (
                 <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase mb-6">
-                  Foros creados por el usuario:{" "}
+                  Hilos del foro creados por el usuario:{" "}
                   <span className="text-RojoC lowercase">
-                    {currentPath.split("/")[3]}
+                    @{currentPath.split("/")[3]}
                   </span>
                 </h4>
               )}
@@ -117,18 +86,12 @@ function ForumsPersonals() {
                 ))}
               </div>
 
-              {pagination.pages === 1 ? (
-                <></>
-              ) : (
-                <ThemeProvider theme={customTheme}>
-                  <Pagination
-                    theme={customTheme}
-                    className="border-verdeD"
-                    currentPage={pagination.page}
-                    totalPages={pagination.pages}
-                    onPageChange={onPageChange}
-                  />
-                </ThemeProvider>
+              {pagination.pages > 1 && (
+                <Paginations
+                  currentPage={pagination.page}
+                  totalPages={pagination.pages}
+                  onPageChange={onPageChange}
+                />
               )}
             </>
           )}

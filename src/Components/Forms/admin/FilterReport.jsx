@@ -1,9 +1,7 @@
-import { Button, Label } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { Label } from "flowbite-react";
 import { FaFilter } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { searchForum } from "../../../services/forum/forumService";
 import { searchReport } from "../../../services/reports/reportsService";
 
 let styles = {
@@ -49,7 +47,7 @@ function FilterReport({values, setValues}) {
               className={styles.input}
               type="text"
               name="status"
-              value={values.status}
+              value={values?.status}
               onChange={handleInputChange}
             >
               <option value="">Ambos Estados</option>

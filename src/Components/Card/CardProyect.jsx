@@ -56,7 +56,8 @@ export function CardProyect({ proyect }) {
   };
 
   return (
-    <Card className="w-[448px] border-[1.5px] border-verdeD bg-Gris">
+    // <Card className="w-[448px] border-[1.5px] border-verdeD bg-Gris">
+    <Card className="w-full sm:w-[350px] md:w-[400px] lg:w-[448px] border-[1.5px] border-verdeD bg-Gris">
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
           {proyect?.owner?.profilePicture?.url === null ? (

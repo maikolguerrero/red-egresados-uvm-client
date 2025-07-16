@@ -1,39 +1,11 @@
 import { useEffect, useState } from "react";
-import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { CardBanner } from "../../Components/Card/CardBanner";
 import { useDispatch, useSelector } from "react-redux";
 import { getNotifications, markNotificationAsRead, deleteNotification } from "../../services/notifications/notificationService";
 import socketService from "../../services/socket/socket.service";
 import notify from "../../utils/notifications";
 import { decrementUnreadCount } from "../../features/notifications/notificationSlice";
-
-const customTheme = createTheme({
-  base: "",
-  layout: {
-    table: {
-      base: "text-sm text-gray-700",
-      span: "font-semibold text-gray-900",
-    },
-  },
-  pages: {
-    base: "xs:mt-0 mt-2 inline-flex items-center -space-x-px",
-    showIcon: "inline-flex",
-    previous: {
-      base: "ml-0 rounded-l-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    next: {
-      base: "rounded-r-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    selector: {
-      base: "w-12 border border-verdeD bg-Gris py-2 leading-tight text-Negro enabled:hover:bg-white enabled:hover:text-verdeD",
-      active:
-        "bg-cyan-50 text-RojoC hover:bg-white hover:text-verdeD",
-      disabled: "cursor-not-allowed opacity-50",
-    },
-  },
-});
+import Paginations from "../../Components/Paginations";
 
 function Notifications() {
   const dispatch = useDispatch();
@@ -132,24 +104,69 @@ function Notifications() {
     }
   };
 
+  // return (
+  //   <>
+  //     {loading ? (
+  //       <div className="w-full flex justify-center">
+  //         <p>Cargando notificaciones...</p>
+  //       </div>
+  //     ) : (
+  //       <>
+
+  //         {/* sin notificaciones */}
+  //         {notifications.length === 0 ? (
+  //           <div className="w-full flex justify-center items-center">
+  //             <div className="bg-Gris p-4 rounded-lg shadow-sm">
+  //               <p className="text-center font-barolw text-lg">No tienes notificaciones</p>
+  //             </div>
+  //           </div>
+  //         ) : (
+  //           <div className="w-full gap-6 justify-center flex-col flex">
+  //             {notifications.map((item) => (
+  //               <CardBanner
+  //                 key={item.id}
+  //                 noti={item.data.message}
+  //                 type={item.type}
+  //                 createdAt={item.createdAt}
+  //                 isRead={item.read}
+  //                 onMarkAsRead={() => handleMarkAsRead(item.id)}
+  //                 notificationId={item.id}
+  //                 onDelete={handleDeleteNotification}
+  //                 data={item.data} // Pasa todos los datos de la notificación
+  //               />
+  //             ))}
+  //           </div>
+  //         )}
+  //         {max > 1 && (
+  //           <div className="flex justify-center">
+  //             <Paginations
+  //               currentPage={currentPage}
+  //               totalPages={max}
+  //               onPageChange={onPageChange}
+  //             />
+  //           </div>
+  //         )}
+  //       </>
+  //     )}
+  //   </>
+  // );
   return (
     <>
       {loading ? (
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center py-8">
           <p>Cargando notificaciones...</p>
         </div>
       ) : (
         <>
-
           {/* sin notificaciones */}
           {notifications.length === 0 ? (
-            <div className="w-full flex justify-center items-center">
-              <div className="bg-Gris p-4 rounded-lg shadow-sm">
+            <div className="w-full flex justify-center items-center py-8">
+              <div className="bg-Gris p-4 rounded-lg shadow-sm max-w-md w-full">
                 <p className="text-center font-barolw text-lg">No tienes notificaciones</p>
               </div>
             </div>
           ) : (
-            <div className="w-full gap-6 justify-center flex-col flex">
+            <div className="w-full flex flex-col items-center gap-6 px-4">
               {notifications.map((item) => (
                 <CardBanner
                   key={item.id}
@@ -160,22 +177,18 @@ function Notifications() {
                   onMarkAsRead={() => handleMarkAsRead(item.id)}
                   notificationId={item.id}
                   onDelete={handleDeleteNotification}
-                  data={item.data} // Pasa todos los datos de la notificación
+                  data={item.data}
                 />
               ))}
             </div>
           )}
           {max > 1 && (
-            <div className="flex justify-center">
-              <ThemeProvider theme={customTheme}>
-                <Pagination
-                  theme={customTheme}
-                  className="border-verdeD"
-                  currentPage={currentPage}
-                  totalPages={max}
-                  onPageChange={onPageChange}
-                />
-              </ThemeProvider>
+            <div className="flex justify-center py-4">
+              <Paginations
+                currentPage={currentPage}
+                totalPages={max}
+                onPageChange={onPageChange}
+              />
             </div>
           )}
         </>
