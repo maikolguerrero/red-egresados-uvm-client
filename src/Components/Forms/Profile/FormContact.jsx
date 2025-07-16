@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../Buttons/Button";
-import { Checkbox, Label, ToggleSwitch } from "flowbite-react";
+import { Checkbox, Label } from "flowbite-react";
 import { FaCamera } from "react-icons/fa";
-import { enqueueSnackbar } from "notistack";
+import notify from "../../../utils/notifications";
 import { typeError } from "../../../models/alertModels";
 import {
   updatePictureProfile,
   updateProfile,
 } from "../../../services/users/usersService";
-import perfil from "../../../../public/Perfil.jpg";
+import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 
 let styles = {
   input:
@@ -191,7 +191,7 @@ function FormContact() {
   const handleSubmitPicture = async (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una foto nueva", typeError);
+      notify.error("No se ha seleccionado una imagen nueva", false);
     } else {
       const formData = new FormData();
       formData.append("picture", picture);
@@ -248,7 +248,15 @@ function FormContact() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
+          <div className="flex flex-col gap-3">
+            <div className="w-full">
+              <p className="px-4 py-2 bg-slate-300 font-barlow-condensed rounded-md text-xs flex text-center justify-center w-auto">
+                El checkbox ☑️ que se ubica a la derecha de cada campo, funciona para hacer público ese campo a todos los usuarios de la red.
+              </p>
+            </div>
+            <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
+            
+          </div>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">

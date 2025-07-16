@@ -1,3 +1,8 @@
+const vitePort = import.meta.env.VITE_PORT;
+export const VITE_PORT = vitePort || 3000;
+
+const viteNodeEnv = import.meta.env.VITE_NODE_ENV;
+export const VITE_NODE_ENV = viteNodeEnv || 'development';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 export const URL_API = apiUrl || 'http://localhost:3000';

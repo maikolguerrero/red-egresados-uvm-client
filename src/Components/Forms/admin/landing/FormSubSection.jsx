@@ -46,12 +46,12 @@ export function FormSubSection({ landingContent, setLandingContent, position }) 
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          {"AGREGAR SUBTITULO"}
+          {"AGREGAR SUBTÍTULO"}
         </h5>
         <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Subtitulo:
+              Subtítulo:
             </Label>
             <input
               className={styles.input}
@@ -59,7 +59,7 @@ export function FormSubSection({ landingContent, setLandingContent, position }) 
               name="subtitle"
               value={values.subtitle}
               onChange={handleInputChange}
-              placeholder={"Escribe el subtitulo"}
+              placeholder={"Escribe el subtítulo"}
             />
           </div>
         </div>

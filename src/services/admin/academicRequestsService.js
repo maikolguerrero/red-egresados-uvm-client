@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { URL_API } from "../../config";
 import { apiFetch } from "../apiService";
+import notify from "../../utils/notifications";
 
 export const getContentAcademicRequests = createAsyncThunk(
   "academicRequestsSlice/getContentAcademicRequests", // Nombre de la acción
@@ -18,9 +17,9 @@ export const getContentAcademicRequests = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar("Se cargo el contenido academic requests", typeSuccess)
+        notify.success("Cargado el contenido de solicitudes académicas", true)
         return {
-          message: "Se cargo el contenido academic requests",
+          message: "Cargado el contenido de solicitudes académicas",
           academicRequests: datas.data
         };
       } else {
@@ -28,7 +27,7 @@ export const getContentAcademicRequests = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -51,7 +50,7 @@ export const updateContentAcademicRequests = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           academicRequestsUpdate: response.data
@@ -61,7 +60,7 @@ export const updateContentAcademicRequests = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

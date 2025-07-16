@@ -1,9 +1,9 @@
 import { io } from 'socket.io-client';
 import store from '../../app/store';
-import { enqueueSnackbar } from 'notistack';
-import { typeError } from '../../models/alertModels';
+import notify from '../../utils/notifications';
 import { URL_SOCKET } from '../../config';
 import { updateConversationOnNewMessage } from '../../features/chat/chatSlice';
+import logger from '../../utils/logger';
 
 class SocketService {
     constructor() {
@@ -45,18 +45,18 @@ class SocketService {
         this.socket.on('connect', () => {
             this.isConnected = true;
             store.dispatch({ type: 'socket/setConnected', payload: true });
-            console.log('Conectado al servidor de sockets');
+            logger.log('Conectado al servidor de sockets');
         });
 
         this.socket.on('disconnect', () => {
             this.isConnected = false;
             store.dispatch({ type: 'socket/setConnected', payload: false });
-            console.log('Desconectado del servidor de sockets');
+            logger.log('Desconectado del servidor de sockets');
         });
 
         this.socket.on('connect_error', (error) => {
-            console.error('Error de conexión con Socket.io:', error);
-            enqueueSnackbar('Error de conexión con el chat', typeError);
+            logger.error('Error de conexión con Socket.io:', error);
+            notify.error('Error de conexión con el chat', true);
         });
     }
 
@@ -92,7 +92,7 @@ class SocketService {
         });
 
         this.socket.on('message_error', (error) => {
-            enqueueSnackbar(`Error en el chat: ${error}`, typeError);
+            notify.error(`Error en el chat: ${error}`, true);
         });
 
         this.socket.on('message_read', (data) => {
@@ -139,11 +139,7 @@ class SocketService {
 
             // Mostrar notificación emergente si no está en la página de notificaciones
             if (window.location.pathname !== '/notifications') {
-                enqueueSnackbar(notification.data.message, {
-                    variant: 'info',
-                    persist: false,
-                    // Puedes personalizar más aquí
-                });
+                notify.info(notification.data.message, true);
             }
         });
 
@@ -174,7 +170,7 @@ class SocketService {
 
     sendPrivateMessage(receiverId, content, read) {
         if (!this.isConnected) {
-            console.error('No hay conexión con el servidor de sockets');
+            logger.error('No hay conexión con el servidor de sockets');
             return false;
         }
 
@@ -202,18 +198,18 @@ class SocketService {
     markMessagesAsRead(messageIds) {
         return new Promise((resolve, reject) => {
             if (!this.isConnected) {
-                console.error('Socket no conectado al intentar marcar como leído');
+                logger.error('Socket no conectado al intentar marcar como leído');
                 reject(new Error('No hay conexión con el servidor'));
                 return;
             }
 
-            console.log('Enviando mensajes para marcar como leído:', messageIds);
+            logger.log('Enviando mensajes para marcar como leído:', messageIds);
             this.socket.emit('mark_as_read', { messageIds }, (response) => {
                 if (response?.success) {
-                    console.log('Mensajes marcados como leídos con éxito:', messageIds);
+                    logger.log('Mensajes marcados como leídos con éxito:', messageIds);
                     resolve(response);
                 } else {
-                    console.error('Error al marcar como leído:', response?.error);
+                    logger.error('Error al marcar como leído:', response?.error);
                     reject(new Error(response?.error || 'Error al marcar como leído'));
                 }
             });

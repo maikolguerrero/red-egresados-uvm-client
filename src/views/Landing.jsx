@@ -8,6 +8,7 @@ import { getContentStats } from "../services/admin/statsService";
 import { useDispatch, useSelector } from "react-redux";
 import { Carousel, createTheme, ThemeProvider } from "flowbite-react";
 import { Loader } from "../Components/Loader";
+import { verifySesion } from "../services/auth/authService";
 
 const customTheme = createTheme({
   "root": {
@@ -45,170 +46,175 @@ function Landing() {
   const landing = useSelector((state) => state.landing.landingContent);
   const loading = useSelector((state) => state.landing.loadingPage);
   const stats = useSelector((state) => state.stats.statsContent);
+  const auth = useSelector((state) => state.auth);
   const [accordion, setAccordion] = useState(false)
 
-  useEffect(() => {
-    dispatch(getContentLanding());
-    dispatch(getContentStats());
-  }, []);
+    useEffect(() => {
+      dispatch(getContentLanding());
+      dispatch(getContentStats());
+    }, []);
 
-  return (
-    <>
-      <Header />
-      <div className="h-[10.5vh]"></div>
+    useEffect(() => {
+      dispatch(getContentStats());
+    }, [auth.sessionActive]);
 
-      {loading ? (
-        <main className="min-h-[89.5vh] flex justify-center items-center">
-          <Loader />
-        </main>
-      ) : (
-        <>
-          {landing?.carouselItems.length === 0 ? (
-            <></>
-          ) : (
-            <div className="h-[200px] md:h-[400px] xl:h-[600px] 2xl:h-[650px]">
-              <ThemeProvider theme={customTheme}>
-                <Carousel theme={customTheme} slideInterval={5000}>
-                  {landing?.carouselItems.map((item, key) => (
-                    <img key={key} src={item.url} alt="..." />
-                  ))}
-                </Carousel>
-              </ThemeProvider>
-            </div>
-          )}
+    return (
+      <>
+        <Header />
+        <div className="h-[10.5vh]"></div>
 
-          {landing?.welcomeSections?.length === 0 ? (
-            <></>
-          ) : (
-            landing?.welcomeSections?.map((item, key) => (
-              <section key={key} className="flex flex-col justify-center items-center gap-4 pt-16 pb-16 px-4">
-                <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
-                  {item.title}
-                </h3>
-                <p className="w-5/6 lg:w-4/6 font-barolw text-center text-xs md:text-sm xl:text-base text-Negro">
-                  {item.description}
-                </p>
-              </section>
-            ))
-          )}
+        {loading ? (
+          <main className="min-h-[89.5vh] flex justify-center items-center">
+            <Loader />
+          </main>
+        ) : (
+          <>
+            {landing?.carouselItems.length === 0 ? (
+              <></>
+            ) : (
+              <div className="h-[200px] md:h-[400px] xl:h-[600px] 2xl:h-[650px]">
+                <ThemeProvider theme={customTheme}>
+                  <Carousel theme={customTheme} slideInterval={5000}>
+                    {landing?.carouselItems.map((item, key) => (
+                      <img key={key} src={item.url} alt="..." />
+                    ))}
+                  </Carousel>
+                </ThemeProvider>
+              </div>
+            )}
 
-          <section className="flex gap-6 px-4 md:px-6 lg:px-10 pt-16 pb-16 justify-center items-center flex-wrap">
-            <div className="flex flex-col items-center justify-center w-[200px]">
-              <figure className="text-RojoC">
-                <FaGraduationCap className="text-5xl" />
-              </figure>
-              <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
-                ESTUDIANTES EGRESADOS
-              </h5>
-              <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                {stats?.graduatesCount}
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center justify-center w-[200px]">
-              <figure className="text-RojoC">
-                <FaUsers className="text-5xl" />
-              </figure>
-              <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
-                USUARIOS EN LÍNEA
-              </h5>
-              <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                {stats?.onlineUsers}
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center justify-center w-[200px]">
-              <figure className="text-RojoC">
-                <FaUserPlus className="text-5xl" />
-              </figure>
-              <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
-                EGRESADOS REGISTRADOS
-              </h5>
-              <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
-                {stats?.registeredGraduates}
-              </p>
-            </div>
-          </section>
-
-          {landing?.featuredSections?.length === 0 ? (
-            <></>
-          ) : (
-            <>
-              {landing?.featuredSections?.map((item, key) => (
-                <section key={key} className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
-                  <h3 className="font-barlow-semi-condensed w-auto uppercase font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC px-3 text-Negro text-center">
-                    {item.mainTitle}
+            {landing?.welcomeSections?.length === 0 ? (
+              <></>
+            ) : (
+              landing?.welcomeSections?.map((item, key) => (
+                <section key={key} className="flex flex-col justify-center items-center gap-4 pt-16 pb-16 px-4">
+                  <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
+                    {item.title}
                   </h3>
-                  {item.subsections?.length === 0 ? (
-                    <></>
-                  ) : (
-                    <ul className="flex flex-wrap justify-center items-center gap-8 ">
-                      {item.subsections?.map((itemSubsection, key) => (
-                        <li key={key} className="relative ">
-                          <img
-                            src={
-                              !itemSubsection.image
-                                ? "''"
-                                : itemSubsection.image.url
-                            }
-                            className={` w-[250px] h-[200px] bg-cover bg-center object-cover rounded-md border-2 border-verdeC`}
-                          />
-                          <p className="bg-Blanco absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 uppercase border-x-2 border-verdeC bg-opacity-75 text-sm w-full text-center py-6 font-barlow-semi-condensed font-semibold text-Negro">
-                            {itemSubsection.subtitle}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <p className="w-5/6 lg:w-4/6 font-barolw text-center text-xs md:text-sm xl:text-base text-Negro">
+                    {item.description}
+                  </p>
                 </section>
-              ))}
-            </>
-          )}
+              ))
+            )}
 
-          {landing?.faqs?.length === 0 ? (
-            <></>
-          ) : (
-            <section className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
-              <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
-                PREGUNTAS FRECUENTES
-              </h3>
-              <ul className="w-full px-4 flex flex-wrap justify-center gap-4">
-                {landing?.faqs?.map((item, key) => (
-                  <li key={key} className="w-full lg:w-[48%] relative">
-                    <h2>
-                      <button
-                        type="button"
-                        className="flex items-center justify-between w-full p-3 font-semibold font-barolw rtl:text-right text-RojoC border bg-Gris hover:bg-gray-200 gap-3"
-                        onClick={(e) => {
-                          if (accordion === key) {
-                            setAccordion(false);
-                          } else {
-                            setAccordion(key);
-                          }
-                        }}
-                      >
-                        <span className="uppercase">{item.question}</span>
-                        <FaChevronDown />
-                      </button>
-                    </h2>
-                    <div
-                      className={`${accordion === key ? "visible" : "hidden"}`}
-                    >
-                      <div className="p-5 border border-Gris text-sm font-barlow-semi-condensed font-medium text-Negro">
-                        <p>{item.answer}</p>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+            <section className="flex gap-6 px-4 md:px-6 lg:px-10 pt-16 pb-16 justify-center items-center flex-wrap">
+              <div className="flex flex-col items-center justify-center w-[200px]">
+                <figure className="text-RojoC">
+                  <FaGraduationCap className="text-5xl" />
+                </figure>
+                <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
+                  ESTUDIANTES EGRESADOS
+                </h5>
+                <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
+                  {stats?.graduatesCount}
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center justify-center w-[200px]">
+                <figure className="text-RojoC">
+                  <FaUsers className="text-5xl" />
+                </figure>
+                <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
+                  USUARIOS EN LÍNEA
+                </h5>
+                <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
+                  {stats?.onlineUsers}
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center justify-center w-[200px]">
+                <figure className="text-RojoC">
+                  <FaUserPlus className="text-5xl" />
+                </figure>
+                <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
+                  EGRESADOS REGISTRADOS
+                </h5>
+                <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
+                  {stats?.registeredGraduates}
+                </p>
+              </div>
             </section>
-          )}
-        </>
-      )}
 
-      <Footer />
-    </>
-  );
-}
+            {landing?.featuredSections?.length === 0 ? (
+              <></>
+            ) : (
+              <>
+                {landing?.featuredSections?.map((item, key) => (
+                  <section key={key} className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
+                    <h3 className="font-barlow-semi-condensed w-auto uppercase font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC px-3 text-Negro text-center">
+                      {item.mainTitle}
+                    </h3>
+                    {item.subsections?.length === 0 ? (
+                      <></>
+                    ) : (
+                      <ul className="flex flex-wrap justify-center items-center gap-8 ">
+                        {item.subsections?.map((itemSubsection, key) => (
+                          <li key={key} className="relative ">
+                            <img
+                              src={
+                                !itemSubsection.image
+                                  ? "''"
+                                  : itemSubsection.image.url
+                              }
+                              className={` w-[250px] h-[200px] bg-cover bg-center object-cover rounded-md border-2 border-verdeC`}
+                            />
+                            <p className="bg-Blanco absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 uppercase border-x-2 border-verdeC bg-opacity-75 text-sm w-full text-center py-6 font-barlow-semi-condensed font-semibold text-Negro">
+                              {itemSubsection.subtitle}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                ))}
+              </>
+            )}
+
+            {landing?.faqs?.length === 0 ? (
+              <></>
+            ) : (
+              <section className="flex flex-col justify-center items-center gap-6 pt-16 pb-16 px-4">
+                <h3 className="font-barlow-semi-condensed font-bold text-lg lg:text-xl pb-2 border-b-2 border-RojoC w-[225px] text-Negro text-center">
+                  PREGUNTAS FRECUENTES
+                </h3>
+                <ul className="w-full px-4 flex flex-wrap justify-center gap-4">
+                  {landing?.faqs?.map((item, key) => (
+                    <li key={key} className="w-full lg:w-[48%] relative">
+                      <h2>
+                        <button
+                          type="button"
+                          className="flex items-center justify-between w-full p-3 font-semibold font-barolw rtl:text-right text-RojoC border bg-Gris hover:bg-gray-200 gap-3"
+                          onClick={(e) => {
+                            if (accordion === key) {
+                              setAccordion(false);
+                            } else {
+                              setAccordion(key);
+                            }
+                          }}
+                        >
+                          <span className="uppercase">{item.question}</span>
+                          <FaChevronDown />
+                        </button>
+                      </h2>
+                      <div
+                        className={`${accordion === key ? "visible" : "hidden"}`}
+                      >
+                        <div className="p-5 border border-Gris text-sm font-barlow-semi-condensed font-medium text-Negro">
+                          <p>{item.answer}</p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </>
+        )}
+
+        <Footer />
+      </>
+    );
+  }
 
 export default Landing;

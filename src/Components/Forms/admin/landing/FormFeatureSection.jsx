@@ -1,10 +1,8 @@
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError, typeInfo } from "../../../../models/alertModels";
+import notify from "../../../../utils/notifications";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
-import { ItemBabge } from "../../../Babge/ItemBabge";
 import { updateContentLanding } from "../../../../services/admin/landingService";
 import { ModalNotHeader } from "../../../Modals/ModalNotHeader";
 import { FormSubSection } from "./FormSubSection";
@@ -50,7 +48,7 @@ export function FormFeatureSection({ landing }) {
   }
 
   const addFeaturedSections = (e) => {
-    if (values.mainTitle.trim().length === 0) return enqueueSnackbar("Tienes que escribir el Título", typeError)
+    if (values.mainTitle.trim().length === 0) return notify.error("Falta el Título", false)
 
     setLandingContent({
       ...landingContent,
@@ -64,7 +62,7 @@ export function FormFeatureSection({ landing }) {
       mainTitle: "",
       subsections: [],
     });
-    enqueueSnackbar("Se agregó la sección con imagenes (debes guardar cambios)", typeInfo)
+    notify.info("Agregada la sección con imagenes (debes guardar cambios)", false)
   }
 
   const deleteSubSection = (key, keySection, keySubSection) => {
@@ -76,10 +74,7 @@ export function FormFeatureSection({ landing }) {
       }
     }
     setLandingContent(newLandingContent);
-    enqueueSnackbar(
-      "Se elimino el subtitulo de la sección (debes guardar cambios)",
-      typeInfo
-    );
+    notify.info("Eliminada el subtítulo de la sección (debes guardar cambios)", false)
   };
 
   const deleteFeaturedSections = (keySectionPosition) => {
@@ -88,10 +83,7 @@ export function FormFeatureSection({ landing }) {
       ...landingContent,
       ["featuredSections"]: newFeatureS,
     });
-    enqueueSnackbar(
-      "Se elimino la sección de imágenes (debes guardar cambios)",
-      typeInfo
-    );
+    notify.info("Eliminada la sección de imágenes (debes guardar cambios)", false)
   };
 
   const handleSubmit = (e) => {
@@ -110,7 +102,7 @@ export function FormFeatureSection({ landing }) {
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Titulo:
+                Título:
               </Label>
               <input
                 className={styles.input}
@@ -118,7 +110,7 @@ export function FormFeatureSection({ landing }) {
                 name="mainTitle"
                 value={values.mainTitle}
                 onChange={handleInputChange}
-                placeholder="Titulo de la sección..."
+                placeholder="Título de la sección..."
               />
             </div>
             <button
@@ -157,7 +149,7 @@ export function FormFeatureSection({ landing }) {
                             }}
                             className="p-2 text-xs bg-blue-600 rounded-md text-white hover:bg-blue-800"
                           >
-                            Agregar Subtitulo
+                            Agregar Subtítulo
                           </button>
                           <button
                             type="button"

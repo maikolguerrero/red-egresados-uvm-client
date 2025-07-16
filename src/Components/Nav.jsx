@@ -12,6 +12,7 @@ import { getUnreadNotificationCount } from "../services/notifications/notificati
 import useIsMobile from "../hooks/useIsMobile";
 import { MdEditDocument } from "react-icons/md";
 import NavItem from "./NavItem";
+import logger from "../utils/logger";
 
 function Nav() {
   const role = useSelector((state) => state.auth.role);
@@ -29,7 +30,7 @@ function Nav() {
         const count = await getUnreadNotificationCount();
         setUnreadCount(count);
       } catch (error) {
-        console.error("Error obteniendo conteo de notificaciones:", error);
+        logger.error("Error obteniendo conteo de notificaciones:", error);
       } finally {
         setLoadingCount(false);
       }
@@ -144,9 +145,10 @@ function Nav() {
               onClick={handleClickLink}
             />
             <NavItem
-              to="/forums"
+              to="/forum"
               icon={<FaPeopleGroup className="text-2xl" />}
-              text="FOROS"
+              text="FORO"
+
               isSidebar={isSidebar}
               onClick={handleClickLink}
             />

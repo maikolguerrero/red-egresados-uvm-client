@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { apiFetch } from "../apiService";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export const getProfile = createAsyncThunk(
   "authSlice/getProfile",
@@ -12,10 +12,10 @@ export const getProfile = createAsyncThunk(
       });
 
       if (response.success) {
-        enqueueSnackbar("Se ha obtenido el perfil", typeSuccess);
+        notify.success("Obtenido el perfil", true)
         return {
           success: true,
-          message: "Se ha obtenido el perfil",
+          message: "Obtenido el perfil",
           profile: response.data,
         };
       } else {
@@ -25,7 +25,7 @@ export const getProfile = createAsyncThunk(
         }
       }
     } catch (error) {
-      enqueueSnackbar(error, typeError);
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -48,9 +48,10 @@ export const getUsers = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Usuarios cargados correctamente", typeSuccess)
+        notify.success("Egresados cargados correctamente", true)
+
         return {
-          message: "Usuarios cargados correctamente",
+          message: "Egresados cargados correctamente",
           pagination: response.pagination,
           users: response.data
         }
@@ -60,7 +61,7 @@ export const getUsers = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -77,9 +78,9 @@ export const updatePictureProfile = createAsyncThunk(
       });
 
       if (response.success) {
-        enqueueSnackbar("Se actualizó la foto de perfil", typeSuccess)
+        notify.success("Actualizada la foto de perfil", false)
         return {
-          message: "Se actualizó la foto de perfil",
+          message: "Actualizada la foto de perfil",
           picture: response.data.profilePicture
         }
       } else {
@@ -88,7 +89,7 @@ export const updatePictureProfile = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -98,7 +99,7 @@ export const updateProfile = createAsyncThunk(
   "authSlice/updateProfile",
   async (data, thunkAPI) => {
     try {
-      console.log(data)
+      logger.log(data)
       const response = await apiFetch("/api/alumni/update-profile", {
         method: "PATCH",
         body: JSON.stringify(data),
@@ -107,9 +108,9 @@ export const updateProfile = createAsyncThunk(
         },
       });
 
-      console.log(response)
+      logger.log(response)
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false)
         return {
           message: response.message,
           profile: response.data,
@@ -121,7 +122,7 @@ export const updateProfile = createAsyncThunk(
         throw response.message || "Error al actualizar el perfil";
       }
     } catch (error) {
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

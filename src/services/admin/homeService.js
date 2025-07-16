@@ -1,8 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
-import { URL_API } from "../../config";
 import { apiFetch } from "../apiService";
+import notify from "../../utils/notifications";
 
 export const getContentHome = createAsyncThunk(
   "homeSlice/getContentHome", // Nombre de la acción
@@ -17,9 +15,9 @@ export const getContentHome = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargo el contenido del home", typeSuccess)
+        notify.success("Cargado el contenido del home", true)
         return {
-          message: "Se cargo el contenido del home",
+          message: "Cargado el contenido del home",
           home: response.data
         };
       } else {
@@ -27,7 +25,7 @@ export const getContentHome = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -50,7 +48,7 @@ export const updateContentHome = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           homeUpdate: response.data
@@ -60,7 +58,7 @@ export const updateContentHome = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -80,9 +78,9 @@ export const addMediaHome = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se agrego la imagen a la galeria", typeSuccess)
+        notify.success("Imagen agregada a la galeria", false)
         return {
-          message: "Se agrego la imagen a la galeria",
+          message: "Imagen agregada a la galeria",
           pictureCarrousel: response.data
         };
       } else {
@@ -90,7 +88,7 @@ export const addMediaHome = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -112,7 +110,7 @@ export const deleteMediaHome = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           idItemCarrouse: data.idItem
@@ -122,7 +120,7 @@ export const deleteMediaHome = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

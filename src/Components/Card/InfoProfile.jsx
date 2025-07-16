@@ -1,4 +1,4 @@
-import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaWhatsapp, FaYoutube } from "react-icons/fa"
+import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTiktok, FaWhatsapp, FaYoutube } from "react-icons/fa"
 import Button from "../Buttons/Button";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -40,7 +40,7 @@ function InfoProfile({ profile }) {
   };
 
   const handleSocialMedia = () => {
-    if (profile.user.username === username || role === "admin" || role === "superadmin") {
+    if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
       if (
         (profile?.profile?.socialMedia?.facebook?.value === undefined ||
           profile?.profile?.socialMedia?.facebook?.value.trim() === "") &&
@@ -57,7 +57,9 @@ function InfoProfile({ profile }) {
         (profile?.profile?.socialMedia?.github?.value === undefined ||
           profile?.profile?.socialMedia?.github?.value.trim() === "") &&
         (profile?.profile?.socialMedia?.x?.value === undefined ||
-          profile?.profile?.socialMedia?.x?.value.trim() === "")
+          profile?.profile?.socialMedia?.x?.value.trim() === "") &&
+        (profile?.profile?.socialMedia?.tiktok?.value === undefined ||
+          profile?.profile?.socialMedia?.tiktok?.value.trim() === "")
       ) {
         return false;
       } else {
@@ -89,7 +91,10 @@ function InfoProfile({ profile }) {
         profile?.profile?.socialMedia?.github?.value.trim() === "") &&
       (profile?.profile?.socialMedia?.x?.isPublic ||
         profile?.profile?.socialMedia?.x?.value === undefined ||
-        profile?.profile?.socialMedia?.x?.value.trim() === "")
+        profile?.profile?.socialMedia?.x?.value.trim() === "") &&
+      (profile?.profile?.socialMedia?.tiktok?.isPublic ||
+        profile?.profile?.socialMedia?.tiktok?.value === undefined ||
+        profile?.profile?.socialMedia?.tiktok?.value.trim() === "")
     ) {
       return false;
     } else {
@@ -225,12 +230,13 @@ function InfoProfile({ profile }) {
               </h5>
               <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
                 {profile?.profile?.personalData?.birthDate?.isPublic ||
-                profile?.user?.username === username ||
-                role === "admin" ||
-                role === "superadmin" ? (
+
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.personalData?.birthDate?.value ===
-                    undefined ? (
+                      undefined ? (
                       <></>
                     ) : (
                       <p>
@@ -245,16 +251,17 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )}
+                )
+                }
 
                 {profile?.profile?.personalData?.location?.isPublic === true ||
-                profile?.user?.username === username ||
-                role === "admin" ||
-                role === "superadmin" ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.personalData?.location?.value ===
                       undefined ||
-                    profile?.profile?.personalData?.location?.value.trim() ===
+                      profile?.profile?.personalData?.location?.value.trim() ===
                       "" ? (
                       <></>
                     ) : (
@@ -266,15 +273,16 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )}
+                )
+                }
 
                 {profile?.profile?.contact?.phone?.isPublic === true ||
-                profile?.user?.username === username ||
-                role === "admin" ||
-                role === "superadmin" ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.contact?.phone?.value === undefined ||
-                    profile?.profile?.contact?.phone?.value.trim() === "" ? (
+                      profile?.profile?.contact?.phone?.value.trim() === "" ? (
                       <></>
                     ) : (
                       <p>
@@ -285,15 +293,16 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )}
+                )
+                }
 
                 {profile?.profile?.contact?.website?.isPublic === true ||
-                profile?.user?.username === username ||
-                role === "admin" ||
-                role === "superadmin" ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.contact?.website?.value === undefined ||
-                    profile?.profile?.contact?.website?.value.trim() === "" ? (
+                      profile?.profile?.contact?.website?.value.trim() === "" ? (
                       <></>
                     ) : (
                       <p>
@@ -304,16 +313,17 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )}
+                )
+                }
 
                 {profile?.profile?.contact?.alternateEmail?.isPublic === true ||
-                profile?.user?.username === username ||
-                role === "admin" ||
-                role === "superadmin" ? (
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
                   <>
                     {profile?.profile?.contact?.alternateEmail?.value ===
                       undefined ||
-                    profile?.profile?.contact?.alternateEmail?.value.trim() ===
+                      profile?.profile?.contact?.alternateEmail?.value.trim() ===
                       "" ? (
                       <></>
                     ) : (
@@ -325,11 +335,13 @@ function InfoProfile({ profile }) {
                   </>
                 ) : (
                   <></>
-                )}
-              </div>
+                )
+                }
+              </div >
             </>
-          )}
-        </div>
+          )
+          }
+        </div >
 
         {handleProfessional() && (
           <div className="py-4 px-2 w-full">
@@ -339,165 +351,170 @@ function InfoProfile({ profile }) {
 
             <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
               {description.map((item, key) => (
-                <>
-                  <p key={key}>{item}</p>
+                <div key={key}>
+                  <p>{item}</p>
                   <br />
-                </>
+                </div>
               ))}
             </div>
           </div>
         )}
 
-        {handleSocialMedia() ? (
-          <div className="py-4 px-2 w-full">
-            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-              REDES SOCIALES
-            </h5>
+        {
+          handleSocialMedia() ? (
+            <div className="py-4 px-2 w-full">
+              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+                REDES SOCIALES
+              </h5>
 
-            <ul className="flex gap-2 text-white text-2xl px-2">
-              {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
-              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                <>
-                  {profile?.profile?.socialMedia?.instagram?.value ===
-                    undefined ||
-                  profile?.profile?.socialMedia?.instagram?.value.trim() ===
-                    "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.instagram?.value}
-                      >
-                        <FaInstagram />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-              {profile?.profile?.socialMedia?.facebook?.isPublic === true ||
-              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                <>
-                  {profile?.profile?.socialMedia?.facebook?.value ===
-                    undefined ||
-                  profile?.profile?.socialMedia?.facebook?.value.trim() ===
-                    "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.facebook?.value}
-                      >
-                        <FaFacebook />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-              {profile?.profile?.socialMedia?.whatsapp?.isPublic === true ||
-              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                <>
-                  {profile?.profile?.socialMedia?.whatsapp?.value ===
-                    undefined ||
-                  profile?.profile?.socialMedia?.whatsapp?.value.trim() ===
-                    "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.whatsapp?.value}
-                      >
-                        <FaWhatsapp />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-
-              {profile?.profile?.socialMedia?.linkedin?.isPublic === true ||
-              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                <>
-                  {profile?.profile?.socialMedia?.linkedin?.value ===
-                    undefined ||
-                  profile?.profile?.socialMedia?.linkedin?.value.trim() ===
-                    "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.linkedin?.value}
-                      >
-                        <FaLinkedin />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-
-              {profile?.profile?.socialMedia?.youtube?.isPublic === true ||
-              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                <>
-                  {profile?.profile?.socialMedia?.youtube?.value ===
-                    undefined ||
-                  profile?.profile?.socialMedia?.youtube?.value.trim() ===
-                    "" ? (
-                    <></>
-                  ) : (
-                    <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                      <a
-                        target="_blank"
-                        href={profile?.profile?.socialMedia?.youtube.value}
-                      >
-                        <FaYoutube />
-                      </a>
-                    </li>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-              {profile?.profile?.socialMedia?.github?.isPublic === true ||
-              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                <>
-                  {profile?.profile?.socialMedia?.github?.value === undefined ||
-                  profile?.profile?.socialMedia?.github?.value.trim() === "" ? (
-                    <></>
-                  ) : (
-                    <>
+              <ul className="flex gap-2 flex-wrap justify-start text-white text-2xl px-2 ">
+                {/* <section className="flex gap-6 flex-wrap justify-center"> */}
+                {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.instagram?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.instagram?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
                       <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                         <a
                           target="_blank"
-                          href={profile?.profile?.socialMedia?.github.value}
+                          href={profile?.profile?.socialMedia?.instagram?.value}
                         >
-                          <FaGithub />
+                          <FaInstagram />
                         </a>
                       </li>
-                    </>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-              {profile?.profile?.socialMedia?.x?.isPublic === true ||
-              profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                <>
-                  {profile?.profile?.socialMedia?.x?.value === undefined ||
-                  profile?.profile?.socialMedia?.x?.value.trim() === "" ? (
-                    <></>
-                  ) : (
-                    <>
-                      {" "}
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {profile?.profile?.socialMedia?.facebook?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.facebook?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.facebook?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.facebook?.value}
+                        >
+                          <FaFacebook />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {profile?.profile?.socialMedia?.whatsapp?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.whatsapp?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.whatsapp?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.whatsapp?.value}
+                        >
+                          <FaWhatsapp />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {profile?.profile?.socialMedia?.linkedin?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.linkedin?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.linkedin?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.linkedin?.value}
+                        >
+                          <FaLinkedin />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {profile?.profile?.socialMedia?.youtube?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.youtube?.value ===
+                      undefined ||
+                      profile?.profile?.socialMedia?.youtube?.value.trim() ===
+                      "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.youtube.value}
+                        >
+                          <FaYoutube />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+
+                {profile?.profile?.socialMedia?.github?.isPublic === true ||
+                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.github?.value === undefined ||
+                      profile?.profile?.socialMedia?.github?.value.trim() === "" ? (
+                      <></>
+                    ) : (
+                      <>
+                        <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                          <a
+                            target="_blank"
+                            href={profile?.profile?.socialMedia?.github.value}
+                          >
+                            <FaGithub />
+                          </a>
+                        </li>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+                {profile?.profile?.socialMedia?.x?.isPublic === true ||
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.x?.value === undefined ||
+                      profile?.profile?.socialMedia?.x?.value.trim() === "" ? (
+                      <></>
+                    ) : (
                       <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
                         <a
                           target="_blank"
@@ -506,93 +523,81 @@ function InfoProfile({ profile }) {
                           <FaXTwitter />
                         </a>
                       </li>
-                    </>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-            </ul>
-          </div>
-        ) : (
-          <></>
-        )}
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
 
-        {handleEducation() ? (
-          <></>
-        ) : (
-          <div className="py-4 px-2 w-full">
-            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-              EDUCACIÓN
-            </h5>
+                {profile?.profile?.socialMedia?.tiktok?.isPublic === true ||
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.socialMedia?.tiktok?.value === undefined ||
+                      profile?.profile?.socialMedia?.tiktok?.value.trim() === "" ? (
+                      <></>
+                    ) : (
+                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
+                        <a
+                          target="_blank"
+                          href={profile?.profile?.socialMedia?.tiktok?.value}
+                        >
+                          <FaTiktok />
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
 
-            <div className="flex justify-between">
-              <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                {profile?.profile?.education?.items.map((item, key) => (
-                  <li className="flex justify-between w-full" key={key}>
-                    <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
-                      {item.degree} -{" "}
-                      <button
-                        onClick={(e) => {
-                          setValues({
-                            education: item,
-                            certification: {},
-                            experience: {},
-                          });
-                          setOpenEducation(true);
-                        }}
-                        className="text-RojoC"
-                      >
-                        Detalles
-                      </button>
-                    </p>{" "}
-                    <span className="text-verdeD text-sm font-semibold">
-                      {item.startYear} - {item.endYear}
-                    </span>
-                  </li>
-                ))}
               </ul>
             </div>
-          </div>
-        )}
+          ) : (
+            <></>
+          )
+        }
 
-        {handleCetification() ? (
-          <></>
-        ) : (
-          <div className="py-4 px-2 w-full">
-            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-              CERTIFICADOS
-            </h5>
+        {
+          handleExperience() ? (
+            <></>
+          ) : (
+            <div className="py-4 px-2 w-full">
+              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+                EXPERIENCIA LABORAL
+              </h5>
 
-            <div className="flex justify-between">
-              <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                {profile?.profile?.certifications?.items.map((item, key) => (
-                  <li className="flex justify-between w-full" key={key}>
-                    <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
-                      {item.name} -{" "}
-                      <button
-                        onClick={(e) => {
-                          setValues({
-                            education: {},
-                            certification: item,
-                            experience: {},
-                          });
-                          setOpenCerti(true);
-                        }}
-                        className="text-RojoC"
-                      >
-                        Detalles
-                      </button>
-                    </p>{" "}
-                    <span className="text-verdeD text-sm font-semibold">
-                      {item?.issueDate?.split("T")[0]}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <div className="flex justify-between">
+                <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
+                  {profile?.profile?.certifications?.items.map((item, key) => (
+                    <li className="flex justify-between w-full" key={key}>
+                      <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
+                        {item.name} -{" "}
+                        <button
+                          onClick={(e) => {
+                            setValues({
+                              education: {},
+                              certification: item,
+                              experience: {},
+                            });
+                            setOpenCerti(true);
+                          }}
+                          className="text-RojoC"
+                        >
+                          Detalles
+                        </button>
+                      </p>{" "}
+                      <span className="text-verdeD text-sm font-semibold">
+                        {item?.issueDate?.split("T")[0]}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        )}
+          )
+        }
 
         {handleExperience() ? (
           <></>
@@ -623,8 +628,8 @@ function InfoProfile({ profile }) {
                       </button>
                     </p>{" "}
                     <span className="text-verdeD text-sm font-semibold">
-                      {item?.startDate?.split("T")[0]} hasta{" "}
-                      {item?.endDate?.split("T")[0]}
+                      {item?.startDate?.split("T")[0]} /{" "}
+                      {item?.endDate === undefined || item?.endDate === null ? " Actualidad" : item?.endDate?.split("T")[0]}
                     </span>
                   </li>
                 ))}
@@ -634,7 +639,7 @@ function InfoProfile({ profile }) {
         )}
 
         {profile?.user?.username === auth?.username ? (
-          <div className="py-4 px-2 w-full flex gap-3 flex-wrap">
+          <div className="py-4 px-2 w-full flex gap-3 flex-wrap justify-center">
             <Button
               action={(e) => {
                 setOpenModal(true);
@@ -643,32 +648,54 @@ function InfoProfile({ profile }) {
             />
             <Button
               action={(e) => {
-                navigate(`/forums/personal/${auth.username}`)
+                navigate(`/forums/personal/${auth?.username}`)
               }}
               className={"bg-verdeC"}
-              text={"MIS FOROS"}
+              text={"MIS HILOS DE FOROS"}
             />
             <Button
               action={(e) => {
-                navigate(`/projects/personal/${auth.username}`)
+                navigate(`/projects/personal/${auth?.username}`)
               }}
               className={"bg-verdeC"}
               text={"MIS PROYECTOS"}
             />
             <Button
               action={(e) => {
-                navigate(`/projects/personal-colaborator/${auth.username}`)
+                navigate(`/projects/personal-colaborator/${auth?.username}`)
               }}
               className={"bg-verdeC"}
               text={"MIS COLABORACIONES"}
             />
           </div>
         ) : (
-          <div className="py-4 px-2 w-full">
+          <div className="py-4 px-2 w-full flex gap-3 flex-wrap justify-center">
+
             <Button
-              text={"Enviar Mensaje"}
-              className={"bg-verdeC hover:bg-RojoC"}
+              text={"ENVIAR MENSAJE"}
+              className={"bg-verdeA hover:bg-RojoC"}
               action={startChat}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/forums/personal/${profile?.user?.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"VER HILOS DE FOROS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal/${profile?.user?.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"VER PROYECTOS"}
+            />
+            <Button
+              action={(e) => {
+                navigate(`/projects/personal-colaborator/${profile?.user?.username}`)
+              }}
+              className={"bg-verdeC"}
+              text={"VER COLABORACIONES"}
             />
           </div>
         )}
@@ -696,7 +723,7 @@ function InfoProfile({ profile }) {
           setOpenModal={setOpenExp}
           component={<CardExperience data={values.experience} />}
         />
-      </div>
+      </div >
     </>
   );
 }

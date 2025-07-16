@@ -39,7 +39,7 @@ export function CardForumHome({ forum }) {
   }, []);
 
   const handleView = (e) => {
-    navigate(`/forums/${forum.id}`);
+    navigate(`/forum/${forum.id}`);
   };
 
   return (

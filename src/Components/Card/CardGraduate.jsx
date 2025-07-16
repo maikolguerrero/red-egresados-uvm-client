@@ -25,31 +25,31 @@ export function CardGraduate({ user }) {
       <Card className="w-[275px] bg-Gris border-verdeD">
         <div className="flex justify-end px-4 pt-4">
           {<Dropdown inline label="">
-          <DropdownItem>
-            <Link
-              to={`/projects/personal/${user.username}`}
-              className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
-            >
-              SUS PROYECTOS
-            </Link>
-          </DropdownItem>
-          <DropdownItem>
-            <Link
-              to={`/projects/personal-colaborator/${user.username}`}
-              className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
-            >
-              SUS COLABORACIONES
-            </Link>
-          </DropdownItem>
-          <DropdownItem>
-            <Link
-              to={`/forums/personal/${user.username}`}
-              className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
-            >
-              SUS FOROS
-            </Link>
-          </DropdownItem>
-        </Dropdown>}
+            <DropdownItem>
+              <Link
+                to={`/forums/personal/${user.username}`}
+                className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
+              >
+                VER HILOS DEL FORO
+              </Link>
+            </DropdownItem>
+            <DropdownItem>
+              <Link
+                to={`/projects/personal/${user.username}`}
+                className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
+              >
+                VER PROYECTOS
+              </Link>
+            </DropdownItem>
+            <DropdownItem>
+              <Link
+                to={`/projects/personal-colaborator/${user.username}`}
+                className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
+              >
+                VER COLABORACIONES
+              </Link>
+            </DropdownItem>
+          </Dropdown>}
         </div>
         <div className="flex flex-col items-center text-center pb-10">
           {user?.profilePicture?.url === null ? (
@@ -129,12 +129,12 @@ export function CardGraduate({ user }) {
         component={
           <div
             className="flex flex-col gap-2 h-full"
-            // style={{
-            //   overflowY: user?.carrerasPregrado?.length + user?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
-            // }}
+          // style={{
+          //   overflowY: user?.carrerasPregrado?.length + user?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
+          // }}
           >
             <h4 className="py-1 px-2 border-b-2 mb-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
-              Titulos obtenidos en la UVM
+              Títulos obtenidos en la UVM
             </h4>
             <ul className="list-inside flex flex-col gap-2 text-sm md:text-base">
               {user?.carrerasPregrado?.map((item, key) => (

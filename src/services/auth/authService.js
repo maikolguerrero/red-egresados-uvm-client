@@ -1,12 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { URL_API } from "../../config";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export const verifySesion = createAsyncThunk(
   "authSlice/verifySesion", // Nombre de la acción
   async (data, thunkAPI) => {
     try {
+
       // Realizar la solicitud POST
       const response = await fetch(
         `${URL_API}/api/auth/check-session`,
@@ -21,9 +22,9 @@ export const verifySesion = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, true)
         return {
           message: datas.message,
           id: datas.user.id,
@@ -36,7 +37,7 @@ export const verifySesion = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -60,9 +61,9 @@ export const logoutSesion = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, true)
         return (datas.message)
       } else {
         throw `${datas.message}`;
@@ -70,7 +71,7 @@ export const logoutSesion = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -96,14 +97,14 @@ export const resendEmailFetch = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, false)
         return (datas.message);
       } else {
         throw `${datas.message}`;
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -129,7 +130,7 @@ export const postData = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, false)
         return ({ message: datas.message, email: data.email });
       } else {
         if (datas.metadata.context === "input_validation") {
@@ -141,12 +142,12 @@ export const postData = createAsyncThunk(
         if (datas.metadata.action === "register_duplicate") {
           throw `${datas.message}`;
         }
-        console.log(datas);
+        logger.log(datas);
         throw datas.message ? datas.message : "Error al registrar";
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -172,7 +173,7 @@ export const loginUserFetch = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, true)
         return {
           message: datas.message,
           id: datas.user.id,
@@ -188,7 +189,7 @@ export const loginUserFetch = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -212,9 +213,9 @@ export const verifyEmail = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess);
+        notify.success(datas.message, false)
         return {
           message: datas.message,
         };
@@ -223,7 +224,7 @@ export const verifyEmail = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -248,16 +249,16 @@ export const forgotPassword = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, false)
         return (datas.message);
       } else {
         throw `${datas.message}`;
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -282,16 +283,16 @@ export const newPassword = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, false)
         return (datas.message);
       } else {
         throw `${datas.message}`;
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

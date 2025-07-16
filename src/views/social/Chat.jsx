@@ -4,14 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { BsArrowLeft, BsThreeDotsVertical, BsEmojiSmile, BsPaperclip, BsSend, } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
 import EmojiPicker from 'emoji-picker-react';
-import { enqueueSnackbar } from "notistack";
 import { throttle } from 'lodash';
-import { typeError, typeSuccess } from "../../models/alertModels";
-import Header from "../../Components/Header";
-import Nav from "../../Components/Nav";
+import notify from "../../utils/notifications";
 import Message from "../../Components/Chat/Message";
 import OnlineStatus from "../../Components/Chat/OnlineStatus";
-import ButtonSmall from "../../Components/Buttons/buttonSmall";
+import ButtonSmall from "../../Components/Buttons/ButtonSmall";
 import { getProfile } from "../../services/users/usersService";
 import { getMessages, sendMessage } from "../../services/chat/chatService";
 import socketService from "../../services/socket/socket.service";
@@ -19,6 +16,7 @@ import { setCurrentChat, addMessage, setMessagesRead, setMessageRead, updateMess
 import { markMessagesAsRead } from "../../services/chat/chatService";
 import { formatDateHeader, groupMessagesByDate } from '../../utils/dateUtils';
 import { Loader } from "../../Components/Loader";
+import logger from "../../utils/logger";
 
 export default function Chat() {
     const { username } = useParams();
@@ -103,7 +101,7 @@ export default function Chat() {
             });
 
         } catch (error) {
-            enqueueSnackbar('Error cargando mensajes anteriores', typeError);
+            notify.error('Error cargando mensajes anteriores', true);
         } finally {
             setLoadingMore(false);
         }
@@ -127,7 +125,7 @@ export default function Chat() {
             const scrollThreshold = 10;
 
             if (container.scrollTop < scrollThreshold && !loadingMore && hasMore && initialScrollDone) {
-                console.log('¡Disparando loadMoreMessages por scroll al tope!');
+                logger.log('¡Disparando loadMoreMessages por scroll al tope!');
                 loadMoreMessages();
             }
 
@@ -155,7 +153,7 @@ export default function Chat() {
             if (data.messageId === pendingRequest?.id) {
                 setPendingRequest(null);
                 setHasChatPermission(true);
-                enqueueSnackbar(`Solicitud de chat aceptada`, typeSuccess);
+                notify.success(`Solicitud de chat aceptada`, true);
             }
         };
 
@@ -202,7 +200,7 @@ export default function Chat() {
                 const profileResult = await dispatch(getProfile({ username })).unwrap();
 
                 if (!profileResult.success) {
-                    enqueueSnackbar(profileResult.message, typeError);
+                    notify.error(profileResult.message, true);
                     navigate('/graduates');
                     return;
                 }
@@ -236,8 +234,8 @@ export default function Chat() {
                     }
                 });
             } catch (error) {
-                console.error("Error en fetchData:", error);
-                enqueueSnackbar(error.message, typeError);
+                logger.error("Error en fetchData:", error);
+                notify.error(error.message, true);
             } finally {
                 setLoading(false);
             }
@@ -249,43 +247,6 @@ export default function Chat() {
             dispatch(resetChat());
         };
     }, [username, dispatch, navigate, auth.id]);
-
-    // Efecto para manejar el scroll para cargar más mensajes antiguos y mostrar/ocultar fecha flotante
-    useEffect(() => {
-        const container = messagesContainerRef.current;
-        if (!container) return;
-
-        let scrollTimeout; // Para detectar el final del scroll
-
-        const handleScroll = throttle(() => {
-            // Lógica para cargar más mensajes
-            if (!initialScrollDone && container.scrollTop > 0) {
-                setInitialScrollDone(true);
-            }
-
-            lastScrollTopRef.current = container.scrollTop;
-            const scrollThreshold = 10;
-
-            if (container.scrollTop < scrollThreshold && !loadingMore && hasMore && initialScrollDone) {
-                console.log('¡Disparando loadMoreMessages por scroll al tope!');
-                loadMoreMessages();
-            }
-
-            // Lógica para mostrar/ocultar la fecha flotante
-            setShowHeaderOnScroll(true); // Mostrar el encabezado al detectar scroll
-
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                setShowHeaderOnScroll(false); // Ocultar después de un breve tiempo sin scroll
-            }, 500); // 500ms sin scroll para ocultar
-        }, 100); // Throttling para el scroll
-
-        container.addEventListener('scroll', handleScroll);
-        return () => {
-            container.removeEventListener('scroll', handleScroll);
-            clearTimeout(scrollTimeout); // Limpiar timeout al desmontar
-        };
-    }, [loadMoreMessages, loadingMore, hasMore, initialScrollDone]);
 
     // Efecto para notificar cuando el usuario está viendo el chat
     useEffect(() => {
@@ -327,7 +288,7 @@ export default function Chat() {
             // Enviar al servidor
             socketService.markMessagesAsRead(unreadIds)
                 .catch(err => {
-                    console.error('Error marcando como leído:', err);
+                    logger.error('Error marcando como leído:', err);
                     // Revertir si falla
                     dispatch(setMessagesRead(unreadIds.map(id => ({ id, read: false }))));
                 });
@@ -407,20 +368,20 @@ export default function Chat() {
             await socketService.acceptChatRequest(pendingRequest.id);
             setPendingRequest({ ...pendingRequest, status: 'accepted' });
             setHasChatPermission(true);
-            enqueueSnackbar('Solicitud de chat aceptada', typeSuccess);
+            notify.success('Solicitud de chat aceptada', false);
         } catch (error) {
-            enqueueSnackbar(error.message, typeError);
+            notify.error(error.message, true);
         }
     };
 
     const handleSendMessage = async () => {
         if (!hasChatPermission) {
-            enqueueSnackbar("Debes esperar a que el usuario acepte tu solicitud de chat", typeError);
+            notify.error("Debes esperar a que el usuario acepte tu solicitud de chat", false);
             return;
         }
 
         if (message.trim() === "") {
-            enqueueSnackbar("No puedes enviar un mensaje vacío", typeError);
+            notify.error("No puedes enviar un mensaje vacío", false);
             return;
         }
 
@@ -459,8 +420,8 @@ export default function Chat() {
             }
 
         } catch (error) {
-            console.error("Error enviando mensaje:", error);
-            enqueueSnackbar(error.message, typeError);
+            logger.error("Error enviando mensaje:", error);
+            notify.error(error.message, true);
         }
     };
 
@@ -647,38 +608,6 @@ export default function Chat() {
                                    bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
                                     style={{ overflowY: 'hidden' }}
                                 />
-
-                            </div>
-
-                            <div className="flex items-end gap-2">
-                                <button
-                                    ref={emojiButtonRef}
-                                    onClick={handleEmojiButtonClick}
-                                    className="text-verdeD hover:text-RojoC transition-colors duration-200 p-2 rounded-full">
-                                    <BsEmojiSmile className="text-xl"
-                                    />
-                                </button>
-                                <div className="flex-1 min-h-[40px] flex items-end">
-                                    <textarea
-                                        ref={textareaRef}
-                                        value={message}
-                                        onChange={handleChange}
-                                        onKeyDown={handleKeyDown}
-                                        placeholder="Escribe un mensaje..."
-                                        rows={1}
-                                        className="w-full h-full p-2 text-Negro font-barolw text-sm resize-none
-                                   bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-gray-500"
-                                        style={{ overflowY: 'hidden' }}
-                                    />
-                                </div>
-
-                                <button
-                                    onClick={handleSendMessage}
-                                    disabled={message.trim() === ""}
-                                    className="bg-verdeA hover:bg-verdeD text-white align-center p-2 rounded-full transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <IoSend className="text-xl" />
-                                </button>
                             </div>
 
                             <button

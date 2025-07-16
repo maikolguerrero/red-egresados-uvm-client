@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../models/alertModels";
+import notify from "../../utils/notifications";
 import socketService from "../../services/socket/socket.service";
 import { setMessagesRead } from "../../features/chat/chatSlice";
 import { apiFetch } from "../apiService";
+import logger from "../../utils/logger";
 
 export const getMessages = createAsyncThunk(
     "chat/getMessages",
@@ -47,12 +47,12 @@ export const sendMessage = createAsyncThunk(
     "chat/sendMessage",
     async ({ receiverId, content, read }, { rejectWithValue }) => {
         try {
-            console.log("Enviando mensaje a:", receiverId);
+            logger.log("Enviando mensaje a:", receiverId);
             const response = await socketService.sendPrivateMessage(receiverId, content, read);
-            console.log("Respuesta del servidor:", response);
+            logger.log("Respuesta del servidor:", response);
             return response; // El mensaje confirmado del servidor
         } catch (error) {
-            console.error("Error enviando mensaje:", error);
+            logger.error("Error enviando mensaje:", error);
             return rejectWithValue(error.message);
         }
     }
@@ -70,7 +70,7 @@ export const markMessagesAsRead = createAsyncThunk(
             await socketService.markMessagesAsRead(messageIds);
             return messageIds;
         } catch (error) {
-            enqueueSnackbar(error.message, typeError);
+            notify.error(error.message, true);
             throw error;
         }
     }

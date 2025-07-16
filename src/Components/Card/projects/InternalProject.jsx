@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, DropdownItem } from "flowbite-react";
 import { FaCalendarCheck, FaCalendarDay, FaEllipsisV } from "react-icons/fa";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit, MdPersonRemove } from "react-icons/md";
 import { ModalNotHeader } from "../../Modals/ModalNotHeader";
 import { useState, useEffect } from "react";
 import { HiOutlineStatusOnline } from "react-icons/hi";
@@ -247,20 +247,20 @@ export function InternalProject({ proyect }) {
             </div>
 
             <div className="flex flex-col gap-1">
-              {proyect?.tags?.length === 0 ? (
-                <></>
-              ) : (
-                <ul className="flex gap-2">
-                  {proyect?.tags?.map((item, key) => (
-                    <li
-                      className="py-1 px-3 rounded-full font-barolw uppercase bg-verdeC text-Blanco w-auto text-xs"
-                      key={key}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <ul className="flex gap-2 mb-3">
+                {proyect?.tags?.length > 0 && (
+                  <ul className="flex flex-wrap mb-2 gap-2 overflow-x-auto pb-1">
+                    {proyect?.tags?.map((item, key) => (
+                      <li
+                        className="py-1 px-3 rounded-full font-medium font-barolw bg-verdeC text-Blanco whitespace-nowrap text-xs sm:text-sm"
+                        key={key}
+                      >
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </ul>
               <h5 className="text-2xl font-bold tracking-tight text-Negro">
                 {proyect?.title}
               </h5>
@@ -363,7 +363,7 @@ export function InternalProject({ proyect }) {
               )}
             </div>
 
-            {proyect?.collaborators?.length === 0 ? (
+            {/* {proyect?.collaborators?.length === 0 ? (
               <></>
             ) : (
               <div className="bg-gris border w-full border-verdeD px-5 py-3 rounded-md flex flex-col gap-6">
@@ -397,18 +397,18 @@ export function InternalProject({ proyect }) {
                           onClick={(e) => {
                             navigate(`/graduates/${item?.user?.username}`);
                           }}
-                          className="cursor-pointer flex gap-3 font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center"
+                          className="cursor-pointer flex font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center"
                         >
-                          @{item?.user?.username} <span>-</span>
+                          @{item?.user?.username}<span className="mx-1">-</span>
                           {item?.role === "creator" ? (
                             <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">
-                              Creador
+                              {" Creador"}
                             </span>
                           ) : (
                             <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">
                               {item.role === "member"
-                                ? "Miembro"
-                                : "Administrador"}
+                                ? " Miembro"
+                                : " Administrador"}
                             </span>
                           )}
                         </p>
@@ -459,6 +459,88 @@ export function InternalProject({ proyect }) {
                   }
                 </ul >
               </div >
+            )} */}
+
+            {proyect?.collaborators?.length === 0 ? null : (
+              <div className="bg-gris border w-full border-verdeD px-4 py-3 rounded-md flex flex-col gap-4">
+                <h5 className="text-base lg:text-lg border-b border-RojoC w-full font-barlow-semi-condensed font-medium uppercase">
+                  Colaboradores
+                </h5>
+                <ul className="flex flex-col gap-3">
+                  {proyect?.collaborators?.map((item, key) => (
+                    <li key={key} className="text-RojoC font-medium text-sm flex justify-between items-center">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        {item?.user?.profilePicture?.url === null ? (
+                          <div
+                            className="w-7 h-7 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0"
+                            onClick={() => navigate(`/graduates/${item?.user?.username}`)}
+                          >
+                            <span className="text-white text-sm font-bold uppercase">
+                              {item?.user?.username?.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        ) : (
+                          <img
+                            className="w-7 h-7 rounded-full object-cover cursor-pointer"
+                            src={item?.user?.profilePicture?.url}
+                            alt={item?.user?.username || "Foto de Perfil del Colaborador"}
+                            onClick={() => navigate(`/graduates/${item?.user?.username}`)}
+                          />
+                        )}
+
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 min-w-0">
+                          <p
+                            className="cursor-pointer font-semibold text-verdeC font-barolw text-sm truncate"
+                            onClick={() => navigate(`/graduates/${item?.user?.username}`)}
+                          >
+                            @{item?.user?.username}
+                          </p>
+                          <span className="hidden sm:inline text-lg text-gray-500">•</span>
+                          <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold text-xs sm:text-sm">
+                            {item?.role === "creator" ? "Creador" :
+                              item?.role === "member" ? "Miembro" : "Administrador"}
+                          </span>
+                        </div>
+                        {proyect?.owner?.username === username && item?.user?.username !== username && (
+                          <>
+
+                            <Dropdown
+                              inline
+                              label=""
+                              placement="left-start"
+                              renderTrigger={() => (
+                                <button className="p-1 text-gray-500 hover:text-gray-700">
+                                  <FaEllipsisV className="h-4 w-4" />
+                                </button>
+                              )}
+                            >
+                              <DropdownItem onClick={() => setEditRole(true)}>
+                                <div className="flex items-center gap-2 px-2 py-1 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100">
+                                  <MdEdit /> Cambiar Rol
+                                </div>
+                              </DropdownItem>
+                              <DropdownItem onClick={() => dispatch(expelCollaborator({
+                                projectId: proyect?.id,
+                                username: item?.user?.username,
+                              }))}>
+                                <div className="flex items-center gap-2 px-2 py-1 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100">
+                                  <MdPersonRemove /> Expulsar
+                                </div>
+                              </DropdownItem>
+                            </Dropdown>
+                            <ModalNotHeader
+                              openModal={editRole}
+                              setOpenModal={setEditRole}
+                              size={"3xl"}
+                              component={<FormEditRole collaborator={item} />}
+                            />
+                          </>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </article >
         </>

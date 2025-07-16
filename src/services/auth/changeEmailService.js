@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
+import notify from "../../utils/notifications";
 import { URL_API } from "../../config";
 import { apiFetch } from "../apiService";
+import logger from "../../utils/logger";
 
 export const changeRecoveryEmail = createAsyncThunk(
     "authSlice/changeRecoveryEmail", // Nombre de la acción
@@ -20,14 +20,14 @@ export const changeRecoveryEmail = createAsyncThunk(
             );
 
             if (response.success) {
-                enqueueSnackbar(response.message, typeSuccess)
+                notify.success(response.message, false)
                 return (response.message);
             } else {
                 throw `${response.message}`;
             }
         } catch (error) {
             // Gestionar errores
-            enqueueSnackbar(error, typeError)
+            notify.error(error, false)
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }
@@ -51,16 +51,16 @@ export const changeRecoveryPassword = createAsyncThunk(
             );
 
             let datas = await response.json();
-            console.log(datas)
+            logger.log(datas)
             if (datas.success) {
-                enqueueSnackbar(datas.message, typeSuccess)
+                notify.success(datas.message, false)
                 return (datas.message);
             } else {
                 throw `${datas.message}`;
             }
         } catch (error) {
             // Gestionar errores
-            enqueueSnackbar(error, typeError)
+            notify.error(error, false)
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }
@@ -84,16 +84,16 @@ export const changeEmailRecovery = createAsyncThunk(
             );
 
             let datas = await response.json();
-            console.log(datas)
+            logger.log(datas)
             if (datas.success) {
-                enqueueSnackbar(datas.message, typeSuccess)
+                notify.success(datas.message, false)
                 return (datas.message);
             } else {
                 throw `${datas.message}`;
             }
         } catch (error) {
             // Gestionar errores
-            enqueueSnackbar(error, typeError)
+            notify.error(error, false)
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }
@@ -116,9 +116,9 @@ export const changeEmail = createAsyncThunk(
             );
 
             let datas = await response.json();
-            console.log(datas)
+            logger.log(datas)
             if (datas.success) {
-                enqueueSnackbar(datas.message, typeSuccess);
+                notify.success(datas.message, false);
                 return {
                     message: datas.message,
                 };
@@ -127,7 +127,7 @@ export const changeEmail = createAsyncThunk(
             }
         } catch (error) {
             // Gestionar errores
-            enqueueSnackbar(error, typeError)
+            notify.error(error, false)
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }

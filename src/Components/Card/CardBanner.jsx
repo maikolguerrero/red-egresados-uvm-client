@@ -7,11 +7,11 @@ import { BsCalendarDate } from "react-icons/bs";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
 import { useState } from "react";
 import { deleteNotification } from "../../services/notifications/notificationService";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { IoIosNotifications, IoMdWarning, IoIosInformationCircle } from "react-icons/io";
 import { BsExclamationOctagon } from "react-icons/bs";
 import { formatNotification } from "../../utils/dateUtils";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export function CardBanner({
   type,
@@ -38,7 +38,7 @@ export function CardBanner({
         return {
           icon: <FaPeopleGroup className="w-6 h-6" />,
           typeText: "FORO",
-          baseRoute: "/forums"
+          baseRoute: "/forum"
         };
       case 'event_reminder':
         return {
@@ -93,7 +93,7 @@ export function CardBanner({
       navigate(`/config/reports`);
     } else if (data?.threadId) {
       // Notificaciones relacionadas con foros
-      navigate(`/forums/${data.threadId}`);
+      navigate(`/forum/${data.threadId}`);
 
       // Scroll a comentario específico si existe
       if (data?.commentId) {
@@ -128,62 +128,58 @@ export function CardBanner({
       if (onDelete) {
         onDelete(notificationId, isRead);
       }
-      enqueueSnackbar("Notificación eliminada", typeSuccess);
+      notify.success("Notificación eliminada", false);
     } catch (error) {
-      enqueueSnackbar(error.message, typeError);
-      console.error("Error eliminando notificación:", error);
+      notify.error(error.message, true);
+      logger.error("Error eliminando notificación:", error);
     }
   };
 
   if (!isVisible) return null;
 
   return (
-    <Banner>
+    <div className="w-full flex justify-center">
       <div
-        className={`flex w-[calc(100%-2rem)] flex-col justify-between rounded-lg border ${!isRead ? "border-RojoC" : "border-verdeD"
-          } bg-Gris p-4 shadow-sm md:flex-row lg:max-w-7xl cursor-pointer`}
+        className={`flex w-full max-w-4xl flex-row justify-between rounded-lg border ${!isRead ? "border-RojoC" : "border-verdeD"
+          } bg-Gris p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow`}
         onClick={handleViewClick}
       >
-        <div className="mb-3 mr-4 flex flex-col items-start md:mb-0 md:flex-row md:items-center">
-          <div className={`mb-2 flex gap-3 items-center ${!isRead ? "border-RojoC" : "border-verdeD"} md:mb-0 md:mr-4 md:border-r md:pr-4`}>
+        <div className="mb-2 flex flex-col items-start">
+          <div className={`mb-2 flex gap-3 items-center ${!isRead ? "border-RojoC" : "border-verdeD"}`}>
             {icon}
-            <span className="self-center whitespace-nowrap text-lg font-semibold md:pr-6">
+            <span className="self-center whitespace-nowrap text-lg font-semibold">
               {typeText}
             </span>
           </div>
-          {/* Nuevo contenedor flex para la notificación y la fecha */}
-          <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2">
-            <p className="flex items-center text-sm font-normal text-Negro">
+          <div className="flex flex-col gap-1">
+            <p className="text-sm font-normal text-Negro">
               {noti}
             </p>
-            {/* Fecha al lado, con estilos más discretos */}
             <p className="text-xs text-gray-600 italic">
               {formatNotification(createdAt)}
             </p>
           </div>
+          <div className="flex flex-col gap-1 mt-2">
+            {!isRead && (
+              <Badge color="failure">
+                Nuevo
+              </Badge>
+            )}
+          </div>
         </div>
-        <div className="flex shrink-0 items-center gap-3">
-          {!isRead && (
-            <Badge color="failure" className="mr-2">
-              Nuevo
-            </Badge>
-          )}
-          <ButtonSmall
-            text={"Ver..."}
-            className={"bg-verdeC hover:bg-RojoC"}
-          />
+        <div className="flex flex-col md:flex-row shrink-0 items-center gap-1 self-end">
           <button
             onClick={(e) => {
-              e.stopPropagation(); // Evita que se marque como leída al hacer clic en la X
+              e.stopPropagation();
               handleDelete();
             }}
-            className="border-0 bg-transparent text-RojoC hover:text-RojoB transition-colors"
+            className="border-0 bg-transparent text-RojoC hover:text-RojoB transition-colors p-1"
             aria-label="Eliminar notificación"
           >
-            <HiX className="h-4 w-4" />
+            <HiX className="h-6 w-6" />
           </button>
         </div>
       </div>
-    </Banner>
+    </div>
   );
 }

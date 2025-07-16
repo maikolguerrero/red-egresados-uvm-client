@@ -37,7 +37,7 @@ function VerifyAlumni() {
             <NavLogin />
             <main className="bg-Blanco min-h-[100vh] py-10 flex flex-col items-center justify-center">
                 <section className="bg-Gris w-[80%] md:w-[60%] lg:w-[40%] h-auto rounded-xl border-verdeC border-2 py-8 px-6 flex flex-col items-center gap-6 mb-6">
-                    <h2 className="text-verdeC text-2xl md:text-3xl lg:text-4xl text-center font-barlow-semi-condensed font-bold">
+                    <h2 className="text-verdeC text-2xl md:text-3xl lg:text-4xl font-barlow-semi-condensed font-bold text-center">
                         VERIFICACIÓN DE EGRESADO
                     </h2>
 
@@ -84,12 +84,12 @@ function VerifyAlumni() {
                                                 <h4 className="font-semibold">Títulos Obtenidos:</h4>
                                                 <ul className="list-disc pl-5">
                                                     {alumniData.datos.carrerasPregrado?.map((carrera, index) => (
-                                                        <li key={`titulo-pre-${index}`}>
+                                                        <li key={`título-pre-${index}`}>
                                                             {carrera.carrera} - {new Date(carrera.fechaGrado).toLocaleDateString()}
                                                         </li>
                                                     ))}
                                                     {alumniData.datos.programasPostgrado?.map((programa, index) => (
-                                                        <li key={`titulo-post-${index}`}>
+                                                        <li key={`título-post-${index}`}>
                                                             {programa.programa} - {new Date(programa.fechaGrado).toLocaleDateString()}
                                                         </li>
                                                     ))}
@@ -121,7 +121,7 @@ function VerifyAlumni() {
                     )}
                 </section>
 
-            <AcademicRequests />
+                <AcademicRequests />
 
             </main>
             <Footer />

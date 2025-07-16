@@ -2,8 +2,7 @@ import { Label } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../../models/alertModels";
+import notify from "../../../utils/notifications";
 import { changeRecoveryEmail } from "../../../services/auth/changeEmailService";
 
 let defaultValues = {
@@ -39,13 +38,13 @@ function FormEmail() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.currentPassword.trim() === "") {
-      return enqueueSnackbar("Debes colocar tu contraseña", typeError);
+      return notify.error("Falta la contraseña actual", false);
     }
     if (values.newEmail.trim() === "") {
-      return enqueueSnackbar("Debes el nuevo correo de recuperacion", typeError);
+      return notify.error("Falta el nuevo correo electrónico", false);
     }
     if (!validarEmail(values.newEmail)) {
-      return enqueueSnackbar("Tu correo electrónico no es válido", typeError);
+      return notify.error("Correo electrónico no válido", false);
     }
 
     dispatch(changeRecoveryEmail(values))
@@ -74,7 +73,7 @@ function FormEmail() {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Nuevo correo electronico:
+              Nuevo correo electrónico:
             </Label>
             <input
               className={styles.input}

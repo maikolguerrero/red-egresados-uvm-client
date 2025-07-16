@@ -21,7 +21,13 @@ export function CardCertification({data}) {
           </h5>
           <h5>
             <b>Enlace:</b>{" "}
-            <a href={data.credentialURL} className="text-RojoC font-semibold">Click Aqui</a>
+            <a
+              href={data.credentialURL}
+              target="_blank"
+              className="text-RojoC font-semibold cursor-pointer"
+            >
+              Ver certificado
+            </a>
           </h5>
         </div>
       </article>

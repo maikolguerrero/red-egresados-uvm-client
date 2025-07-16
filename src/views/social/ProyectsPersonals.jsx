@@ -1,42 +1,9 @@
-import { createTheme, Pagination, ThemeProvider } from "flowbite-react";
 import { CardProyect } from "../../Components/Card/CardProyect";
-import { useEffect, useState } from "react";
-import { ButtonAdd } from "../../Components/Buttons/ButtonAdd";
-import { ModalNotHeader } from "../../Components/Modals/ModalNotHeader";
-import { FormAddProyect } from "../../Components/Forms/Proyects/FormAddProyect";
+import { useEffect } from "react";
 import { searchProyect } from "../../services/proyects/proyectService";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader } from "../../Components/Loader";
-import FilterProyect from "../../Components/Forms/Proyects/FilterProyect";
-
-const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-
-const customTheme = createTheme({
-  base: "",
-  layout: {
-    table: {
-      base: "text-sm text-gray-700",
-      span: "font-semibold text-gray-900",
-    },
-  },
-  pages: {
-    base: "xs:mt-0 mt-2 inline-flex items-center -space-x-px",
-    showIcon: "inline-flex",
-    previous: {
-      base: "ml-0 rounded-l-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    next: {
-      base: "rounded-r-lg border border-verdeD bg-Gris px-3 py-2 leading-tight text-Negro enabled:hover:bg-Blanco enabled:hover:text-verdeD",
-      icon: "h-5 w-5",
-    },
-    selector: {
-      base: "w-12 border border-verdeD bg-Gris py-2 leading-tight text-Negro enabled:hover:bg-white enabled:hover:text-verdeD",
-      active: "bg-cyan-50 text-RojoC hover:bg-white hover:text-verdeD",
-      disabled: "cursor-not-allowed opacity-50",
-    },
-  },
-});
+import Paginations from "../../Components/Paginations";
 
 function ProyectsPersonals() {
   const pagination = useSelector((state) => state.proyects.pagination);
@@ -91,13 +58,17 @@ function ProyectsPersonals() {
           {proyects.length === 0 ? (
             <>
               {username === currentPath.split("/")[3] ? (
-                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                  No has creado proyectos todavía
-                </h4>
+                <div className="bg-Gris p-4 rounded-lg shadow-sm max-w-md w-full flex justify-center items-center">
+                  <h4 className="font-barolw text-lg font-medium text-black uppercase">
+                    No has creado proyectos todavía
+                  </h4>
+                </div>
               ) : (
-                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                  El usuario no ha creado proyectos todavía
-                </h4>
+                <div className="bg-Gris p-4 rounded-lg shadow-sm max-w-md w-full flex justify-center items-center">
+                  <h4 className="font-barolw text-lg font-medium text-black uppercase">
+                    El usuario no ha creado proyectos todavía
+                  </h4>
+                </div>
               )}
             </>
           ) : (
@@ -121,19 +92,13 @@ function ProyectsPersonals() {
                 ))}
               </div>
 
-              {pagination.pages == 1 ? (
-                <></>
-              ) : (
+              {pagination.pages > 1 && (
                 <div className="flex justify-center">
-                  <ThemeProvider theme={customTheme}>
-                    <Pagination
-                      theme={customTheme}
-                      className="border-verdeD"
-                      currentPage={pagination.page}
-                      totalPages={pagination.pages}
-                      onPageChange={onPageChange}
-                    />
-                  </ThemeProvider>
+                  <Paginations
+                    currentPage={pagination.page}
+                    totalPages={pagination.pages}
+                    onPageChange={onPageChange}
+                  />
                 </div>
               )}
             </section>

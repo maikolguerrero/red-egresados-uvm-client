@@ -1,9 +1,8 @@
 import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { enqueueSnackbar } from "notistack";
+import { useDispatch } from "react-redux";
+import notify from "../../../../utils/notifications";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
-import { typeError } from "../../../../models/alertModels";
 import { addMediaCarrousel, deleteMediaCarrousel } from "../../../../services/admin/landingService";
 import { ModalNotHeader } from "../../../Modals/ModalNotHeader";
 
@@ -32,7 +31,7 @@ export function FormCarrousel({landing}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una foto para el Foro", typeError);
+      notify.error("No se ha seleccionado una imagen para el carrousel", false);
     } else {
       const formData = new FormData();
       formData.append("file", picture);
@@ -47,11 +46,11 @@ export function FormCarrousel({landing}) {
       <div className="flex flex-col gap-4">
         <form className="flex flex-col gap-5 border-b-2 border-verdeD pb-8">
           <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-            Agregar Foto al Carrousel
+            Agregar Imagen al Carrousel
           </h5>
           <div className="flex flex-col gap-1">
             <Label className="mb-2 block" htmlFor="small-file-upload">
-              Selecciona la foto:
+              Selecciona la imagen:
             </Label>
             <FileInput
               onChange={onImageChange}
@@ -79,7 +78,7 @@ export function FormCarrousel({landing}) {
           <ButtonSmall
             action={handleSubmit}
             className={"bg-verdeA hover:bg-RojoC"}
-            text={"AGREGAR FOTO"}
+            text={"AGREGAR IMAGEN"}
           />
         </form>
 

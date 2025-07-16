@@ -9,19 +9,19 @@ function CardReport({ item }) {
   const [comment, setComment] = useState(false);
   const [reportResolve, setReportResolve] = useState(false);
 
-  const reason = item.reason === 'spam' ? 'Spam' :
-    item.reason === 'inappropriate' ? 'Contenido inapropiado' :
-      item.reason === 'harassment' ? 'Acoso' :
-        item.reason === 'other' ? 'Otro' : 'Desconocido';
+  const reason = item?.reason === 'spam' ? 'Spam' :
+    item?.reason === 'inappropriate' ? 'Contenido inapropiado' :
+      item?.reason === 'harassment' ? 'Acoso' :
+        item?.reason === 'other' ? 'Otro' : 'Desconocido';
 
   const navigate = useNavigate();
 
   return (
     <>
       <div
-        className={`${item.status === "pending"
+        className={`${item?.status === "pending"
           ? "border-blue-800"
-          : item.status === "resolved"
+          : item?.status === "resolved"
             ? "border-verdeB"
             : "border-red-800"
           } flex w-full flex-col rounded-lg border bg-Gris p-4 shadow-sm lg:max-w-7xl`}
@@ -59,25 +59,25 @@ function CardReport({ item }) {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            {item.status === "resolved" ? (
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            {item?.status === "resolved" ? (
               <></>
             ) : (
               <>
-                {item.comment === undefined ? (
-                  item.comment === null ? (
+                {item?.comment === undefined ? (
+                  item?.comment === null ? (
                     <></>
                   ) : (
                     <button
                       onClick={(e) => {
-                        navigate(`/forums/${item.thread.id}`);
+                        navigate(`/forum/${item?.thread?.id}`);
                       }}
                       className="bg-blue-500 text-white px-2 py-[6px] rounded-md text-xs uppercase font-semibold hover:cursor-pointer hover:bg-blue-700"
                     >
-                      ver foro
+                      Ver Hilo
                     </button>
                   )
-                ) : item.comment === null ? (
+                ) : item?.comment === null ? (
                   <></>
                 ) : (
                   <button
@@ -103,21 +103,21 @@ function CardReport({ item }) {
         </div>
 
         <div className="flex flex-col gap-1 p-3">
-          {item.status === "resolved" ? (
+          {item?.status === "resolved" ? (
             <h5 className="text-sm">
               <span className="font-semibold">Accion:</span>{" "}
               <span
-                className={`${item.adminAction === "no_action"
+                className={`${item?.adminAction === "no_action"
                   ? "text-blue-800"
-                  : item.adminAction === "warning"
+                  : item?.adminAction === "warning"
                     ? "text-yellow-500"
                     : "text-red-800"
                   }`}
               >
                 {
-                  item.adminAction === "no_action"
+                  item?.adminAction === "no_action"
                     ? "Sin accion"
-                    : item.adminAction === "warning"
+                    : item?.adminAction === "warning"
                       ? "Advertencia"
                       : "Eliminado"
                 }
@@ -129,16 +129,16 @@ function CardReport({ item }) {
           <h5 className="text-sm">
             <span className="font-semibold">Estado:</span>{" "}
             <span
-              className={`${item.status === "pending"
+              className={`${item?.status === "pending"
                 ? "text-blue-800"
-                : item.status === "resolved"
+                : item?.status === "resolved"
                   ? "text-verdeB"
                   : "text-red-800"
                 }`}
             >
-              {item.status === "pending"
+              {item?.status === "pending"
                 ? "Pendiente"
-                : item.status === "resolved"
+                : item?.status === "resolved"
                   ? "Resuelto"
                   : "Rechazado"}
             </span>
@@ -148,13 +148,13 @@ function CardReport({ item }) {
             <span>{reason}</span>
           </h5>
           <p className="text-sm">
-            <span className="font-semibold">Descripcion:</span>{" "}
-            {item.description}
+            <span className="font-semibold">Descripción:</span>{" "}
+            {item?.description}
           </p>
         </div>
       </div>
 
-      {item.comment === undefined || item.comment === null ? (
+      {item?.comment === undefined || item?.comment === null ? (
         <></>
       ) : (
         <ModalNotHeader
@@ -164,7 +164,7 @@ function CardReport({ item }) {
           component={
             <div className="flex flex-col gap-2">
               <h6 className="text-base font-bold font-barolw">Comentario: </h6>
-              <p className="text-sm">{item.comment.content}</p>
+              <p className="text-sm">{item?.comment?.content}</p>
             </div>
           }
         />
@@ -174,7 +174,7 @@ function CardReport({ item }) {
         openModal={reportResolve}
         setOpenModal={setReportResolve}
         size={"xl"}
-        component={<FormResolveReport reportId={item.id} />}
+        component={<FormResolveReport reportId={item?.id} />}
       />
     </>
   );

@@ -43,7 +43,7 @@ function CMHomePage() {
           </h4>
 
           <div className="flex flex-wrap justify-center gap-8">
-            <div className="w-[300px] flex flex-col gap-3">
+            <div className="w-[300px] flex flex-col gap-3 p-4 bg-Gris rounded-md border border-verdeC">
               <ButtonBig
                 text={"Carrousel de Imágenes"}
                 className={"bg-verdeC hover:bg-RojoC w-full"}
@@ -60,7 +60,7 @@ function CMHomePage() {
               </div>
             </div>
 
-            <div className="w-[300px] flex flex-col gap-3">
+            <div className="w-[300px] flex flex-col gap-3 p-4 bg-Gris rounded-md border border-verdeC">
               <ButtonBig
                 text={"Consejos de uso"}
                 className={"bg-verdeB hover:bg-RojoC w-full"}

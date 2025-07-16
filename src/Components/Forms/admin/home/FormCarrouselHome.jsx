@@ -1,10 +1,8 @@
 import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { enqueueSnackbar } from "notistack";
+import { useDispatch } from "react-redux";
+import notify from "../../../../utils/notifications";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
-import { typeError } from "../../../../models/alertModels";
-import { addMediaCarrousel, deleteMediaCarrousel } from "../../../../services/admin/landingService";
 import { ModalNotHeader } from "../../../Modals/ModalNotHeader";
 import { addMediaHome, deleteMediaHome } from "../../../../services/admin/homeService";
 
@@ -33,7 +31,7 @@ export function FormCarrouselHome({ home }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una foto para la galeria", typeError);
+      notify.error("No se ha seleccionado una imagen para la galeria", false);
     } else {
       const formData = new FormData();
       formData.append("file", picture);

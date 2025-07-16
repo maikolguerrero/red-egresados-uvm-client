@@ -62,18 +62,6 @@ function Config() {
           </>
         )}
 
-        {role === "admin" || role === "superadmin" && (
-          <>
-            <ButtonSecurity
-              onClick={(e) => {
-                navigate("/config/graduates");
-              }}
-              icono={<FaGraduationCap className="text-6xl" />}
-              texto={"Agregar Egresados"}
-            />
-          </>
-        )}
-
         {
           role === "admin" || role === "superadmin" && (
             <ButtonSecurity
@@ -85,6 +73,18 @@ function Config() {
             />
           )
         }
+
+        {role === "admin" || role === "superadmin" && (
+          <>
+            <ButtonSecurity
+              onClick={(e) => {
+                navigate("/config/graduates");
+              }}
+              icono={<FaGraduationCap className="text-6xl" />}
+              texto={"Agregar Egresados"}
+            />
+          </>
+        )}
 
         {
           role === "superadmin" && (

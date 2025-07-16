@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { URL_API } from "../../config";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export const searchReport = createAsyncThunk(
   "reportsSlice/searchReport", // Nombre de la acción
@@ -23,11 +23,11 @@ export const searchReport = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar("Se cargaron los reportes", typeSuccess)
+        notify.success("Reportes cargados", true)
         return {
-          message: "Se cargaron los reportes",
+          message: "Reportes cargados",
           reports: datas.data,
           pagination: datas.pagination
         }
@@ -37,7 +37,7 @@ export const searchReport = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -62,9 +62,9 @@ export const resolveReport = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, false)
         return {
           message: datas.message,
           report: datas.data
@@ -78,7 +78,7 @@ export const resolveReport = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

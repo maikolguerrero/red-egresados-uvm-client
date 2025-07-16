@@ -95,13 +95,11 @@ export function InternalEvent({ event }) {
             </div>
 
             <div>
-              {event?.tags?.length === 0 ? (
-                <></>
-              ) : (
-                <ul className="flex mb-2 gap-2">
+              {event?.tags?.length > 0 && (
+                <ul className="flex flex-wrap mb-2 gap-2 overflow-x-auto pb-1">
                   {event?.tags?.map((item, key) => (
                     <li
-                      className="py-1 px-3 rounded-full font-medium font-barolw bg-verdeA w-auto text-xs md:text-sm"
+                      className="py-1 px-3 rounded-full font-medium font-barolw bg-verdeA text-white whitespace-nowrap text-xs sm:text-sm"
                       key={key}
                     >
                       {item}
@@ -150,72 +148,72 @@ export function InternalEvent({ event }) {
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-8">
-              <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
-                <p className={`font-barolw text-base uppercase`}>
-                  <b>Estado:</b>{" "}
-                  <span
-                    className={
-                      `${(event.startDate >= new Date() && event.endDate <= new Date()) ? "text-verdeB" : "text-RojoC"} font-medium`}
-                  >
-                    {(event.startDate >= new Date() && event.endDate <= new Date()) ? "Activo" : "Inactivo"}
-                  </span>
-                </p>
-                <FaCalendar className="text-verdeC text-2xl" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Estado del Evento */}
+              <div className="bg-Gris p-3 border border-verdeD rounded-md flex justify-between items-start">
+                <div className="flex-1 break-words pr-2">
+                  <p className="font-barolw text-sm md:text-base uppercase">
+                    <b>Estado:</b>{" "}
+                    <span className={`${(event?.startDate >= new Date() && event?.endDate <= new Date()) ? "text-verdeB" : "text-RojoC"} font-medium`}>
+                      {(event?.startDate >= new Date() && event?.endDate <= new Date()) ? "Activo" : "Inactivo"}
+                    </span>
+                  </p>
+                </div>
+                <FaCalendar className="text-verdeC text-xl md:text-2xl flex-shrink-0 mt-1" />
               </div>
 
+              {/* Capacidad de Aforo */}
               {event?.capacity && (
-                <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
-                  <p className="font-barolw text-base">
-                    <b>CAPACIDAD DE AFORO:</b> {event.capacity}
-                  </p>
-                  <FaPeopleRoof className="text-verdeC text-2xl" />
+                <div className="bg-Gris p-3 border border-verdeD rounded-md flex justify-between items-start">
+                  <div className="flex-1 break-words pr-2">
+                    <p className="font-barolw text-sm md:text-base">
+                      <b>Capacidad:</b> {event?.capacity}
+                    </p>
+                  </div>
+                  <FaPeopleRoof className="text-verdeC text-xl md:text-2xl flex-shrink-0 mt-1" />
                 </div>
               )}
-            </div>
 
-            <div className="grid grid-cols-2 gap-8">
+              {/* Ubicación */}
               {event?.location && (
-                <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
-                  <p className="font-barolw text-base">
-                    <b>LUGAR:</b> {event.location}
-                  </p>
-                  <FaLocationDot className="text-verdeC text-2xl" />
+                <div className="bg-Gris p-3 border border-verdeD rounded-md flex justify-between items-start">
+                  <div className="flex-1 break-words pr-2">
+                    <p className="font-barolw text-sm md:text-base">
+                      <b>Lugar:</b> {event?.location}
+                    </p>
+                  </div>
+                  <FaLocationDot className="text-verdeC text-xl md:text-2xl flex-shrink-0 mt-1" />
                 </div>
               )}
-              {/* <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
-                <p className="font-barolw text-base">
-                  <b>LUGAR:</b> {event.location}
-                </p>
-                <FaLocationDot className="text-verdeC text-2xl" />
-              </div> */}
+
+              {/* Certificado */}
               {event?.certificate && (
-                <div className="bg-Gris py-3 px-4 border border-verdeD rounded-md flex justify-between">
-                  <p className="font-barolw text-base">
-                    <b>Certificado</b> por participar
-                  </p>
-                  <GiDiploma className="text-verdeC text-2xl" />
+                <div className="bg-Gris p-3 border border-verdeD rounded-md flex justify-between items-start">
+                  <div className="flex-1 break-words pr-2">
+                    <p className="font-barolw text-sm md:text-base">
+                      <b>Certificado</b> por participar
+                    </p>
+                  </div>
+                  <GiDiploma className="text-verdeC text-xl md:text-2xl flex-shrink-0 mt-1" />
                 </div>
               )}
-            </div >
 
-            <div className="grid grid-cols-2 gap-8">
-              <div className="bg-Gris py-6 px-4 border border-verdeD rounded-md flex flex-col gap-6">
-                <div className="flex justify-between">
-                  <p className="font-barolw text-base">
-                    <b>ORGANIZADORES DEL EVENTO</b>
+              {/* Organizadores */}
+              <div className="bg-Gris p-4 border border-verdeD rounded-md md:col-span-2">
+                <div className="flex justify-between items-center mb-3">
+                  <p className="font-barolw text-sm md:text-base">
+                    <b>Organizadores del evento</b>
                   </p>
-                  <IoIosPeople className="text-verdeC text-2xl" />
+                  <IoIosPeople className="text-verdeC text-xl md:text-2xl" />
                 </div>
-
                 {event?.organizers?.length === 0 ? (
-                  <p className="text-sm font-barlow-condensed">
+                  <p className="text-xs md:text-sm font-barlow-condensed">
                     No hay organizadores en el evento
                   </p>
                 ) : (
-                  <ul className="list-decimal text-sm px-6 text-RojoC font-medium font-barolw">
-                    {event.organizers.map((item, key) => (
-                      <li className="uppercase" key={key}>
+                  <ul className="list-decimal text-xs md:text-sm px-6 text-RojoC font-medium font-barolw space-y-2">
+                    {event?.organizers?.map((item, key) => (
+                      <li className="uppercase break-words" key={key}>
                         {item}
                       </li>
                     ))}
@@ -223,22 +221,22 @@ export function InternalEvent({ event }) {
                 )}
               </div>
 
-              <div className="bg-Gris py-6 px-4 border border-verdeD rounded-md flex flex-col gap-6">
-                <div className="flex justify-between">
-                  <p className="font-barolw text-base">
-                    <b>INVITADOS ESPECIALES</b>
+              {/* Invitados Especiales */}
+              <div className="bg-Gris p-4 border border-verdeD rounded-md md:col-span-2">
+                <div className="flex justify-between items-center mb-3">
+                  <p className="font-barolw text-sm md:text-base">
+                    <b>Invitados especiales</b>
                   </p>
-                  <FaPeopleGroup className="text-verdeC text-2xl" />
+                  <FaPeopleGroup className="text-verdeC text-xl md:text-2xl" />
                 </div>
-
                 {event?.specialGuests?.length === 0 ? (
-                  <p className="text-sm font-barlow px-4 uppercase font-medium text-RojoC">
+                  <p className="text-xs md:text-sm font-barlow uppercase font-medium text-RojoC">
                     No hay invitados especiales en el evento
                   </p>
                 ) : (
-                  <ul className="list-decimal text-sm px-6 text-RojoC font-medium font-barolw">
-                    {event.specialGuests.map((item, key) => (
-                      <li className="uppercase" key={key}>
+                  <ul className="list-decimal text-xs md:text-sm px-6 text-RojoC font-medium font-barolw space-y-2">
+                    {event?.specialGuests?.map((item, key) => (
+                      <li className="uppercase break-words" key={key}>
                         {item}
                       </li>
                     ))}
@@ -246,10 +244,9 @@ export function InternalEvent({ event }) {
                 )}
               </div>
             </div>
-          </article >
+          </article>
         </>
-      )
-      }
+      )}
 
       <ModalNotHeader
         openModal={openEditImage}

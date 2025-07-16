@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import socketService from '../../services/socket/socket.service';
 import { formatLastSeen } from '../../utils/dateUtils';
+import logger from '../../utils/logger';
 
 export default function OnlineStatus({ userId }) {
     const [status, setStatus] = useState({ isOnline: false, lastSeen: null });
@@ -29,7 +30,7 @@ export default function OnlineStatus({ userId }) {
                     lastSeen
                 });
             } catch (error) {
-                console.error('Error fetching status:', error);
+                logger.error('Error obteniendo el estado del usuario:', error);
             }
         };
 

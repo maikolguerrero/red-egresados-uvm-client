@@ -38,7 +38,7 @@ function FormLogin(props) {
             name="emailOrUsername"
             value={values.emailOrUsername}
             onChange={handleInputChange}
-            placeholder="Usuario"
+            placeholder="Nombre de usuario"
           />
           <FaUserCircle className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
         </div>

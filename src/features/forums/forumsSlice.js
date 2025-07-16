@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { addComment, addForum, addPictureForum, addReport, deleteComment, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
+import logger from '../../utils/logger';
 
 export const forumsSlice = createSlice({
   name: "forums",
@@ -196,7 +197,7 @@ export const forumsSlice = createSlice({
     builder.addCase(deleteComment.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      console.log(action.payload.idComment)
+      logger.log(action.payload.idComment)
       if (action.payload.idComment === null) {
         let newComments = state.forumSelect.comments.filter((item) => item.id !== action.payload.commentId)
         state.forumSelect.comments = newComments;

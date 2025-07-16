@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { apiFetch } from "../apiService";
+import notify from "../../utils/notifications";
 
 export const addForum = createAsyncThunk(
   "authSlice/addForum", // Nombre de la acción
@@ -20,9 +19,9 @@ export const addForum = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se creo el foro", typeSuccess)
+        notify.success("Hilo creado", false)
         return {
-          message: "Se creo el foro",
+          message: "Hilo creado",
           forum: response.data
         }
       } else {
@@ -34,7 +33,7 @@ export const addForum = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -57,7 +56,7 @@ export const addReport = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Reporte enviado", typeSuccess)
+        notify.success("Reporte enviado", false)
         return {
           message: "Reporte enviado",
         }
@@ -70,7 +69,7 @@ export const addReport = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -90,9 +89,9 @@ export const addPictureForum = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se agrego la foto al foro", typeSuccess)
+        notify.success("Agregada la imagen al hilo", false)
         return {
-          message: "Se agrego la foto al foro"
+          message: "Agregada la imagen al hilo"
         }
       } else {
         throw `${response.message}`;
@@ -100,7 +99,7 @@ export const addPictureForum = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -126,9 +125,9 @@ export const searchForum = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargaron los foros", typeSuccess)
+        notify.success("Se cargaron los hilos", true)
         return {
-          message: "Se cargaron los foros",
+          message: "Se cargaron los hilos",
           forums: response.data,
           pagination: response.pagination
         }
@@ -138,7 +137,7 @@ export const searchForum = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -161,12 +160,12 @@ export const likeThreads = createAsyncThunk(
 
       if (response.success) {
         if (data.type === "thread") {
-          let message = "Has quitado tu like del foro";
-          if (response.data.isLike) {
-            message = "Has dado like al foro";
+          let message = "Has quitado tu like del hilo";
+          if (response.data.isLiked) {
+            message = "Has dado like al hilo";
           }
 
-          enqueueSnackbar(message, typeSuccess);
+          notify.success(message, true)
           return {
             type: data.type,
             message: message,
@@ -177,7 +176,7 @@ export const likeThreads = createAsyncThunk(
         }
 
         if (data.types === "replies") {
-          enqueueSnackbar("Like a la respuesta", typeSuccess);
+          notify.success("Like a la respuesta", true)
           return {
             type: data.types,
             message: "Like a la respuesta",
@@ -188,7 +187,7 @@ export const likeThreads = createAsyncThunk(
         }
 
         if (data.type === "comment") {
-          enqueueSnackbar("Like al comentario", typeSuccess);
+          notify.success("Like al comentario", true)
           return {
             type: data.type,
             message: "Like al comentario",
@@ -203,7 +202,7 @@ export const likeThreads = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -225,9 +224,9 @@ export const getThreadsComments = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Cargo el foro", typeSuccess)
+        notify.success("Cargado el hilo del foro", true)
         return {
-          message: "Cargo el foro",
+          message: "Cargado el hilo del foro",
           forumSelected: response.data,
         }
       } else {
@@ -236,7 +235,7 @@ export const getThreadsComments = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -257,18 +256,18 @@ export const addComment = createAsyncThunk(
 
       if (response.success) {
         if (data.type === "thread") {
-          enqueueSnackbar("Comentaste", typeSuccess);
+          notify.success("Comentario agregado", false)
           return {
             idThread: response.data.thread,
-            message: "Comentaste",
+            message: "Comentario agregado ",
             comment: response.data,
             type: data.type
           };
         } else {
-          enqueueSnackbar("Respondiste el comentario", typeSuccess);
+          notify.success("Respondiste el comentario", false);
           return {
             idComment: response.data.parentComment,
-            message: "Comentaste",
+            message: "Respondiste el comentario",
             comment: response.data,
             type: data.type
           };
@@ -279,7 +278,7 @@ export const addComment = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -301,7 +300,7 @@ export const deleteForum = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false);
         return {
           idThread: data.threadId,
           message: response.message,
@@ -312,7 +311,7 @@ export const deleteForum = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -331,7 +330,7 @@ export const deleteComment = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false);
         return {
           commentId: data.commentId,
           message: response.message,
@@ -343,7 +342,7 @@ export const deleteComment = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -366,10 +365,10 @@ export const editForum = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se edito el foro", typeSuccess);
+        notify.success("Hilo editado", false);
         return {
           idThread: data.threadId,
-          message: "Se edito el foro",
+          message: "Hilo editado",
           data: response.data,
           type: data.type
         };
@@ -379,7 +378,7 @@ export const editForum = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

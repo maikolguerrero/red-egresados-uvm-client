@@ -1,12 +1,9 @@
-import { FileInput, Label } from "flowbite-react";
-import { enqueueSnackbar } from "notistack";
+import { Label } from "flowbite-react";
+import notify from "../../../utils/notifications";
 import { useState } from "react";
-import { typeError, typeInfo } from "../../../models/alertModels";
-import { IoIosAdd } from "react-icons/io";
-import { Skills } from "../../Skills";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
-import { addComment, addForum } from "../../../services/forum/forumService";
+import { addComment } from "../../../services/forum/forumService";
 
 let styles = {
   input:
@@ -34,7 +31,7 @@ export function FormAddComment({ forum, comment }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.content.trim() === "") {
-      return enqueueSnackbar("Debe tener contenido el comentario", typeError);
+      return notify.error("Falta el contenido del comentario", false);
     }
     if (forum === undefined) {
       const formData = new FormData();
@@ -42,7 +39,7 @@ export function FormAddComment({ forum, comment }) {
       formData.append("parentCommentId", comment.id);
       dispatch(
         addComment({
-          id: comment.thread,
+          id: comment?.thread,
           data: formData,
           type: "replies"
         })
@@ -53,7 +50,7 @@ export function FormAddComment({ forum, comment }) {
       formData.append("parentCommentId", null);
       dispatch(
         addComment({
-          id: forum.id,
+          id: forum?.id,
           data: formData,
           type: "thread"
         })

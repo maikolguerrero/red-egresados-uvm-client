@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { apiFetch } from "../apiService";
+import notify from "../../utils/notifications";
 
 export const addProyect = createAsyncThunk(
   "proyectsSlice/addProyect", // Nombre de la acción
@@ -20,9 +19,9 @@ export const addProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se creo el proyecto", typeSuccess)
+        notify.success("Proyecto creado", false)
         return {
-          message: "Se creo el proyecto",
+          message: "Proyecto creado",
           proyect: response.data
         }
       } else {
@@ -34,7 +33,7 @@ export const addProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -63,9 +62,9 @@ export const searchProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargaron los proyectos", typeSuccess)
+        notify.success("Proyectos cargados", true)
         return {
-          message: "Se cargaron los proyectos",
+          message: "Proyectos cargados",
           proyects: response.data,
           pagination: response.pagination
         }
@@ -75,7 +74,7 @@ export const searchProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -94,9 +93,9 @@ export const getProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargo el proyecto", typeSuccess)
+        notify.success("Proyecto cargado", true)
         return {
-          message: "Se cargo el proyecto",
+          message: "Proyecto cargado",
           proyectSelected: response.data,
         }
       } else {
@@ -105,7 +104,7 @@ export const getProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -128,10 +127,10 @@ export const editProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se edito el proyecto", typeSuccess);
+        notify.success("Proyecto editado", false)
         return {
           projectId: data.projectId,
-          message: "Se edito el proyecto",
+          message: "Proyecto editado",
           data: response.data,
           type: data.type
         };
@@ -141,7 +140,7 @@ export const editProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -160,7 +159,7 @@ export const deleteProject = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false);
         return {
           projectId: data.projectId,
           message: response.message,
@@ -171,7 +170,7 @@ export const deleteProject = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -191,9 +190,9 @@ export const requestProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se envio la solicitud", typeSuccess)
+        notify.success("Solicitud enviada", false)
         return {
-          message: "Se envio la solicitud",
+          message: "Solicitud enviada",
           projectId: data.projectId
         }
       } else {
@@ -202,7 +201,7 @@ export const requestProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -222,7 +221,7 @@ export const joinProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Te uniste al proyecto", typeSuccess)
+        notify.success("Te uniste al proyecto", false)
         return {
           message: "Te uniste al proyecto",
           projectId: data.projectId,
@@ -234,7 +233,7 @@ export const joinProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -253,7 +252,7 @@ export const getRequestProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Cargaron las solicitudes", typeSuccess)
+        notify.success("Cargaron las solicitudes", true)
         return {
           message: "Cargaron las solicitudes",
           request: response.data
@@ -264,7 +263,7 @@ export const getRequestProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -287,9 +286,9 @@ export const responseRequest = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Completado la solicitud", typeSuccess)
+        notify.success("Respuesta enviada", false)
         return {
-          message: "Completado la solicitud",
+          message: "Respuesta enviada",
           project: response.data.project,
           status: response.data.status,
           requestId: data.requestId
@@ -300,7 +299,7 @@ export const responseRequest = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -319,7 +318,7 @@ export const expelCollaborator = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           projectId: data.projectId,
@@ -331,7 +330,7 @@ export const expelCollaborator = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -351,7 +350,7 @@ export const cancelRequest = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           projectId: data.projectId,
@@ -362,7 +361,7 @@ export const cancelRequest = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -382,7 +381,7 @@ export const leaveProyect = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           projectId: data.projectId,
@@ -394,7 +393,7 @@ export const leaveProyect = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -417,9 +416,9 @@ export const editRoleCollaborator = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cambio el rol del colaborador", typeSuccess)
+        notify.success("Cambió el rol del colaborador", false)
         return {
-          message: "Se cambio el rol del colaborador",
+          message: "Cambió el rol del colaborador",
           data: response.data,
           username: data.data.username,
         }
@@ -429,7 +428,7 @@ export const editRoleCollaborator = createAsyncThunk(
       
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

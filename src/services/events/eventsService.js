@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { apiFetch } from "../apiService";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export const addEvent = createAsyncThunk(
   "eventsSlice/addEvent", // Nombre de la acción
@@ -20,10 +20,10 @@ export const addEvent = createAsyncThunk(
       );
 
       if (response.success) {
-        alert("ok")
-        enqueueSnackbar("Se ha creado el evento sin foto", typeSuccess)
+        notify.success("Creado el evento sin imagen", false);
+
         return {
-          message: "Se ha creado el evento sin foto",
+          message: "Creado el evento sin imagen",
           data: response.data
         };
       } else {
@@ -32,7 +32,7 @@ export const addEvent = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -52,9 +52,9 @@ export const addPictureEvent = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se agrego la imagen al evento", typeSuccess)
+        notify.success("Agregada la imagen al evento", false);
         return {
-          message: "Se agrego la imagen al evento",
+          message: "Agregada la imagen al evento",
           media: response.data.image,
           internal: data.internal,
           eventId: data.eventId
@@ -65,7 +65,7 @@ export const addPictureEvent = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -87,7 +87,7 @@ export const searchEvent = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargaron los eventos", typeSuccess)
+        notify.success("Se cargaron los eventos", true);
         return {
           message: "Se cargaron los eventos",
           events: response.data,
@@ -99,7 +99,7 @@ export const searchEvent = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -118,9 +118,9 @@ export const getEvent = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargo el evento", typeSuccess)
+        notify.success("Cargado el evento", true);
         return {
-          message: "Se cargo el evento",
+          message: "Cargado el evento",
           eventSelected: response.data,
         }
       } else {
@@ -129,7 +129,7 @@ export const getEvent = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -148,7 +148,7 @@ export const deleteEvent = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false);
         return {
           eventId: data.eventId,
           message: response.message,
@@ -159,7 +159,7 @@ export const deleteEvent = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -180,13 +180,12 @@ export const editEvent = createAsyncThunk(
           body: JSON.stringify(data.data)
         }
       );
-      // console.log(JSON.stringify(response))
 
       if (response.success) {
-        enqueueSnackbar("Se edito el evento", typeSuccess);
+        notify.success("Evento editado", false);
         return {
           eventId: data.eventId,
-          message: "Se edito el evento",
+          message: "Evento editado",
           data: response.data,
           type: data.type
         };
@@ -196,7 +195,7 @@ export const editEvent = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -215,7 +214,7 @@ export const addAgenda = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false);
         return {
           message: response.message,
           userId: data.userId,
@@ -226,7 +225,7 @@ export const addAgenda = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -245,7 +244,7 @@ export const deleteAgenda = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false);
         return {
           message: response.message,
           userId: data.userId,
@@ -257,7 +256,7 @@ export const deleteAgenda = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -275,9 +274,9 @@ export const deletePictureEvent = createAsyncThunk(
         }
       );
 
-      console.log(response)
+      logger.log(response)
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false);
         return {
           message: response.message,
           eventId: data.eventId,
@@ -288,7 +287,7 @@ export const deletePictureEvent = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

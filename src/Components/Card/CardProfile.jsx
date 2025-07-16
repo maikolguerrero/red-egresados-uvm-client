@@ -70,9 +70,9 @@ function CardProfile({ profile }) {
               </h6>
             ))}
             {/* Botón "Ver más" si hay más de 2 carreras/programas */}
-            {profile?.programasPostgrado?.length +
+            {(profile?.programasPostgrado?.length +
               profile?.carrerasPregrado?.length >
-            2 ? (
+              2) ? (
               <button
                 onClick={(e) => setOpenModal3(true)}
                 className="text-[10px] md:text-[14px] lg:text-base font-barlow-semi-condensed font-semibold text-verdeD hover:text-verdeB"
@@ -85,13 +85,11 @@ function CardProfile({ profile }) {
           {/* Habilidades e Intereses */}
           <div className="flex gap-1 md:gap-2 flex-wrap">
             {profile?.user?.username === username ||
-            role === "admin" ||
-            role === "superadmin" ? (
+              role === "admin" ||
+              role === "superadmin" ? (
               <>
                 {" "}
-                {profile?.profile?.professional?.skills?.values.length === 0 ? (
-                  <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
-                ) : (
+                {profile?.profile?.professional?.skills?.values.length > 0 && (
                   <button
                     onClick={(e) => setOpenModal(true)}
                     className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
@@ -104,7 +102,7 @@ function CardProfile({ profile }) {
             ) : (
               <>
                 {profile?.profile?.professional?.skills?.values.length === 0 ||
-                profile?.profile?.professional?.skills?.isPublic === false ? (
+                  profile?.profile?.professional?.skills?.isPublic === false ? (
                   <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
                 ) : (
                   <button
@@ -119,12 +117,13 @@ function CardProfile({ profile }) {
             )}
 
             {profile?.user?.username === username ||
-            role === "admin" ||
-            role === "superadmin" ? (
+              role === "admin" ||
+              role === "superadmin" ? (
               <>
                 {profile?.profile?.professional?.interests?.values.length ===
-                0 ? (
-                  <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  0 ? (
+                  // <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  <></>
                 ) : (
                   <button
                     onClick={(e) => setOpenModal2(true)}
@@ -139,9 +138,10 @@ function CardProfile({ profile }) {
               <>
                 {profile?.profile?.professional?.interests?.values.length ===
                   0 ||
-                profile?.profile?.professional?.interests?.isPublic ===
+                  profile?.profile?.professional?.interests?.isPublic ===
                   false ? (
-                  <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  // <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                  <></>
                 ) : (
                   <button
                     onClick={(e) => setOpenModal2(true)}
@@ -152,10 +152,11 @@ function CardProfile({ profile }) {
                   </button>
                 )}
               </>
-            )}
-          </div>
-        </div>
-      </div>
+            )
+            }
+          </div >
+        </div >
+      </div >
 
       <ModalNotHeader
         size={"sm"}
@@ -167,12 +168,16 @@ function CardProfile({ profile }) {
               HABILIDADES PROFESIONALES
             </h4>
             <div className="flex gap-2">
-              {profile?.profile?.professional?.skills?.values.map(
-                (item, key) => (
-                  <BadgeNormal color="bg-verdeD" text={item} key={key} />
+              {profile?.profile?.professional?.skills?.length === 0 ? (
+                <></>
+              ) : (
+                profile?.profile?.professional?.skills?.values.map(
+                  (item, key) => (
+                    <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                  )
                 )
               )}
-            </div>
+            </ div >
           </>
         }
       />
@@ -187,12 +192,16 @@ function CardProfile({ profile }) {
               INTERESES PERSONALES
             </h4>
             <div className="flex gap-2">
-              {profile?.profile?.professional?.interests?.values.map(
-                (item, key) => (
-                  <BadgeNormal color="bg-verdeD" text={item} key={key} />
+              {profile?.profile?.professional?.interests?.length === 0 ? (
+                <></>
+              ) : (
+                profile?.profile?.professional?.interests?.values.map(
+                  (item, key) => (
+                    <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                  )
                 )
               )}
-            </div>
+            </div >
           </>
         }
       />
@@ -202,14 +211,14 @@ function CardProfile({ profile }) {
         openModal={openModal3}
         setOpenModal={setOpenModal3}
         component={
-          <div
+          < div
             className="flex flex-col gap-2 h-full"
-            // style={{
-            //   overflowY: profile?.carrerasPregrado?.length + profile?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
-            // }}
+          // style={{
+          //   overflowY: profile?.carrerasPregrado?.length + profile?.programasPostgrado?.length > 4 ? 'scroll' : 'hidden',
+          // }}
           >
             <h4 className="py-1 px-2 border-b-2 mb-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
-              Titulos obtenidos en la UVM
+              Títulos obtenidos en la UVM
             </h4>
             <ul className="list-inside flex flex-col gap-2">
               {profile?.carrerasPregrado?.map((item, key) => (
@@ -229,7 +238,7 @@ function CardProfile({ profile }) {
                 </li>
               ))}
             </ul>
-          </div>
+          </div >
         }
       />
     </>

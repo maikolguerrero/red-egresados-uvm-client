@@ -223,7 +223,7 @@ function Home() {
           <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
             <div className="w-full flex flex-col h-[225px]">
               <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
-                Foros populares
+                Hilos del foro populares
               </h4>
               <Carousel
                 theme={customThemeCarrouselCard}

@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
 import { URL_API } from "../../config";
 import { apiFetch } from "../apiService";
+import notify from "../../utils/notifications";
 
 export const getContentLanding = createAsyncThunk(
   "landingSlice/getContentLanding", // Nombre de la acción
@@ -17,9 +16,9 @@ export const getContentLanding = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se cargo el contenido landing", typeSuccess)
+        notify.success("Cargado el contenido de la landing", true)
         return {
-          message: "Se cargo el contenido landing",
+          message: "Cargado el contenido de la landing",
           landing: response.data
         };
       } else {
@@ -27,7 +26,7 @@ export const getContentLanding = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -52,9 +51,9 @@ export const getContentFooter = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar("Se cargo el contenido del footer", typeSuccess)
+        notify.success("Cargado el contenido del footer", true)
         return {
-          message: "Se cargo el contenido del footer",
+          message: "Cargado el contenido del footer",
           footer: datas.data
         };
       } else {
@@ -62,7 +61,7 @@ export const getContentFooter = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -85,7 +84,7 @@ export const updateContentLanding = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           landingUpdate: response.data
@@ -95,7 +94,7 @@ export const updateContentLanding = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -115,9 +114,9 @@ export const addMediaCarrousel = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar("Se agrego la imagen al carrousel", typeSuccess)
+        notify.success("Imagen agregada al carrusel", false)
         return {
-          message: "Se agrego la imagen al carrousel",
+          message: "Imagen agregada al carrusel",
           pictureCarrousel: response.data
         };
       } else {
@@ -125,7 +124,7 @@ export const addMediaCarrousel = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -144,7 +143,7 @@ export const deleteMediaCarrousel = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           idItemCarrouse: data.idItem
@@ -154,7 +153,7 @@ export const deleteMediaCarrousel = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -174,7 +173,7 @@ export const addMediaSubSection = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           image: response.data,
@@ -186,7 +185,7 @@ export const addMediaSubSection = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -205,7 +204,7 @@ export const deleteMediaSubSection = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           sectionIndex: data.sectionIndex,
@@ -216,7 +215,7 @@ export const deleteMediaSubSection = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

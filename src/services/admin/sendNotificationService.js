@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
+import notify from "../../utils/notifications";
 import { apiFetch } from "../apiService";
 
 export const sendNotification = createAsyncThunk(
@@ -20,7 +19,7 @@ export const sendNotification = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess)
+        notify.success(response.message, false)
         return {
           message: response.message,
           notification: response.data
@@ -32,7 +31,7 @@ export const sendNotification = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

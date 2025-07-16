@@ -1,11 +1,9 @@
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { typeError, typeInfo } from "../../../../models/alertModels";
+import notify from "../../../../utils/notifications";
 import { Label } from "flowbite-react";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
 import { ItemBabge } from "../../../Babge/ItemBabge";
-import { updateContentLanding } from "../../../../services/admin/landingService";
 import { updateContentHome } from "../../../../services/admin/homeService";
 
 let styles = {
@@ -43,8 +41,8 @@ export function FormTextSectionHome({home}) {
   }
 
   const addWelcomeSection = (e) => {
-      if (values.title.trim().length === 0) return enqueueSnackbar("Tienes que escribir el Título", typeError)
-      if (values.description.trim().length === 0) return enqueueSnackbar("Tienes que escribir la descripción", typeError)
+      if (values.title.trim().length === 0) return notify.error("Falta el Título", false)
+      if (values.description.trim().length === 0) return notify.error("Falta la descripción", false)
 
       setHomeContent({
         ...homeContent,
@@ -58,7 +56,7 @@ export function FormTextSectionHome({home}) {
         title: "",
         description: "",
       });
-    enqueueSnackbar("Se agregó la sección de bienvenida (debes guardar cambios)", typeInfo)
+    notify.info("Agregada la sección de bienvenida (debes guardar cambios)", false)
   }
 
   const deleteWelcomeSection = (key) => {
@@ -67,10 +65,7 @@ export function FormTextSectionHome({home}) {
       ...homeContent,
       ["welcomeSections"]: newWelcomeS,
     });
-    enqueueSnackbar(
-      "Se elimino la sección de bienvenida (debes guardar cambios)",
-      typeInfo
-    );
+    notify.info("Eliminada la sección de bienvenida (debes guardar cambios)", false);
   };
 
   const handleSubmit = (e) => {

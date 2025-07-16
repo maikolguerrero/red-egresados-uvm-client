@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { typeError, typeSuccess } from "../../models/alertModels";
-import { URL_API } from "../../config";
 import { apiFetch } from "../apiService";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export const getAdmins = createAsyncThunk(
   "adminsSlice/getAdmins", // Nombre de la acción
@@ -16,9 +15,10 @@ export const getAdmins = createAsyncThunk(
         }
       );
 
-      console.log(response)
+      logger.log(response)
       if (response.success) {
-        enqueueSnackbar("Se listaron los Administradores", typeSuccess)
+        notify.success("Se listaron los Administradores", true)
+
         return {
           message: "Se listaron los Administradores",
           admins: response.data,
@@ -29,7 +29,7 @@ export const getAdmins = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -51,11 +51,11 @@ export const addAdmin = createAsyncThunk(
         }
       );
 
-      console.log(response)
+      logger.log(response)
       if (response.success) {
-        enqueueSnackbar("Se registro el admin", typeSuccess)
+        notify.success("Admin registrado", false)
         return {
-          message: "Se registro el admin",
+          message: "Admin registrado",
           admin: response.data
         }
       } else {
@@ -67,7 +67,7 @@ export const addAdmin = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -86,7 +86,7 @@ export const deleteAdmin = createAsyncThunk(
       );
 
       if (response.success) {
-        enqueueSnackbar(response.message, typeSuccess);
+        notify.success(response.message, false)
         return {
           username: data.username,
           message: response.message,
@@ -97,7 +97,7 @@ export const deleteAdmin = createAsyncThunk(
 
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
