@@ -54,7 +54,7 @@ function CMLandingPage() {
           </h4>
 
           <div className="flex flex-wrap justify-center gap-8">
-            <div className="w-[300px] flex flex-col gap-3">
+            <div className="w-[300px] flex flex-col gap-3 p-4 bg-Gris rounded-md border border-verdeC">
               <ButtonBig
                 text={"Galería de Imágenes"}
                 className={"bg-verdeC hover:bg-RojoC w-full"}
@@ -68,7 +68,7 @@ function CMLandingPage() {
               </div>
             </div>
 
-            <div className="w-[300px] flex flex-col gap-3">
+            <div className="w-[300px] flex flex-col gap-3 p-4 bg-Gris rounded-md border border-verdeC">
               <ButtonBig
                 text={"Sección de texto"}
                 className={"bg-verdeC hover:bg-RojoC w-full"}
@@ -82,7 +82,7 @@ function CMLandingPage() {
               </div>
             </div>
 
-            <div className="w-[300px] flex flex-col gap-3">
+            <div className="w-[300px] flex flex-col gap-3 p-4 bg-Gris rounded-md border border-verdeC">
               <ButtonBig
                 text={"Sección de texto e imágenes"}
                 className={"bg-verdeC hover:bg-RojoC w-full"}
@@ -96,7 +96,7 @@ function CMLandingPage() {
               </div>
             </div>
 
-            <div className="w-[300px] flex flex-col gap-3">
+            <div className="w-[300px] flex flex-col gap-3 p-4 bg-Gris rounded-md border border-verdeC">
               <ButtonBig
                 text={"Preguntas frecuentes"}
                 className={"bg-verdeC hover:bg-RojoC w-full"}
@@ -110,7 +110,7 @@ function CMLandingPage() {
               </div>
             </div>
 
-            <div className="w-[300px] flex flex-col gap-3">
+            <div className="w-[300px] flex flex-col gap-3 p-4 bg-Gris rounded-md border border-verdeC">
               <ButtonBig
                 text={"Pie de página"}
                 className={"bg-verdeC hover:bg-RojoC w-full"}

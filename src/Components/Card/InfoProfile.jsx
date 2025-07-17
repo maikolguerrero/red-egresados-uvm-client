@@ -367,7 +367,7 @@ function InfoProfile({ profile }) {
                 REDES SOCIALES
               </h5>
 
-              <ul className="flex gap-2 flex-wrap justify-center text-white text-2xl px-2 ">
+              <ul className="flex gap-2 flex-wrap justify-start text-white text-2xl px-2 ">
                 {/* <section className="flex gap-6 flex-wrap justify-center"> */}
                 {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
                   profile?.user?.username === username || role === "admin" || role === "superadmin" ? (

@@ -56,13 +56,17 @@ function ForumsPersonals() {
           {forums.length === 0 ? (
             <>
               {username === currentPath.split("/")[3] ? (
-                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                  No has creado foros todavía
-                </h4>
+                <div className="bg-Gris p-4 rounded-lg shadow-sm max-w-md w-full flex justify-center items-center">
+                  <h4 className="font-barolw text-lg font-medium text-black uppercase">
+                    No has creado foros todavía
+                  </h4>
+                </div>
               ) : (
-                <h4 className="font-barolw text-lg font-semibold px-2 text-RojoC mb-4 uppercase">
-                  El usuario no ha creado foros todavía
-                </h4>
+                <div className="bg-Gris p-4 rounded-lg shadow-sm max-w-md w-full flex justify-center items-center">
+                  <h4 className="font-barolw text-lg font-medium text-black uppercase">
+                    El usuario no ha creado foros todavía
+                  </h4>
+                </div>
               )}
             </>
           ) : (

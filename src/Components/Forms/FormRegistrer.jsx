@@ -105,7 +105,7 @@ function FormRegister(props) {
                 name="username"
                 value={values.username}
                 onChange={handleInputChange}
-                placeholder="Usuario"
+                placeholder="Nombre de usuario"
               />
             </div>
             <div className="w-full flex relative">

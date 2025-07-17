@@ -4,7 +4,6 @@ import Button from "../../Buttons/Button";
 import { Checkbox, Label } from "flowbite-react";
 import { FaCamera } from "react-icons/fa";
 import notify from "../../../utils/notifications";
-import { typeError } from "../../../models/alertModels";
 import {
   updatePictureProfile,
   updateProfile,
@@ -247,7 +246,15 @@ function FormContact() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
+          <div className="flex flex-col gap-3">
+            <div className="w-full">
+              <p className="px-4 py-2 bg-slate-300 font-barlow-condensed rounded-md text-xs flex text-center justify-center w-auto">
+                El checkbox ☑️ que se ubica a la derecha de cada campo, funciona para hacer público ese campo a todos los usuarios de la red.
+              </p>
+            </div>
+            <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
+
+          </div>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
