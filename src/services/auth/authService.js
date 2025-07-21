@@ -224,7 +224,7 @@ export const verifyEmail = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

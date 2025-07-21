@@ -8,7 +8,6 @@ import { getContentStats } from "../services/admin/statsService";
 import { useDispatch, useSelector } from "react-redux";
 import { Carousel, createTheme, ThemeProvider } from "flowbite-react";
 import { Loader } from "../Components/Loader";
-import { verifySesion } from "../services/auth/authService";
 
 const customTheme = createTheme({
   "root": {
@@ -116,7 +115,7 @@ function Landing() {
                   <FaUsers className="text-5xl" />
                 </figure>
                 <h5 className="text-RojoC font-barlow-semi-condensed font-bold text-base">
-                  USUARIOS EN LÍNEA
+                  EGRESADOS EN LÍNEA
                 </h5>
                 <p className="text-verdeD font-barlow-semi-condensed font-bold text-xl">
                   {stats?.onlineUsers}

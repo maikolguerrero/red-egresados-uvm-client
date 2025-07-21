@@ -200,7 +200,7 @@ function InfoProfile({ profile }) {
     }
   }
 
-  const handleCetification = () => {
+  const handleCertifications = () => {
     if (profile?.profile?.certifications?.items?.length === 0) {
       return true
     }
@@ -560,37 +560,37 @@ function InfoProfile({ profile }) {
         }
 
         {
-          handleExperience() ? (
+          handleEducation() ? (
             <></>
           ) : (
             <div className="py-4 px-2 w-full">
               <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-                EXPERIENCIA LABORAL
+                EDUCACIÓN
               </h5>
 
               <div className="flex justify-between">
                 <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                  {profile?.profile?.certifications?.items.map((item, key) => (
+                  {profile?.profile?.education?.items.map((item, key) => (
                     <li className="flex justify-between w-full" key={key}>
                       <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
-                        {item.name} -{" "}
+                        {item.institution} -{" "}
+                        <span className="text-verdeD text-sm font-semibold mr-2">
+                          {item?.degree}
+                        </span>
                         <button
                           onClick={(e) => {
                             setValues({
-                              education: {},
-                              certification: item,
+                              education: item,
+                              certification: {},
                               experience: {},
                             });
-                            setOpenCerti(true);
+                            setOpenEducation(true);
                           }}
                           className="text-RojoC"
                         >
                           Detalles
                         </button>
                       </p>{" "}
-                      <span className="text-verdeD text-sm font-semibold">
-                        {item?.issueDate?.split("T")[0]}
-                      </span>
                     </li>
                   ))}
                 </ul>
@@ -613,6 +613,10 @@ function InfoProfile({ profile }) {
                   <li className="flex justify-between w-full" key={key}>
                     <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
                       {item.position} -{" "}
+                      <span className="text-verdeD text-sm font-semibold mr-2">
+                        {item?.startDate?.split("T")[0]} /{" "}
+                        {item?.endDate === undefined || item?.endDate === null ? " Actualidad" : item?.endDate?.split("T")[0]}
+                      </span>
                       <button
                         onClick={(e) => {
                           setValues({
@@ -627,16 +631,53 @@ function InfoProfile({ profile }) {
                         Detalles
                       </button>
                     </p>{" "}
-                    <span className="text-verdeD text-sm font-semibold">
-                      {item?.startDate?.split("T")[0]} /{" "}
-                      {item?.endDate === undefined || item?.endDate === null ? " Actualidad" : item?.endDate?.split("T")[0]}
-                    </span>
+
                   </li>
                 ))}
               </ul>
             </div>
           </div>
         )}
+
+        {
+          handleCertifications() ? (
+            <></>
+          ) : (
+            <div className="py-4 px-2 w-full">
+              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+                CERTIFICACIONES
+              </h5>
+
+              <div className="flex justify-between">
+                <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
+                  {profile?.profile?.certifications?.items.map((item, key) => (
+                    <li className="flex justify-between w-full" key={key}>
+                      <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
+                        {item.name} -{" "}
+                        <span className="text-verdeD text-sm font-semibold mr-2">
+                          {item?.issueDate?.split("T")[0]}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            setValues({
+                              education: {},
+                              certification: item,
+                              experience: {},
+                            });
+                            setOpenCerti(true);
+                          }}
+                          className="text-RojoC"
+                        >
+                          Detalles
+                        </button>
+                      </p>{" "}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )
+        }
 
         {profile?.user?.username === auth?.username ? (
           <div className="py-4 px-2 w-full flex gap-3 flex-wrap justify-center">
