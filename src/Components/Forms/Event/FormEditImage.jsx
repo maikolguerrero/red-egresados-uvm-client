@@ -57,6 +57,7 @@ export function FormEditImage({ internal, event }) {
               onChange={onImageChange}
               id="small-file-upload"
               sizing="sm"
+              accept=".jpg, .jpeg, .png, .svg"
             />
           </div>
         ) : (

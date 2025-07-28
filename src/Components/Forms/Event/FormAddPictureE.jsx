@@ -61,6 +61,7 @@ export function FormAddPictureE({setOpenModal}) {
             onChange={onImageChange}
             id="small-file-upload"
             sizing="sm"
+            accept=".jpg, .jpeg, .png, .svg"
           />
         </div>
         <div>
