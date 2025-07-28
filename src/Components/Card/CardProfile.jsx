@@ -103,7 +103,8 @@ function CardProfile({ profile }) {
               <>
                 {profile?.profile?.professional?.skills?.values.length === 0 ||
                   profile?.profile?.professional?.skills?.isPublic === false ? (
-                  <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
+                  // <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
+                  <></>
                 ) : (
                   <button
                     onClick={(e) => setOpenModal(true)}

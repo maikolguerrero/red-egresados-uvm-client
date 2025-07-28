@@ -4,12 +4,12 @@ import Button from "../../Buttons/Button";
 import { Checkbox, Label } from "flowbite-react";
 import { FaCamera } from "react-icons/fa";
 import notify from "../../../utils/notifications";
-import { typeError } from "../../../models/alertModels";
+import ProfileUpdateConfirmation from "../../Modals/ProfileUpdateConfirmation";
+
 import {
   updatePictureProfile,
   updateProfile,
 } from "../../../services/users/usersService";
-import { MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 
 let styles = {
   input:
@@ -95,6 +95,8 @@ function FormContact() {
   const [values2, setValues2] = useState(defaultSocialMedias);
   const [picture, setPicture] = useState("");
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   useEffect(() => {
     if (profile?.profile?.personalData != undefined) {
       setValuesPersonalData(profile.profile.personalData);
@@ -177,8 +179,23 @@ function FormContact() {
     });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   dispatch(
+  //     updateProfile({
+  //       personalData: valuesPersonalData,
+  //       contact: values,
+  //       socialMedia: values2,
+  //     })
+  //   );
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmSubmit = async () => {
     dispatch(
       updateProfile({
         personalData: valuesPersonalData,
@@ -186,6 +203,7 @@ function FormContact() {
         socialMedia: values2,
       })
     );
+    setShowConfirmation(false);
   };
 
   const handleSubmitPicture = async (e) => {
@@ -247,7 +265,8 @@ function FormContact() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+
+        {/* <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <div className="w-full">
               <p className="px-4 py-2 bg-slate-300 font-barlow-condensed rounded-md text-xs flex text-center justify-center w-auto">
@@ -255,35 +274,34 @@ function FormContact() {
               </p>
             </div>
             <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
-            
-          </div>
-          <div className="flex flex-col gap-3">
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Fecha de Nacimiento:
-              </Label>
-              <div className="flex gap-2 items-center">
-                <input
-                  className={styles.input}
-                  type="date"
-                  name="birthDate"
-                  max={
-                    new Date().toISOString().split("T")[0].split("-")[0] -
-                    18 +
-                    "-" +
-                    new Date().toISOString().split("T")[0].split("-")[1] +
-                    "-" +
-                    new Date().toISOString().split("T")[0].split("-")[2]
-                  } // Restar 18 años
-                  value={
-                    valuesPersonalData?.birthDate.value === null || valuesPersonalData?.birthDate.value === undefined
-                      ? ""
-                      : valuesPersonalData?.birthDate.value.split("T")[0]
-                  }
-                  onChange={handleInputChangePersonalData}
-                  placeholder="Fecha de nacimiento"
-                />
-                <Checkbox
+
+            <div className="flex flex-col gap-3">
+              <div className="w-full flex flex-col relative">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Fecha de Nacimiento:
+                </Label>
+                <div className="flex gap-2 items-center">
+                  <input
+                    className={styles.input}
+                    type="date"
+                    name="birthDate"
+                    max={
+                      new Date().toISOString().split("T")[0].split("-")[0] -
+                      18 +
+                      "-" +
+                      new Date().toISOString().split("T")[0].split("-")[1] +
+                      "-" +
+                      new Date().toISOString().split("T")[0].split("-")[2]
+                    } // Restar 18 años
+                    value={
+                      valuesPersonalData?.birthDate.value === null || valuesPersonalData?.birthDate.value === undefined
+                        ? ""
+                        : valuesPersonalData?.birthDate.value.split("T")[0]
+                    }
+                    onChange={handleInputChangePersonalData}
+                    placeholder="Fecha de nacimiento"
+                  />
+                  <Checkbox
                   className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
                   checked={valuesPersonalData?.birthDate.isPublic}
                   onChange={(e) => {
@@ -293,7 +311,24 @@ function FormContact() {
                     );
                   }}
                 />
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                      checked={valuesPersonalData?.birthDate.isPublic}
+                      onChange={(e) => {
+                        handleCheckChangePersonalData(
+                          "birthDate",
+                          !valuesPersonalData?.birthDate.isPublic
+                        );
+                      }}
+                    />
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
+                    </Label>
+                  </div>
+                </div>
               </div>
+
             </div>
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
@@ -321,16 +356,91 @@ function FormContact() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+
+        <div className="flex flex-col gap-6">
+          <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
+          <div className="flex flex-col gap-3">
+            <div className="w-full flex flex-col relative">
+              <div className="">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Fecha de Nacimiento:
+                </Label>
+                <input
+                  className={styles.input}
+                  type="date"
+                  name="birthDate"
+                  max={
+                    new Date().toISOString().split("T")[0].split("-")[0] -
+                    18 +
+                    "-" +
+                    new Date().toISOString().split("T")[0].split("-")[1] +
+                    "-" +
+                    new Date().toISOString().split("T")[0].split("-")[2]
+                  } // Restar 18 años
+                  value={
+                    valuesPersonalData?.birthDate.value === null || valuesPersonalData?.birthDate.value === undefined
+                      ? ""
+                      : valuesPersonalData?.birthDate.value.split("T")[0]
+                  }
+                  onChange={handleInputChangePersonalData}
+                  placeholder="Fecha de nacimiento"
+                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={valuesPersonalData?.birthDate.isPublic}
+                    onChange={(e) =>
+                      handleCheckChangePersonalData("birthDate", !valuesPersonalData?.birthDate.isPublic)
+                    }
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Ubicación:
+                </Label>
+                <input
+                  className={styles.input}
+                  type="text"
+                  name="location"
+                  value={valuesPersonalData.location.value}
+                  onChange={handleInputChangePersonalData}
+                  placeholder="Ubicación"
+                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={valuesPersonalData?.location.isPublic}
+                    onChange={(e) => {
+                      handleCheckChangePersonalData(
+                        "location",
+                        !valuesPersonalData?.location.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div >
 
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>CONTACTO</h4>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Teléfono:
-              </Label>
-              <div className="flex gap-2 items-center">
+              <div className="">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Teléfono:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
@@ -339,23 +449,27 @@ function FormContact() {
                   onChange={handleInputChange}
                   placeholder="Teléfono"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values?.phone.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange(
-                      "phone",
-                      !values?.phone.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values?.phone.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange(
+                        "phone",
+                        !values?.phone.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Correo de Contacto:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Correo de Contacto:
+                </Label>
                 <input
                   className={styles.input}
                   type="email"
@@ -364,23 +478,27 @@ function FormContact() {
                   onChange={handleInputChange}
                   placeholder="Correo de contacto"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values?.alternateEmail.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange(
-                      "alternateEmail",
-                      !values?.alternateEmail.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values?.alternateEmail.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange(
+                        "alternateEmail",
+                        !values?.alternateEmail.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Sitio Web:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Sitio Web:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
@@ -389,248 +507,293 @@ function FormContact() {
                   onChange={handleInputChange}
                   placeholder="Sitio web"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values?.website.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange(
-                      "website",
-                      !values?.website.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values?.website.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange(
+                        "website",
+                        !values?.website.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
+
             </div>
           </div>
-        </div>
+        </div >
+
 
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>REDES SOCIALES</h4>
           <div className="flex flex-col gap-3">
             <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Instagram:
-              </Label>
-              <div className="flex gap-2 items-center">
+              <div className="">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Instagram:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="instagram"
                   value={values2.instagram.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="Instagram"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.instagram.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "instagram",
-                      !values2?.instagram.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.instagram.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "instagram",
+                        !values2?.instagram.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Facebook:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Facebook:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="facebook"
                   value={values2.facebook.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="Facebook"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.facebook.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "facebook",
-                      !values2?.facebook.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.facebook.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "facebook",
+                        !values2?.facebook.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Linkedin:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  LinkedIn:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="linkedin"
                   value={values2.linkedin.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="LinkedIn"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.linkedin.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "linkedin",
-                      !values2?.linkedin.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.linkedin.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "linkedin",
+                        !values2?.linkedin.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                X:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  X:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="x"
                   value={values2.x.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="X"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.x.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "x",
-                      !values2?.x.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.x.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "x",
+                        !values2?.x.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Youtube:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  YouTube:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="youtube"
                   value={values2.youtube.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="YouTube"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.youtube.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "youtube",
-                      !values2?.youtube.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.youtube.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "youtube",
+                        !values2?.youtube.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                TikTok:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Tiktok:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="tiktok"
                   value={values2.tiktok.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="Tiktok"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.tiktok.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "tiktok",
-                      !values2?.tiktok.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.tiktok.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "tiktok",
+                        !values2?.tiktok.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Whatsapp:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  WhatsApp:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="whatsapp"
                   value={values2.whatsapp.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="WhatsApp"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.whatsapp.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "whatsapp",
-                      !values2?.whatsapp.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.whatsapp.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "whatsapp",
+                        !values2?.whatsapp.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Telegram:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Telegram:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="telegram"
                   value={values2.telegram.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="Telegram"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.telegram.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "telegram",
-                      !values2?.telegram.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.telegram.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "telegram",
+                        !values2?.telegram.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Github:
-              </Label>
-              <div className="flex gap-2 items-center">
+
+              <div className="mt-4">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  GitHub:
+                </Label>
                 <input
                   className={styles.input}
                   type="text"
                   name="github"
                   value={values2.github.value}
                   onChange={handleInputChange2}
-                  placeholder="Url de tu perfil"
+                  placeholder="GitHub"
                 />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={values2?.github.isPublic}
-                  onChange={(e) => {
-                    handleCheckChange2(
-                      "github",
-                      !values2?.github.isPublic
-                    );
-                  }}
-                />
+                <div className="flex items-center gap-2 mt-2">
+                  <Checkbox
+                    className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                    checked={values2?.github.isPublic}
+                    onChange={(e) => {
+                      handleCheckChange2(
+                        "github",
+                        !values2?.github.isPublic
+                      );
+                    }}
+                  />
+                  <Label className="font-barlow-semi-condensed text-RojoC">
+                    Hacer público este contenido
+                  </Label>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -642,7 +805,13 @@ function FormContact() {
             text="GUARDAR CAMBIOS"
           />
         </div>
-      </form>
+      </form >
+
+      <ProfileUpdateConfirmation
+        showConfirmation={showConfirmation}
+        setShowConfirmation={setShowConfirmation}
+        handleConfirmSubmit={handleConfirmSubmit}
+      />
     </>
   );
 }

@@ -303,7 +303,7 @@ export function FormAddProyect({ proyect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.tags.map((item, key) => (
                       <li key={key}>
                         <Skills key={key} text={item} onClick={deleteTag} />

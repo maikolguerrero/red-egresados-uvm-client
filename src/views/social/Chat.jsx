@@ -17,6 +17,7 @@ import { markMessagesAsRead } from "../../services/chat/chatService";
 import { formatDateHeader, groupMessagesByDate } from '../../utils/dateUtils';
 import { Loader } from "../../Components/Loader";
 import logger from "../../utils/logger";
+import useIsMobile from "../../hooks/useIsMobile";
 
 export default function Chat() {
     const { username } = useParams();
@@ -40,6 +41,9 @@ export default function Chat() {
     const userAgent = navigator.userAgent || window.opera;
     const isMobileUserAgent = /android|iphone|ipad|ipod|blackberry|windows phone/i.test(userAgent);
     const isDesktop = !isMobileUserAgent;
+
+    // Nuevo estado para detectar si es un dispositivo móvil
+    const isMobile = useIsMobile();
 
     const [page, setPage] = useState(1);
     const [loadingMore, setLoadingMore] = useState(false);
@@ -206,9 +210,9 @@ export default function Chat() {
                 }
 
                 const userData = {
-                    userId: profileResult.profile.user.id,
-                    username: profileResult.profile.user.username,
-                    nombreCompleto: profileResult.profile?.nombreCompleto || profileResult.profile?.user?.fullName,
+                    userId: profileResult?.profile?.user?.id,
+                    username: profileResult?.profile?.user?.username,
+                    nombreCompleto: profileResult?.profile?.nombreCompleto || profileResult?.profile?.user?.fullName,
                     profilePicture: {
                         url: profileResult?.profile?.user?.profilePicture?.url || null
                     }
@@ -564,9 +568,9 @@ export default function Chat() {
                 }
 
                 {/* solicitud de chat */}
-                {
+                {/* {
                     pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
-                        <div className="fixed bottom-20 left-0 right-0 bg-verdeA font-bold text-white p-4 ">
+                        <div className={`fixed bottom-20 ${isMobile ? 'left-0' : 'left-14'} right-0 bg-verdeA font-bold text-white p-4 `}>
                             <div className="container mx-auto flex  items-center p-2">
                                 <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
                                 <ButtonSmall
@@ -577,15 +581,38 @@ export default function Chat() {
                             </div>
                         </div>
                     )
-                }
+                } */}
             </div >
+
+            {
+                pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
+                    <div className={`bg-verdeA font-bold text-white p-4`}>
+                        <div className="container mx-auto flex  items-center p-2">
+                            <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
+                            <ButtonSmall
+                                text={"Aceptar solicitud"}
+                                className={"bg-verdeC hover:bg-RojoC"}
+                                action={handleAcceptRequest}
+                            />
+                        </div>
+                    </div>
+                )
+            }
 
             {/* Contenedor principal de la barra de mensaje */}
             <div className={`p-4 border-t-2 border-verdeD bg-Gris`}>
-                {!hasChatPermission && pendingRequest?.sender.id === auth.id ? (
-                    <div className="text-center text-sm text-verdeC">
-                        Esperando a que {user.nombreCompleto} acepte tu solicitud de chat
-                    </div>
+                {!hasChatPermission ? (
+                    <>
+                        {((!hasChatPermission && pendingRequest?.sender.id === auth.id) ? (
+                            <div className="text-center text-sm text-verdeC">
+                                Esperando a que {user?.nombreCompleto} acepte tu solicitud de chat
+                            </div>
+                        ) : (
+                            <div className="text-center text-sm text-verdeC">
+                                Podrás chatear con {user?.nombreCompleto} una vez que apruebes la solicitud de chat
+                            </div>
+                        ))}
+                    </>
                 ) :
                     (
                         <div className="flex items-end gap-2">

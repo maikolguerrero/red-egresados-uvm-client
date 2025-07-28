@@ -49,7 +49,7 @@ export function ErrorsDetailsModal({ errors = [] }) {
                                 <TableCell className="px-3 py-2">
                                     <Badge
                                         // color={error.code === 'VALIDATION_ERROR' ? 'failure' : 'warning'}
-                                        className={error.code === 'VALIDATION_ERROR'
+                                        className={error.code === 'ERROR_VALIDACION'
                                             ? 'bg-RojoB text-white' // Clase de Tailwind para fondo rojo y texto blanco
                                             : 'bg-yellow-300 text-black' // Clase de Tailwind para fondo amarillo y texto gris oscuro
                                         }

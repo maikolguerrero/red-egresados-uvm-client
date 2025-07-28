@@ -10,17 +10,17 @@ export function CardEducation({data}) {
             <b>Institucion:</b> {data.institution}
           </h5>
           <h5>
-            <b>Carrera:</b> {data.degree}
+            <b>Título:</b> {data.degree}
           </h5>
-          <h5>
+          {/* <h5>
             <b>Campo de Estudio:</b> {data.fieldOfStudy}
-          </h5>
-          <h5>
+          </h5> */}
+          {/* <h5>
             <b>Año de Inicio:</b>{" "}
             <span className="text-verdeB font-semibold">{data.startYear}</span>
-          </h5>
+          </h5> */}
           <h5>
-            <b>Año de finalizacion:</b>{" "}
+            <b>Año de Graduación:</b>{" "}
             <span className="text-RojoB font-semibold">{data.endYear}</span>
           </h5>
         </div>

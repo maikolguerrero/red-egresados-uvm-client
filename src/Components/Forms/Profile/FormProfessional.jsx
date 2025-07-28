@@ -8,6 +8,7 @@ import { Skills } from "../../Skills";
 import { ItemBabge } from "../../Babge/ItemBabge";
 import notify from "../../../utils/notifications";
 import { updateProfile } from "../../../services/users/usersService";
+import ProfileUpdateConfirmation from "../../Modals/ProfileUpdateConfirmation";
 
 let styles = {
   input:
@@ -72,6 +73,8 @@ function FormProfessional() {
 
   const [valuesIsPublic, setValuesIsPublic] = useState(defaultIsPublic);
 
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
   useEffect(() => {
     setSkills(profile?.profile?.professional?.skills?.values || []);
     setInterests(profile?.profile?.professional?.interests?.values || []);
@@ -124,8 +127,8 @@ function FormProfessional() {
   const addEducation = (e) => {
     if (valuesEd?.institution?.trim().length === 0) return notify.error("Falta la institución", false);
     if (valuesEd?.degree?.trim().length === 0) return notify.error("Falta el grado", false);
-    if (valuesEd?.fieldOfStudy?.trim().length === 0) return notify.error("Falta el campo de estudio", false);
-    if (valuesEd?.startYear === 0) return notify.error("Falta el año de inicio", false);
+    // if (valuesEd?.fieldOfStudy?.trim().length === 0) return notify.error("Falta el campo de estudio", false);
+    // if (valuesEd?.startYear === 0) return notify.error("Falta el año de inicio", false);
     if (valuesEd?.endYear === 0) return notify.error("Falta el año de finalización", false);
     if (valuesEd?.startYear > valuesEd?.endYear) return notify.error("El año de inicio debe ser menor al de finalización", false);
 
@@ -205,7 +208,7 @@ function FormProfessional() {
   const deleteExperiencie = (key) => {
     let newExperiencie = experience.filter((item) => item.position !== key)
     setExperience(newExperiencie)
-    notify("Eliminada la experiencia laboral (debes guardar cambios)", false) 
+    notify("Eliminada la experiencia laboral (debes guardar cambios)", false)
   }
 
   const handleInputChange = (e) => {
@@ -249,6 +252,10 @@ function FormProfessional() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmSubmit = async () => {
     if (valuesEx.endDate === null) {
       delete valuesEx.endDate
     }
@@ -283,7 +290,8 @@ function FormProfessional() {
         isPublic: valuesIsPublic?.certifications,
       },
     };
-    dispatch(updateProfile(data))
+    dispatch(updateProfile(data));
+    setShowConfirmation(false);
   };
 
   return (
@@ -472,7 +480,7 @@ function FormProfessional() {
             </div>
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Carrera:
+                Título:
               </Label>
               <input
                 className={styles.input}
@@ -483,7 +491,7 @@ function FormProfessional() {
                 placeholder="..."
               />
             </div>
-            <div className="w-full flex flex-col relative">
+            {/* <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Campo de Estudio:
               </Label>
@@ -495,9 +503,10 @@ function FormProfessional() {
                 onChange={handleInputChange2}
                 placeholder="..."
               />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="w-full flex flex-col relative">
+            </div> */}
+            {/* <div className="grid grid-cols-2 gap-3"> */}
+            <div className="w-full flex flex-col relative">
+              {/* <div className="w-full flex flex-col relative">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                   Año de Inicio:
                 </Label>
@@ -509,17 +518,17 @@ function FormProfessional() {
                   value={valuesEd?.startYear}
                   onChange={handleInputChange2}
                 />
-              </div>
+              </div> */}
               <div className="w-full flex flex-col relative">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Año de Finalización:
+                  Año de Graduación:
                 </Label>
                 <input
                   className={styles.input}
                   type="number"
                   name="endYear"
                   value={valuesEd?.endYear}
-                  min={0}
+                  min={1930}
                   onChange={handleInputChange2}
                 />
               </div>
@@ -565,6 +574,143 @@ function FormProfessional() {
                         handleCheckChange(
                           "education",
                           !valuesIsPublic?.education
+                        )
+                      }
+                    />
+                    <Label className="font-barlow-semi-condensed text-RojoC">
+                      Hacer público este contenido
+                    </Label>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <h4 className={styles.subtitle_form}>EXPERIENCIA LABORAL</h4>
+          <div className="flex flex-col gap-3">
+            <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Compañía:
+              </Label>
+              <input
+                className={styles.input}
+                type="text"
+                name="company"
+                value={valuesEx?.company}
+                onChange={handleInputChange4}
+                placeholder="..."
+              />
+            </div>
+            <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Cargo:
+              </Label>
+              <input
+                className={styles.input}
+                type="text"
+                name="position"
+                value={valuesEx?.position}
+                onChange={handleInputChange4}
+                placeholder="..."
+              />
+            </div>
+            <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Descripción:
+              </Label>
+              <textarea
+                cols={40}
+                className={styles.input}
+                type="text"
+                name="description"
+                value={valuesEx.description}
+                onChange={handleInputChange4}
+                placeholder="Descripción profesional..."
+              ></textarea>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="w-full flex flex-col relative">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Fecha de Inicio:
+                </Label>
+                <input
+                  className={styles.input}
+                  type="date"
+                  name="startDate"
+                  value={valuesEx?.startDate}
+                  onChange={handleInputChange4}
+                />
+              </div>
+              <div className="w-full flex flex-col relative">
+                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                  Fecha de Finalización (opcional):
+                </Label>
+                <input
+                  className={styles.input}
+                  type="date"
+                  name="endDate"
+                  value={valuesEx?.endDate}
+                  onChange={handleInputChange4}
+                />
+              </div>
+            </div>
+            {/* <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Sigo Actualmente:
+              </Label>
+              <select
+                className={styles.input}
+                name="current"
+                value={valuesEx.current}
+                onChange={handleInputChange4}
+              >
+                <option value="false">No</option>
+                <option value="true">Si</option>
+              </select>
+            </div> */}
+            <button
+              type="button"
+              onClick={addExperiencie}
+              className={
+                "bg-verdeC text-Blanco px-7 py-1 font-barlow-condensed font-bold rounded-3xl text-sm md:text-base hover:bg-RojoC transition-all duration-300 "
+              }
+              style={{ boxShadow: "inset -3px -5px 7px  rgba(0, 0, 0, .4)" }}
+            >
+              AGREGAR
+            </button>
+            <div className="w-full flex flex-col relative">
+              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+                Lista de Experiencia Laboral:
+              </Label>
+              {experience.length === 0 ? (
+                <>
+                  <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
+                    No hay ninguna experiencia laboral registrada...
+                  </h6>
+                </>
+              ) : (
+                <>
+                  <ul className="flex flex-col gap-2">
+                    {experience.map((item, key) => (
+                      <li key={key}>
+                        <ItemBabge
+                          key={key}
+                          text={item?.company}
+                          onClick={deleteExperiencie}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
+                      checked={valuesIsPublic?.experience}
+                      onChange={(e) =>
+                        handleCheckChange(
+                          "experience",
+                          !valuesIsPublic?.experience
                         )
                       }
                     />
@@ -699,143 +845,6 @@ function FormProfessional() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <h4 className={styles.subtitle_form}>EXPERIENCIA LABORAL</h4>
-          <div className="flex flex-col gap-3">
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Compañía:
-              </Label>
-              <input
-                className={styles.input}
-                type="text"
-                name="company"
-                value={valuesEx?.company}
-                onChange={handleInputChange4}
-                placeholder="..."
-              />
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Cargo:
-              </Label>
-              <input
-                className={styles.input}
-                type="text"
-                name="position"
-                value={valuesEx?.position}
-                onChange={handleInputChange4}
-                placeholder="..."
-              />
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Descripción:
-              </Label>
-              <textarea
-                cols={40}
-                className={styles.input}
-                type="text"
-                name="description"
-                value={valuesEx.description}
-                onChange={handleInputChange4}
-                placeholder="Descripción profesional..."
-              ></textarea>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="w-full flex flex-col relative">
-                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Fecha de Inicio:
-                </Label>
-                <input
-                  className={styles.input}
-                  type="date"
-                  name="startDate"
-                  value={valuesEx?.startDate}
-                  onChange={handleInputChange4}
-                />
-              </div>
-              <div className="w-full flex flex-col relative">
-                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Fecha de Finalización (opcional):
-                </Label>
-                <input
-                  className={styles.input}
-                  type="date"
-                  name="endDate"
-                  value={valuesEx?.endDate}
-                  onChange={handleInputChange4}
-                />
-              </div>
-            </div>
-            {/* <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Sigo Actualmente:
-              </Label>
-              <select
-                className={styles.input}
-                name="current"
-                value={valuesEx.current}
-                onChange={handleInputChange4}
-              >
-                <option value="false">No</option>
-                <option value="true">Si</option>
-              </select>
-            </div> */}
-            <button
-              type="button"
-              onClick={addExperiencie}
-              className={
-                "bg-verdeC text-Blanco px-7 py-1 font-barlow-condensed font-bold rounded-3xl text-sm md:text-base hover:bg-RojoC transition-all duration-300 "
-              }
-              style={{ boxShadow: "inset -3px -5px 7px  rgba(0, 0, 0, .4)" }}
-            >
-              AGREGAR
-            </button>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Lista de Experiencia Laboral:
-              </Label>
-              {experience.length === 0 ? (
-                <>
-                  <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
-                    No hay ninguna experiencia laboral registrada...
-                  </h6>
-                </>
-              ) : (
-                <>
-                  <ul className="flex flex-col gap-2">
-                    {experience.map((item, key) => (
-                      <li key={key}>
-                        <ItemBabge
-                          key={key}
-                          text={item?.position}
-                          onClick={deleteExperiencie}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Checkbox
-                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                      checked={valuesIsPublic?.experience}
-                      onChange={(e) =>
-                        handleCheckChange(
-                          "experience",
-                          !valuesIsPublic?.experience
-                        )
-                      }
-                    />
-                    <Label className="font-barlow-semi-condensed text-RojoC">
-                      Hacer público este contenido
-                    </Label>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-
         <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
           <Button
             action={handleSubmit}
@@ -844,6 +853,12 @@ function FormProfessional() {
           />
         </div>
       </form>
+
+      <ProfileUpdateConfirmation
+        showConfirmation={showConfirmation}
+        setShowConfirmation={setShowConfirmation}
+        handleConfirmSubmit={handleConfirmSubmit}
+      />
     </>
   );
 }
