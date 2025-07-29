@@ -601,7 +601,7 @@ export default function Chat() {
 
             {/* Contenedor principal de la barra de mensaje */}
             <div className={`p-4 border-t-2 border-verdeD bg-Gris`}>
-                {!hasChatPermission ? (
+                {!hasChatPermission && messages.length <= 1 ? (
                     <>
                         {((!hasChatPermission && pendingRequest?.sender.id === auth.id) ? (
                             <div className="text-center text-sm text-verdeC">

@@ -106,7 +106,7 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       organizers: [...values.organizers, organizer],
     });
-    setTag("");
+    setOrganizer("");
     notify.info("Agregado al organizador", false);
   };
 
@@ -130,7 +130,7 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       specialGuests: [...values.specialGuests, specialGuest],
     });
-    setTag("");
+    setSpecialGuest("");
     notify.info("Agregado al invitado especial", false);
   };
 
@@ -430,7 +430,7 @@ export function FormAddEvent({ eventSelect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.tags.map((item, key) => (
                       <li key={key}>
                         <Skills key={key} text={item} onClick={deleteTag} />
@@ -479,7 +479,7 @@ export function FormAddEvent({ eventSelect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.organizers.map((item, key) => (
                       <li key={key}>
                         <Skills
@@ -532,7 +532,7 @@ export function FormAddEvent({ eventSelect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.specialGuests.map((item, key) => (
                       <li key={key}>
                         <Skills

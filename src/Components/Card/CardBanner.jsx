@@ -12,6 +12,7 @@ import { BsExclamationOctagon } from "react-icons/bs";
 import { formatNotification } from "../../utils/dateUtils";
 import logger from "../../utils/logger";
 import notify from "../../utils/notifications";
+import { useSelector } from "react-redux";
 
 export function CardBanner({
   type,
@@ -25,6 +26,7 @@ export function CardBanner({
 }) {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
+  const role = useSelector((state) => state.auth.role);
 
   // Función para determinar el icono y texto según el tipo
   const getNotificationTypeInfo = () => {
@@ -58,7 +60,7 @@ export function CardBanner({
         return {
           icon: <BsExclamationOctagon className="w-6 h-6" />,
           typeText: "REPORTE",
-          baseRoute: "/config/reports"
+          baseRoute: (role === "admin" || role === "superadmin") ? "/config/reports" : "/"
         };
       case 'user_warning':
         return {
@@ -88,7 +90,7 @@ export function CardBanner({
     }
 
     // Navegar según el tipo de notificación y datos disponibles
-    if (data?.reportId) {
+    if (data?.reportId && (role === "admin" || role === "superadmin")) {
       // Notificaciones de proyectos
       navigate(`/config/reports`);
     } else if (data?.threadId) {

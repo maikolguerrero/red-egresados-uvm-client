@@ -3,10 +3,9 @@ import { FaGraduationCap, FaUser } from "react-icons/fa";
 import { FaArrowLeftLong, FaArrowRightLong, FaGear, FaPeopleGroup } from "react-icons/fa6";
 import { IoIosHome, IoIosNotifications } from "react-icons/io";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toggleSidebar } from "../features/sidebar/sidebarSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import socketService from "../services/socket/socket.service";
 import { getUnreadNotificationCount } from "../services/notifications/notificationService";
 import useIsMobile from "../hooks/useIsMobile";
@@ -22,6 +21,19 @@ function Nav() {
   const [loadingCount, setLoadingCount] = useState(true);
 
   const isMobile = useIsMobile();
+
+  const itemRef = useRef(null);
+  const [tooltipStyle, setTooltipStyle] = useState({});
+
+  const handleMouseEnter = () => {
+    if (isMobile) return;
+
+    const rect = itemRef.current.getBoundingClientRect();
+    setTooltipStyle({
+      left: `${rect.right + 10}px`, // 10px a la derecha del elemento
+      top: `${rect.top + rect.height / 2}px`, // Centrado vertical
+    });
+  };
 
   useEffect(() => {
     const fetchInitialCount = async () => {
@@ -100,31 +112,46 @@ function Nav() {
 
         <nav
           className={`${isMobile
-            ? `fixed top-0 left-0 h-full w-full ${!isSidebar ? "translate-x-0" : "-translate-x-full"
-            }`
+            ? `fixed top-0 left-0 h-full w-full ${!isSidebar ? "translate-x-0" : "-translate-x-full"}`
             : isSidebar
               ? "w-[60px] items-center"
               : "md:w-[200px] absolute md:relative w-full"
-            } flex flex-col border-r-2 bg-Gris ${!isMobile && "border-verdeD"
-            } h-[89.5vh] md:h-auto text-verdeD transition-all duration-300 ease-in-out z-20`}
+            } flex flex-col border-r-2 bg-Gris ${!isMobile && "border-verdeD"}
+              h-[89.5vh] text-verdeD transition-all duration-300 ease-in-out z-20
+              overflow-y-auto overflow-x-hidden`} // scroll vertical
         >
           {/* Contenido del sidebar */}
           <div className="px-4 pt-3 flex justify-end">
-            <button
-              onClick={() => dispatch(toggleSidebar())}
-              className="rounded-full px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all group relative"
+
+            <div
+              ref={itemRef}
+              onMouseEnter={handleMouseEnter}
+              // onMouseLeave={() => setTooltipStyle({})}
+              className="relative group"
             >
-              {isSidebar ? (
-                <FaArrowRightLong className="text-xl" />
-              ) : (
-                <FaArrowLeftLong className="text-xl" />
-              )}
-              {!isMobile && (
-                <span className="absolute left-full ml-4 px-3 py-1 bg-verdeD text-Blanco text-sm font-barolw rounded-md shadow-lg whitespace-nowrap scale-0 group-hover:scale-100 origin-left transition-transform duration-200 z-20">
-                  {isSidebar ? "EXPANDIR" : "CONTRAER"}
-                </span>
-              )}
-            </button>
+              <button
+                onClick={() => dispatch(toggleSidebar())}
+                className="rounded-full px-4 py-2 flex gap-2 items-center hover:cursor-pointer hover:bg-Blanco duration-300 transition-all group relative"
+              >
+                {isSidebar ? (
+                  <FaArrowRightLong className="text-xl" />
+                ) : (
+                  <FaArrowLeftLong className="text-xl" />
+                )}
+
+                {!isMobile && (
+                  <div
+                    className="fixed z-[9999] px-3 py-1 bg-verdeD text-Blanco text-sm rounded-md whitespace-nowrap shadow-lg origin-left scale-0 group-hover:scale-100 transition-transform duration-200 transform -translate-y-1/2"
+                    style={{
+                      left: `${tooltipStyle.left}`,
+                      top: `${tooltipStyle.top}`,
+                    }}
+                  >
+                    {isSidebar ? "EXPANDIR" : "CONTRAER"}
+                  </div>
+                )}
+              </button>
+            </div>
           </div>
 
           <ul className="py-4 border-b border-verdeD">

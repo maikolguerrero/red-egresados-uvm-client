@@ -56,6 +56,7 @@ export function FormCarrousel({landing}) {
               onChange={onImageChange}
               id="small-file-upload"
               sizing="sm"
+              accept=".jpg, .jpeg, .png, .svg, .webp, .avif"
             />
           </div>
           <div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 // Define el breakpoint por defecto, puedes ajustarlo si lo necesitas
 const MOBILE_BREAKPOINT = 768; // Por ejemplo, el 'md' de Tailwind CSS
+const DESKTOP_BREAKPOINT = 1024;
 
 function useIsMobile() {
   // Función para determinar si es móvil.
@@ -13,7 +14,9 @@ function useIsMobile() {
     // Si el User Agent indica móvil, lo consideramos móvil.
     // De lo contrario, nos basamos en el ancho de la ventana.
     // Esto es útil para casos donde un User Agent móvil podría tener una ventana grande (ej. tablet en landscape).
-    return isMobileUserAgent || window.innerWidth <= MOBILE_BREAKPOINT;
+    // return isMobileUserAgent || window.innerWidth <= MOBILE_BREAKPOINT;
+    // return isMobileUserAgent || window.innerWidth >= DESKTOP_BREAKPOINT;
+    return  window.innerWidth <= DESKTOP_BREAKPOINT;
   };
 
   // 1. Estado para almacenar si es móvil

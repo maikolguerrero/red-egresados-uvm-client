@@ -26,7 +26,7 @@ function CardReport({ item }) {
             : "border-red-800"
           } flex w-full flex-col rounded-lg border bg-Gris p-4 shadow-sm lg:max-w-7xl`}
       >
-        <div className="flex justify-between w-full items-center p-3 border-b border-verdeA">
+        <div className="flex flex-col gap-3 md:gap-0 md:justify-between w-full p-3 border-b border-verdeA">
           <div className="flex gap-2 items-center">
             {/* <img
               className="rounded-full w-8"
@@ -59,7 +59,7 @@ function CardReport({ item }) {
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-2">
+          <div className="flex flex-row md:flex-row items-center gap-2 mt-2">
             {item?.status === "resolved" ? (
               <></>
             ) : (

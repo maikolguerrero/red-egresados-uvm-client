@@ -67,7 +67,7 @@ function Reports() {
             </>
           ) : (
             <>
-              <div className="w-full gap-6 justify-center flex-col flex">
+              <div className="w-full gap-6 justify-center flex-col items-center flex">
                 {reports.map((item, key) => (
                   <CardReport key={key} item={item} />
                 ))}

@@ -58,6 +58,7 @@ export function FormAddPictureSubSection({ sectionIndex, subsectionIndex, image,
               onChange={onImageChange}
               id="small-file-upload"
               sizing="sm"
+              accept=".jpg, .jpeg, .png, .svg, .webp, .avif"
             />
           </div>
         ) : (
