@@ -2,7 +2,7 @@ import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
-import { enqueueSnackbar } from "notistack";
+import notify from "../../../utils/notifications";
 import { typeError } from "../../../models/alertModels";
 import { addPictureForum } from "../../../services/forum/forumService";
 import { finish } from "../../../features/forums/forumsSlice";
@@ -31,7 +31,7 @@ export function FormAddPicture({setOpenModal}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una foto para el Foro", typeError);
+      notify("No se ha seleccionado una imagen para el Hilo", typeError);
     } else {
       const formData = new FormData();
       formData.append("image", picture);
@@ -52,11 +52,11 @@ export function FormAddPicture({setOpenModal}) {
     <>
       <form className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          Agregar Foto al Foro
+          Agregar Imagen al Hilo
         </h5>
         <div className="flex flex-col gap-1">
           <Label className="mb-2 block" htmlFor="small-file-upload">
-            Selecciona la foto:
+            Selecciona la imagen:
           </Label>
           <FileInput
             onChange={onImageChange}
@@ -74,7 +74,7 @@ export function FormAddPicture({setOpenModal}) {
               </h6>
               <img
                 src={image}
-                alt=""
+                alt="Imagen del Hilo"
                 className="w-auto h-auto border border-verdeD"
               />
             </div>
@@ -84,7 +84,7 @@ export function FormAddPicture({setOpenModal}) {
         <ButtonSmall
           action={handleSubmit}
           className={"bg-verdeA hover:bg-RojoC"}
-          text={"AGREGAR FOTO"}
+          text={"AGREGAR IMAGEN"}
         />
         <ButtonSmall
           action={handleClose}

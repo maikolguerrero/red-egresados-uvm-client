@@ -1,6 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
+import notify from "../utils/notifications";
 import { typeError, typeSuccess } from "../models/alertModels";
+import { URL_API } from "../config";
+import logger from "../utils/logger";
 
 // Action asíncrona
 export const postData = createAsyncThunk(
@@ -9,10 +11,10 @@ export const postData = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/register/alumni",
+        `${URL_API}/api/auth/register/alumni`,
         {
           mode: "cors",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -22,7 +24,7 @@ export const postData = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, false)
         return ({message: datas.message, email: data.email});
       } else {
         if (datas.metadata.context === "input_validation") {
@@ -34,12 +36,12 @@ export const postData = createAsyncThunk(
         if (datas.metadata.action === "register_duplicate") {
           throw `${datas.message}`;
         }
-        console.log(datas);
+        logger.log(datas);
         throw "no conozco el error";
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -51,11 +53,11 @@ export const loginUserFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/login",
+        `${URL_API}/api/auth/login`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -65,7 +67,7 @@ export const loginUserFetch = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, true)
         return (datas.message);
       }
       if (datas.metadata.context === "security") {
@@ -76,7 +78,7 @@ export const loginUserFetch = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

@@ -1,31 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { Bounce, toast } from "react-toastify";
-import { typeError, typeSuccess } from "../../models/alertModels";
-
-let optionsToast = {
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: false,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-  transition: Bounce,
-};
+import { URL_API } from "../../config";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export const verifySesion = createAsyncThunk(
   "authSlice/verifySesion", // Nombre de la acción
   async (data, thunkAPI) => {
     try {
+
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/check-session",
+        `${URL_API}/api/auth/check-session`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -33,9 +22,9 @@ export const verifySesion = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, true)
         return {
           message: datas.message,
           id: datas.user.id,
@@ -45,10 +34,10 @@ export const verifySesion = createAsyncThunk(
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -60,11 +49,11 @@ export const logoutSesion = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/logout",
+        `${URL_API}/api/auth/logout`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -72,17 +61,17 @@ export const logoutSesion = createAsyncThunk(
       );
 
       let datas = await response.json();
-            console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, true)
         return (datas.message)
       } else {
         throw `${datas.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -94,11 +83,11 @@ export const resendEmailFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/resend-verification",
+        `${URL_API}/api/auth/resend-verification`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -108,14 +97,14 @@ export const resendEmailFetch = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, false)
         return (datas.message);
       } else {
         throw `${datas.message}`;
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -128,10 +117,10 @@ export const postData = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/register/alumni",
+        `${URL_API}/api/auth/register/alumni`,
         {
           mode: "cors",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -141,8 +130,8 @@ export const postData = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
-        return ({message: datas.message, email: data.email});
+        notify.success(datas.message, false)
+        return ({ message: datas.message, email: data.email });
       } else {
         if (datas.metadata.context === "input_validation") {
           throw `${datas.metadata.errors[0].message}`;
@@ -153,12 +142,12 @@ export const postData = createAsyncThunk(
         if (datas.metadata.action === "register_duplicate") {
           throw `${datas.message}`;
         }
-        console.log(datas);
-        throw "no conozco el error";
+        logger.log(datas);
+        throw datas.message ? datas.message : "Error al registrar";
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -170,11 +159,11 @@ export const loginUserFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        "http://localhost:3000" + "/api/auth/login",
+        `${URL_API}/api/auth/login`,
         {
           mode: "cors",
           credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -184,7 +173,7 @@ export const loginUserFetch = createAsyncThunk(
 
       let datas = await response.json();
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess)
+        notify.success(datas.message, true)
         return {
           message: datas.message,
           id: datas.user.id,
@@ -200,7 +189,7 @@ export const loginUserFetch = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -212,12 +201,11 @@ export const verifyEmail = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        // "http://localhost:3000" + "/api/auth/verify-email?token =" + "?",
-         `http://localhost:3000/api/auth/verify-email?token=${data}`,
+        `${URL_API}/api/auth/verify-email?token=${data}`,
         {
           mode: "cors",
           credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -225,9 +213,9 @@ export const verifyEmail = createAsyncThunk(
       );
 
       let datas = await response.json();
-      console.log(datas)
+      logger.log(datas)
       if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess);
+        notify.success(datas.message, false)
         return {
           message: datas.message,
         };
@@ -236,7 +224,75 @@ export const verifyEmail = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk(
+  "authSlice/forgotPassword", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/auth/forgot-password`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      let datas = await response.json();
+      logger.log(datas)
+      if (datas.success) {
+        notify.success(datas.message, false)
+        return (datas.message);
+      } else {
+        throw `${datas.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      notify.error(error, false)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const newPassword = createAsyncThunk(
+  "authSlice/newPassword", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await fetch(
+        `${URL_API}/api/auth/reset-password`,
+        {
+          mode: "cors",
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      let datas = await response.json();
+      logger.log(datas)
+      if (datas.success) {
+        notify.success(datas.message, false)
+        return (datas.message);
+      } else {
+        throw `${datas.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

@@ -1,7 +1,6 @@
 import { Label } from "flowbite-react";
-import { enqueueSnackbar } from "notistack";
+import notify from "../../../utils/notifications";
 import { useEffect, useState } from "react";
-import { typeError, typeInfo } from "../../../models/alertModels";
 import { IoIosAdd } from "react-icons/io";
 import { Skills } from "../../Skills";
 import ButtonSmall from "../../Buttons/ButtonSmall";
@@ -15,7 +14,7 @@ let styles = {
     "py-1 px-2 border-b-2 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold",
 };
 
-export function FormAddForum({forum, type}) {
+export function FormAddForum({ forum, type }) {
   const dispatch = useDispatch();
 
   const [tag, setTag] = useState("");
@@ -31,19 +30,19 @@ export function FormAddForum({forum, type}) {
       return;
     } else {
       setValues({
-        title: forum.title,
-        content: forum.content,
-        category: forum.category,
-        tags: forum.tags,
+        title: forum?.title,
+        content: forum?.content,
+        category: forum?.category,
+        tags: forum?.tags,
       });
     }
   }, [forum]);
 
   const addTag = (e) => {
     if (tag.trim().length === 0) {
-      return enqueueSnackbar(
-        "No puedes agregar la etiqueta sin escribirla",
-        typeError
+      return notify.error(
+        "Falta la etiqueta",
+        false
       );
     }
     setValues({
@@ -51,7 +50,7 @@ export function FormAddForum({forum, type}) {
       tags: [...values.tags, tag],
     });
     setTag("");
-    enqueueSnackbar("Se agrego la etiqueta", typeInfo);
+    notify.info("Agregada la etiqueta", false);
   };
 
   const deleteTag = (key) => {
@@ -60,7 +59,7 @@ export function FormAddForum({forum, type}) {
       ...values,
       tags: newTags,
     });
-    enqueueSnackbar("Se elimino la etiqueta", typeInfo);
+    notify.info("Eliminada la etiqueta", false);
   };
 
   const handleInputChange = (e) => {
@@ -74,19 +73,19 @@ export function FormAddForum({forum, type}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.title.trim() === "") {
-      return enqueueSnackbar("Debe tener titulo el foro", typeError);
+      return notify.error("Falta el título", false);
     }
     if (values.content.trim() === "") {
-      return enqueueSnackbar("Debe tener descripcion el foro", typeError);
+      return notify.error("Falta la descripción", false);
     }
     if (values.category.trim() === "") {
-      return enqueueSnackbar("Debe tener categoria el foro", typeError);
+      return notify.error("Falta la categoría", false);
     }
     if (forum === undefined) {
       dispatch(addForum(values));
     } else {
       dispatch(editForum({
-        threadId: forum.id,
+        threadId: forum?.id,
         data: values,
         type: type
       }))
@@ -97,20 +96,20 @@ export function FormAddForum({forum, type}) {
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          {forum === undefined ? "Agregar Foro" : "Editar Foro"}
+          {forum === undefined ? "Agregar Hilo al Foro" : "Editar Hilo del Foro"}
         </h5>
         <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Titulo:
+              Título:
             </Label>
             <input
               className={styles.input}
               type="text"
               name="title"
-              value={values.title}
+              value={values?.title}
               onChange={handleInputChange}
-              placeholder="Titulo del foro..."
+              placeholder="Título del hilo..."
             />
           </div>
 
@@ -122,25 +121,25 @@ export function FormAddForum({forum, type}) {
               className={styles.input}
               type="text"
               name="content"
-              value={values.content}
+              value={values?.content}
               onChange={handleInputChange}
-              placeholder="Descripcion del foro..."
+              placeholder="Descripción del hilo..."
             ></textarea>
           </div>
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Categoria:
+              Categoría:
             </Label>
             <select
               className={styles.input}
               type="text"
               name="category"
-              value={values.category}
+              value={values?.category}
               onChange={handleInputChange}
-              placeholder="Titulo del foro..."
+              placeholder="Categoría del hilo..."
             >
-              <option value="">Selecciona una categoria...</option>
+              <option value="">Selecciona una categoría...</option>
               <option value="general">General</option>
               <option value="empleos">Empleos</option>
               <option value="eventos">Eventos</option>
@@ -177,18 +176,16 @@ export function FormAddForum({forum, type}) {
 
               <div className="flex flex-col">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Lista de Habilidades:
+                  Lista de Etiquetas:
                 </Label>
                 {values.tags.length === 0 ? (
-                  <>
-                    <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
-                      No hay ninguna etiqueta registrada...
-                    </h6>
-                  </>
+                  <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
+                    No hay ninguna etiqueta registrada...
+                  </h6>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.tags.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <Skills key={key} text={item} onClick={deleteTag} />
                       </li>
                     ))}
@@ -200,7 +197,7 @@ export function FormAddForum({forum, type}) {
         </div>
         <ButtonSmall
           className={"bg-verdeD hover:bg-RojoC"}
-          text={forum === undefined ? "Crear Foro" : "Editar Foro"}
+          text={forum === undefined ? "Crear Hilo" : "Editar Hilo"}
         />
       </form>
     </>

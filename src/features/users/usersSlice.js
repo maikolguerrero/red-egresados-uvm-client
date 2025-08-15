@@ -12,6 +12,7 @@ export const usersSlice = createSlice({
       limit: 12,
     },
     loading: false,
+    loadingPage: false,
     error: "",
     message: "",
     profile: null,
@@ -23,32 +24,32 @@ export const usersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getProfile.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(getProfile.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.profile = action.payload.profile;
       state.email = action.payload.email;
     });
     builder.addCase(getProfile.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 
     builder.addCase(getUsers.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(getUsers.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.pagination = action.payload.pagination;
       state.users = action.payload.users;
     });
     builder.addCase(getUsers.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 

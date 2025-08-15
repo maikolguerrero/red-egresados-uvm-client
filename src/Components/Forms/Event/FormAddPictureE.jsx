@@ -2,8 +2,7 @@ import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
-import { enqueueSnackbar } from "notistack";
-import { typeError } from "../../../models/alertModels";
+import notify from "../../../utils/notifications";
 import { finishEventAdd } from "../../../features/events/eventsSlice";
 import { addPictureEvent } from "../../../services/events/eventsService";
 
@@ -31,7 +30,7 @@ export function FormAddPictureE({setOpenModal}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      enqueueSnackbar("No se ha seleccionado una foto para el Evento", typeError);
+      notify.error("No se ha seleccionado una imagen para el evento", false);
     } else {
       const formData = new FormData();
       formData.append("image", picture);
@@ -52,16 +51,17 @@ export function FormAddPictureE({setOpenModal}) {
     <>
       <form className="flex flex-col gap-5">
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
-          Agregar Foto al Foro
+          Agregar Imágen al evento
         </h5>
         <div className="flex flex-col gap-1">
           <Label className="mb-2 block" htmlFor="small-file-upload">
-            Selecciona la foto:
+            Selecciona la imágen:
           </Label>
           <FileInput
             onChange={onImageChange}
             id="small-file-upload"
             sizing="sm"
+            accept=".jpg, .jpeg, .png, .svg, .webp, .avif"
           />
         </div>
         <div>
@@ -84,7 +84,7 @@ export function FormAddPictureE({setOpenModal}) {
         <ButtonSmall
           action={handleSubmit}
           className={"bg-verdeA hover:bg-RojoC"}
-          text={"AGREGAR FOTO"}
+          text={"AGREGAR IMÁGEN"}
         />
         <ButtonSmall
           action={handleClose}

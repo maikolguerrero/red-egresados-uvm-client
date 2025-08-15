@@ -65,7 +65,7 @@ export function TabsProfile() {
   return (
     <ThemeProvider theme={customTheme}>
       <Tabs theme={customTheme} aria-label="Default tabs" variant="default">
-        <TabItem active title="Contactos" icon={HiUserCircle}>
+        <TabItem active title="Personal" icon={HiUserCircle}>
           <FormContact />
         </TabItem>
         <TabItem title="Profesional" icon={MdDashboard}>

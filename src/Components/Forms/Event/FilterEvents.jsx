@@ -1,9 +1,8 @@
-import { Button, Label } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { Label } from "flowbite-react";
 import { FaFilter } from "react-icons/fa6";
+import { GrPowerReset } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getUsers } from "../../../services/users/usersService";
 import { searchEvent } from "../../../services/events/eventsService";
 
 let styles = {
@@ -39,6 +38,20 @@ function FilterEvents({ values, setValues }) {
     );
   };
 
+  const handleReset = (e) => {
+    if (values.type.trim() === "" && values.search.trim() === ""
+      && values.upcoming.trim() === "") {
+      e.preventDefault();
+      return;
+    }
+
+    setValues({
+      type: "",
+      search: "",
+      upcoming: "",
+    });
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
@@ -54,7 +67,7 @@ function FilterEvents({ values, setValues }) {
               value={values.type}
               onChange={handleInputChange}
             >
-              <option value="">...</option>
+              <option value="">Todos los tipos</option>
               <option value="conferencia">Conferencia</option>
               <option value="taller">Taller</option>
               <option value="seminario">Seminario</option>
@@ -66,7 +79,7 @@ function FilterEvents({ values, setValues }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Titulo y Descripcion:
+              Título y Descripción:
             </Label>
             <input
               className={styles.input}
@@ -74,11 +87,12 @@ function FilterEvents({ values, setValues }) {
               name="search"
               value={values.search}
               onChange={handleInputChange}
-              placeholder="Filtrar por titulo o descripcion..."
+              placeholder="Filtrar por título o descripción..."
             />
           </div>
 
-          <div className="w-full flex flex-col relative">
+          {
+            /*<div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
               Estado del Evento:
             </Label>
@@ -93,15 +107,24 @@ function FilterEvents({ values, setValues }) {
               <option value={true}>Activo</option>
               <option value={false}>Inactivo</option>
             </select>
-          </div>
+          </div>*/
+          }
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <button
             type="submit"
             className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
           >
             <FaFilter /> Filtrar
+          </button>
+          <button
+            onClick={(e) => {
+              handleReset(e);
+            }}
+            className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
+          >
+            <GrPowerReset /> Limpiar
           </button>
         </div>
       </form>

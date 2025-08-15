@@ -1,4 +1,5 @@
-import { Card, Dropdown, DropdownItem } from "flowbite-react";
+import { Dropdown, DropdownItem } from "flowbite-react";
+import { formatUTCDateToLocalAMPM } from "../../utils/dateUtils";
 import ButtonSmall from "../Buttons/ButtonSmall";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +10,8 @@ import { useEffect, useState } from "react";
 import { FormAddEvent } from "../Forms/Event/FormAddEvent";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { IoIosCamera } from "react-icons/io";
+import { FormEditImage } from "../Forms/Event/FormEditImage";
+import logoUVM from "../../../public/LogoUVM.png"
 
 export function CardEvent({event}) {
   const dispatch = useDispatch();
@@ -18,7 +21,20 @@ export function CardEvent({event}) {
   const events = useSelector((state) => state.events.events);
 
   const [openEditEvent, setOpenEditEvent] = useState(false);
-  const [scheduled, setScheduled] = useState(false)
+  const [scheduled, setScheduled] = useState(false);
+  const [active, setActive] = useState(false);
+  const [openEditImage, setOpenEditImage] = useState(false);
+
+  useEffect(() => {
+    let date = new Date();
+    let date2 = new Date(event?.endDate)
+
+    if (date <= date2) {
+      setActive(true)
+    } else {
+      setActive(false)
+    }
+  }, [event])
 
   useEffect(() => {
     for (let i = 0; i < event.savedByUsers.length; i++) {
@@ -49,11 +65,13 @@ export function CardEvent({event}) {
     <div className="w-full bg-white border border-verdeD rounded-lg shadow-sm ">
       <a>
         {event.media.length === 0 ? (
-          <img
-            src={"https://www.losprincipios.org/images/default.jpg"}
-            className="rounded-t-lg border-b border-verdeD w-full"
-            alt="Multimedia Evento"
-          />
+          <div className="flex rounded-t-lg w-full h-[300px] justify-center items-center bg-slate-100 border-verdeD border-b">
+            <img
+              src={logoUVM}
+              className="rounded-t-lg w-56"
+              alt="Multimedia Evento"
+            />
+          </div>
         ) : (
           <img
             className="rounded-t-lg border-b border-verdeD w-full"
@@ -64,12 +82,20 @@ export function CardEvent({event}) {
       </a>
 
       <div className="p-5 font-barolw">
-        <h5 className="mb-1 text-sm md:text-base xl:text-lg font-bold tracking-tight text-Negro uppercase">
+        <h5 className="mb-4 text-sm md:text-base xl:text-lg font-bold tracking-tight text-Negro uppercase">
           {event.title}
         </h5>
+        <h6 className="text-RojoC text-xs md:text-sm xl:text-base font-semibold">
+          <span className="text-verdeD">{active ? "INICIA: " : "INICIÓ: "}</span>
+          {formatUTCDateToLocalAMPM(event?.startDate).date} A LAS{" "}
+          {formatUTCDateToLocalAMPM(event?.startDate).time}
+        </h6>
         <h6 className="text-RojoC mb-8 text-xs md:text-sm xl:text-base font-semibold">
-          {event.startDate.split("T")[0]}. HORA:{" "}
-          {event.startDate.split("T")[1].split(".")[0]}
+          <span className="text-verdeD">
+            {active ? "FINALIZA: " : "FINALIZÓ: "}
+          </span>
+          {formatUTCDateToLocalAMPM(event?.endDate).date} A LAS{" "}
+          {formatUTCDateToLocalAMPM(event?.endDate).time}
         </h6>
         <p className="mb-3 font-medium text-Negro ">{event.description}</p>
 
@@ -77,7 +103,7 @@ export function CardEvent({event}) {
           <div className="flex gap-3">
             <ButtonSmall
               action={handleNavigate}
-              text={"Ver mas..."}
+              text={"Ver más..."}
               className={"bg-verdeC hover:bg-RojoC"}
             />
             {scheduled ? (
@@ -86,18 +112,18 @@ export function CardEvent({event}) {
                 text={"Eliminar de Agenda"}
                 className={"bg-verdeC hover:bg-RojoC"}
               />
-            ) : (
+            ) : active ? (
               <ButtonSmall
                 action={handleAgendar}
                 text={"Agendar"}
                 className={"bg-verdeC hover:bg-RojoC"}
               />
+            ) : (
+              <></>
             )}
           </div>
 
-          {role === "egresado" ? (
-            <></>
-          ) : (
+          {role === "admin" || role === "superadmin" ? (
             <Dropdown
               label=""
               dismissOnClick={false}
@@ -113,7 +139,10 @@ export function CardEvent({event}) {
               >
                 <MdEdit /> Editar Evento
               </DropdownItem>
-              <DropdownItem className="flex gap-2 items-center text-Negro">
+              <DropdownItem
+                onClick={(e) => setOpenEditImage(true)}
+                className="flex gap-2 items-center text-Negro"
+              >
                 <IoIosCamera /> Editar Imagen
               </DropdownItem>
               <DropdownItem
@@ -123,6 +152,8 @@ export function CardEvent({event}) {
                 <MdDelete /> Eliminar Evento
               </DropdownItem>
             </Dropdown>
+          ) : (
+            <></>
           )}
         </div>
       </div>
@@ -132,6 +163,12 @@ export function CardEvent({event}) {
         setOpenModal={setOpenEditEvent}
         size={"3xl"}
         component={<FormAddEvent eventSelect={event} type={"edit"} />}
+      />
+      <ModalNotHeader
+        openModal={openEditImage}
+        setOpenModal={setOpenEditImage}
+        size={"3xl"}
+        component={<FormEditImage internal={false} event={event} />}
       />
     </div>
   );

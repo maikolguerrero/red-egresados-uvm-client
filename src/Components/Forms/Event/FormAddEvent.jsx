@@ -1,13 +1,12 @@
-import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import { typeError, typeInfo } from "../../../models/alertModels";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
-import { addComment } from "../../../services/forum/forumService";
 import { Label } from "flowbite-react";
 import { Skills } from "../../Skills";
 import { IoIosAdd } from "react-icons/io";
 import { addEvent, editEvent } from "../../../services/events/eventsService";
+import { utcToLocalDateTime } from "../../../utils/dateUtils";
+import notify from "../../../utils/notifications";
 
 let styles = {
   input:
@@ -23,56 +22,71 @@ export function FormAddEvent({ eventSelect, type }) {
   const [organizer, setOrganizer] = useState("");
   const [specialGuest, setSpecialGuest] = useState("");
   const [values, setValues] = useState({
-    title: "",
-    description: "",
-    eventType: "",
-    location: "",
-    capacity: 0,
-    virtualLink: "",
-    startDate: "",
-    endDate: "",
-    certificate: false,
-    organizers: [],
-    specialGuests: [],
-    tags: [],
-    isActive: true,
+    title: eventSelect?.title || "",
+    description: eventSelect?.description || "",
+    eventType: eventSelect?.eventType || "",
+    location: eventSelect?.location || "",
+    capacity: eventSelect?.capacity || 0,
+    virtualLink: eventSelect?.virtualLink || "",
+    // startDate: eventSelect.startDate.split(".")[0],
+    // endDate: eventSelect.endDate.split(".")[0],
+    startDate: utcToLocalDateTime(eventSelect?.startDate || ""),
+    endDate: utcToLocalDateTime(eventSelect?.endDate || ""),
+    certificate: eventSelect?.certificate || false,
+    organizers: eventSelect?.organizers || [],
+    specialGuests: eventSelect?.specialGuests || [],
+    tags: eventSelect?.tags || [],
+    isActive: eventSelect?.isActive || true,
   });
 
-  useEffect(() => {
-    if (eventSelect === undefined) {
-      return;
-    } else {
-      setValues({
-        title: eventSelect.title,
-        description: eventSelect.description,
-        eventType: eventSelect.eventType,
-        location: eventSelect.location,
-        capacity: eventSelect.capacity,
-        virtualLink: eventSelect.virtualLink,
-        startDate: eventSelect.startDate.split(".")[0],
-        endDate: eventSelect.endDate.split(".")[0],
-        certificate: eventSelect.certificate,
-        organizers: eventSelect.organizers,
-        specialGuests: eventSelect.specialGuests,
-        tags: eventSelect.tags,
-        isActive: eventSelect.isActive,
-      });
+  const validateDates = () => {
+    const now = new Date().toISOString();
+    const startDate = new Date(values.startDate).toISOString();
+    const endDate = new Date(values.endDate).toISOString();
+
+    // Validar que la fecha de inicio no sea pasada
+    if (startDate < now) {
+      notify.error("La fecha de inicio no puede ser una fecha pasada", false);
+      return false;
     }
-  }, [eventSelect]);
+
+    // Validar que la fecha de fin no sea anterior a la de inicio
+    if (endDate <= startDate) {
+      notify.error("La fecha de fin no puede ser anterior a la de inicio", false);
+      return false;
+    }
+
+    return true;
+  };
+
+
+  const toLocalDateTimeString = (dateString) => {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+    // Ajustar por el offset de la zona horaria
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().slice(0, 16);
+  };
+
+  const parseLocalDateTime = (localDateTime) => {
+    if (!localDateTime) return '';
+
+    // Convertir la fecha local a un formato ISO que mantenga la hora local
+    const [date, time] = localDateTime.split('T');
+    return `${date}T${time}:00`;
+  };
 
   const addTag = (e) => {
     if (tag.trim().length === 0) {
-      return enqueueSnackbar(
-        "No puedes agregar la etiqueta sin escribirla",
-        typeError
-      );
+      return notify.error("Falta la etiqueta", false);
     }
     setValues({
       ...values,
       tags: [...values.tags, tag],
     });
     setTag("");
-    enqueueSnackbar("Se agrego la etiqueta", typeInfo);
+    notify.info("Agregada la etiqueta", false);
   };
 
   const deleteTag = (key) => {
@@ -81,22 +95,19 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       tags: newTags,
     });
-    enqueueSnackbar("Se elimino la etiqueta", typeInfo);
+    notify.info("Eliminada la etiqueta", false);
   };
 
   const addOrganizer = (e) => {
     if (organizer.trim().length === 0) {
-      return enqueueSnackbar(
-        "No puedes agregar al organizador sin escribirlo",
-        typeError
-      );
+      return notify.error("No puedes agregar al organizador como un texto vacío", false);
     }
     setValues({
       ...values,
       organizers: [...values.organizers, organizer],
     });
-    setTag("");
-    enqueueSnackbar("Se agrego al organizador", typeInfo);
+    setOrganizer("");
+    notify.info("Agregado al organizador", false);
   };
 
   const deleteOrganizer = (key) => {
@@ -105,22 +116,22 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       organizers: newOrg,
     });
-    enqueueSnackbar("Se elimino al organizador", typeInfo);
+    notify.info("Eliminado al organizador", false);
   };
 
   const addEspecial = (e) => {
     if (specialGuest.trim().length === 0) {
-      return enqueueSnackbar(
-        "No puedes agregar al invitado especial sin escribirlo",
-        typeError
+      return notify.error(
+        "No puedes agregar al invitado como un texto vacío",
+        false
       );
     }
     setValues({
       ...values,
       specialGuests: [...values.specialGuests, specialGuest],
     });
-    setTag("");
-    enqueueSnackbar("Se agrego al invitado especial", typeInfo);
+    setSpecialGuest("");
+    notify.info("Agregado al invitado especial", false);
   };
 
   const deleteEspecial = (key) => {
@@ -129,55 +140,89 @@ export function FormAddEvent({ eventSelect, type }) {
       ...values,
       specialGuests: newEspecial,
     });
-    enqueueSnackbar("Se elimino al invitado especial", typeInfo);
+    notify.info("Eliminado al invitado especial", false);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
+    // setValues({
+    //   ...values,
+    //   [name]: value,
+    // });
+
+    // Manejo especial para fechas
+    if (name === 'startDate' || name === 'endDate') {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (values.title.trim() === "") {
-        return enqueueSnackbar("Debe tener titulo el evento", typeError);
+      return notify.error("Falta el título del evento", false);
     }
     if (values.description.trim() === "") {
-        return enqueueSnackbar("Debe tener descripcion el evento", typeError);
+      return notify.error("Falta la descripción del evento", false);
     }
     if (values.eventType.trim() === "") {
-        return enqueueSnackbar("Debe especificar el tipo de evento", typeError);
+      return notify.error("Falta el tipo de evento", false);
     }
-    if (values.location.trim() === "") {
-        return enqueueSnackbar("Debe escribir la ubicacion de evento", typeError);
-    }
-    if (values.virtualLink.trim() === "") {
-        return enqueueSnackbar("Debe escribir el link virtual del evento o (no tiene)", typeError);
-    }
-    if (values.capacity <= 0) {
-        return enqueueSnackbar("Debes colocar una capacidad minima de 1 persona", typeError);
+    // if (values.location.trim() === "") {
+    //   return notify.error("Falta la ubicación del evento", false);
+    // }
+    // if (values.virtualLink.trim() === "") {
+    //   return notify.error("Falta el link virtual del evento", false);
+    // }
+    if (values.capacity < 0) {
+      return notify.error("Debes colocar una capacidad mínima de 0", false);
     }
     if (values.startDate.trim() === "") {
-        return enqueueSnackbar("Debes colocar una fecha de inicio", typeError);
+      return notify.error("Debes colocar una fecha de inicio", false);
     }
     if (values.endDate.trim() === "") {
-        return enqueueSnackbar("Debes colocar una fecha de finalizacion tentativa", typeError);
+      return notify.error("Debes colocar una fecha de finalización tentativa", false);
+    }
+    // Validación de fechas
+    if (!validateDates()) {
+      return;
     }
     if (values.organizers.length === 0) {
-        return enqueueSnackbar("Debes tener minimo 1 organizador", typeError);
+      return notify.error("Falta tener mínimo 1 organizador", false);
     }
 
+    // Crear copia de values con las fechas formateadas
+    const formData = {
+      ...values,
+      startDate: parseLocalDateTime(values.startDate),
+      endDate: parseLocalDateTime(values.endDate),
+    };
+
+    // if (eventSelect === undefined) {
+    //   dispatch(addEvent(values))
+    // } else {
+    //   dispatch(editEvent({
+    //     eventId: eventSelect.id,
+    //     data: values,
+    //     type: type
+    //   }))
+    // }
+
     if (eventSelect === undefined) {
-      dispatch(addEvent(values))
+      dispatch(addEvent(formData));
     } else {
       dispatch(editEvent({
         eventId: eventSelect.id,
-        data: values,
+        data: formData,
         type: type
-      }))
+      }));
     }
   };
 
@@ -191,7 +236,7 @@ export function FormAddEvent({ eventSelect, type }) {
         <div className="flex flex-col gap-4">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Titulo del evento:
+              Título del evento:
             </Label>
             <input
               className={styles.input}
@@ -199,13 +244,13 @@ export function FormAddEvent({ eventSelect, type }) {
               name="title"
               value={values.title}
               onChange={handleInputChange}
-              placeholder="Titulo del evento..."
+              placeholder="Título del evento..."
             />
           </div>
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Descripcion del evento:
+              Descripción del evento:
             </Label>
             <textarea
               className={styles.input}
@@ -213,7 +258,7 @@ export function FormAddEvent({ eventSelect, type }) {
               name="description"
               value={values.description}
               onChange={handleInputChange}
-              placeholder={"Descripcion del evento..."}
+              placeholder={"Descripción del evento..."}
             ></textarea>
           </div>
 
@@ -240,7 +285,7 @@ export function FormAddEvent({ eventSelect, type }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Ubicacion del evento:
+              Ubicación del evento (opcional):
             </Label>
             <input
               className={styles.input}
@@ -248,13 +293,13 @@ export function FormAddEvent({ eventSelect, type }) {
               name="location"
               value={values.location}
               onChange={handleInputChange}
-              placeholder="Ubicacion del evento..."
+              placeholder="Ubicación del evento..."
             />
           </div>
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Link virtual:
+              Link virtual (opcional):
             </Label>
             <input
               className={styles.input}
@@ -266,9 +311,9 @@ export function FormAddEvent({ eventSelect, type }) {
             />
           </div>
 
-          <div className="w-full flex flex-col relative">
+          {/* <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Status del evento:
+              Estado del evento:
             </Label>
             <select
               className={styles.input}
@@ -280,12 +325,12 @@ export function FormAddEvent({ eventSelect, type }) {
               <option value={true}>Activo</option>
               <option value={false}>Inactivo</option>
             </select>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Capacidad:
+                Capacidad (opcional dejar en 0):
               </Label>
               <input
                 className={styles.input}
@@ -309,8 +354,8 @@ export function FormAddEvent({ eventSelect, type }) {
                 value={values.certificate}
                 onChange={handleInputChange}
               >
-                <option value={true}>Con certificacion</option>
-                <option value={false}>Sin certificacion</option>
+                <option value={true}>Con certificación</option>
+                <option value={false}>Sin certificación</option>
               </select>
             </div>
           </div>
@@ -323,7 +368,9 @@ export function FormAddEvent({ eventSelect, type }) {
               <input
                 className={styles.input}
                 type="datetime-local"
-                min={0}
+                // min={0}
+                // min={new Date().toISOString().slice(0, 16)}
+                min={toLocalDateTimeString(new Date().toISOString())}
                 name="startDate"
                 value={values.startDate}
                 onChange={handleInputChange}
@@ -332,12 +379,13 @@ export function FormAddEvent({ eventSelect, type }) {
 
             <div className="w-full flex flex-col relative">
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Fecha y hora de inicio:
+                Fecha y hora de finalización:
               </Label>
               <input
                 className={styles.input}
                 type="datetime-local"
-                min={0}
+                // min={values.startDate || new Date().toISOString().slice(0, 16)} // No puede ser anterior a startDate min={0}
+                min={values.startDate || toLocalDateTimeString(new Date().toISOString())}
                 name="endDate"
                 value={values.endDate}
                 onChange={handleInputChange}
@@ -346,7 +394,7 @@ export function FormAddEvent({ eventSelect, type }) {
           </div>
 
           <div className="flex flex-col gap-6">
-            <h4 className={styles.subtitle_form}>ETIQUETAS</h4>
+            <h4 className={styles.subtitle_form}>ETIQUETAS (opcional)</h4>
             <div className="flex flex-col gap-3">
               <div className="w-full flex flex-col relative">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
@@ -382,9 +430,9 @@ export function FormAddEvent({ eventSelect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.tags.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <Skills key={key} text={item} onClick={deleteTag} />
                       </li>
                     ))}
@@ -427,13 +475,13 @@ export function FormAddEvent({ eventSelect, type }) {
                 {values.organizers.length === 0 ? (
                   <>
                     <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
-                      No hay ningun organizador registrado...
+                      No hay ningún organizador registrado...
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.organizers.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <Skills
                           key={key}
                           text={item}
@@ -448,7 +496,7 @@ export function FormAddEvent({ eventSelect, type }) {
           </div>
 
           <div className="flex flex-col gap-6">
-            <h4 className={styles.subtitle_form}>INVITADOS ESPECIALES</h4>
+            <h4 className={styles.subtitle_form}>INVITADOS ESPECIALES (opcional)</h4>
             <div className="flex flex-col gap-3">
               <div className="w-full flex flex-col relative">
                 <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
@@ -461,7 +509,7 @@ export function FormAddEvent({ eventSelect, type }) {
                     name="specialGuest"
                     value={specialGuest}
                     onChange={(e) => setSpecialGuest(e.target.value)}
-                    placeholder="Organizador del evento..."
+                    placeholder="Invitado del evento..."
                   />
                   <button
                     type="button"
@@ -480,13 +528,13 @@ export function FormAddEvent({ eventSelect, type }) {
                 {values.specialGuests.length === 0 ? (
                   <>
                     <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
-                      No hay ningun invitado especial...
+                      No hay ningún invitado especial...
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-wrap gap-2">
                     {values.specialGuests.map((item, key) => (
-                      <li>
+                      <li key={key}>
                         <Skills
                           key={key}
                           text={item}

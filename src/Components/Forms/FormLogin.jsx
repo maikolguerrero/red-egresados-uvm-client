@@ -1,6 +1,6 @@
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import Button from "../Buttons/Button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserFetch } from "../../services/auth/authService";
@@ -12,13 +12,8 @@ let defaultValues = {
 
 function FormLogin(props) {
   const dispatch = useDispatch()
-  const navigate = useNavigate();
 
-  const [values, setValues] = useState({});
-
-  useEffect(() => {
-    setValues(defaultValues);
-  }, []);
+  const [values, setValues] = useState(defaultValues);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,8 +25,7 @@ function FormLogin(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUserFetch(values))
-    // navigate("/home");
+    dispatch(loginUserFetch(values));
   };
 
   return (
@@ -44,7 +38,7 @@ function FormLogin(props) {
             name="emailOrUsername"
             value={values.emailOrUsername}
             onChange={handleInputChange}
-            placeholder="Usuario"
+            placeholder="Nombre de usuario"
           />
           <FaUserCircle className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
         </div>
@@ -65,6 +59,12 @@ function FormLogin(props) {
             ¿No tienes una cuenta?{" "}
             <Link to={"/register"} className="text-verdeC">
               Regístrate Aquí.
+            </Link>
+          </p>
+          <p className="">
+            ¿No has verificado tu cuenta?{" "}
+            <Link to={"/recover/change-email"} className="text-verdeC">
+              Verificala Aquí.
             </Link>
           </p>
           <p>

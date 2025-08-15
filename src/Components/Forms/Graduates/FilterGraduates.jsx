@@ -1,8 +1,7 @@
-import { Button, Label } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { Label } from "flowbite-react";
 import { FaFilter } from "react-icons/fa6";
+import { GrPowerReset } from "react-icons/gr";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { getUsers } from "../../../services/users/usersService";
 
 let styles = {
@@ -14,7 +13,6 @@ let styles = {
 
 function FilterGraduates({ values, setValues }) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const pagination = useSelector((state) => state.users.pagination);
 
   const handleInputChange = (e) => {
@@ -22,6 +20,21 @@ function FilterGraduates({ values, setValues }) {
     setValues({
       ...values,
       [name]: value,
+    });
+  };
+
+  const handleReset = (e) => {
+    if (values.query.trim() === "" && values.location.trim() === ""
+      && values.degree.trim() === "" && values.graduationYear.trim() === "") {
+      e.preventDefault();
+      return;
+    }
+
+    setValues({
+      query: "",
+      location: "",
+      degree: "",
+      graduationYear: "",
     });
   };
 
@@ -34,6 +47,7 @@ function FilterGraduates({ values, setValues }) {
         query: values.query.trim() === "" ? null : values.query,
         location: values.location.trim() === "" ? null : values.location,
         degree: values.degree.trim() === "" ? null : values.degree,
+        graduationYear: values.graduationYear.trim() === "" ? null : values.graduationYear,
       })
     );
   };
@@ -58,7 +72,7 @@ function FilterGraduates({ values, setValues }) {
 
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Ubicacion:
+              Ubicación:
             </Label>
             <input
               className={styles.input}
@@ -66,22 +80,23 @@ function FilterGraduates({ values, setValues }) {
               name="location"
               value={values.location}
               onChange={handleInputChange}
-              placeholder="Filtrar por ubicacion..."
+              placeholder="Filtrar por ubicación..."
             />
           </div>
-
+        </div>
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Carrera:
+              TÍtulo obtenido:
             </Label>
-            <select
+            {/* <select
               className={styles.input}
               type="text"
               name="degree"
               value={values.degree}
               onChange={handleInputChange}
             >
-              <option value="">...</option>
+              <option value="">Todas las carreras</option>
               <option value="Licenciatura%20en%20Administraci%C3%B3n%20de%20Empresas">
                 Licenciatura en Administración de Empresas
               </option>
@@ -98,16 +113,48 @@ function FilterGraduates({ values, setValues }) {
               <option value="Ciencias%20Pol%C3%ADticas%20y%20Administrativas">
                 Ciencias Políticas y Administrativas
               </option>
-            </select>
+            </select> */}
+            <input
+              className={styles.input}
+              type="text"
+              name="degree"
+              value={values.degree}
+              onChange={handleInputChange}
+              placeholder="Filtrar por título obtenido..."
+            />
+          </div>
+
+          <div className="w-full flex flex-col relative">
+            <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+              Año de graduación:
+            </Label>
+            <input
+              className={styles.input}
+              type="number"
+              min={1997}
+              max={new Date().getFullYear()}
+              name="graduationYear"
+              value={values.graduationYear}
+              onChange={handleInputChange}
+              placeholder="Filtrar por año de graduación..."
+            />
           </div>
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <button
             type="submit"
             className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
           >
             <FaFilter /> Filtrar
+          </button>
+          <button
+            onClick={(e) => {
+              handleReset(e);
+            }}
+            className="rounded-full flex gap-2 items-center px-6 py-2 text-xs font-barolw uppercase font-semibold bg-verdeA hover:bg-verdeD hover:text-Blanco transition-all duration-200"
+          >
+            <GrPowerReset /> Limpiar
           </button>
         </div>
       </form>

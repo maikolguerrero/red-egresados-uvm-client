@@ -1,40 +1,38 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { Bounce, toast } from "react-toastify";
-import { typeError, typeSuccess } from "../../models/alertModels";
+import { apiFetch } from "../apiService";
+import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
 export const addEvent = createAsyncThunk(
   "eventsSlice/addEvent", // Nombre de la acción
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + "/api/events",
+      const response = await apiFetch(
+        `/api/events`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
+          body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+          }
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar("Se ha creado el evento sin foto", typeSuccess)
+      if (response.success) {
+        notify.success("Creado el evento sin imagen", false);
+
         return {
-          message: "Se ha creado el evento sin foto",
-          data: datas.data
+          message: "Creado el evento sin imagen",
+          data: response.data
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.metadata.errors[0].message}`;
+
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -45,31 +43,29 @@ export const addPictureEvent = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}/media/images`,
+      const response = await apiFetch(
+        `/api/events/${data.eventId}/media/images`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar("Se agrego la imagen al evento", typeSuccess)
+      if (response.success) {
+        notify.success("Agregada la imagen al evento", false);
         return {
-          message: "Se agrego la imagen al evento",
-          media: datas.data.image
+          message: "Agregada la imagen al evento",
+          media: response.data.image,
+          internal: data.internal,
+          eventId: data.eventId
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -80,40 +76,30 @@ export const searchEvent = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" +
-          `/api/events?page=${data.page}&limit=${data.limit}${
-            data.type === null || data.type === undefined ? "" : "&type=" + data.type
-          }${
-            data.search === null || data.search === undefined ? "" : "&search=" + data.search
-          }${
-            data.upcoming === null || data.upcoming === undefined ? "" : "&upcoming=" + data.upcoming
-          }`,
+      const response = await apiFetch(
+        `/api/events?page=${data.page}&limit=${data.limit}${data.type === null || data.type === undefined ? "" : "&type=" + data.type
+        }${data.search === null || data.search === undefined ? "" : "&search=" + data.search
+        }${data.upcoming === null || data.upcoming === undefined ? "" : "&upcoming=" + data.upcoming
+        }`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "GET", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "GET",
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar("Se cargaron los eventos", typeSuccess)
+      if (response.success) {
+        notify.success("Se cargaron los eventos", true);
         return {
           message: "Se cargaron los eventos",
-          events: datas.data,
-          pagination: datas.pagination
+          events: response.data,
+          pagination: response.pagination
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -124,33 +110,26 @@ export const getEvent = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" +
-          `/api/events/${data.id}`,
+      const response = await apiFetch(
+        `/api/events/${data.id}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "GET", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "GET",
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar("Se cargo el evento", typeSuccess)
+      if (response.success) {
+        notify.success("Cargado el evento", true);
         return {
-          message: "Se cargo el evento",
-          eventSelected: datas.data,
+          message: "Cargado el evento",
+          eventSelected: response.data,
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -161,32 +140,26 @@ export const deleteEvent = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}`,
+      const response = await apiFetch(
+        `/api/events/${data.eventId}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "DELETE", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "DELETE",
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess);
+      if (response.success) {
+        notify.success(response.message, false);
         return {
           eventId: data.eventId,
-          message: datas.message,
+          message: response.message,
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -197,12 +170,10 @@ export const editEvent = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}`,
+      const response = await apiFetch(
+        `/api/events/${data.eventId}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -210,23 +181,21 @@ export const editEvent = createAsyncThunk(
         }
       );
 
-      let datas = await response.json();
-      console.log(datas)
-      if (datas.success) {
-        enqueueSnackbar("Se edito el evento", typeSuccess);
+      if (response.success) {
+        notify.success("Evento editado", false);
         return {
           eventId: data.eventId,
-          message: "Se edito el evento",
-          data: datas.data,
+          message: "Evento editado",
+          data: response.data,
           type: data.type
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.metadata.errors[0].message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -237,33 +206,26 @@ export const addAgenda = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}/save`,
+      const response = await apiFetch(
+        `/api/events/${data.eventId}/save`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "POST", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "POST",
         }
       );
 
-      let datas = await response.json();
-      console.log(datas);
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess);
+      if (response.success) {
+        notify.success(response.message, false);
         return {
-          message: datas.message,
+          message: response.message,
           userId: data.userId,
           eventId: data.eventId
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -274,33 +236,58 @@ export const deleteAgenda = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/events/${data.eventId}/unsave`,
+      const response = await apiFetch(
+        `/api/events/${data.eventId}/unsave`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "DELETE", // or 'PUT'
-          headers: {
-            "Content-Type": "application/json",
-          },
+          method: "DELETE",
         }
       );
 
-      let datas = await response.json();
-      console.log(datas);
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess);
+      if (response.success) {
+        notify.success(response.message, false);
         return {
-          message: datas.message,
+          message: response.message,
           userId: data.userId,
           eventId: data.eventId
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
+
       }
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError);
+      notify.error(error, false);
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const deletePictureEvent = createAsyncThunk(
+  "eventsSlice/deletePictureEvent", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await apiFetch(
+        `/api/events/${data.eventId}/media/images/${data.imageId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      logger.log(response)
+      if (response.success) {
+        notify.success(response.message, false);
+        return {
+          message: response.message,
+          eventId: data.eventId,
+          internal: data.internal,
+        };
+      } else {
+        throw `${response.message}`;
+      }
+    } catch (error) {
+      // Gestionar errores
+      notify.error(error, false);
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

@@ -1,4 +1,4 @@
-export function CardExperience({data}) {
+export function CardExperience({ data }) {
   return (
     <>
       <article className="p-3">
@@ -7,28 +7,28 @@ export function CardExperience({data}) {
             EXPERIENCIA LABORAL
           </h4>
           <h5>
-            <b>Empresa:</b> {data.company}
+            <b>Empresa:</b> {data?.company}
           </h5>
           <h5>
-            <b>Puesto:</b> {data.position}
+            <b>Puesto:</b> {data?.position}
           </h5>
           <h5>
-            <b>Descripcion:</b> {data.description}
+            <b>Descripción:</b> {data?.description}
           </h5>
           <h5>
             <b>Fecha de Inicio:</b>{" "}
-            <span className="text-verdeB font-semibold">{data.startDate.split("T")[0]}</span>
+            <span className="text-verdeB font-semibold">{data?.startDate?.split("T")[0]}</span>
           </h5>
           <h5>
             <b>Fecha de finalizacion:</b>{" "}
-            <span className="text-RojoB font-semibold">{data.endDate.split("T")[0]}</span>
+            <span className="text-RojoB font-semibold">{data?.endDate === null ? "Actualidad" : data?.endDate?.split("T")[0]}</span>
           </h5>
-          <h5>
+          {/* <h5>
             <b>Continua actualmente:</b>{" "}
-            <span className="text-Negro font-semibold">{data.current ? "SI" : "NO"}</span>
-          </h5>
-        </div>
-      </article>
+            <span className="text-Negro font-semibold">{data?.current ? "SI" : "NO"}</span>
+          </h5> */}
+        </div >
+      </article >
     </>
   );
 }

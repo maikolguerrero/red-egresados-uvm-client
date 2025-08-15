@@ -1,12 +1,9 @@
-import { FileInput, Label } from "flowbite-react";
-import { enqueueSnackbar } from "notistack";
+import { Label } from "flowbite-react";
+import notify from "../../../utils/notifications";
 import { useState } from "react";
-import { typeError, typeInfo } from "../../../models/alertModels";
-import { IoIosAdd } from "react-icons/io";
-import { Skills } from "../../Skills";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
-import { addComment, addForum } from "../../../services/forum/forumService";
+import { addComment } from "../../../services/forum/forumService";
 
 let styles = {
   input:
@@ -21,15 +18,6 @@ export function FormAddComment({ forum, comment }) {
   const [values, setValues] = useState({
     content: "",
   });
-  const [picture, setPicture] = useState("");
-  const [image, setImage] = useState(false);
-
-  const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImage(URL.createObjectURL(event.target.files[0]));
-      setPicture(event.target.files[0])
-    }
-  };
 
 
   const handleInputChange = (e) => {
@@ -43,7 +31,7 @@ export function FormAddComment({ forum, comment }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.content.trim() === "") {
-      return enqueueSnackbar("Debe tener contenido el comentario", typeError);
+      return notify.error("Falta el contenido del comentario", false);
     }
     if (forum === undefined) {
       const formData = new FormData();
@@ -51,7 +39,7 @@ export function FormAddComment({ forum, comment }) {
       formData.append("parentCommentId", comment.id);
       dispatch(
         addComment({
-          id: comment.thread,
+          id: comment?.thread,
           data: formData,
           type: "replies"
         })
@@ -60,19 +48,14 @@ export function FormAddComment({ forum, comment }) {
       const formData = new FormData();
       formData.append("content", values.content);
       formData.append("parentCommentId", null);
-      if (image) {
-        formData.append("media", picture);
-      }
       dispatch(
         addComment({
-          id: forum.id,
+          id: forum?.id,
           data: formData,
           type: "thread"
         })
       );
     }
-    setImage(false);
-    setPicture("");
     setValues({
       content: "",
     });
@@ -98,37 +81,6 @@ export function FormAddComment({ forum, comment }) {
               placeholder={forum === undefined ? "Respuesta del comentario..." : "Contenido del comentario..."}
             ></textarea>
           </div>
-
-          {forum === undefined ? (
-            <></>
-          ) : (
-            <>
-              <div className="flex flex-col gap-1">
-                <Label className="mb-2 block" htmlFor="small-file-upload">
-                  Selecciona la foto (opcional):
-                </Label>
-                <FileInput
-                  onChange={onImageChange}
-                  id="small-file-upload"
-                  sizing="sm"
-                />
-              </div>
-              <div>
-                {image === false ? (
-                  <></>
-                ) : (
-                  <div className="flex flex-col w-full h-auto justify-center items-center mt-6">
-                    <h6 className="w-full flex justify-start font-barlow-semi-condensed text-lg font-bold text-verdeD">
-                      VISTA PREVIA:
-                    </h6>
-                    <div className="w-full flex justify-center bg-Negro border border-verdeD">
-                      <img src={image} alt="" className="w-auto h-auto" />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
         </div>
         <ButtonSmall className={"bg-verdeD hover:bg-RojoC"} text={"Comentar"} />
       </form>

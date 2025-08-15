@@ -1,11 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loginUserFetch, logoutSesion, postData, resendEmailFetch, verifyEmail, verifySesion } from '../services/auth/authService';
+import {
+  forgotPassword,
+  loginUserFetch,
+  logoutSesion,
+  newPassword,
+  postData,
+  resendEmailFetch,
+  verifyEmail,
+  verifySesion
+} from '../../services/auth/authService';
+import { changeEmail, changeEmailRecovery, changeRecoveryEmail, changeRecoveryPassword } from '../../services/auth/changeEmailService';
 
 export const authSlice = createSlice({
   name: 'verification',
   initialState: {
     value: "No found",
-    loading: false,
+    loading: true,
+    checked: false,
     error: "",
     message: "",
     sessionActive: false,
@@ -13,7 +24,9 @@ export const authSlice = createSlice({
     id: "",
     username: "",
     role: "",
-    verifyEmail: false
+    verifyEmail: false,
+    changeEmail: false,
+    newPassword: false
   },
   reducers: {
     actived: (state) => {
@@ -21,6 +34,9 @@ export const authSlice = createSlice({
     },
     desactived: (state) => {
       state.value = "No found"
+    },
+    markAsChecked: (state) => {
+      state.checked = true;
     }
   },
   extraReducers: (builder) => {
@@ -45,6 +61,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(loginUserFetch.fulfilled, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.message = action.payload.message
       state.id = action.payload.id
       state.username = action.payload.username
@@ -53,6 +70,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(loginUserFetch.rejected, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.error = action.error.message;
     });
 
@@ -62,6 +80,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(verifySesion.fulfilled, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.message = action.payload.message
       state.id = action.payload.id
       state.username = action.payload.username
@@ -70,6 +89,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(verifySesion.rejected, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.error = action.error.message;
     });
 
@@ -79,6 +99,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(logoutSesion.fulfilled, (state, action) => {
       state.loading = false;
+      state.checked = true;
       state.message = action.payload
       state.id = ""
       state.username = ""
@@ -86,7 +107,9 @@ export const authSlice = createSlice({
       state.sessionActive = false
     });
     builder.addCase(logoutSesion.rejected, (state, action) => {
+      state.sessionActive = false;
       state.loading = false;
+      state.checked = true;
       state.error = action.error.message;
     });
 
@@ -117,10 +140,91 @@ export const authSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+
+    builder.addCase(changeRecoveryEmail.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(changeRecoveryEmail.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+    });
+    builder.addCase(changeRecoveryEmail.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(changeEmail.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(changeEmail.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+      state.changeEmail = true
+    });
+    builder.addCase(changeEmail.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+      state.newPassword = false
+    });
+    builder.addCase(forgotPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(newPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(newPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+      state.newPassword = true
+    });
+    builder.addCase(newPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(changeRecoveryPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(changeRecoveryPassword.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+    });
+    builder.addCase(changeRecoveryPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(changeEmailRecovery.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(changeEmailRecovery.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message
+    });
+    builder.addCase(changeEmailRecovery.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { actived, desactived } = authSlice.actions;
+export const { actived, desactived, markAsChecked } = authSlice.actions;
 
 export default authSlice.reducer

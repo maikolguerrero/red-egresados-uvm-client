@@ -1,19 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { enqueueSnackbar } from "notistack";
-import { Bounce, toast } from "react-toastify";
-import { typeError, typeSuccess } from "../../models/alertModels";
+import { apiFetch } from "../apiService";
+import notify from "../../utils/notifications";
 
 export const addForum = createAsyncThunk(
   "authSlice/addForum", // Nombre de la acción
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + "/api/forum/threads",
+      const response = await apiFetch(
+        `/api/forum/threads`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -21,23 +18,58 @@ export const addForum = createAsyncThunk(
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar("Se creo el foro", typeSuccess)
+      if (response.success) {
+        notify.success("Hilo creado", false)
         return {
-          message: "Se creo el foro",
-          forum: datas.data
+          message: "Hilo creado",
+          forum: response.data
         }
       } else {
-        if (datas.message === "Error de validación") {
-          throw `${datas.metadata.errors[0].message}`
+        if (response.message === "Error de validación") {
+          throw `${response.metadata.errors[0].message}`
         }
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const addReport = createAsyncThunk(
+  "forumsSlice/addReport", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await apiFetch(
+        `/api/forum/report`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        }
+      );
+
+      if (response.success) {
+        notify.success("Reporte enviado", false)
+        return {
+          message: "Reporte enviado",
+        }
+      } else {
+        if (response.message === "Error de validación") {
+          throw `${response.metadata.errors[0].message}`
+        }
+        throw `${response.message}`;
+      }
+
+    } catch (error) {
+      // Gestionar errores
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -48,29 +80,26 @@ export const addPictureForum = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/forum/threads/${data.threadId}/media/images`,
+      const response = await apiFetch(
+        `/api/forum/threads/${data.threadId}/media/images`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar("Se agrego la foto al foro", typeSuccess)
+      if (response.success) {
+        notify.success("Agregada la imagen al hilo", false)
         return {
-          message: "Se agrego la foto al foro"
+          message: "Agregada la imagen al hilo"
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -81,38 +110,34 @@ export const searchForum = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" +
-          `/api/forum/threads?page=${data.page}&limit=${data.limit}${
-            data.category === null || data.category === undefined ? "" : "&category=" + data.category
-          }${
-            data.search === null || data.search === undefined ? "" : "&search=" + data.search
-          }`,
+      const response = await apiFetch(
+        `/api/forum/threads?page=${data.page}&limit=${data.limit}${data.category === null || data.category === undefined ? "" : "&category=" + data.category
+        }${data.search === null || data.search === undefined ? "" : "&search=" + data.search
+        }${!data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
+        }${!data.username || data.username === undefined ? "" : "&username=" + data.username
+        }`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar("Se cargaron los foros", typeSuccess)
+      if (response.success) {
+        notify.success("Se cargaron los hilos", true)
         return {
-          message: "Se cargaron los foros",
-          forums: datas.data,
-          pagination: datas.pagination
+          message: "Se cargaron los hilos",
+          forums: response.data,
+          pagination: response.pagination
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -123,64 +148,61 @@ export const likeThreads = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/forum/like/${data.type}/${data.id}`,
+      const response = await apiFetch(
+        `/api/forum/like/${data.type}/${data.id}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
+      if (response.success) {
         if (data.type === "thread") {
-          let message = "Has quitado tu like del foro";
-          if (datas.data.isLike) {
-            message = "Has dado like al foro";
+          let message = "Has quitado tu like del hilo";
+          if (response.data.isLiked) {
+            message = "Has dado like al hilo";
           }
 
-          enqueueSnackbar(message, typeSuccess);
+          notify.success(message, true)
           return {
             type: data.type,
             message: message,
-            isLiked: datas.data.isLiked,
-            likeCount: datas.data.likeCount,
+            isLiked: response.data.isLiked,
+            likeCount: response.data.likeCount,
             id: data.id,
           };
         }
 
         if (data.types === "replies") {
-          enqueueSnackbar("Like a la respuesta", typeSuccess);
+          notify.success("Like a la respuesta", true)
           return {
             type: data.types,
             message: "Like a la respuesta",
-            isLiked: datas.data.isLiked,
-            likeCount: datas.data.likeCount,
+            isLiked: response.data.isLiked,
+            likeCount: response.data.likeCount,
             id: data.id,
           };
         }
-        
+
         if (data.type === "comment") {
-          enqueueSnackbar("Like al comentario", typeSuccess);
+          notify.success("Like al comentario", true)
           return {
             type: data.type,
             message: "Like al comentario",
-            isLiked: datas.data.isLiked,
-            likeCount: datas.data.likeCount,
+            isLiked: response.data.isLiked,
+            likeCount: response.data.likeCount,
             id: data.id,
           };
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -191,33 +213,29 @@ export const getThreadsComments = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" +
-          `/api/forum/threads/${data.id}`,
+      const response = await apiFetch(
+        `/api/forum/threads/${data.id}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "GET", // or 'PUT'
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar("Cargo el foro", typeSuccess)
+      if (response.success) {
+        notify.success("Cargado el hilo del foro", true)
         return {
-          message: "Cargo el foro",
-          forumSelected: datas.data,
+          message: "Cargado el hilo del foro",
+          forumSelected: response.data,
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, true)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -228,43 +246,39 @@ export const addComment = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" +
-          `/api/forum/threads/${data.id}/comments`,
+      const response = await apiFetch(
+        `/api/forum/threads/${data.id}/comments`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "POST", // or 'PUT'
+          method: "POST",
           body: data.data
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
+      if (response.success) {
         if (data.type === "thread") {
-          enqueueSnackbar("Comentaste", typeSuccess);
+          notify.success("Comentario agregado", false)
           return {
-            idThread: datas.data.thread,
-            message: "Comentaste",
-            comment: datas.data,
+            idThread: response.data.thread,
+            message: "Comentario agregado ",
+            comment: response.data,
             type: data.type
           };
         } else {
-          enqueueSnackbar("Respondiste el comentario", typeSuccess);
+          notify.success("Respondiste el comentario", false);
           return {
-            idComment: datas.data.parentComment,
-            message: "Comentaste",
-            comment: datas.data,
+            idComment: response.data.parentComment,
+            message: "Respondiste el comentario",
+            comment: response.data,
             type: data.type
           };
         }
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -275,32 +289,60 @@ export const deleteForum = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/forum/threads/${data.threadId}`,
+      const response = await apiFetch(
+        `/api/forum/threads/${data.threadId}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "DELETE", // or 'PUT'
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar(datas.message, typeSuccess);
+      if (response.success) {
+        notify.success(response.message, false);
         return {
           idThread: data.threadId,
-          message: datas.message,
+          message: response.message,
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
+      return thunkAPI.rejectWithValue({ continue: false });
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "authSlice/deleteComment", // Nombre de la acción
+  async (data, thunkAPI) => {
+    try {
+      // Realizar la solicitud POST
+      const response = await apiFetch(
+        `/api/forum/comments/${data.commentId}`,
+        {
+          method: "DELETE"
+        }
+      );
+
+      if (response.success) {
+        notify.success(response.message, false);
+        return {
+          commentId: data.commentId,
+          message: response.message,
+          idComment: !data.idComment ? null : data.idComment
+        };
+      } else {
+        throw `${response.message}`;
+      }
+
+    } catch (error) {
+      // Gestionar errores
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -311,12 +353,10 @@ export const editForum = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await fetch(
-        "http://localhost:3000" + `/api/forum/threads/${data.threadId}`,
+      const response = await apiFetch(
+        `/api/forum/threads/${data.threadId}`,
         {
-          mode: "cors",
-          credentials: "include",
-          method: "PATCH", // or 'PUT'
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -324,22 +364,21 @@ export const editForum = createAsyncThunk(
         }
       );
 
-      let datas = await response.json();
-      if (datas.success) {
-        enqueueSnackbar("Se edito el foro", typeSuccess);
+      if (response.success) {
+        notify.success("Hilo editado", false);
         return {
           idThread: data.threadId,
-          message: "Se edito el foro",
-          data: datas.data,
+          message: "Hilo editado",
+          data: response.data,
           type: data.type
         };
       } else {
-        throw `${datas.message}`;
+        throw `${response.message}`;
       }
-      
+
     } catch (error) {
       // Gestionar errores
-      enqueueSnackbar(error, typeError)
+      notify.error(error, false)
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

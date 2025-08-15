@@ -3,7 +3,7 @@ import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
-import { actived, desactived } from "../../features/authSlice";
+import { actived, desactived } from "../../features/auth/authSlice";
 import { resendEmailFetch } from "../../services/auth/authService";
 
 let styles = {
@@ -31,7 +31,7 @@ function FormEmailVerify(props) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full">
         <div className="flex flex-col gap-6">
           <p className="text-Negro text-base md:text-lg font-barlow-condensed font-medium text-center">
-            Se te ha enviado un email a tu correo electrónico para <a className="text-RojoC">ACTIVAR</a> tu cuenta.
+            Se envió un email a tu correo electrónico para <a className="text-RojoC">ACTIVAR</a> tu cuenta.
           </p>
         </div>
 
@@ -44,9 +44,9 @@ function FormEmailVerify(props) {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
+        {/* <div className="flex flex-col lg:flex-row lg:justify-center gap-4">
           <Button className={"w-full"} text="YA ME VERIFIQUÉ" />
-        </div>
+        </div> */}
       </form>
       <ToastContainer
         position="top-right"

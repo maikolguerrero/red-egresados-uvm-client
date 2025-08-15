@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { addComment, addForum, addPictureForum, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
+import { addComment, addForum, addPictureForum, addReport, deleteComment, deleteForum, editForum, getThreadsComments, likeThreads, searchForum } from '../../services/forum/forumService';
+import logger from '../../utils/logger';
 
 export const forumsSlice = createSlice({
   name: "forums",
@@ -7,11 +8,8 @@ export const forumsSlice = createSlice({
     forums: [],
     forumSelect: {},
     pagination: { total: 0, page: 1, pages: 0, limit: 10 },
-    forumAdd: {
-      data: null,
-      passed: 0,
-    },
     loading: false,
+    loadingPage: false,
     error: "",
     message: "",
   },
@@ -34,10 +32,22 @@ export const forumsSlice = createSlice({
     builder.addCase(addForum.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
-      state.forumAdd.data = action.payload.forum;
-      state.forumAdd.passed = 1;
+      state.forums = [action.payload.forum, ...state.forums];
     });
     builder.addCase(addForum.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(addReport.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(addReport.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+    });
+    builder.addCase(addReport.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
@@ -56,17 +66,17 @@ export const forumsSlice = createSlice({
     });
 
     builder.addCase(searchForum.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(searchForum.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.forums = action.payload.forums;
       state.pagination = action.payload.pagination
     });
     builder.addCase(searchForum.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 
@@ -124,16 +134,16 @@ export const forumsSlice = createSlice({
     });
 
     builder.addCase(getThreadsComments.pending, (state) => {
-      state.loading = true;
+      state.loadingPage = true;
       state.error = null;
     });
     builder.addCase(getThreadsComments.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.message = action.payload.message;
       state.forumSelect = action.payload.forumSelected
     });
     builder.addCase(getThreadsComments.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPage = false;
       state.error = action.error.message;
     });
 
@@ -145,7 +155,8 @@ export const forumsSlice = createSlice({
       state.loading = false;
       state.message = action.payload.message;
       if (action.payload.type === "thread") {
-        state.forumSelect.comments = [...state.forumSelect.comments, action.payload.comment]
+        action.payload.comment.replies = [];
+        state.forumSelect.comments = [action.payload.comment, ...state.forumSelect.comments]
       } else {
         let position = 0
         for (let i = 0; i < state.forumSelect.comments.length; i++) {
@@ -175,6 +186,31 @@ export const forumsSlice = createSlice({
       }
     });
     builder.addCase(deleteForum.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(deleteComment.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteComment.fulfilled, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.message;
+      logger.log(action.payload.idComment)
+      if (action.payload.idComment === null) {
+        let newComments = state.forumSelect.comments.filter((item) => item.id !== action.payload.commentId)
+        state.forumSelect.comments = newComments;
+      } else {
+        for (let i = 0; i < state.forumSelect.comments.length; i++) {
+          if (state.forumSelect.comments[i].id === action.payload.idComment) {
+            let newReplies = state.forumSelect.comments[i].replies.filter((item) => item.id !== action.payload.commentId)
+            state.forumSelect.comments[i].replies = newReplies
+          }
+        }
+      }
+    });
+    builder.addCase(deleteComment.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
