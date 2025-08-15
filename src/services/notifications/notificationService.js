@@ -1,68 +1,104 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiFetch } from "../apiService";
 import logger from "../../utils/logger";
+import notify from "../../utils/notifications";
 
-export const getNotifications = async (page = 1, limit = 10) => {
-    const response = await apiFetch(
-        `/api/notifications?page=${page}&limit=${limit}`,
-        {
-            method: "GET",
-        }
-    );
-    if (!response.success) {
-        throw new Error(response.message || "Error al obtener notificaciones");
-    }
-    return response;
-};
-
-export const markNotificationAsRead = async (notificationId) => {
-    const response = await apiFetch(
-        `/api/notifications/${notificationId}/read`,
-        {
-            method: "PATCH",
-        }
-    );
-    if (!response.success) {
-        throw new Error(response.message || "Error al marcar como leída");
-    }
-    return response;
-};
-
-export const deleteNotification = async (notificationId) => {
-    try {
-        const response = await apiFetch(
-            `/api/notifications/${notificationId}`,
-            {
-                method: "DELETE",
+export const getNotifications = createAsyncThunk(
+    "notifications/getNotifications",
+    async ({ page = 1, limit = 10 }, thunkAPI) => {
+        try {
+            const response = await apiFetch(
+                `/notifications?page=${page}&limit=${limit}`,
+                {
+                    method: "GET",
+                }
+            );
+            if (!response.success) {
+                notify.error(response.message || "Error al obtener notificaciones", false);
+                return thunkAPI.rejectWithValue({ continue: false });
             }
-        );
-
-        if (!response.success) {
-            throw new Error(response.message || "Error al eliminar notificación");
+            return response;
+        } catch (error) {
+            logger.error("Error en getNotifications:", error);
+            notify.error(error, true);
+            notify.errorDefault();
+            throw error;
         }
-
-        return response;
-    } catch (error) {
-        logger.error("Error en deleteNotification:", error);
-        throw error;
     }
-};
+);
 
-export const getUnreadNotificationCount = async () => {
-    try {
-        const response = await apiFetch(
-            `/api/notifications/unread-count`,
-            {
-                method: "GET",
+export const markNotificationAsRead = createAsyncThunk(
+    "notifications/markNotificationAsRead",
+    async (notificationId, thunkAPI) => {
+        try {
+            const response = await apiFetch(
+                `/notifications/${notificationId}/read`,
+                {
+                    method: "PATCH",
+                }
+            );
+            if (!response.success) {
+                notify.error(response.message || "Error al marcar como leída", false);
+                return thunkAPI.rejectWithValue({ continue: false });
             }
-        );
-
-        if (!response.success) {
-            throw new Error(response.message || "Error al obtener conteo de notificaciones");
+            return response;
+        } catch (error) {
+            logger.error("Error en markNotificationAsRead:", error);
+            notify.error(error, true);
+            notify.errorDefault();
+            throw error;
         }
-
-        return response.count || 0;
-    } catch (error) {
-        logger.error("Error en getUnreadNotificationCount:", error);
-        throw error;
     }
-};
+);
+
+export const deleteNotification = createAsyncThunk(
+    "notifications/deleteNotification",
+    async (notificationId, thunkAPI) => {
+        try {
+            const response = await apiFetch(
+                `/notifications/${notificationId}`,
+                {
+                    method: "DELETE",
+                }
+            );
+
+            if (!response.success) {
+                notify.error(response.message || "Error al eliminar notificación", true);
+                return thunkAPI.rejectWithValue({ continue: false });
+            }
+
+            return response;
+        } catch (error) {
+            logger.error("Error en deleteNotification:", error);
+            notify.error(error, true);
+            notify.errorDefault();
+            throw error;
+        }
+    }
+);
+
+export const getUnreadNotificationCount = createAsyncThunk(
+    "notifications/getUnreadNotificationCount",
+    async (data, thunkAPI) => {
+        try {
+            const response = await apiFetch(
+                `/notifications/unread-count`,
+                {
+                    method: "GET",
+                }
+            );
+
+            if (!response.success) {
+                notify.error(response.message || "Error al obtener conteo de notificaciones", false);
+                return thunkAPI.rejectWithValue({ continue: false });
+            }
+
+            return response.count || 0;
+        } catch (error) {
+            logger.error("Error en getUnreadNotificationCount:", error);
+            notify.error(error, true);
+            notify.errorDefault();
+            throw error;
+        }
+    }
+);

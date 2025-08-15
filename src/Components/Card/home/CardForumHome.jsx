@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaCircle, FaComments } from "react-icons/fa";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import perfil from "../../../../public/Perfil.jpg"
 
 export function CardForumHome({ forum }) {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [type, setType] = useState("");

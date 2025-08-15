@@ -175,7 +175,7 @@ function Home() {
         </main>
       ) : (
         <section className="grid-cols-4 grid gap-4 w-full">
-          {home.carouselItems.length === 0 ? (
+          {home?.carouselItems?.length === 0 ? (
             <></>
           ) : (
             <div className="col-span-4 h-[200px] sm:h-[250px] md:h-[300px] xl:h-[400px] w-full">
@@ -185,7 +185,7 @@ function Home() {
                   theme={customTheme}
                   slideInterval={5000}
                 >
-                  {home.carouselItems.map((item, key) => (
+                  {home?.carouselItems?.map((item, key) => (
                     <img key={key} src={item.url} alt="..." />
                   ))}
                 </Carousel>
@@ -193,100 +193,112 @@ function Home() {
             </div>
           )}
 
-          <div className="col-span-4 row-span-3 p-4 rounded-md border-2 flex flex-col gap-4 border-verdeD bg-gray-200 h-auto">
-            <h4 className="font-barolw font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
-              Consejos para usar la Red
-            </h4>
-            <div className="px-3 overflow-y-auto">
-              {home.welcomeSections.length === 0 ? (
-                <h5 className="font-barolw font-medium text-verdeD">
-                  No se han publicados consejos para usar la red de
-                  egresados aún...
-                </h5>
-              ) : (
-                <Timeline theme={customThemeTimeline}>
-                  {home.welcomeSections.map((item, key) => (
-                    <TimelineItem key={key}>
-                      <TimelinePoint />
-                      <TimelineContent>
-                        <TimelineTime>Consejo #{key + 1}</TimelineTime>
-                        <TimelineTitle>{item.title}</TimelineTitle>
-                        <TimelineBody>{item.description}</TimelineBody>
-                      </TimelineContent>
-                    </TimelineItem>
+          {home?.welcomeSections?.length > 0 && (
+            <div className="col-span-4 row-span-3 p-4 rounded-md border-2 flex flex-col gap-4 border-verdeD bg-gray-200 h-auto">
+              <h4 className="font-barolw font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
+                Consejos para usar la Red
+              </h4>
+              <div className="px-3 overflow-y-auto">
+                {/* {home?.welcomeSections?.length === 0 ? (
+                  <h5 className="font-barolw font-medium text-verdeD">
+                    No se han publicados consejos para usar la red de
+                    egresados aún...
+                  </h5>
+                ) : ( */}
+                  <Timeline theme={customThemeTimeline}>
+                    {home?.welcomeSections.map((item, key) => (
+                      <TimelineItem key={key}>
+                        <TimelinePoint />
+                        <TimelineContent>
+                          <TimelineTime>Consejo #{key + 1}</TimelineTime>
+                          <TimelineTitle>{item.title}</TimelineTitle>
+                          <TimelineBody>{item.description}</TimelineBody>
+                        </TimelineContent>
+                      </TimelineItem>
+                    ))}
+                  </Timeline>
+                {/* )} */}
+              </div>
+            </div>
+          )}
+
+          {forums.length > 0 && (
+            <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
+
+              <div className="w-full flex flex-col h-[225px]">
+                <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
+                  Hilos del foro populares
+                </h4>
+                <Carousel
+                  theme={customThemeCarrouselCard}
+                  indicators={false}
+                  slideInterval={3000}
+                >
+                  {forums?.map((item, key) => (
+                    <CardForumHome key={key} forum={item} />
                   ))}
-                </Timeline>
-              )}
+                </Carousel>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
-            <div className="w-full flex flex-col h-[225px]">
-              <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
-                Hilos del foro populares
-              </h4>
-              <Carousel
-                theme={customThemeCarrouselCard}
-                indicators={false}
-                slideInterval={3000}
-              >
-                {forums.map((item, key) => (
-                  <CardForumHome key={key} forum={item} />
-                ))}
-              </Carousel>
+          {proyects.length > 0 && (
+            <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
+              <div className="h-[225px] w-full flex flex-col">
+                <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
+                  Proyectos populares
+                </h4>
+                <Carousel
+                  theme={customThemeCarrouselCard}
+                  indicators={false}
+                  slideInterval={3000}
+                >
+                  {proyects?.map((item, key) => (
+                    <CardProyectHome key={key} proyect={item} />
+                  ))}
+                </Carousel>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
-            <div className="h-[225px] w-full flex flex-col">
-              <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
-                Proyectos populares
-              </h4>
-              <Carousel
-                theme={customThemeCarrouselCard}
-                indicators={false}
-                slideInterval={3000}
-              >
-                {proyects.map((item, key) => (
-                  <CardProyectHome key={key} proyect={item} />
-                ))}
-              </Carousel>
+          {graduates.length > 0 && (
+            <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
+              <div className="h-[225px] w-full flex flex-col">
+                <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
+                  Nuevos registros
+                </h4>
+                <Carousel
+                  theme={customThemeCarrouselCard}
+                  indicators={false}
+                  slideInterval={3000}
+                >
+                  {graduates?.map((item, key) => (
+                    <CardGraduateHome key={key} user={item} />
+                  ))}
+                </Carousel>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
-            <div className="h-[225px] w-full flex flex-col">
-              <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
-                Nuevos registros
-              </h4>
-              <Carousel
-                theme={customThemeCarrouselCard}
-                indicators={false}
-                slideInterval={3000}
-              >
-                {graduates.map((item, key) => (
-                  <CardGraduateHome key={key} user={item} />
-                ))}
-              </Carousel>
+          {events.length > 0 && (
+            <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
+              <div className="h-[225px] w-full flex flex-col">
+                <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
+                  Eventos cercanos
+                </h4>
+                <Carousel
+                  theme={customThemeCarrouselCard}
+                  indicators={false}
+                  slideInterval={3000}
+                >
+                  {events?.map((item, key) => (
+                    <CardEventHome key={key} event={item} />
+                  ))}
+                </Carousel>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="col-span-4 md:col-span-2 rounded-md border-2 border-verdeD bg-gray-200 p-3">
-            <div className="h-[225px] w-full flex flex-col">
-              <h4 className="font-barolw px-2 font-semibold w-full border-b pb-1 border-RojoC text-black uppercase text-lg">
-                Eventos cercanos
-              </h4>
-              <Carousel
-                theme={customThemeCarrouselCard}
-                indicators={false}
-                slideInterval={3000}
-              >
-                {events.map((item, key) => (
-                  <CardEventHome key={key} event={item} />
-                ))}
-              </Carousel>
-            </div>
-          </div>
         </section>
       )}
     </>

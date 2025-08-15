@@ -2,14 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 import {
   forgotPassword,
   loginUserFetch,
-  logoutSesion,
   newPassword,
   postData,
   resendEmailFetch,
   verifyEmail,
   verifySesion
 } from '../../services/auth/authService';
-import { changeEmail, changeEmailRecovery, changeRecoveryEmail, changeRecoveryPassword } from '../../services/auth/changeEmailService';
+import { logoutSesion, changeEmail, changeEmailRecovery, changeRecoveryEmail, changeRecoveryPassword } from '../../services/auth/authServiceApiFetch';
 
 export const authSlice = createSlice({
   name: 'verification',

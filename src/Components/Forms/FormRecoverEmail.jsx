@@ -1,11 +1,10 @@
-import { FaLock, FaUserCircle, FaVoicemail } from "react-icons/fa";
+import { FaLock, FaUserCircle } from "react-icons/fa";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { loginUserFetch } from "../../services/auth/authService";
 import { MdEmail } from "react-icons/md";
-import { changeEmailRecovery } from "../../services/auth/changeEmailService";
+import { changeEmailRecovery } from "../../services/auth/authServiceApiFetch";
 
 let defaultValues = {
   emailOrUsername: "",

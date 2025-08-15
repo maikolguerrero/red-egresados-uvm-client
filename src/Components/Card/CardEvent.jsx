@@ -11,7 +11,7 @@ import { FormAddEvent } from "../Forms/Event/FormAddEvent";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { IoIosCamera } from "react-icons/io";
 import { FormEditImage } from "../Forms/Event/FormEditImage";
-import logoUVM from "../../../public/LogoUVM.png"
+import logoUVM from "../../assets/LogoUVM.png"
 
 export function CardEvent({event}) {
   const dispatch = useDispatch();

@@ -11,14 +11,15 @@ export const getMessages = createAsyncThunk(
 
         try {
             const response = await apiFetch(
-                `/api/chat/conversation/${userId}?page=${page}`,
+                `/chat/conversation/${userId}?page=${page}`,
                 {
                     method: "GET",
                 }
             );
 
             if (!response.success) {
-                throw new Error("Error al obtener mensajes");
+                notify.error(response.message || "Error al obtener mensajes", false);
+                return thunkAPI.rejectWithValue({ continue: false });
             }
 
             return {
@@ -28,32 +29,57 @@ export const getMessages = createAsyncThunk(
             };
 
         } catch (error) {
+            notify.error(error.message, true);
+            notify.errorDefault();
             return thunkAPI.rejectWithValue(error.message);
         }
     }
 );
 
-export const getConversations = async () => {
-    const response = await apiFetch(
-        `/api/chat/conversations`,
-        {
-            method: "GET",
+export const getConversations = createAsyncThunk(
+    "chat/getConversations",
+    async (data, thunkAPI) => {
+        try {
+            const response = await apiFetch(
+                `/chat/conversations`,
+                {
+                    method: "GET",
+                }
+            );
+
+            if (!response.success) {
+                notify.error(response.message || "Error al obtener conversaciones", false);
+                return thunkAPI.rejectWithValue({ continue: false });
+            }
+
+            return response;
+        } catch (error) {
+            notify.error(error.message || "Error al obtener conversaciones", true);
+            notify.errorDefault();
+            return thunkAPI.rejectWithValue(error.message);
         }
-    );
-    return response;
-};
+    }
+);
 
 export const sendMessage = createAsyncThunk(
     "chat/sendMessage",
-    async ({ receiverId, content, read }, { rejectWithValue }) => {
+    async ({ receiverId, content, read }, thunkAPI) => {
         try {
             logger.log("Enviando mensaje a:", receiverId);
             const response = await socketService.sendPrivateMessage(receiverId, content, read);
             logger.log("Respuesta del servidor:", response);
+
+            if (!response) {
+                notify.error("Error al enviar mensaje", false);
+                return thunkAPI.rejectWithValue({ continue: false });
+            }
+
             return response; // El mensaje confirmado del servidor
         } catch (error) {
             logger.error("Error enviando mensaje:", error);
-            return rejectWithValue(error.message);
+            notify.error(error.message || "Error al enviar mensaje", true);
+            notify.errorDefault();
+            return thunkAPI.rejectWithValue(error.message);
         }
     }
 );
@@ -70,7 +96,7 @@ export const markMessagesAsRead = createAsyncThunk(
             await socketService.markMessagesAsRead(messageIds);
             return messageIds;
         } catch (error) {
-            notify.error(error.message, true);
+            notify.error(error.message || "Error al marcar mensajes como leídos", true);
             throw error;
         }
     }

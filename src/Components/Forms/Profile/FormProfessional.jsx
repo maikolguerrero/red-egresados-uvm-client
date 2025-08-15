@@ -101,9 +101,13 @@ function FormProfessional() {
   }, [profile]);
 
   const addSkill = (e) => {
-    if (values.skills.trim().length === 0) {
+    if (values.skills?.trim().length === 0) {
       return notify.error("Falta la habilidad", false);
     }
+    if (values.skills?.trim().length > 50) {
+      return notify.error("La habilidad debe tener menos de 50 caracteres", false);
+    }
+    
     setSkills([...skills, values.skills])
     setValues({
       ...values,
@@ -113,8 +117,11 @@ function FormProfessional() {
   }
 
   const addInterest = (e) => {
-    if (values.interests.trim().length === 0) {
+    if (values.interests?.trim().length === 0) {
       return notify.error("Falta el interés personal", false);
+    }
+    if (values.interests?.trim().length > 50) {
+      return notify.error("El interés personal debe tener menos de 50 caracteres", false);
     }
     setInterests([...interests, values.interests])
     setValues({
@@ -126,7 +133,7 @@ function FormProfessional() {
 
   const addEducation = (e) => {
     if (valuesEd?.institution?.trim().length === 0) return notify.error("Falta la institución", false);
-    if (valuesEd?.degree?.trim().length === 0) return notify.error("Falta el grado", false);
+    if (valuesEd?.degree?.trim().length === 0) return notify.error("Falta el título", false);
     // if (valuesEd?.fieldOfStudy?.trim().length === 0) return notify.error("Falta el campo de estudio", false);
     // if (valuesEd?.startYear === 0) return notify.error("Falta el año de inicio", false);
     if (valuesEd?.endYear === 0) return notify.error("Falta el año de finalización", false);
@@ -140,7 +147,7 @@ function FormProfessional() {
       startYear: 0,
       endYear: 0,
     });
-    notify("Agregado el nivel de educación (debes guardar cambios)", false);
+    notify.info("Agregado el nivel de educación (debes guardar cambios)", false);
   }
 
   const addCertification = (e) => {
@@ -158,7 +165,7 @@ function FormProfessional() {
       credentialID: "",
       credentialURL: "",
     });
-    notify("Agregado el certificado (debes guardar cambios)", false);
+    notify.info("Agregado el certificado (debes guardar cambios)", false);
   }
 
   const addExperiencie = (e) => {
@@ -178,41 +185,42 @@ function FormProfessional() {
       current: false,
       description: "",
     });
-    notify("Agregado la experiencia (debes guardar cambios)", false);
+    notify.info("Agregado la experiencia (debes guardar cambios)", false);
   }
 
   const deleteSkill = (key) => {
     let newSkills = skills.filter((item) => item !== key)
     setSkills(newSkills)
-    notify("Eliminada la habilidad (debes guardar cambios)", false);
+    notify.info("Eliminada la habilidad (debes guardar cambios)", false);
   }
 
   const deleteInterest = (key) => {
     let newInterest = interests.filter((item) => item !== key)
     setInterests(newInterest)
-    notify("Eliminado el interés personal (debes guardar cambios)", false);
+    notify.info("Eliminado el interés personal (debes guardar cambios)", false);
   }
 
   const deleteEducation = (key) => {
     let newEducation = education.filter((item) => item.degree !== key)
     setEducation(newEducation)
-    notify("Eliminado el nivel de educación (debes guardar cambios)", false);
+    notify.info("Eliminado el nivel de educación (debes guardar cambios)", false);
   }
 
   const deleteCertification = (key) => {
     let newCertification = certifications.filter((item) => item.name !== key)
     setCertifications(newCertification)
-    notify("Eliminado el certificado (debes guardar cambios)", false);
+    notify.info("Eliminado el certificado (debes guardar cambios)", false);
   }
 
   const deleteExperiencie = (key) => {
     let newExperiencie = experience.filter((item) => item.position !== key)
     setExperience(newExperiencie)
-    notify("Eliminada la experiencia laboral (debes guardar cambios)", false)
+    notify.info("Eliminada la experiencia laboral (debes guardar cambios)", false)
   }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setValues({
       ...values,
       [name]: value,
@@ -359,7 +367,7 @@ function FormProfessional() {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de Habilidades:
               </Label>
-              {skills.length === 0 ? (
+              {skills?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
                     No hay ninguna habilidad registrada...
@@ -367,10 +375,21 @@ function FormProfessional() {
                 </>
               ) : (
                 <>
-                  <ul className="flex gap-2">
+                  {/* <ul className="flex gap-2">
                     {skills.map((item, key) => (
                       <li key={key}>
                         <Skills key={key} text={item} onClick={deleteSkill} />
+                      </li>
+                    ))}
+                  </ul> */}
+                  <ul className="flex flex-col gap-2">
+                    {skills.map((item, key) => (
+                      <li key={key}>
+                        <ItemBabge
+                          key={key}
+                          text={item}
+                          onClick={deleteSkill}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -422,7 +441,7 @@ function FormProfessional() {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de Intereses:
               </Label>
-              {interests.length === 0 ? (
+              {interests?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
                     No hay ningun interes registrado...
@@ -430,10 +449,10 @@ function FormProfessional() {
                 </>
               ) : (
                 <>
-                  <ul className="flex gap-2">
+                  <ul className="flex flex-col gap-2">
                     {interests.map((item, key) => (
                       <li key={key}>
-                        <Skills
+                        <ItemBabge
                           key={key}
                           text={item}
                           onClick={deleteInterest}
@@ -547,7 +566,7 @@ function FormProfessional() {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de Estudios:
               </Label>
-              {education.length === 0 ? (
+              {education?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
                     No hay ninguna educacion registrada...
@@ -684,7 +703,7 @@ function FormProfessional() {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de Experiencia Laboral:
               </Label>
-              {experience.length === 0 ? (
+              {experience?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
                     No hay ninguna experiencia laboral registrada...
@@ -805,7 +824,7 @@ function FormProfessional() {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de Certificados:
               </Label>
-              {certifications.length === 0 ? (
+              {certifications?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium">
                     No hay ningun certificado registrado...

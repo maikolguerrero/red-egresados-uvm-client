@@ -1,7 +1,7 @@
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { loginUserFetch } from "../../services/auth/authService";
 
@@ -38,7 +38,9 @@ function FormLogin(props) {
             name="emailOrUsername"
             value={values.emailOrUsername}
             onChange={handleInputChange}
-            placeholder="Nombre de usuario"
+            placeholder="Nombre de usuario o correo electrónico"
+            autoComplete="username"
+            required
           />
           <FaUserCircle className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
         </div>
@@ -50,6 +52,8 @@ function FormLogin(props) {
             value={values.password}
             onChange={handleInputChange}
             placeholder="Contraseña"
+            autoComplete="current-password"
+            required
           />
           <FaLock className="absolute right-3 top-1 md:top-1.5 text-verdeA text-xl" />
         </div>

@@ -8,7 +8,7 @@ export const addGraduatesPregrado = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/alumni/pregrado`,
+        `/alumni/pregrado`,
         {
           method: "POST",
           body: data,
@@ -22,11 +22,13 @@ export const addGraduatesPregrado = createAsyncThunk(
           data: response
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
 
@@ -39,7 +41,7 @@ export const addGraduatesPostgrado = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/alumni/postgrado`,
+        `/alumni/postgrado`,
         {
           method: "POST",
           body: data,
@@ -53,11 +55,13 @@ export const addGraduatesPostgrado = createAsyncThunk(
           data: response
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   })

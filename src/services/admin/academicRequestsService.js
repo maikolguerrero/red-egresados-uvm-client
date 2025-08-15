@@ -9,7 +9,7 @@ export const getContentAcademicRequests = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/content/academic-requests`,
+        `${URL_API}/content/academic-requests`,
         {
           method: "GET",
         }
@@ -23,11 +23,13 @@ export const getContentAcademicRequests = createAsyncThunk(
           academicRequests: datas.data
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -39,7 +41,7 @@ export const updateContentAcademicRequests = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/academic-requests`,
+        `/content/academic-requests`,
         {
           method: "PATCH",
           headers: {
@@ -56,11 +58,13 @@ export const updateContentAcademicRequests = createAsyncThunk(
           academicRequestsUpdate: response.data
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

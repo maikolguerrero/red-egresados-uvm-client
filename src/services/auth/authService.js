@@ -10,7 +10,7 @@ export const verifySesion = createAsyncThunk(
 
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/check-session`,
+        `${URL_API}/auth/check-session`,
         {
           mode: "cors",
           credentials: "include",
@@ -25,6 +25,7 @@ export const verifySesion = createAsyncThunk(
       logger.log(datas)
       if (datas.success) {
         notify.success(datas.message, true)
+
         return {
           message: datas.message,
           id: datas.user.id,
@@ -32,46 +33,13 @@ export const verifySesion = createAsyncThunk(
           role: datas.user.role,
         };
       } else {
-        throw `${datas.message}`;
+        notify.error(datas.message, true);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
-
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
-      return thunkAPI.rejectWithValue({ continue: false });
-    }
-  }
-);
-
-export const logoutSesion = createAsyncThunk(
-  "authSlice/logoutSesion", // Nombre de la acción
-  async (data, thunkAPI) => {
-    try {
-      // Realizar la solicitud POST
-      const response = await fetch(
-        `${URL_API}/api/auth/logout`,
-        {
-          mode: "cors",
-          credentials: "include",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      let datas = await response.json();
-      logger.log(datas)
-      if (datas.success) {
-        notify.success(datas.message, true)
-        return (datas.message)
-      } else {
-        throw `${datas.message}`;
-      }
-
-    } catch (error) {
-      // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -83,7 +51,7 @@ export const resendEmailFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/resend-verification`,
+        `${URL_API}/auth/resend-verification`,
         {
           mode: "cors",
           credentials: "include",
@@ -100,11 +68,13 @@ export const resendEmailFetch = createAsyncThunk(
         notify.success(datas.message, false)
         return (datas.message);
       } else {
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -117,7 +87,7 @@ export const postData = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/register/alumni`,
+        `${URL_API}/auth/register/alumni`,
         {
           mode: "cors",
           method: "POST",
@@ -133,21 +103,26 @@ export const postData = createAsyncThunk(
         notify.success(datas.message, false)
         return ({ message: datas.message, email: data.email });
       } else {
-        if (datas.metadata.context === "input_validation") {
-          throw `${datas.metadata.errors[0].message}`;
+        if (datas?.metadata?.context === "input_validation") {
+          notify.error(datas.metadata.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        if (datas.metadata.context === "security") {
-          throw `${datas.message}`;
+        if (datas?.metadata?.context === "security") {
+          notify.error(datas.message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        if (datas.metadata.action === "register_duplicate") {
-          throw `${datas.message}`;
+        if (datas?.metadata?.action === "register_duplicate") {
+          notify.error(datas.message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
         logger.log(datas);
-        throw datas.message ? datas.message : "Error al registrar";
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -159,7 +134,7 @@ export const loginUserFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/login`,
+        `${URL_API}/auth/login`,
         {
           mode: "cors",
           credentials: "include",
@@ -181,15 +156,21 @@ export const loginUserFetch = createAsyncThunk(
           username: datas.user.username,
         };
       }
-      if (datas.metadata.context === "security") {
-        throw `${datas.message}`;
+      if (datas?.metadata?.context === "security") {
+        notify.error(datas?.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
-      if (datas.metadata.context === "input_validation") {
-        throw `${datas.metadata.errors[0].message}`;
+      if (datas?.metadata?.context === "input_validation") {
+        notify.error(datas?.metadata?.errors[0].message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
+      } else {
+        notify.error(datas?.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -201,7 +182,7 @@ export const verifyEmail = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/verify-email?token=${data}`,
+        `${URL_API}/auth/verify-email?token=${data}`,
         {
           mode: "cors",
           credentials: "include",
@@ -220,11 +201,13 @@ export const verifyEmail = createAsyncThunk(
           message: datas.message,
         };
       } else {
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -236,7 +219,7 @@ export const forgotPassword = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/forgot-password`,
+        `${URL_API}/auth/forgot-password`,
         {
           mode: "cors",
           credentials: "include",
@@ -254,11 +237,13 @@ export const forgotPassword = createAsyncThunk(
         notify.success(datas.message, false)
         return (datas.message);
       } else {
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -270,7 +255,7 @@ export const newPassword = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/reset-password`,
+        `${URL_API}/auth/reset-password`,
         {
           mode: "cors",
           credentials: "include",
@@ -288,11 +273,13 @@ export const newPassword = createAsyncThunk(
         notify.success(datas.message, false)
         return (datas.message);
       } else {
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

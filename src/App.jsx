@@ -164,7 +164,7 @@ function App() {
       ),
     },
     {
-      path: "/forums/personal/:username",
+      path: "/forum/personal/:username",
       element: (
         <ProtectedRoute>
           <Layout>
@@ -439,7 +439,7 @@ function App() {
           userId: auth.id,
           type: 'window_closed'
         });
-        navigator.sendBeacon(`${URL_API}/api/socket/disconnect`, data);
+        navigator.sendBeacon(`${URL_API}/socket/disconnect`, data);
         socketService.manualDisconnect('window_closed');
       }
     };

@@ -8,7 +8,7 @@ export const sendNotification = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/notifications/bulk/graduates`,
+        `/notifications/bulk/graduates`,
         {
           method: "POST",
           headers: {
@@ -31,7 +31,8 @@ export const sendNotification = createAsyncThunk(
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

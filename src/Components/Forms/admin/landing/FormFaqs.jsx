@@ -46,7 +46,7 @@ export function FormFaqs({landing}) {
 
       setLandingContent({
         ...landingContent,
-        ["faqs"]: [...landingContent.faqs, {
+        ["faqs"]: [...(landingContent?.faqs || []), {
           question: values.question,
           answer: values.answer,
           order: getRandomInt(100)
@@ -60,7 +60,7 @@ export function FormFaqs({landing}) {
   }
 
   const deleteQuestion = (key) => {
-    let newFaq = landingContent.faqs.filter((item) => item.question !== key);
+    let newFaq = landingContent?.faqs?.filter((item) => item.question !== key);
     setLandingContent({
       ...landingContent,
       ["faqs"]: newFaq,
@@ -123,7 +123,7 @@ export function FormFaqs({landing}) {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de preguntas frecuentes:
               </Label>
-              {landingContent.faqs.length === 0 ? (
+              {landingContent?.faqs?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium border-b-2 pb-3 mb-3 border-verdeD">
                     No hay ninguna prefunta frecuente registrada...
@@ -131,7 +131,7 @@ export function FormFaqs({landing}) {
                 </>
               ) : (
                 <ul className="flex flex-col gap-2 pb-3 mb-3 border-b-2 border-verdeD">
-                  {landingContent.faqs.map((item, key) => (
+                  {landingContent?.faqs?.map((item, key) => (
                     <li key={key}>
                       <ItemBabge
                         key={key}

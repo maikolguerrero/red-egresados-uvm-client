@@ -9,7 +9,7 @@ export const searchReport = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/forum/reports?page=${data.page}&limit=${data.limit}${
+        `${URL_API}/forum/reports?page=${data.page}&limit=${data.limit}${
             data.status === null || data.status === undefined ? "" : "&status=" + data.status
           }`,
         {
@@ -32,12 +32,14 @@ export const searchReport = createAsyncThunk(
           pagination: datas.pagination
         }
       } else {
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -49,7 +51,7 @@ export const resolveReport = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/forum/reports/${data.reportId}/resolve`,
+        `${URL_API}/forum/reports/${data.reportId}/resolve`,
         {
           mode: "cors",
           credentials: "include",
@@ -71,14 +73,17 @@ export const resolveReport = createAsyncThunk(
         }
       } else {
         if (datas.message === "Error de validación") {
-          throw `${datas.metadata.errors[0].message}`
+          notify.error(datas.metadata.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

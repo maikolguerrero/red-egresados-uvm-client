@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import ButtonSmall from "../Components/Buttons/ButtonSmall";
 import Footer from "../Components/Footer";
 import NavLogin from "../Components/NavLogin";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { changeEmail } from "../services/auth/changeEmailService";
+import { changeEmail } from "../services/auth/authServiceApiFetch";
 import Button from "../Components/Buttons/Button";
 import Header from "../Components/Header";
 

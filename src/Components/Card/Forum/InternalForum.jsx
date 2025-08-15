@@ -106,7 +106,7 @@ export function InternalForum({ forum }) {
     <>
       {forum?.id === undefined ? (
         <>
-          <EntityNotFound entity="Hilo" entityPath="/forums" />
+          <EntityNotFound entity="Hilo" entityPath="/forum" />
         </>
       ) : (
         <>
@@ -115,7 +115,9 @@ export function InternalForum({ forum }) {
               <div className="flex gap-4 w-ful flex-wrap mb-3">
                 {forum?.author?.profilePicture?.url === null ? (
                   // Si no hay foto de perfil, muestra la inicial del username
-                  <div className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+                  <div
+                    onClick={searchProfile}
+                    className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0 cursor-pointer">
                     <span className="text-white text-base md:text-lg xl:text-xl font-bold uppercase">
                       {forum?.author?.username?.charAt(0).toUpperCase()}
                     </span>
@@ -123,14 +125,15 @@ export function InternalForum({ forum }) {
                 ) : (
                   // Si hay foto, muéstrala circular
                   <img
-                    className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full object-cover"
+                    onClick={searchProfile}
+                    className="w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 rounded-full object-cover cursor-pointer"
                     src={forum?.author?.profilePicture?.url}
                     alt={forum?.author?.username || "Foto de Perfil del Autor"}
                   />
                 )}
                 <div className="flex flex-col">
-                  <p onClick={searchProfile} className="cursor-pointer flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
-                    @{forum?.author?.username}
+                  <p className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center">
+                    <span onClick={searchProfile} className="cursor-pointer">@{forum?.author?.username}</span>
                     <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
                     Hace {datePublic}{" "}
                     {type}

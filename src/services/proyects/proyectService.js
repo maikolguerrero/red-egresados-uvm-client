@@ -8,7 +8,7 @@ export const addProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects`,
+        `/projects`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -26,14 +26,17 @@ export const addProyect = createAsyncThunk(
         }
       } else {
         if (response.message === "Error de validación") {
-          throw `${response.metadata.errors[0].message}`
+          notify.error(response.metadata.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -45,7 +48,7 @@ export const searchProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects?page=${data.page}&limit=${data.limit}${
+        `/projects?page=${data.page}&limit=${data.limit}${
             data.status === null || data.status === undefined ? "" : "&status=" + data.status
           }${
             data.search === null || data.search === undefined ? "" : "&search=" + data.search
@@ -69,12 +72,14 @@ export const searchProyect = createAsyncThunk(
           pagination: response.pagination
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -86,7 +91,7 @@ export const getProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.id}`,
+        `/projects/${data.id}`,
         {
           method: "GET",
         }
@@ -99,12 +104,14 @@ export const getProyect = createAsyncThunk(
           proyectSelected: response.data,
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -116,7 +123,7 @@ export const editProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}`,
+        `/projects/${data.projectId}`,
         {
           method: "PATCH",
           body: JSON.stringify(data.data),
@@ -135,12 +142,14 @@ export const editProyect = createAsyncThunk(
           type: data.type
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -152,7 +161,7 @@ export const deleteProject = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}`,
+        `/projects/${data.projectId}`,
         {
           method: "DELETE",
         }
@@ -165,12 +174,14 @@ export const deleteProject = createAsyncThunk(
           message: response.message,
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -182,7 +193,7 @@ export const requestProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}/request`,
+        `/projects/${data.projectId}/request`,
         {
           method: "POST",
           body: data.data
@@ -196,12 +207,14 @@ export const requestProyect = createAsyncThunk(
           projectId: data.projectId
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -213,7 +226,7 @@ export const joinProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}/join`,
+        `/projects/${data.projectId}/join`,
         {
           method: "POST",
           body: data.data
@@ -228,12 +241,14 @@ export const joinProyect = createAsyncThunk(
           collaborators: response.data
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -245,7 +260,7 @@ export const getRequestProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}/requests`,
+        `/projects/${data.projectId}/requests`,
         {
           method: "GET",
         }
@@ -258,12 +273,14 @@ export const getRequestProyect = createAsyncThunk(
           request: response.data
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
       notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -275,7 +292,7 @@ export const responseRequest = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/requests/${data.requestId}`,
+        `/projects/requests/${data.requestId}`,
         {
           method: "PATCH",
           body: JSON.stringify(data.data),
@@ -294,12 +311,14 @@ export const responseRequest = createAsyncThunk(
           requestId: data.requestId
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -311,7 +330,7 @@ export const expelCollaborator = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}/collaborators/${data.username}`,
+        `/projects/${data.projectId}/collaborators/${data.username}`,
         {
           method: "DELETE"
         }
@@ -325,12 +344,14 @@ export const expelCollaborator = createAsyncThunk(
           username: data.username,
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -342,7 +363,7 @@ export const cancelRequest = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}/request`,
+        `/projects/${data.projectId}/request`,
         {
           method: "DELETE",
           body: data.data
@@ -356,12 +377,14 @@ export const cancelRequest = createAsyncThunk(
           projectId: data.projectId,
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -373,7 +396,7 @@ export const leaveProyect = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}/leave`,
+        `/projects/${data.projectId}/leave`,
         {
           method: "POST",
           body: data.data
@@ -388,12 +411,14 @@ export const leaveProyect = createAsyncThunk(
           username: data.username
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -405,7 +430,7 @@ export const editRoleCollaborator = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/projects/${data.projectId}/collaborators/role`,
+        `/projects/${data.projectId}/collaborators/role`,
         {
           method: "PATCH",
           body: JSON.stringify(data.data),
@@ -423,12 +448,14 @@ export const editRoleCollaborator = createAsyncThunk(
           username: data.data.username,
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

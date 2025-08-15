@@ -1,6 +1,6 @@
 import { URL_API } from "../config";
 import store from "../app/store";
-import { logoutSesion } from "./auth/authService";
+import { logoutSesion } from "./auth/authServiceApiFetch";
 import logger from "../utils/logger";
 import notify from "../utils/notifications";
 
@@ -52,7 +52,7 @@ export const apiFetch = async (url, options = {}) => {
 
       try {
         // Intentamos renovar el token
-        const refreshResponse = await fetch(`${URL_API}/api/auth/refresh-token`, {
+        const refreshResponse = await fetch(`${URL_API}/auth/refresh-token`, {
           method: "POST",
           credentials: "include",
           headers: {

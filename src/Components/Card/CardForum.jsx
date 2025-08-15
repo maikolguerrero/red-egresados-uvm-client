@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
-import { FaCircle, FaComments, FaEllipsisV, FaRegComments, FaShare } from "react-icons/fa";
+import { FaCircle, FaComments, FaEllipsisV, FaShare } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteForum, likeThreads } from "../../services/forum/forumService";
 import { useNavigate } from "react-router-dom";
@@ -32,8 +32,9 @@ export function CardForum({ forum }) {
         (diferenciaMilisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
       const minutos = Math.floor(diferenciaMilisegundos / (1000 * 60));
+      const segundos = Math.floor(diferenciaMilisegundos / 1000);
 
-      return { semanas: semanas, dias: dias, horas: horas, minutos: minutos };
+      return { semanas: semanas, dias: dias, horas: horas, minutos: minutos, segundos: segundos };
     }
 
     let date = new Date();
@@ -52,8 +53,13 @@ export function CardForum({ forum }) {
         setDatePublic(response.horas);
         setType("h");
       } else {
-        setDatePublic(response.minutos);
-        setType("min");
+        if (response.minutos >= 1) {
+          setDatePublic(response.minutos);
+          setType("min");
+        } else {
+          setDatePublic(response.segundos);
+          setType("seg");
+        }
       }
     }
     }
@@ -104,7 +110,9 @@ export function CardForum({ forum }) {
           {forum?.author?.profilePicture === undefined ||
             forum?.author?.profilePicture?.url === null ? (
             // Si no hay foto de perfil, muestra la inicial del username
-            <div className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div 
+            onClick={searchProfile}
+            className="cursor-pointer w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
               <span className="text-white text-xs md:text-sm xl:text-base font-bold uppercase">
                 {forum?.author?.username?.charAt(0).toUpperCase()}
               </span>
@@ -112,16 +120,16 @@ export function CardForum({ forum }) {
           ) : (
             // Si hay foto, muéstrala circular
             <img
-              className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
+              onClick={searchProfile}
+              className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover cursor-pointer"
               src={forum?.author?.profilePicture?.url}
               alt={forum?.author?.username || 'Foto de Perfil del Autor'}
             />
           )}
           <p
-            onClick={searchProfile}
-            className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center cursor-pointer"
+            className="flex gap-2 text-RojoC font-barolw text-xs md:text-sm xl:text-base items-center"
           >
-            @{forum?.author?.username}
+            <span onClick={searchProfile} className="cursor-pointer">@{forum?.author?.username}</span>
             <FaCircle className="text-Negro text-[6px] md:text-[9px] xl:text-xs flex justify-center items-center h-full" />{" "}
             Hace {datePublic}{" "}
             {type}

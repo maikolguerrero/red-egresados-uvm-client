@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
 import { Bounce, ToastContainer } from 'react-toastify';
@@ -41,6 +41,38 @@ function FormRegister(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (values.nombreCompleto.trim().length < 2) {
+      return notify.error("El nombre debe tener al menos 2 caracteres", false);
+    }
+
+    if (values.username.trim().length < 4) {
+      return notify.error("El usuario debe tener al menos 4 caracteres", false);
+    }
+    if (values.username.trim().length > 20) {
+      return notify.error("El usuario no puede exceder 20 caracteres", false);
+    }
+    if (!values.username.trim().match(/^[a-z0-9_]+$/)) {
+      return notify.error("El usuario debe contener solo letras minúsculas, números y guiones bajos", false);
+    }
+
+    if (!values.password.match(/[A-Z]/)) {
+      return notify.error("La contraseña debe contener al menos una mayúscula", false);
+    }
+    if (!values.password.match(/[a-z]/)) {
+      return notify.error("La contraseña debe contener al menos una minúscula", false);
+    }
+    if (!values.password.match(/[0-9]/)) {
+      return notify.error("La contraseña debe contener al menos un número", false);
+    }
+    if (!values.password.match(/[^a-zA-Z0-9]/)) {
+      return notify.error("La contraseña debe contener al menos un carácter especial", false);
+    }
+    if (values.password.length < 8) {
+      return notify.error("La contraseña debe tener al menos 8 caracteres", false);
+    }
+
+
     if (values.password === values.passwordConfirm) {
       values.cedula = `${values.nacionalidad}-${values.cedulaNum.trim()}`;
       values.nombreCompleto = values.nombreCompleto.trim();
@@ -61,24 +93,25 @@ function FormRegister(props) {
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
           <div className="flex flex-col gap-3">
-            <div className="flex gap-2"> {/* Usamos 'gap-2' para un pequeño espacio entre ellos */}
+            <div className="flex gap-2">
               <select
                 name="nacionalidad"
                 value={values.nacionalidad}
                 onChange={handleInputChange}
-                // className="w-16 h-10 px-2 border border-gray-300 rounded-md shadow-sm focus:ring-verdeD focus:border-verdeD" // Ajusta estos estilos a tu 'styles.input' si es posible
                 className={styles.input_select}
+                required
               >
                 <option value="V">V</option>
                 <option value="E">E</option>
               </select>
               <input
-                className={styles.input} // Aplicamos los estilos existentes para el input de texto
+                className={styles.input}
                 type="text"
                 name="cedulaNum"
                 value={values.cedulaNum}
                 onChange={handleInputChange}
                 placeholder="Número de Cédula (12345678)"
+                required
               />
             </div>
 
@@ -90,6 +123,7 @@ function FormRegister(props) {
                 value={values.nombreCompleto}
                 onChange={handleInputChange}
                 placeholder="Nombres y Apellidos (en ese orden)"
+                required
               />
             </div>
           </div>
@@ -106,6 +140,8 @@ function FormRegister(props) {
                 value={values.username}
                 onChange={handleInputChange}
                 placeholder="Nombre de usuario"
+                autoComplete="username"
+                required
               />
             </div>
             <div className="w-full flex relative">
@@ -116,6 +152,8 @@ function FormRegister(props) {
                 value={values.email}
                 onChange={handleInputChange}
                 placeholder="Correo Electrónico"
+                autoComplete="username"
+                required
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -126,6 +164,8 @@ function FormRegister(props) {
                 value={values.password}
                 onChange={handleInputChange}
                 placeholder="Contraseña"
+                autoComplete="new-password"
+                required
               />
               <input
                 className={styles.input}
@@ -134,6 +174,8 @@ function FormRegister(props) {
                 value={values.passwordConfirm}
                 onChange={handleInputChange}
                 placeholder="Confirmar Contraseña"
+                autoComplete="new-password"
+                required
               />
             </div>
           </div>

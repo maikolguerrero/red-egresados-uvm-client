@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { Banner, Badge } from "flowbite-react";
+import { Badge } from "flowbite-react";
 import { HiX } from "react-icons/hi";
-import ButtonSmall from "../Buttons/ButtonSmall";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { BsCalendarDate } from "react-icons/bs";
 import { PiProjectorScreenChartBold } from "react-icons/pi";
@@ -12,7 +11,7 @@ import { BsExclamationOctagon } from "react-icons/bs";
 import { formatNotification } from "../../utils/dateUtils";
 import logger from "../../utils/logger";
 import notify from "../../utils/notifications";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 export function CardBanner({
   type,
@@ -21,12 +20,13 @@ export function CardBanner({
   isRead,
   onMarkAsRead,
   notificationId,
-  onDelete,
   data
 }) {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
   const role = useSelector((state) => state.auth.role);
+  const notification = useSelector((state) => state.notifications.notifications.find(n => n.data.id === notificationId));
+  const dispatch = useDispatch();
 
   // Función para determinar el icono y texto según el tipo
   const getNotificationTypeInfo = () => {
@@ -124,13 +124,12 @@ export function CardBanner({
 
   const handleDelete = async () => {
     try {
-      await deleteNotification(notificationId);
-      setIsVisible(false);
-      // Notificar al componente padre que se eliminó
-      if (onDelete) {
-        onDelete(notificationId, isRead);
+      dispatch(deleteNotification(notificationId));
+      if (!notification) {
+        setIsVisible(false);
       }
-      notify.success("Notificación eliminada", false);
+
+      notify.success("Notificación eliminada", true);
     } catch (error) {
       notify.error(error.message, true);
       logger.error("Error eliminando notificación:", error);

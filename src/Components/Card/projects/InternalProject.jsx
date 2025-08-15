@@ -92,16 +92,6 @@ export function InternalProject({ proyect }) {
           <article className="flex flex-col gap-6">
             <div className="flex justify-between">
               <div className="flex items-center gap-2">
-                {/* <img
-                  className="rounded-full w-8 md:w-8 xl:w-10"
-                  src={
-                    proyect.owner.profilePicture.url === null
-                      ? perfil
-                      : proyect.owner.profilePicture.url
-                  }
-                  alt="Foto de Perfil"
-                /> */}
-
                 {proyect?.owner?.profilePicture?.url === null ? (
                   // Si no hay foto de perfil, muestra la inicial del username
                   <div className="w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -363,104 +353,6 @@ export function InternalProject({ proyect }) {
               )}
             </div>
 
-            {/* {proyect?.collaborators?.length === 0 ? (
-              <></>
-            ) : (
-              <div className="bg-gris border w-full border-verdeD px-5 py-3 rounded-md flex flex-col gap-6">
-                <h5 className="lg:text-lg border-b border-RojoC w-full font-barlow-semi-condensed font-medium uppercase">
-                  Colaboradores
-                </h5>
-                <ul className="px-2 flex flex-col gap-3">
-                  {proyect?.collaborators?.map((item, key) => (
-                    <li key={key} className="text-RojoC font-medium text-sm flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        {item?.user?.profilePicture?.url === null ? (
-                          // Si no hay foto de perfil, muestra la inicial del username
-                          <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
-                            <span className="text-white text-xs md:text-xs xl:text-sm font-bold uppercase">
-                              {item?.user?.username?.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
-                        ) : (
-                          // Si hay foto, muéstrala circular
-                          <img
-                            className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
-                            src={item?.user?.profilePicture?.url}
-                            alt={
-                              item?.user?.username ||
-                              "Foto de Perfil del Colaborador"
-                            }
-                          />
-                        )}
-
-                        <p
-                          onClick={(e) => {
-                            navigate(`/graduates/${item?.user?.username}`);
-                          }}
-                          className="cursor-pointer flex font-semibold text-verdeC font-barolw text-xs md:text-sm xl:text-base items-center"
-                        >
-                          @{item?.user?.username}<span className="mx-1">-</span>
-                          {item?.role === "creator" ? (
-                            <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">
-                              {" Creador"}
-                            </span>
-                          ) : (
-                            <span className="uppercase text-RojoC font-barlow-semi-condensed font-semibold">
-                              {item.role === "member"
-                                ? " Miembro"
-                                : " Administrador"}
-                            </span>
-                          )}
-                        </p>
-                      </div>
-
-                      {
-                        proyect?.owner?.username === username ? (
-                          item?.user?.username === username ? (
-                            <></>
-                          ) : (
-                            <>
-                              <div className="flex gap-2">
-                                <button
-                                  onClick={(e) => setEditRole(true)}
-                                  className="text-xs px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 font-barlow-semi-condensed font-medium uppercase"
-                                >
-                                  Rol
-                                </button>
-                                <button
-                                  onClick={(e) => {
-                                    dispatch(
-                                      expelCollaborator({
-                                        projectId: proyect?.id,
-                                        username: item?.user?.username,
-                                      })
-                                    );
-                                  }}
-                                  className="text-xs px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-800 font-barlow-semi-condensed font-medium uppercase"
-                                >
-                                  Expulsar
-                                </button>
-                              </div>
-
-                              <ModalNotHeader
-                                openModal={editRole}
-                                setOpenModal={setEditRole}
-                                size={"3xl"}
-                                component={<FormEditRole collaborator={item} />}
-                              />
-                            </>
-                          )
-                        ) : (
-                          <></>
-                        )
-                      }
-                    </li >
-                  ))
-                  }
-                </ul >
-              </div >
-            )} */}
-
             {proyect?.collaborators?.length === 0 ? null : (
               <div className="bg-gris border w-full border-verdeD px-4 py-3 rounded-md flex flex-col gap-4">
                 <h5 className="text-base lg:text-lg border-b border-RojoC w-full font-barlow-semi-condensed font-medium uppercase">
@@ -472,8 +364,8 @@ export function InternalProject({ proyect }) {
                       <div className="flex items-center gap-2 flex-1 min-w-0">
                         {item?.user?.profilePicture?.url === null ? (
                           <div
-                            className="w-7 h-7 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0"
                             onClick={() => navigate(`/graduates/${item?.user?.username}`)}
+                            className="cursor-pointer w-7 h-7 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0"
                           >
                             <span className="text-white text-sm font-bold uppercase">
                               {item?.user?.username?.charAt(0).toUpperCase()}

@@ -12,7 +12,7 @@ import ButtonSmall from "../../Components/Buttons/ButtonSmall";
 import { getProfile } from "../../services/users/usersService";
 import { getMessages, sendMessage } from "../../services/chat/chatService";
 import socketService from "../../services/socket/socket.service";
-import { setCurrentChat, addMessage, setMessagesRead, setMessageRead, updateMessages, removeMessage, replaceTempMessage, resetChat } from "../../features/chat/chatSlice";
+import { setCurrentChat, addMessage, setMessagesRead, replaceTempMessage, resetChat } from "../../features/chat/chatSlice";
 import { markMessagesAsRead } from "../../services/chat/chatService";
 import { formatDateHeader, groupMessagesByDate } from '../../utils/dateUtils';
 import { Loader } from "../../Components/Loader";
@@ -36,6 +36,10 @@ export default function Chat() {
 
     const emojiButtonRef = useRef(null);
     const emojiPickerRef = useRef(null);
+
+    const searchProfile = (e) => {
+        navigate(`/graduates/${user?.username}`);
+    };
 
     // Nuevo estado para detectar si es un dispositivo de escritorio
     const userAgent = navigator.userAgent || window.opera;
@@ -385,7 +389,7 @@ export default function Chat() {
         }
 
         if (message.trim() === "") {
-            notify.error("No puedes enviar un mensaje vacío", false);
+            notify.error("No puedes enviar un mensaje vacío", true);
             return;
         }
 
@@ -420,6 +424,7 @@ export default function Chat() {
                 }));
                 scrollToBottomOnSend(); // Volver a scrollar al final si es necesario
             } else {
+                scrollToBottomOnSend();
                 throw new Error(resultAction.error.message);
             }
 
@@ -433,14 +438,17 @@ export default function Chat() {
         <>
             {/* Header del chat */}
             <div className="flex items-center justify-between p-4 border-b-2 border-verdeD bg-Gris">
-                <div className="flex items-center gap-4">
+                <div
+                    className="flex items-center gap-4">
                     <button
                         onClick={() => navigate(-1)}
                         className="text-verdeD hover:text-RojoC transition-colors duration-200"
                     >
                         <BsArrowLeft className="text-xl" />
                     </button>
-                    <div className="flex items-center gap-3">
+                    <div
+                        onClick={searchProfile}
+                        className="flex items-center gap-3 cursor-pointer hover:bg-gray-300 rounded-lg p-2  transition-colors duration-200">
                         <div className="w-10 h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
                             {user?.profilePicture?.url ? (
                                 <img
@@ -458,7 +466,8 @@ export default function Chat() {
                             <h3 className="font-barolw font-semibold text-Negro text-sm">
                                 {user?.nombreCompleto}
                             </h3>
-                            <p className="text-xs font-barlow-semi-condensed text-verdeD">
+                            <p
+                                className="text-xs font-barlow-semi-condensed text-verdeD">
                                 @{user?.username}
                             </p>
                             <OnlineStatus userId={user?.userId} />
@@ -467,7 +476,7 @@ export default function Chat() {
                 </div>
                 {/* <button className="text-verdeD hover:text-RojoC transition-colors duration-200">
                             <BsThreeDotsVertical className="text-xl" />
-                        </button> */}
+                    </button> */}
             </div>
 
             {/* Contenedor de la fecha flotante */}
@@ -555,7 +564,8 @@ export default function Chat() {
                                                     profilePicture: msg.sender?.profilePicture || {
                                                         url: null
                                                     }
-                                                }
+                                                },
+                                                isTemp: msg.isTemp
                                             }}
                                             isOwn={isOwn}
                                             markMessagesAsRead={handleMarkAsRead}
@@ -566,24 +576,9 @@ export default function Chat() {
                         )
                     })
                 }
-
-                {/* solicitud de chat */}
-                {/* {
-                    pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
-                        <div className={`fixed bottom-20 ${isMobile ? 'left-0' : 'left-14'} right-0 bg-verdeA font-bold text-white p-4 `}>
-                            <div className="container mx-auto flex  items-center p-2">
-                                <p className="mr-4">{user.nombreCompleto} quiere chatear contigo.</p>
-                                <ButtonSmall
-                                    text={"Aceptar solicitud"}
-                                    className={"bg-verdeC hover:bg-RojoC"}
-                                    action={handleAcceptRequest}
-                                />
-                            </div>
-                        </div>
-                    )
-                } */}
             </div >
 
+            {/* solicitud de chat */}
             {
                 pendingRequest?.status === 'pending' && pendingRequest?.receiver.id === auth.id && (
                     <div className={`bg-verdeA font-bold text-white p-4`}>

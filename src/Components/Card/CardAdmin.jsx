@@ -1,6 +1,5 @@
 import { Card, Dropdown, DropdownItem } from "flowbite-react";
 import ButtonSmall from "../Buttons/ButtonSmall";
-import perfil from "../../../public/Perfil.jpg"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -23,24 +22,6 @@ export function CardAdmin({ admin }) {
     <>
       <Card className="w-[275px] bg-Gris border-verdeD">
         <div className="flex justify-end px-4 pt-4">
-          {/* <Dropdown inline label="">
-          <DropdownItem>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
-            >
-              Proyectos
-            </a>
-          </DropdownItem>
-          <DropdownItem>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
-            >
-              Foros
-            </a>
-          </DropdownItem>
-        </Dropdown> */}
         </div>
         <div className="flex flex-col items-center text-center pb-10">
           {admin?.profilePicture?.url === null ? (

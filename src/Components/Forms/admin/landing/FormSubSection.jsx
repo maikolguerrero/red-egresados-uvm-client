@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import ButtonSmall from "../../../Buttons/ButtonSmall";
 import { updateContentLanding } from "../../../../services/admin/landingService";
+import notify from "../../../../utils/notifications";
 
 let styles = {
   input:
@@ -29,10 +30,12 @@ export function FormSubSection({ landingContent, setLandingContent, position }) 
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (values.subtitle.trim().length === 0) return notify.error("Falta el Subtítulo", false);
+    
     let newLandingContent = JSON.parse(JSON.stringify(landingContent))
-    for (let i = 0; i < newLandingContent.featuredSections.length; i++) {
+    for (let i = 0; i < newLandingContent?.featuredSections?.length; i++) {
       if (i === position) {
-        newLandingContent.featuredSections[i].subsections.push(values)
+        newLandingContent?.featuredSections[i]?.subsections?.push(values)
       }
     }
     setLandingContent(newLandingContent)
@@ -60,6 +63,7 @@ export function FormSubSection({ landingContent, setLandingContent, position }) 
               value={values.subtitle}
               onChange={handleInputChange}
               placeholder={"Escribe el subtítulo"}
+              required
             />
           </div>
         </div>

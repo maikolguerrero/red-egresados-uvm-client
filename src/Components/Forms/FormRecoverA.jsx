@@ -2,7 +2,7 @@ import { useState } from "react";
 import Button from "../Buttons/Button";
 import { Link } from "react-router-dom";
 import notify from "../../utils/notifications";
-import { changeRecoveryPassword } from "../../services/auth/changeEmailService";
+import { changeRecoveryPassword } from "../../services/auth/authServiceApiFetch";
 import { useDispatch } from "react-redux";
 
 function FormRecoverA(props) {

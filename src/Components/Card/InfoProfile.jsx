@@ -1,4 +1,4 @@
-import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTiktok, FaWhatsapp, FaYoutube } from "react-icons/fa"
+import { FaFacebook, FaGithub, FaInstagram, FaLinkedin, FaTiktok, FaWhatsapp, FaTelegram, FaYoutube, FaLock } from "react-icons/fa"
 import Button from "../Buttons/Button";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -68,31 +68,31 @@ function InfoProfile({ profile }) {
     }
 
     if (
-      (profile?.profile?.socialMedia?.facebook?.isPublic ||
+      (!profile?.profile?.socialMedia?.facebook?.isPublic ||
         profile?.profile?.socialMedia?.facebook?.value === undefined ||
         profile?.profile?.socialMedia?.facebook?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.whatsapp?.isPublic ||
+      (!profile?.profile?.socialMedia?.whatsapp?.isPublic ||
         profile?.profile?.socialMedia?.whatsapp?.value === undefined ||
         profile?.profile?.socialMedia?.whatsapp?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.telegram?.isPublic ||
+      (!profile?.profile?.socialMedia?.telegram?.isPublic ||
         profile?.profile?.socialMedia?.telegram?.value === undefined ||
         profile?.profile?.socialMedia?.telegram?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.instagram?.isPublic === false ||
+      (!profile?.profile?.socialMedia?.instagram?.isPublic ||
         profile?.profile?.socialMedia?.instagram?.value === undefined ||
         profile?.profile?.socialMedia?.instagram?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.linkedin?.isPublic ||
+      (!profile?.profile?.socialMedia?.linkedin?.isPublic ||
         profile?.profile?.socialMedia?.linkedin?.value === undefined ||
         profile?.profile?.socialMedia?.linkedin?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.youtube?.isPublic ||
+      (!profile?.profile?.socialMedia?.youtube?.isPublic ||
         profile?.profile?.socialMedia?.youtube?.value === undefined ||
         profile?.profile?.socialMedia?.youtube?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.github?.isPublic ||
+      (!profile?.profile?.socialMedia?.github?.isPublic ||
         profile?.profile?.socialMedia?.github?.value === undefined ||
         profile?.profile?.socialMedia?.github?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.x?.isPublic ||
+      (!profile?.profile?.socialMedia?.x?.isPublic ||
         profile?.profile?.socialMedia?.x?.value === undefined ||
         profile?.profile?.socialMedia?.x?.value.trim() === "") &&
-      (profile?.profile?.socialMedia?.tiktok?.isPublic ||
+      (!profile?.profile?.socialMedia?.tiktok?.isPublic ||
         profile?.profile?.socialMedia?.tiktok?.value === undefined ||
         profile?.profile?.socialMedia?.tiktok?.value.trim() === "")
     ) {
@@ -115,7 +115,7 @@ function InfoProfile({ profile }) {
     }
 
     if (
-      profile?.profile?.professional?.summary?.isPublic === false ||
+      !profile?.profile?.professional?.summary?.isPublic ||
       profile?.profile?.professional?.summary?.value === undefined ||
       profile?.profile?.professional?.summary?.value.trim() === ""
     ) {
@@ -146,19 +146,19 @@ function InfoProfile({ profile }) {
     }
 
     if (
-      (profile?.profile?.personalData?.birthDate?.isPublic === false ||
+      (!profile?.profile?.personalData?.birthDate?.isPublic ||
         profile?.profile?.personalData?.birthDate?.value === undefined ||
         profile?.profile?.personalData?.birthDate?.value.trim() === "") &&
-      (profile?.profile?.personalData?.location?.isPublic === false ||
+      (!profile?.profile?.personalData?.location?.isPublic ||
         profile?.profile?.personalData?.location?.value === undefined ||
         profile?.profile?.personalData?.location?.value.trim() === "") &&
-      (profile?.profile?.contact?.phone?.isPublic === false ||
+      (!profile?.profile?.contact?.phone?.isPublic ||
         profile?.profile?.contact?.phone?.value === undefined ||
         profile?.profile?.contact?.phone?.value.trim() === "") &&
-      (profile?.profile?.contact?.website?.isPublic === false ||
+      (!profile?.profile?.contact?.website?.isPublic ||
         profile?.profile?.contact?.website?.value === undefined ||
         profile?.profile?.contact?.website?.value.trim() === "") &&
-      (profile?.profile?.contact?.alternateEmail?.isPublic === false ||
+      (!profile?.profile?.contact?.alternateEmail?.isPublic ||
         profile?.profile?.contact?.alternateEmail?.value === undefined ||
         profile?.profile?.contact?.alternateEmail?.value.trim() === "")
     ) {
@@ -169,50 +169,56 @@ function InfoProfile({ profile }) {
   };
 
   const handleEducation = () => {
-    if (profile?.profile?.education?.items?.length === 0) {
-      return true
+    if ((profile?.profile?.education?.items)) {
+      if (profile?.profile?.education?.items?.length > 0) {
+        return true;
+      }
     }
 
     if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
-      return false
+      return true;
     }
 
     if (profile?.profile?.education?.isPublic) {
-      return false
+      return true;
     } else {
-      return true
+      return false;
     }
   }
 
   const handleExperience = () => {
-    if (profile?.profile?.experience?.items?.length === 0) {
-      return true
+    if ((profile?.profile?.experience?.items)) {
+      if (profile?.profile?.experience?.items?.length > 0) {
+        return true;
+      }
     }
 
     if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
-      return false
+      return true;
     }
 
     if (profile?.profile?.experience?.isPublic) {
-      return false
+      return true;
     } else {
-      return true
+      return false;
     }
   }
 
   const handleCertifications = () => {
-    if (profile?.profile?.certifications?.items?.length === 0) {
-      return true
+    if ((profile?.profile?.certifications?.items)) {
+      if (profile?.profile?.certifications?.items?.length > 0) {
+        return true;
+      }
     }
 
     if (profile?.user?.username === username || role === "admin" || role === "superadmin") {
-      return false
+      return true;
     }
 
     if (profile?.profile?.certifications?.isPublic) {
-      return false
+      return true;
     } else {
-      return true
+      return false;
     }
   }
 
@@ -239,14 +245,32 @@ function InfoProfile({ profile }) {
                       undefined ? (
                       <></>
                     ) : (
-                      <p>
-                        <b>Nacimiento:</b>{" "}
-                        {
-                          profile?.profile?.personalData?.birthDate?.value.split(
-                            "T"
-                          )[0]
-                        }
-                      </p>
+                      // <>
+                      //   <p>
+                      //     <b>Fecha de Nacimiento:</b>{" "}
+                      //     {
+                      //       profile?.profile?.personalData?.birthDate?.value.split(
+                      //         "T"
+                      //       )[0]
+                      //     }
+                      //     {profile?.profile?.personalData?.birthDate?.isPublic === false && (
+                      //       <FaLock />
+                      //     )}
+                      //   </p>
+
+                      // </>
+
+                      <div className="flex items-center gap-1">
+                        <p>
+                          <b>Fecha de Nacimiento: </b>{" "}
+                          {
+                            profile?.profile?.personalData?.birthDate?.value.split("T")[0]
+                          }
+                        </p>
+                        {profile?.profile?.personalData?.birthDate?.isPublic === false && (
+                          <FaLock className="h-3 w-3" />
+                        )}
+                      </div>
                     )}
                   </>
                 ) : (
@@ -265,10 +289,15 @@ function InfoProfile({ profile }) {
                       "" ? (
                       <></>
                     ) : (
-                      <p>
-                        <b>Ubicación:</b>{" "}
-                        {profile?.profile?.personalData?.location?.value}
-                      </p>
+                      <div className="flex items-center gap-1">
+                        <p>
+                          <b>Ubicación:</b>{" "}
+                          {profile?.profile?.personalData?.location?.value}
+                        </p>
+                        {profile?.profile?.personalData?.location?.isPublic === false && (
+                          <FaLock className="h-3 w-3" />
+                        )}
+                      </div>
                     )}
                   </>
                 ) : (
@@ -285,30 +314,15 @@ function InfoProfile({ profile }) {
                       profile?.profile?.contact?.phone?.value.trim() === "" ? (
                       <></>
                     ) : (
-                      <p>
-                        <b>Teléfono:</b>{" "}
-                        {profile?.profile?.contact?.phone?.value}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )
-                }
-
-                {profile?.profile?.contact?.website?.isPublic === true ||
-                  profile?.user?.username === username ||
-                  role === "admin" ||
-                  role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.contact?.website?.value === undefined ||
-                      profile?.profile?.contact?.website?.value.trim() === "" ? (
-                      <></>
-                    ) : (
-                      <p>
-                        <b>Sitio Web:</b>{" "}
-                        {profile?.profile?.contact?.website?.value}
-                      </p>
+                      <div className="flex items-center gap-1">
+                        <p>
+                          <b>Teléfono:</b>{" "}
+                          {profile?.profile?.contact?.phone?.value}
+                        </p>
+                        {profile?.profile?.contact?.phone?.isPublic === false && (
+                          <FaLock className="h-3 w-3" />
+                        )}
+                      </div>
                     )}
                   </>
                 ) : (
@@ -327,16 +341,47 @@ function InfoProfile({ profile }) {
                       "" ? (
                       <></>
                     ) : (
-                      <p>
-                        <b>Correo Electrónico:</b>{" "}
-                        {profile?.profile?.contact?.alternateEmail?.value}
-                      </p>
+                      <div className="flex items-center gap-1">
+                        <p>
+                          <b>Correo Electrónico:</b>{" "}
+                          {profile?.profile?.contact?.alternateEmail?.value}
+                        </p>
+                        {profile?.profile?.contact?.alternateEmail?.isPublic === false && (
+                          <FaLock className="h-3 w-3" />
+                        )}
+                      </div>
                     )}
                   </>
                 ) : (
                   <></>
                 )
                 }
+
+                {profile?.profile?.contact?.website?.isPublic === true ||
+                  profile?.user?.username === username ||
+                  role === "admin" ||
+                  role === "superadmin" ? (
+                  <>
+                    {profile?.profile?.contact?.website?.value === undefined ||
+                      profile?.profile?.contact?.website?.value.trim() === "" ? (
+                      <></>
+                    ) : (
+                      <div className="flex items-center gap-1">
+                        <p>
+                          <b>Sitio Web:</b>{" "}
+                          {profile?.profile?.contact?.website?.value}
+                        </p>
+                        {profile?.profile?.contact?.website?.isPublic === false && (
+                          <FaLock className="h-3 w-3" />
+                        )}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )
+                }
+
               </div >
             </>
           )
@@ -345,12 +390,24 @@ function InfoProfile({ profile }) {
 
         {handleProfessional() && (
           <div className="py-4 px-2 w-full">
-            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+            {/* <h5 className="flex items-center gap-1 text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
               PERFIL PROFESIONAL
+              {profile?.profile?.professional?.isPublic === false && (
+                <FaLock className="h-4 w-4" />
+              )}
+              {profile?.profile?.professional?.isPublic === false && (
+                <p>hola</p>
+              )}
+            </h5> */}
+            <h5 className="flex items-center gap-1 text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+              PERFIL PROFESIONAL
+              {profile?.profile?.professional?.summary?.isPublic === false && (
+                <FaLock className="h-4 w-4" />
+              )}
             </h5>
 
             <div className="text-xs lg:text-sm px-2 flex flex-col gap-1">
-              {description.map((item, key) => (
+              {description?.map((item, key) => (
                 <div key={key}>
                   <p>{item}</p>
                   <br />
@@ -361,216 +418,69 @@ function InfoProfile({ profile }) {
         )}
 
         {
-          handleSocialMedia() ? (
+          handleSocialMedia() && (
             <div className="py-4 px-2 w-full">
               <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
                 REDES SOCIALES
               </h5>
 
-              <ul className="flex gap-2 flex-wrap justify-start text-white text-2xl px-2 ">
-                {/* <section className="flex gap-6 flex-wrap justify-center"> */}
-                {profile?.profile?.socialMedia?.instagram?.isPublic === true ||
-                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.instagram?.value ===
-                      undefined ||
-                      profile?.profile?.socialMedia?.instagram?.value.trim() ===
-                      "" ? (
-                      <></>
-                    ) : (
-                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                        <a
-                          target="_blank"
-                          href={profile?.profile?.socialMedia?.instagram?.value}
-                        >
-                          <FaInstagram />
-                        </a>
-                      </li>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
+              <ul className="flex gap-2 flex-wrap justify-start text-white text-2xl px-2">
+                {[
+                  { key: 'instagram', icon: <FaInstagram /> },
+                  { key: 'facebook', icon: <FaFacebook /> },
+                  { key: 'linkedin', icon: <FaLinkedin /> },
+                  { key: 'x', icon: <FaXTwitter /> },
+                  { key: 'youtube', icon: <FaYoutube /> },
+                  { key: 'tiktok', icon: <FaTiktok /> },
+                  { key: 'whatsapp', icon: <FaWhatsapp /> },
+                  { key: 'telegram', icon: <FaTelegram /> },
+                  { key: 'github', icon: <FaGithub /> },
+                ]?.map(({ key, icon }) => {
+                  const socialData = profile?.profile?.socialMedia?.[key];
+                  const isOwner = profile?.user?.username === username;
+                  const isAdmin = role === "admin" || role === "superadmin";
+                  const isPublic = socialData?.isPublic === true;
+                  const hasValue = socialData?.value?.trim();
 
-                {profile?.profile?.socialMedia?.facebook?.isPublic === true ||
-                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.facebook?.value ===
-                      undefined ||
-                      profile?.profile?.socialMedia?.facebook?.value.trim() ===
-                      "" ? (
-                      <></>
-                    ) : (
-                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                        <a
-                          target="_blank"
-                          href={profile?.profile?.socialMedia?.facebook?.value}
-                        >
-                          <FaFacebook />
+                  // Mostrar solo si es público o es el dueño/admin y tiene valor
+                  if ((isPublic || isOwner || isAdmin) && hasValue) {
+                    return (
+                      <li
+                        key={key}
+                        className="relative rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer"
+                      >
+                        <a target="_blank" href={socialData.value}>
+                          {icon}
                         </a>
+                        {(isOwner || isAdmin) && !isPublic && (
+                          // <FaLock className="absolute -top-2 -right-2 h-5 w-5 text-black bg-verdeA rounded-full p-1" />
+                          <div className="absolute -top-2 -right-2 h-5 w-5 bg-verdeA rounded-full p-1 flex items-center justify-center">
+                            <FaLock className="text-black h-3 w-3" />
+                          </div>
+                        )}
                       </li>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                {profile?.profile?.socialMedia?.whatsapp?.isPublic === true ||
-                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.whatsapp?.value ===
-                      undefined ||
-                      profile?.profile?.socialMedia?.whatsapp?.value.trim() ===
-                      "" ? (
-                      <></>
-                    ) : (
-                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                        <a
-                          target="_blank"
-                          href={profile?.profile?.socialMedia?.whatsapp?.value}
-                        >
-                          <FaWhatsapp />
-                        </a>
-                      </li>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                {profile?.profile?.socialMedia?.linkedin?.isPublic === true ||
-                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.linkedin?.value ===
-                      undefined ||
-                      profile?.profile?.socialMedia?.linkedin?.value.trim() ===
-                      "" ? (
-                      <></>
-                    ) : (
-                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                        <a
-                          target="_blank"
-                          href={profile?.profile?.socialMedia?.linkedin?.value}
-                        >
-                          <FaLinkedin />
-                        </a>
-                      </li>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                {profile?.profile?.socialMedia?.youtube?.isPublic === true ||
-                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.youtube?.value ===
-                      undefined ||
-                      profile?.profile?.socialMedia?.youtube?.value.trim() ===
-                      "" ? (
-                      <></>
-                    ) : (
-                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                        <a
-                          target="_blank"
-                          href={profile?.profile?.socialMedia?.youtube.value}
-                        >
-                          <FaYoutube />
-                        </a>
-                      </li>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                {profile?.profile?.socialMedia?.github?.isPublic === true ||
-                  profile?.user?.username === username || role === "admin" || role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.github?.value === undefined ||
-                      profile?.profile?.socialMedia?.github?.value.trim() === "" ? (
-                      <></>
-                    ) : (
-                      <>
-                        <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                          <a
-                            target="_blank"
-                            href={profile?.profile?.socialMedia?.github.value}
-                          >
-                            <FaGithub />
-                          </a>
-                        </li>
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-                {profile?.profile?.socialMedia?.x?.isPublic === true ||
-                  profile?.user?.username === username ||
-                  role === "admin" ||
-                  role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.x?.value === undefined ||
-                      profile?.profile?.socialMedia?.x?.value.trim() === "" ? (
-                      <></>
-                    ) : (
-                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                        <a
-                          target="_blank"
-                          href={profile?.profile?.socialMedia?.x?.value}
-                        >
-                          <FaXTwitter />
-                        </a>
-                      </li>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                {profile?.profile?.socialMedia?.tiktok?.isPublic === true ||
-                  profile?.user?.username === username ||
-                  role === "admin" ||
-                  role === "superadmin" ? (
-                  <>
-                    {profile?.profile?.socialMedia?.tiktok?.value === undefined ||
-                      profile?.profile?.socialMedia?.tiktok?.value.trim() === "" ? (
-                      <></>
-                    ) : (
-                      <li className="rounded-full bg-verdeD p-2 hover:bg-RojoC duration-300 transition-all hover:cursor-pointer">
-                        <a
-                          target="_blank"
-                          href={profile?.profile?.socialMedia?.tiktok?.value}
-                        >
-                          <FaTiktok />
-                        </a>
-                      </li>
-                    )}
-                  </>
-                ) : (
-                  <></>
-                )}
-
+                    );
+                  }
+                  return null;
+                })}
               </ul>
             </div>
-          ) : (
-            <></>
           )
         }
 
         {
-          handleEducation() ? (
-            <></>
-          ) : (
+          handleEducation() && (
             <div className="py-4 px-2 w-full">
-              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+              <h5 className="flex items-center gap-1 text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
                 EDUCACIÓN
+                {profile?.profile?.education?.isPublic === false && (
+                  <FaLock className="h-4 w-4" />
+                )}
               </h5>
 
               <div className="flex justify-between">
                 <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                  {profile?.profile?.education?.items.map((item, key) => (
+                  {profile?.profile?.education?.items?.map((item, key) => (
                     <li className="flex justify-between w-full" key={key}>
                       <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
                         {item.institution} -{" "}
@@ -599,17 +509,18 @@ function InfoProfile({ profile }) {
           )
         }
 
-        {handleExperience() ? (
-          <></>
-        ) : (
+        {handleExperience() && (
           <div className="py-4 px-2 w-full">
-            <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+            <h5 className="flex items-center gap-1 text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
               EXPERIENCIA LABORAL
+              {profile?.profile?.experience?.isPublic === false && (
+                <FaLock className="h-4 w-4" />
+              )}
             </h5>
 
             <div className="flex justify-between">
               <ul className="flex flex-col gap-1 w-full text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                {profile?.profile?.experience?.items.map((item, key) => (
+                {profile?.profile?.experience?.items?.map((item, key) => (
                   <li className="flex justify-between w-full" key={key}>
                     <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
                       {item.position} -{" "}
@@ -640,17 +551,18 @@ function InfoProfile({ profile }) {
         )}
 
         {
-          handleCertifications() ? (
-            <></>
-          ) : (
+          handleCertifications() && (
             <div className="py-4 px-2 w-full">
-              <h5 className="text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
-                CERTIFICACIONES
+              <h5 className="flex items-center gap-1 text-base lg:text-lg font-barlow-semi-condensed font-bold uppercase border-b border-RojoC w-full pb-1 px-2 mb-4">
+                CERTIFICADOS
+                {profile?.profile?.certifications?.isPublic === false && (
+                  <FaLock className="h-4 w-4" />
+                )}
               </h5>
 
               <div className="flex justify-between">
                 <ul className="flex flex-col w-full gap-1 text-black font-barolw text-xs lg:text-sm pl-2 px-2 list-disc">
-                  {profile?.profile?.certifications?.items.map((item, key) => (
+                  {profile?.profile?.certifications?.items?.map((item, key) => (
                     <li className="flex justify-between w-full" key={key}>
                       <p className="w-3/4 font-medium text-sm lg:w-auto uppercase">
                         {item.name} -{" "}
@@ -689,7 +601,7 @@ function InfoProfile({ profile }) {
             />
             <Button
               action={(e) => {
-                navigate(`/forums/personal/${auth?.username}`)
+                navigate(`/forum/personal/${auth?.username}`)
               }}
               className={"bg-verdeC"}
               text={"MIS HILOS DE FOROS"}
@@ -719,7 +631,7 @@ function InfoProfile({ profile }) {
             />
             <Button
               action={(e) => {
-                navigate(`/forums/personal/${profile?.user?.username}`)
+                navigate(`/forum/personal/${profile?.user?.username}`)
               }}
               className={"bg-verdeC"}
               text={"VER HILOS DE FOROS"}

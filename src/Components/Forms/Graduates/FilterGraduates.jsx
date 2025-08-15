@@ -58,7 +58,7 @@ function FilterGraduates({ values, setValues }) {
         <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Nombre o Apellido:
+              Nombre:
             </Label>
             <input
               className={styles.input}
@@ -66,7 +66,7 @@ function FilterGraduates({ values, setValues }) {
               name="query"
               value={values.query}
               onChange={handleInputChange}
-              placeholder="Filtrar por nombre o apellido..."
+              placeholder="Filtrar por nombre..."
             />
           </div>
 
@@ -89,31 +89,6 @@ function FilterGraduates({ values, setValues }) {
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
               TÍtulo obtenido:
             </Label>
-            {/* <select
-              className={styles.input}
-              type="text"
-              name="degree"
-              value={values.degree}
-              onChange={handleInputChange}
-            >
-              <option value="">Todas las carreras</option>
-              <option value="Licenciatura%20en%20Administraci%C3%B3n%20de%20Empresas">
-                Licenciatura en Administración de Empresas
-              </option>
-              <option value="Licenciatura%20en%20Contadur%C3%ADa%20P%C3%BAblica">
-                Licenciatura en Contaduría Pública
-              </option>
-              <option value="Ingenier%C3%ADa%20de%20Computaci%C3%B3n">
-                Ingeniería de Computación
-              </option>
-              <option value="Ingenier%C3%ADa%20Industrial">
-                Ingeniería Industrial
-              </option>
-              <option value="Derecho">Derecho</option>
-              <option value="Ciencias%20Pol%C3%ADticas%20y%20Administrativas">
-                Ciencias Políticas y Administrativas
-              </option>
-            </select> */}
             <input
               className={styles.input}
               type="text"

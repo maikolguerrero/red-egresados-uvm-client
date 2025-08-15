@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
 import { Label } from "flowbite-react";
-import { Skills } from "../../Skills";
+import { ItemBabge } from "../../Babge/ItemBabge";
 import { IoIosAdd } from "react-icons/io";
 import { addEvent, editEvent } from "../../../services/events/eventsService";
-import { utcToLocalDateTime } from "../../../utils/dateUtils";
+import { utcToLocalDateTime, parseLocalDateTimeToUTC } from "../../../utils/dateUtils";
 import notify from "../../../utils/notifications";
 
 let styles = {
@@ -28,8 +28,6 @@ export function FormAddEvent({ eventSelect, type }) {
     location: eventSelect?.location || "",
     capacity: eventSelect?.capacity || 0,
     virtualLink: eventSelect?.virtualLink || "",
-    // startDate: eventSelect.startDate.split(".")[0],
-    // endDate: eventSelect.endDate.split(".")[0],
     startDate: utcToLocalDateTime(eventSelect?.startDate || ""),
     endDate: utcToLocalDateTime(eventSelect?.endDate || ""),
     certificate: eventSelect?.certificate || false,
@@ -145,23 +143,10 @@ export function FormAddEvent({ eventSelect, type }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // setValues({
-    //   ...values,
-    //   [name]: value,
-    // });
-
-    // Manejo especial para fechas
-    if (name === 'startDate' || name === 'endDate') {
-      setValues({
-        ...values,
-        [name]: value,
-      });
-    } else {
-      setValues({
-        ...values,
-        [name]: value,
-      });
-    }
+    setValues({
+      ...values,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (e) => {
@@ -201,8 +186,8 @@ export function FormAddEvent({ eventSelect, type }) {
     // Crear copia de values con las fechas formateadas
     const formData = {
       ...values,
-      startDate: parseLocalDateTime(values.startDate),
-      endDate: parseLocalDateTime(values.endDate),
+      startDate: parseLocalDateTimeToUTC(values.startDate),
+      endDate: parseLocalDateTimeToUTC(values.endDate),
     };
 
     // if (eventSelect === undefined) {
@@ -430,10 +415,14 @@ export function FormAddEvent({ eventSelect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex flex-wrap gap-2">
+                  <ul className="flex flex-col gap-2">
                     {values.tags.map((item, key) => (
                       <li key={key}>
-                        <Skills key={key} text={item} onClick={deleteTag} />
+                        <ItemBabge
+                          key={key}
+                          text={item}
+                          onClick={deleteTag}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -479,10 +468,10 @@ export function FormAddEvent({ eventSelect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex flex-wrap gap-2">
+                  <ul className="flex flex-col gap-2">
                     {values.organizers.map((item, key) => (
                       <li key={key}>
-                        <Skills
+                        <ItemBabge
                           key={key}
                           text={item}
                           onClick={deleteOrganizer}
@@ -532,10 +521,10 @@ export function FormAddEvent({ eventSelect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex flex-wrap gap-2">
+                  <ul className="flex flex-col gap-2">
                     {values.specialGuests.map((item, key) => (
                       <li key={key}>
-                        <Skills
+                        <ItemBabge
                           key={key}
                           text={item}
                           onClick={deleteEspecial}

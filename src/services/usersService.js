@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import notify from "../utils/notifications";
-import { typeError, typeSuccess } from "../models/alertModels";
 import { URL_API } from "../config";
 import logger from "../utils/logger";
 
@@ -11,7 +10,7 @@ export const postData = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/register/alumni`,
+        `${URL_API}/auth/register/alumni`,
         {
           mode: "cors",
           method: "POST",
@@ -28,20 +27,25 @@ export const postData = createAsyncThunk(
         return ({message: datas.message, email: data.email});
       } else {
         if (datas.metadata.context === "input_validation") {
-          throw `${datas.metadata.errors[0].message}`;
+          notify.error(datas.metadata.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
         if (datas.metadata.context === "security") {
-          throw `${datas.message}`;
+          notify.error(datas.message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
         if (datas.metadata.action === "register_duplicate") {
-          throw `${datas.message}`;
+          notify.error(datas.message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
         logger.log(datas);
-        throw "no conozco el error";
+        notify.error("Error al registrar", false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -53,7 +57,7 @@ export const loginUserFetch = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/auth/login`,
+        `${URL_API}/auth/login`,
         {
           mode: "cors",
           credentials: "include",
@@ -71,14 +75,17 @@ export const loginUserFetch = createAsyncThunk(
         return (datas.message);
       }
       if (datas.metadata.context === "security") {
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
       if (datas.metadata.context === "input_validation") {
-        throw `${datas.metadata.errors[0].message}`;
+        notify.error(datas.metadata.errors[0].message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

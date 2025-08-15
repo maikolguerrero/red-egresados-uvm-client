@@ -9,7 +9,7 @@ export const getAdmins = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/auth/admins`,
+        `/auth/admins`,
         {
           method: "GET"
         }
@@ -25,11 +25,13 @@ export const getAdmins = createAsyncThunk(
           pagination: response.pagination
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -41,7 +43,7 @@ export const addAdmin = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/auth/register/admin`,
+        `/auth/register/admin`,
         {
           method: "POST",
           headers: {
@@ -60,14 +62,17 @@ export const addAdmin = createAsyncThunk(
         }
       } else {
         if (response.message === "Error de validación") {
-          throw `${response.metadata.errors[0].message}`
+          notify.error(response.metadata.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -79,7 +84,7 @@ export const deleteAdmin = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/auth/admin/${data.username}`,
+        `/auth/admin/${data.username}`,
         {
           method: "DELETE"
         }
@@ -92,12 +97,14 @@ export const deleteAdmin = createAsyncThunk(
           message: response.message,
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

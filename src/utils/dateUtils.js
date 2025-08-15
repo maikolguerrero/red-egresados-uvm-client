@@ -289,12 +289,54 @@ export const utcToLocalDateTime = (utcDateString) => {
   // Crear objeto Date desde UTC
   const date = new Date(utcDateString);
 
-  // Ajustar por el offset de la zona horaria local
-  const offset = date.getTimezoneOffset() * 60000; // offset en milisegundos
-  const localDate = new Date(date.getTime() - offset);
+  // Validación de fecha
+  if (isNaN(date.getTime())) {
+    logger.error('Fecha UTC inválida:', utcDateString);
+    return '';
+  }
 
-  // Formatear a YYYY-MM-DDTHH:MM (formato que espera datetime-local)
+  // Ajustar a hora local sin cambiar el instante temporal
+  const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
   return localDate.toISOString().slice(0, 16);
+};
+
+/**
+ * Parsea una fecha local a UTC manteniendo el instante correcto
+ */
+export const parseLocalDateTimeToUTC = (localDateTime) => {
+  if (!localDateTime) return '';
+
+  // Crear fecha desde el string local (el navegador lo interpreta en la zona del usuario)
+  const date = new Date(localDateTime);
+
+  // Validación de fecha
+  if (isNaN(date.getTime())) {
+    logger.error('Fecha local inválida:', localDateTime);
+    return '';
+  }
+
+  // Convertir a ISO string (UTC)
+  return date.toISOString();
+};
+
+/**
+ * Formatea fecha para mostrar al usuario según su zona horaria
+ * @param {string} utcDateString - Fecha en formato ISO (UTC)
+ * @returns {string} - Fecha formateada según la zona horaria del usuario
+ */
+export const formatForUserLocale = (utcDateString) => {
+  if (!utcDateString) return '';
+
+  const date = new Date(utcDateString);
+
+  return new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZoneName: 'short'
+  }).format(date);
 };
 
 /**

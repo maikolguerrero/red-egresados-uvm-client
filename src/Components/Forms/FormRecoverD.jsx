@@ -1,5 +1,4 @@
 import Button from "../Buttons/Button";
-import { Link } from "react-router-dom";
 
 function FormRecoverD(props) {
   return (

@@ -8,7 +8,7 @@ export const addForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads`,
+        `/forum/threads`,
         {
           method: "POST",
           headers: {
@@ -26,14 +26,17 @@ export const addForum = createAsyncThunk(
         }
       } else {
         if (response.message === "Error de validación") {
-          throw `${response.metadata.errors[0].message}`
+          notify.error(response.metadata.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -45,7 +48,7 @@ export const addReport = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/report`,
+        `/forum/report`,
         {
           method: "POST",
           headers: {
@@ -62,14 +65,17 @@ export const addReport = createAsyncThunk(
         }
       } else {
         if (response.message === "Error de validación") {
-          throw `${response.metadata.errors[0].message}`
+          notify.error(response.metadata.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -81,7 +87,7 @@ export const addPictureForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads/${data.threadId}/media/images`,
+        `/forum/threads/${data.threadId}/media/images`,
         {
           method: "POST",
           body: data.data
@@ -94,12 +100,14 @@ export const addPictureForum = createAsyncThunk(
           message: "Agregada la imagen al hilo"
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -111,7 +119,7 @@ export const searchForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads?page=${data.page}&limit=${data.limit}${data.category === null || data.category === undefined ? "" : "&category=" + data.category
+        `/forum/threads?page=${data.page}&limit=${data.limit}${data.category === null || data.category === undefined ? "" : "&category=" + data.category
         }${data.search === null || data.search === undefined ? "" : "&search=" + data.search
         }${!data.sort || data.sort === undefined ? "" : "&sort=" + data.sort
         }${!data.username || data.username === undefined ? "" : "&username=" + data.username
@@ -132,12 +140,14 @@ export const searchForum = createAsyncThunk(
           pagination: response.pagination
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -149,7 +159,7 @@ export const likeThreads = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/like/${data.type}/${data.id}`,
+        `/forum/like/${data.type}/${data.id}`,
         {
           method: "POST",
           headers: {
@@ -197,12 +207,14 @@ export const likeThreads = createAsyncThunk(
           };
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -214,7 +226,7 @@ export const getThreadsComments = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads/${data.id}`,
+        `/forum/threads/${data.id}`,
         {
           method: "GET",
           headers: {
@@ -230,12 +242,14 @@ export const getThreadsComments = createAsyncThunk(
           forumSelected: response.data,
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, true);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -247,7 +261,7 @@ export const addComment = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads/${data.id}/comments`,
+        `/forum/threads/${data.id}/comments`,
         {
           method: "POST",
           body: data.data
@@ -273,12 +287,14 @@ export const addComment = createAsyncThunk(
           };
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -290,7 +306,7 @@ export const deleteForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads/${data.threadId}`,
+        `/forum/threads/${data.threadId}`,
         {
           method: "DELETE",
           headers: {
@@ -306,12 +322,14 @@ export const deleteForum = createAsyncThunk(
           message: response.message,
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -323,7 +341,7 @@ export const deleteComment = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/comments/${data.commentId}`,
+        `/forum/comments/${data.commentId}`,
         {
           method: "DELETE"
         }
@@ -337,12 +355,14 @@ export const deleteComment = createAsyncThunk(
           idComment: !data.idComment ? null : data.idComment
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -354,7 +374,7 @@ export const editForum = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/forum/threads/${data.threadId}`,
+        `/forum/threads/${data.threadId}`,
         {
           method: "PATCH",
           headers: {
@@ -373,12 +393,14 @@ export const editForum = createAsyncThunk(
           type: data.type
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

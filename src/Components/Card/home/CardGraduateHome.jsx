@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import perfil from "../../../../public/Perfil.jpg"
 import ButtonSmall from "../../Buttons/ButtonSmall";
 
 export function CardGraduateHome({ user }) {

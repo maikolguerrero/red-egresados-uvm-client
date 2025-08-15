@@ -52,7 +52,7 @@ export function FormFeatureSection({ landing }) {
 
     setLandingContent({
       ...landingContent,
-      ["featuredSections"]: [...landingContent.featuredSections, {
+      ["featuredSections"]: [...(landingContent?.featuredSections || []), {
         mainTitle: values.mainTitle,
         subsections: values.subsections,
         order: getRandomInt(100)
@@ -66,9 +66,9 @@ export function FormFeatureSection({ landing }) {
   }
 
   const deleteSubSection = (key, keySection, keySubSection) => {
-    let newSubSections = landingContent.featuredSections[keySection].subsections.filter((item, keyPosition) => keyPosition !== keySubSection);
+    let newSubSections = landingContent?.featuredSections[keySection]?.subsections?.filter((item, keyPosition) => keyPosition !== keySubSection);
     let newLandingContent = JSON.parse(JSON.stringify(landingContent))
-    for (let i = 0; i < newLandingContent.featuredSections.length; i++) {
+    for (let i = 0; i < newLandingContent?.featuredSections?.length; i++) {
       if (i === keySection) {
         newLandingContent.featuredSections[i].subsections = newSubSections
       }
@@ -78,7 +78,7 @@ export function FormFeatureSection({ landing }) {
   };
 
   const deleteFeaturedSections = (keySectionPosition) => {
-    let newFeatureS = landingContent.featuredSections.filter((item, keySection) => keySection !== keySectionPosition);
+    let newFeatureS = landingContent?.featuredSections?.filter((item, keySection) => keySection !== keySectionPosition);
     setLandingContent({
       ...landingContent,
       ["featuredSections"]: newFeatureS,
@@ -139,7 +139,7 @@ export function FormFeatureSection({ landing }) {
                   {landingContent?.featuredSections?.map((item, keySection) => (
                     <article key={keySection} className="flex flex-col p-2 text-white bg-verdeB rounded-md text-xs font-medium font-barolw uppercase">
                       <div className="flex justify-between items-center gap-2">
-                        {item.mainTitle}
+                        {item?.mainTitle}
                         <div className="flex gap-2">
                           <button
                             type="button"
@@ -163,11 +163,11 @@ export function FormFeatureSection({ landing }) {
                         </div>
                       </div>
 
-                      {item.subsections?.length === 0 ? (
+                      {item?.subsections?.length === 0 ? (
                         <></>
                       ) : (
                         <ul className="py-4 px-2 flex flex-col gap-3">
-                          {item.subsections?.map((item, key) => (
+                          {item?.subsections?.map((item, key) => (
                             <li key={key} className="flex justify-between p-2 bg-verdeD rounded-md items-center">
                               {item.subtitle}
                               <div className="flex gap-2">
@@ -198,30 +198,12 @@ export function FormFeatureSection({ landing }) {
                                 </button>
                               </div>
 
-                              <ModalNotHeader
-                                openModal={modalSubSectionPicture}
-                                setOpenModal={setModalSubSectionPicture}
-                                size={"xl"}
-                                component={
-                                  <FormAddPictureSubSection setModalSubSectionPicture={setModalSubSectionPicture} sectionIndex={onKeyPosition} subsectionIndex={subsectionIndex} image={onImage} />
-                                }
-                              />
+
                             </li>
                           ))}
                         </ul>
                       )}
-                      <ModalNotHeader
-                        openModal={modalSubSection}
-                        setOpenModal={setModalSubSection}
-                        size={"xl"}
-                        component={
-                          <FormSubSection
-                            landingContent={landingContent}
-                            setLandingContent={setLandingContent}
-                            position={onKeyPosition}
-                          />
-                        }
-                      />
+
                     </article>
 
                   ))}
@@ -235,6 +217,33 @@ export function FormFeatureSection({ landing }) {
           text={"Actualizar Sección de Imagenes"}
         />
       </form>
+
+      <ModalNotHeader
+        openModal={modalSubSection}
+        setOpenModal={setModalSubSection}
+        size={"xl"}
+        component={
+          <FormSubSection
+            landingContent={landingContent}
+            setLandingContent={setLandingContent}
+            position={onKeyPosition}
+          />
+        }
+      />
+
+      <ModalNotHeader
+        openModal={modalSubSectionPicture}
+        setOpenModal={setModalSubSectionPicture}
+        size={"xl"}
+        component={
+          <FormAddPictureSubSection
+            setModalSubSectionPicture={setModalSubSectionPicture}
+            sectionIndex={onKeyPosition}
+            subsectionIndex={subsectionIndex}
+            image={onImage}
+          />
+        }
+      />
     </>
   );
 }

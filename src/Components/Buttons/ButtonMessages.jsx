@@ -10,9 +10,11 @@ import { setConversations as setReduxConversations } from '../../features/chat/c
 import logger from "../../utils/logger";
 
 export function ButtonMessages() {
+  const conversations = useSelector((state) => state.chat.conversations);
   const [isOpen, setIsOpen] = useState(false);
-  const [conversations, setConversations] = useState([]);
-  const [unreadTotal, setUnreadTotal] = useState(0);
+  // const [conversations, setConversations] = useState([]);
+  // const [unreadTotal, setUnreadTotal] = useState(0);
+  const unreadTotal = useSelector((state) => state.chat.unreadTotal);
 
   const [drawerWidth, setDrawerWidth] = useState('28rem');
   const auth = useSelector((state) => state.auth);
@@ -21,27 +23,29 @@ export function ButtonMessages() {
 
   const handleClose = () => setIsOpen(false);
 
-  const fetchConversations = async () => {
-    try {
-      const { data } = await getConversations();
-      updateConversations(data);
-    } catch (error) {
-      logger.error("Error al obtener conversaciones:", error);
-    }
-  };
+  // const fetchConversations = async () => {
+  //   try {
+  //     const { data } = await getConversations();
+  //     updateConversations(data);
+  //   } catch (error) {
+  //     logger.error("Error al obtener conversaciones:", error);
+  //   }
+  // };
 
   const updateConversations = (newConversations) => {
-    setConversations(newConversations);
-    dispatch(setReduxConversations(newConversations));
+    // setConversations(newConversations);
+    // dispatch(setReduxConversations(newConversations));
 
-    const total = newConversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
-    setUnreadTotal(total);
+    // const total = newConversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
+    // setUnreadTotal(total);
+    // dispatch(getConversations());
   };
 
   useEffect(() => {
     // Cargar conversaciones al montar el componente
     if (auth.id) {
-      fetchConversations();
+      // fetchConversations();
+      dispatch(getConversations());
     }
 
     const handleResize = () => {
@@ -62,7 +66,8 @@ export function ButtonMessages() {
   useEffect(() => {
     if (isOpen && auth.id) {
       // Refrescar conversaciones al abrir el drawer
-      fetchConversations();
+      // fetchConversations();
+      dispatch(getConversations());
     }
   }, [isOpen, auth.id]);
 
@@ -70,13 +75,14 @@ export function ButtonMessages() {
     if (!auth.id) return;
 
     const handleConversationUpdate = (data) => {
-      setConversations(prev => {
-        const updated = prev.map(conv =>
-          conv.userId === data.contactId ? { ...conv, ...data.conversation } : conv
-        );
-        updateConversations(updated);
-        return updated;
-      });
+      // setConversations(prev => {
+      //   const updated = prev.map(conv =>
+      //     conv.userId === data.contactId ? { ...conv, ...data.conversation } : conv
+      //   );
+      //   updateConversations(updated);
+      //   return updated;
+      // });
+      dispatch(getConversations());
     };
 
     const handleConversationsUpdate = (updatedConversations) => {

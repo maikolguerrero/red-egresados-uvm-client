@@ -21,12 +21,8 @@ export function CardExperience({ data }) {
           </h5>
           <h5>
             <b>Fecha de finalizacion:</b>{" "}
-            <span className="text-RojoB font-semibold">{data?.endDate === null ? "Actualidad" : data?.endDate?.split("T")[0]}</span>
+            <span className="text-RojoB font-semibold">{data?.endDate ? data?.endDate?.split("T")[0] : "Actualmente trabajando"}</span>
           </h5>
-          {/* <h5>
-            <b>Continua actualmente:</b>{" "}
-            <span className="text-Negro font-semibold">{data?.current ? "SI" : "NO"}</span>
-          </h5> */}
         </div >
       </article >
     </>

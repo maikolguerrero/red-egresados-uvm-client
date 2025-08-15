@@ -9,11 +9,11 @@ import { getContentLanding } from "../../services/admin/landingService";
 import { FormCarrousel } from "../../Components/Forms/admin/landing/FormCarrousel";
 import { FormFeatureSection } from "../../Components/Forms/admin/landing/FormFeatureSection";
 import { Loader } from "../../Components/Loader";
-import PreviewA from "../../../public/PreviewA.png"
-import PreviewB from "../../../public/PreviewB.png"
-import PreviewC from "../../../public/PreviewC.png"
-import PreviewD from "../../../public/PreviewD.png"
-import PreviewE from "../../../public/PreviewE.png"
+import PreviewA from "../../assets/PreviewA.png"
+import PreviewB from "../../assets/PreviewB.png"
+import PreviewC from "../../assets/PreviewC.png"
+import PreviewD from "../../assets/PreviewD.png"
+import PreviewE from "../../assets/PreviewE.png"
 
 function CMLandingPage() {
   const dispatch = useDispatch();

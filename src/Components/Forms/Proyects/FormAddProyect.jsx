@@ -2,7 +2,7 @@ import { Label } from "flowbite-react";
 import notify from "../../../utils/notifications";
 import { useEffect, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
-import { Skills } from "../../Skills";
+import { ItemBabge } from "../../Babge/ItemBabge";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import { useDispatch } from "react-redux";
 import { addProyect, editProyect } from "../../../services/proyects/proyectService";
@@ -303,10 +303,14 @@ export function FormAddProyect({ proyect, type }) {
                     </h6>
                   </>
                 ) : (
-                  <ul className="flex flex-wrap gap-2">
+                  <ul className="flex flex-col gap-2">
                     {values.tags.map((item, key) => (
                       <li key={key}>
-                        <Skills key={key} text={item} onClick={deleteTag} />
+                        <ItemBabge
+                          key={key}
+                          text={item}
+                          onClick={deleteTag}
+                        />
                       </li>
                     ))}
                   </ul>

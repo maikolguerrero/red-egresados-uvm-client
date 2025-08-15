@@ -42,13 +42,40 @@ export function FormAddAdmin() {
     if (values.username.trim() === "") {
       return notify.error("Falta el nombre de usuario", false);
     }
-    if (values.password.trim() === "") {
-      return notify.error("Falta la contraseña", false);
+    if (values.username.trim().length < 4) {
+      return notify.error("El usuario debe tener al menos 4 caracteres", false);
     }
-    if (values.password != values.confirmPassword) {
+    if (values.username.trim().length > 20) {
+      return notify.error("El usuario no puede exceder 20 caracteres", false);
+    }
+    if (!values.username.trim().match(/^[a-z0-9_]+$/)) {
+      return notify.error("El usuario debe contener solo letras minúsculas, números y guiones bajos", false);
+    }
+
+    if (!values.password.match(/[A-Z]/)) {
+      return notify.error("La contraseña debe contener al menos una mayúscula", false);
+    }
+    if (!values.password.match(/[a-z]/)) {
+      return notify.error("La contraseña debe contener al menos una minúscula", false);
+    }
+    if (!values.password.match(/[0-9]/)) {
+      return notify.error("La contraseña debe contener al menos un número", false);
+    }
+    if (!values.password.match(/[^a-zA-Z0-9]/)) {
+      return notify.error("La contraseña debe contener al menos un carácter especial", false);
+    }
+    if (!(values.password == values.confirmPassword)) {
       return notify.error("Las contraseñas no coinciden", false);
     }
-    
+    if (values.password.trim() === "") {
+      return notify.error("Ingresa la nueva contraseña", false);
+    }
+    if (values.confirmPassword.trim() === "") {
+      return notify.error("Confirma la nueva contraseña", false);
+    }
+    if (values.password.length < 8) {
+      return notify.error("La contraseña debe tener al menos 8 caracteres", false);
+    }
     dispatch(addAdmin(values))
   };
 
@@ -96,6 +123,7 @@ export function FormAddAdmin() {
               value={values.username}
               onChange={handleInputChange}
               placeholder={"Usuario del administrador..."}
+              autoComplete="username"
             />
           </div>
           <div className="w-full flex flex-col relative">
@@ -109,6 +137,7 @@ export function FormAddAdmin() {
               value={values.password}
               onChange={handleInputChange}
               placeholder={"********"}
+              autoComplete="new-password"
             />
           </div>
           <div className="w-full flex flex-col relative">
@@ -122,6 +151,7 @@ export function FormAddAdmin() {
               value={values.confirmPassword}
               onChange={handleInputChange}
               placeholder={"********"}
+              autoComplete="new-password"
             />
           </div>
         </div>

@@ -6,8 +6,8 @@ import { getContentHome } from "../../services/admin/homeService";
 import { FormCarrouselHome } from "../../Components/Forms/admin/home/FormCarrouselHome";
 import { FormTextSectionHome } from "../../Components/Forms/admin/home/FormTextSectionHome";
 import { Loader } from "../../Components/Loader";
-import PreviewF from "../../../public/PreviewF.png"
-import PreviewG from "../../../public/PreviewG.png"
+import PreviewF from "../../assets/PreviewF.png"
+import PreviewG from "../../assets/PreviewG.png"
 
 function CMHomePage() {
   const dispatch = useDispatch();

@@ -17,7 +17,6 @@ function Login() {
 
         <AcademicRequests />
       </main>
-
       <Footer />
     </>
   );

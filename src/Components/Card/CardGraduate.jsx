@@ -1,11 +1,9 @@
 import { Card, Dropdown, DropdownItem } from "flowbite-react";
 import ButtonSmall from "../Buttons/ButtonSmall";
-import perfil from "../../../public/Perfil.jpg"
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
-import BadgeNormal from "../Buttons/BadgeNormal";
 
 export function CardGraduate({ user }) {
   const navigate = useNavigate();
@@ -27,7 +25,7 @@ export function CardGraduate({ user }) {
           {<Dropdown inline label="">
             <DropdownItem>
               <Link
-                to={`/forums/personal/${user.username}`}
+                to={`/forum/personal/${user.username}`}
                 className="block px-4 py-2 text-sm uppercase font-barlow-condensed text-Negro hover:bg-gray-100"
               >
                 VER HILOS DEL FORO

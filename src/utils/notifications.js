@@ -17,6 +17,15 @@ const notify = {
         }
     },
 
+    errorDefault: (
+        message = "Ocurrió un error inesperado. Por favor, verifica tu conexión a internet e inténtalo de nuevo más tarde.",
+        onlyDev = false
+    ) => {
+        if ((onlyDev && dev) || !onlyDev) {
+            enqueueSnackbar(message, typeError);
+        }
+    },
+
     warning: (message, onlyDev = false) => {
         if ((onlyDev && dev) || !onlyDev) {
             enqueueSnackbar(message, typeWarning);

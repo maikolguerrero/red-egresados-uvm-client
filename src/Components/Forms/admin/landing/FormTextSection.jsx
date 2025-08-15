@@ -46,7 +46,7 @@ export function FormTextSection({landing}) {
 
       setLandingContent({
         ...landingContent,
-        ["welcomeSections"]: [...landingContent.welcomeSections, {
+        ["welcomeSections"]: [...(landingContent?.welcomeSections || []), {
           title: values.title,
           description: values.description,
           order: getRandomInt(100)
@@ -123,7 +123,7 @@ export function FormTextSection({landing}) {
               <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
                 Lista de secciones de bienvenida:
               </Label>
-              {landingContent.welcomeSections.length === 0 ? (
+              {landingContent?.welcomeSections?.length === 0 ? (
                 <>
                   <h6 className="font-barlow-semi-condensed text-RojoC font-medium border-b-2 pb-3 mb-3 border-verdeD">
                     No hay ninguna sección de bienvenida registrada...
@@ -131,7 +131,7 @@ export function FormTextSection({landing}) {
                 </>
               ) : (
                 <ul className="flex flex-col gap-2 pb-3 mb-3 border-b-2 border-verdeD">
-                  {landingContent.welcomeSections.map((item, key) => (
+                  {landingContent?.welcomeSections?.map((item, key) => (
                     <li key={key}>
                       <ItemBabge
                         key={key}

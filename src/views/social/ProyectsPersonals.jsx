@@ -81,7 +81,7 @@ function ProyectsPersonals() {
                 <h4 className="font-barlow-condensed text-xl text-center font-bold uppercase mb-6">
                   Proyectos creados por el usuario:{" "}
                   <span className="text-RojoC lowercase">
-                    {currentPath.split("/")[3]}
+                    @{currentPath.split("/")[3]}
                   </span>
                 </h4>
               )}

@@ -1,9 +1,9 @@
 import { Label } from "flowbite-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import notify from "../../../utils/notifications";
-import { changeRecoveryEmail } from "../../../services/auth/changeEmailService";
+import { changeRecoveryEmail } from "../../../services/auth/authServiceApiFetch";
 
 let defaultValues = {
   "currentPassword": "",
@@ -56,21 +56,8 @@ function FormEmail() {
         <h5 className="text-xl font-semibold text-Negro font-barlow-semi-condensed uppercase">
           {"CAMBIAR CORREO DE RECUPERACION"}
         </h5>
-        <div className="flex flex-col gap-2">
-          <div className="w-full flex flex-col relative">
-            <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-              Contraseña actual:
-            </Label>
-            <input
-              className={styles.input}
-              type="password"
-              name="currentPassword"
-              value={values.currentPassword}
-              onChange={handleInputChange}
-              placeholder="********"
-            />
-          </div>
 
+        <div className="flex flex-col gap-2">
           <div className="w-full flex flex-col relative">
             <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
               Nuevo correo electrónico:
@@ -82,6 +69,22 @@ function FormEmail() {
               value={values.newEmail}
               onChange={handleInputChange}
               placeholder="Nuevo correo..."
+              autoComplete="username"
+            />
+          </div>
+
+          <div className="w-full flex flex-col relative">
+            <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
+              Contraseña actual:
+            </Label>
+            <input
+              className={styles.input}
+              type="password"
+              name="currentPassword"
+              value={values.currentPassword}
+              onChange={handleInputChange}
+              placeholder="********"
+              autoComplete="current-password"
             />
           </div>
         </div>

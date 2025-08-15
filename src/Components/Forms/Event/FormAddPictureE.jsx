@@ -43,7 +43,7 @@ export function FormAddPictureE({setOpenModal}) {
 
   const handleClose = (e) => {
     e.preventDefault();
-    dispatch(finishEventAdd());
+    // dispatch(finishEventAdd());
     setOpenModal(false);
   }
 

@@ -1,5 +1,4 @@
 import { FaCircle, FaComments, FaEllipsisV } from "react-icons/fa";
-import perfil from "../../../../public/Perfil.jpg"
 import { MdDelete, MdReportProblem } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -33,8 +32,9 @@ export function CardComment({ forum, comment }) {
         (diferenciaMilisegundos % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
       );
       const minutos = Math.floor(diferenciaMilisegundos / (1000 * 60));
+      const segundos = Math.floor(diferenciaMilisegundos / 1000);
 
-      return { semanas: semanas, dias: dias, horas: horas, minutos: minutos };
+      return { semanas: semanas, dias: dias, horas: horas, minutos: minutos, segundos: segundos };
     }
 
     let date = new Date();
@@ -53,8 +53,13 @@ export function CardComment({ forum, comment }) {
           setDatePublic(response.horas);
           setType("h");
         } else {
-          setDatePublic(response.minutos);
-          setType("min");
+          if (response.minutos >= 1) {
+            setDatePublic(response.minutos);
+            setType("min");
+          } else {
+            setDatePublic(response.segundos);
+            setType("seg");
+          }
         }
       }
     }
@@ -86,7 +91,9 @@ export function CardComment({ forum, comment }) {
         <div className="flex gap-4 w-full flex-wrap mb-3 h-full">
           {comment?.author?.profilePicture?.url === null ? (
             // Si no hay foto de perfil, muestra la inicial del username
-            <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div
+            onClick={searchProfile}
+            className="cursor-pointer w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
               <span className="text-white text-xs md:text-xs xl:text-sm font-bold uppercase">
                 {comment?.author?.username?.charAt(0).toUpperCase()}
               </span>
@@ -94,15 +101,16 @@ export function CardComment({ forum, comment }) {
           ) : (
             // Si hay foto, muéstrala circular
             <img
-              className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
+            onClick={searchProfile}
+            className="cursor-pointer w-8 h-8 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
               src={comment?.author?.profilePicture?.url}
               alt={comment?.author?.username || 'Foto de Perfil del Autor del Comentario'}
             />
           )}
           <div className="h-full flex items-center">
 
-            <p onClick={searchProfile} className="cursor-pointer flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-xs md:text-sm xl:text-base items-center">
-              @{comment?.author?.username}
+            <p className="flex gap-2 text-RojoC h-6 xl:h-8 font-barolw text-xs md:text-sm xl:text-base items-center">
+              <span onClick={searchProfile} className="cursor-pointer">@{comment?.author?.username}</span>
               <FaCircle className="text-Negro text-[6px] md:text-[6px] xl:text-[8px] flex justify-center items-center h-full" />{" "}
               Hace {datePublic}{" "}
               {type}

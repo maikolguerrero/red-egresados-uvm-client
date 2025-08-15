@@ -38,6 +38,7 @@ export const eventsSlice = createSlice({
     builder.addCase(addEvent.fulfilled, (state, action) => {
       state.loading = false;
       state.message = action.payload.message;
+      state.events = [...state.events, action.payload.data];
       state.eventAdd.data = action.payload.data;
       state.eventAdd.passed = 1;
     });

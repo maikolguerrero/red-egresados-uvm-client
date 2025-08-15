@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ButtonSmall from "../../Buttons/ButtonSmall";
 import notify from "../../../utils/notifications";
-import { typeError } from "../../../models/alertModels";
 import { addPictureForum } from "../../../services/forum/forumService";
 import { finish } from "../../../features/forums/forumsSlice";
 
@@ -31,7 +30,7 @@ export function FormAddPicture({setOpenModal}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (picture === "") {
-      notify("No se ha seleccionado una imagen para el Hilo", typeError);
+      notify.error("No se ha seleccionado una imagen para el Hilo", false);
     } else {
       const formData = new FormData();
       formData.append("image", picture);

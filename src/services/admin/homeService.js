@@ -8,7 +8,7 @@ export const getContentHome = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/home`,
+        `/content/home`,
         {
           method: "GET"
         }
@@ -21,11 +21,13 @@ export const getContentHome = createAsyncThunk(
           home: response.data
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -37,7 +39,7 @@ export const updateContentHome = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/home`,
+        `/content/home`,
         {
           method: "PATCH",
           headers: {
@@ -54,7 +56,13 @@ export const updateContentHome = createAsyncThunk(
           homeUpdate: response.data
         };
       } else {
-        throw `${response.message}`;
+        if (response?.metadata?.errors[0]?.message) {
+          notify.error(response?.metadata?.errors[0]?.message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
+        }
+        
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
@@ -70,7 +78,7 @@ export const addMediaHome = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/home/carousel/media`,
+        `/content/home/carousel/media`,
         {
           method: "POST",
           body: data.data,
@@ -84,7 +92,8 @@ export const addMediaHome = createAsyncThunk(
           pictureCarrousel: response.data
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
@@ -100,7 +109,7 @@ export const deleteMediaHome = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/home/carousel/${data.index}`,
+        `/content/home/carousel/${data.index}`,
         {
           method: "DELETE",
           headers: {
@@ -116,7 +125,8 @@ export const deleteMediaHome = createAsyncThunk(
           idItemCarrouse: data.idItem
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores

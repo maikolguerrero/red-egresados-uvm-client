@@ -39,7 +39,7 @@ export const landingSlice = createSlice({
     builder.addCase(getContentFooter.fulfilled, (state, action) => {
       state.loadingPage = false;
       state.message = action.payload.message;
-      state.landingContent.footerText = action.payload.footer;
+      state.landingContent.footerText = (action.payload?.footer) && "";
     });
     builder.addCase(getContentFooter.rejected, (state, action) => {
       state.loadingPage = false;

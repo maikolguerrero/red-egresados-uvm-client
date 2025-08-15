@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import perfil from "../../../../public/Perfil.jpg"
 import { Badge } from "flowbite-react";
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { BiWorld } from "react-icons/bi";

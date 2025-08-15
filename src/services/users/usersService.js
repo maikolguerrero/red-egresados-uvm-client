@@ -7,7 +7,7 @@ export const getProfile = createAsyncThunk(
   "authSlice/getProfile",
   async (data, thunkAPI) => {
     try {
-      const response = await apiFetch(`/api/alumni/${data.username}`, {
+      const response = await apiFetch(`/alumni/${data.username}`, {
         method: "GET",
       });
 
@@ -25,7 +25,8 @@ export const getProfile = createAsyncThunk(
         }
       }
     } catch (error) {
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -37,7 +38,7 @@ export const getUsers = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "&query=" + data.query
+        `/alumni/search?page=${data.page}&limit=${data.limit}${data.query === null || data.query === undefined ? "" : "&query=" + data.query
         }${data.degree === null || data.degree === undefined ? "" : ("&degree=" + data.degree)
         }${data.location === null || data.location === undefined ? "" : ("&location=" + data.location)
         }${data.graduationYear === null || data.graduationYear === undefined ? "" : ("&graduationYear=" + data.graduationYear)
@@ -56,12 +57,14 @@ export const getUsers = createAsyncThunk(
           users: response.data
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -72,7 +75,7 @@ export const updatePictureProfile = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       // Realizar la solicitud POST
-      const response = await apiFetch(`/api/alumni/profile/picture`, {
+      const response = await apiFetch(`/alumni/profile/picture`, {
         method: "PATCH",
         body: data,
       });
@@ -84,12 +87,14 @@ export const updatePictureProfile = createAsyncThunk(
           picture: response.data.profilePicture
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -100,7 +105,7 @@ export const updateProfile = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       logger.log(data)
-      const response = await apiFetch("/api/alumni/update-profile", {
+      const response = await apiFetch("/alumni/update-profile", {
         method: "PATCH",
         body: JSON.stringify(data),
         headers: {
@@ -108,7 +113,7 @@ export const updateProfile = createAsyncThunk(
         },
       });
 
-      logger.log(response)
+      logger.log(response);
       if (response.success) {
         notify.success(response.message, false)
         return {
@@ -116,13 +121,20 @@ export const updateProfile = createAsyncThunk(
           profile: response.data,
         };
       } else {
-        if (response.message === "Error de validación") {
-          throw response.metadata.errors[0].message;
+        if (response?.metadata?.errors[0].context === "input_validation") {
+          notify.error(response?.metadata?.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
         }
-        throw response.message || "Error al actualizar el perfil";
+        if (response?.metadata?.errors[0].message) {
+          notify.error(response?.metadata?.errors[0].message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
+        }
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

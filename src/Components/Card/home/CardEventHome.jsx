@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { formatForUserLocale } from "../../../utils/dateUtils";
 
 export function CardEventHome({event}) {
   const dispatch = useDispatch();
@@ -26,15 +27,13 @@ export function CardEventHome({event}) {
         <div className="flex flex-col">
           <h6 className="text-RojoC text-xs font-semibold">
             <span className="text-verdeD">INICIA: </span>
-            {event.startDate.split("T")[0]} A LAS{" "}
-            {event.startDate.split("T")[1].split(".")[0]}
+            {formatForUserLocale(event.startDate)}
           </h6>
           <h6 className="text-RojoC text-xs font-semibold">
             <span className="text-verdeD">
               {active ? "FINALIZA: " : "FINALIZO: "}
             </span>
-            {event.endDate.split("T")[0]} A LAS{" "}
-            {event.endDate.split("T")[1].split(".")[0]}
+            {formatForUserLocale(event.endDate)}
           </h6>
           <h6 className="text-RojoC text-xs font-semibold">
             <span className="text-verdeD">

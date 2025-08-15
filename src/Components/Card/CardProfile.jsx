@@ -1,28 +1,15 @@
-import { useEffect, useState } from "react";
-import perfil from "../../../public/Perfil.jpg"
+import { useState } from "react";
 import BadgeNormal from "../Buttons/BadgeNormal";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { useSelector } from "react-redux";
+import { FaLock } from "react-icons/fa";
 
 function CardProfile({ profile }) {
   const username = useSelector((state) => state.auth.username)
   const role = useSelector((state) => state.auth.role)
-  const [anchoPantalla, setAnchoPantalla] = useState(window.innerWidth);
-
   const [openModal, setOpenModal] = useState(false)
   const [openModal2, setOpenModal2] = useState(false)
   const [openModal3, setOpenModal3] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setAnchoPantalla(window.innerWidth);
-    };
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
     <>
@@ -83,25 +70,28 @@ function CardProfile({ profile }) {
           </div>
 
           {/* Habilidades e Intereses */}
-          <div className="flex gap-1 md:gap-2 flex-wrap">
+          <div className="flex gap-1 md:gap-2 flex-wrap items-center">
             {profile?.user?.username === username ||
               role === "admin" ||
               role === "superadmin" ? (
-              <>
+              <div className="">
                 {" "}
-                {profile?.profile?.professional?.skills?.values.length > 0 && (
+                {profile?.profile?.professional?.skills?.values?.length > 0 && (
                   <button
                     onClick={(e) => setOpenModal(true)}
-                    className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+                    className="flex items-center gap-1 bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
                   >
                     ver habilidades de valor{" "}
-                    {profile?.profile?.professional?.skills?.values.length}
+                    <p>{profile?.profile?.professional?.skills?.values?.length}</p>
+                    {profile?.profile?.professional?.skills?.isPublic === false && (
+                      <FaLock className="h-3 w-3" />
+                    )}
                   </button>
                 )}
-              </>
+              </div>
             ) : (
               <>
-                {profile?.profile?.professional?.skills?.values.length === 0 ||
+                {profile?.profile?.professional?.skills?.values?.length === 0 ||
                   profile?.profile?.professional?.skills?.isPublic === false ? (
                   // <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
                   <></>
@@ -111,7 +101,7 @@ function CardProfile({ profile }) {
                     className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
                   >
                     ver habilidades de valor{" "}
-                    {profile?.profile?.professional?.skills?.values.length}
+                    {profile?.profile?.professional?.skills?.values?.length}
                   </button>
                 )}
               </>
@@ -121,27 +111,25 @@ function CardProfile({ profile }) {
               role === "admin" ||
               role === "superadmin" ? (
               <>
-                {profile?.profile?.professional?.interests?.values.length ===
-                  0 ? (
-                  // <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
-                  <></>
-                ) : (
+                {" "}
+                {profile?.profile?.professional?.interests?.values?.length > 0 && (
                   <button
                     onClick={(e) => setOpenModal2(true)}
-                    className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
+                    className="flex items-center gap-1 bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
                   >
                     ver intereses personales{" "}
-                    {profile?.profile?.professional?.interests?.values.length}
+                    <p>{profile?.profile?.professional?.interests?.values?.length}</p>
+                    {profile?.profile?.professional?.interests?.isPublic === false && (
+                      <FaLock className="h-3 w-3" />
+                    )}
                   </button>
                 )}
               </>
             ) : (
               <>
-                {profile?.profile?.professional?.interests?.values.length ===
-                  0 ||
-                  profile?.profile?.professional?.interests?.isPublic ===
-                  false ? (
-                  // <BadgeNormal color="bg-RojoC" text="SIN INTERESES" />
+                {profile?.profile?.professional?.interests?.values?.length === 0 ||
+                  profile?.profile?.professional?.interests?.isPublic === false ? (
+                  // <BadgeNormal color="bg-RojoC" text="SIN HABILIDADES" />
                   <></>
                 ) : (
                   <button
@@ -149,12 +137,11 @@ function CardProfile({ profile }) {
                     className="bg-verdeD text-Blanco text-[9px] uppercase md:text-xs lg:text-sm font-barlow-condensed px-2 py-1 rounded-md"
                   >
                     ver intereses personales{" "}
-                    {profile?.profile?.professional?.interests?.values.length}
+                    {profile?.profile?.professional?.interests?.values?.length}
                   </button>
                 )}
               </>
-            )
-            }
+            )}
           </div >
         </div >
       </div >
@@ -168,17 +155,20 @@ function CardProfile({ profile }) {
             <h4 className="py-1 px-2 border-b-2 mb-6 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
               HABILIDADES PROFESIONALES
             </h4>
-            <div className="flex gap-2">
-              {profile?.profile?.professional?.skills?.length === 0 ? (
-                <></>
-              ) : (
+            <ul className="list-inside flex flex-col gap-2">
+              {profile?.profile?.professional?.skills?.values?.length > 0 && (
                 profile?.profile?.professional?.skills?.values.map(
                   (item, key) => (
-                    <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                    <li
+                      key={key}
+                      className="list-disc font-barlow-condensed text-lg font-medium text-verdeB"
+                    >
+                      {item}
+                    </li>
                   )
                 )
               )}
-            </ div >
+            </ul >
           </>
         }
       />
@@ -192,17 +182,20 @@ function CardProfile({ profile }) {
             <h4 className="py-1 px-2 border-b-2 mb-6 border-verdeC text-sm md:text-base font-barlow-condensed font-semibold">
               INTERESES PERSONALES
             </h4>
-            <div className="flex gap-2">
-              {profile?.profile?.professional?.interests?.length === 0 ? (
-                <></>
-              ) : (
+            <ul className="list-inside flex flex-col gap-2">
+              {profile?.profile?.professional?.interests?.values?.length > 0 && (
                 profile?.profile?.professional?.interests?.values.map(
                   (item, key) => (
-                    <BadgeNormal color="bg-verdeD" text={item} key={key} />
+                    <li
+                      key={key}
+                      className="list-disc font-barlow-condensed text-lg font-medium text-verdeB"
+                    >
+                      {item}
+                    </li>
                   )
                 )
               )}
-            </div >
+            </ul >
           </>
         }
       />

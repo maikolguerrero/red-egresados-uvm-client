@@ -7,7 +7,7 @@ export const verifyAlumni = createAsyncThunk(
   async (cedula, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${URL_API}/api/alumni/verify-alumni/${cedula}`,
+        `${URL_API}/alumni/verify-alumni/${cedula}`,
         {
           method: "GET",
           headers: {
@@ -29,7 +29,8 @@ export const verifyAlumni = createAsyncThunk(
         return rejectWithValue(data.message || "Error al verificar egresado");
       }
     } catch (error) {
-      notify.error(error.message, false);
+      notify.error(error.message, true);
+      notify.errorDefault();
       return rejectWithValue(error.message);
     }
   }

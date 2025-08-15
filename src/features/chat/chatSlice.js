@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getMessages, markMessagesAsRead } from "../../services/chat/chatService";
+import { getMessages, markMessagesAsRead, getConversations, sendMessage } from "../../services/chat/chatService";
 import logger from "../../utils/logger";
 
 const chatSlice = createSlice({
@@ -194,6 +194,43 @@ const chatSlice = createSlice({
                 state.loading = false;
             })
             .addCase(markMessagesAsRead.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
+            .addCase(getConversations.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getConversations.fulfilled, (state, action) => {
+                state.loading = false;
+                state.conversations = action.payload.data;
+                state.unreadTotal = action.payload.data.reduce((sum, conv) => sum + conv.unreadCount, 0);
+            })
+            .addCase(getConversations.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
+            .addCase(sendMessage.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(sendMessage.fulfilled, (state, action) => {
+                state.loading = false;
+                // state.messages.push({
+                //     id: action.payload.id,
+                //     content: action.payload.content,
+                //     sender: action.payload.sender,
+                //     receiver: action.payload.receiver,
+                //     read: action.payload.read,
+                //     readAt: action.payload.readAt,
+                //     createdAt: action.payload.createdAt,
+                //     updatedAt: action.payload.updatedAt,
+                //     isTemp: false
+                // });
+                state.unreadTotal = state.conversations.reduce((sum, conv) => sum + conv.unreadCount, 0);
+            })
+            .addCase(sendMessage.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             });

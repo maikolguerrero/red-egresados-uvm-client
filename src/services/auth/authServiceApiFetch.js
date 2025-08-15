@@ -4,12 +4,45 @@ import { URL_API } from "../../config";
 import { apiFetch } from "../apiService";
 import logger from "../../utils/logger";
 
+export const logoutSesion = createAsyncThunk(
+    "authSlice/logoutSesion", // Nombre de la acción
+    async (data, thunkAPI) => {
+        try {
+            // Realizar la solicitud POST
+            const response = await apiFetch(
+                `/auth/logout`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            logger.log(response)
+            if (response.success) {
+                notify.success(response.message, true)
+                return (response.message)
+            } else {
+                notify.error(response.message, false);
+                return thunkAPI.rejectWithValue({ continue: false });
+            }
+
+        } catch (error) {
+            // Gestionar errores
+            notify.error(error, true);
+            notify.errorDefault();
+            return thunkAPI.rejectWithValue({ continue: false });
+        }
+    }
+);
+
 export const changeRecoveryEmail = createAsyncThunk(
     "authSlice/changeRecoveryEmail", // Nombre de la acción
     async (data, thunkAPI) => {
         try {
             const response = await apiFetch(
-                `/api/auth/change-email`,
+                `/auth/change-email`,
                 {
                     method: "POST",
                     headers: {
@@ -23,11 +56,13 @@ export const changeRecoveryEmail = createAsyncThunk(
                 notify.success(response.message, false)
                 return (response.message);
             } else {
-                throw `${response.message}`;
+                notify.error(response.message, false);
+                return thunkAPI.rejectWithValue({ continue: false });
             }
         } catch (error) {
             // Gestionar errores
-            notify.error(error, false)
+            notify.error(error, true);
+            notify.errorDefault();
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }
@@ -38,7 +73,7 @@ export const changeRecoveryPassword = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
             const response = await fetch(
-                `${URL_API}/api/auth/forgot-password`,
+                `${URL_API}/auth/forgot-password`,
                 {
                     mode: "cors",
                     credentials: "include",
@@ -56,11 +91,13 @@ export const changeRecoveryPassword = createAsyncThunk(
                 notify.success(datas.message, false)
                 return (datas.message);
             } else {
-                throw `${datas.message}`;
+                notify.error(datas.message, false);
+                return thunkAPI.rejectWithValue({ continue: false });
             }
         } catch (error) {
             // Gestionar errores
-            notify.error(error, false)
+            notify.error(error, true);
+            notify.errorDefault();
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }
@@ -71,7 +108,7 @@ export const changeEmailRecovery = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
             const response = await fetch(
-                `${URL_API}/api/auth/update-email-and-resend`,
+                `${URL_API}/auth/update-email-and-resend`,
                 {
                     mode: "cors",
                     credentials: "include",
@@ -89,11 +126,13 @@ export const changeEmailRecovery = createAsyncThunk(
                 notify.success(datas.message, false)
                 return (datas.message);
             } else {
-                throw `${datas.message}`;
+                notify.error(datas.message, false);
+                return thunkAPI.rejectWithValue({ continue: false });
             }
         } catch (error) {
             // Gestionar errores
-            notify.error(error, false)
+            notify.error(error, true);
+            notify.errorDefault();
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }
@@ -104,7 +143,7 @@ export const changeEmail = createAsyncThunk(
     async (data, thunkAPI) => {
         try {
             const response = await fetch(
-                `${URL_API}/api/auth/verify-email-change?token=${data}`,
+                `${URL_API}/auth/verify-email-change?token=${data}`,
                 {
                     mode: "cors",
                     credentials: "include",
@@ -123,11 +162,13 @@ export const changeEmail = createAsyncThunk(
                     message: datas.message,
                 };
             } else {
-                throw `${datas.message}`;
+                notify.error(datas.message, false);
+                return thunkAPI.rejectWithValue({ continue: false });
             }
         } catch (error) {
             // Gestionar errores
-            notify.error(error, false)
+            notify.error(error, true);
+            notify.errorDefault();
             return thunkAPI.rejectWithValue({ continue: false });
         }
     }

@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Dropdown, DropdownItem } from "flowbite-react";
+import { Badge, Card, Dropdown, DropdownItem } from "flowbite-react";
 import ButtonSmall from "../Buttons/ButtonSmall";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { FormAddProyect } from "../Forms/Proyects/FormAddProyect";
 import { cancelRequest, deleteProject, joinProyect, requestProyect } from "../../services/proyects/proyectService";
-import perfil from "../../../public/Perfil.jpg"
 import { RiGitRepositoryPrivateFill } from "react-icons/ri";
 import { BiWorld } from "react-icons/bi";
 
@@ -62,7 +61,9 @@ export function CardProyect({ proyect }) {
         <div className="flex items-center gap-2">
           {proyect?.owner?.profilePicture?.url === null ? (
             // Si no hay foto de perfil, muestra la inicial del username
-            <div className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div 
+            onClick={searchProfile}
+            className="cursor-pointer w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
               <span className="text-white text-[14px] md:text-[14px] xl:text-[16px] font-bold">
                 {proyect?.owner?.username?.charAt(0).toUpperCase()}
               </span>
@@ -70,7 +71,8 @@ export function CardProyect({ proyect }) {
           ) : (
             // Si hay foto, muéstrala circular
             <img
-              className="w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
+            onClick={searchProfile}
+              className="cursor-pointer w-6 h-6 md:w-6 md:h-6 xl:w-8 xl:h-8 rounded-full object-cover"
               src={proyect.owner.profilePicture.url}
               alt={proyect?.owner?.username || 'Foto de Perfil del Propietario'} // Alt text para accesibilidad
             />
@@ -80,7 +82,7 @@ export function CardProyect({ proyect }) {
           </p>
         </div>
 
-        {proyect?.owner?.username === username || role === "admin" || role === "superadmin" ? (
+        {(proyect?.owner?.username === username || role === "admin" || role === "superadmin") ? (
           <>
             <Dropdown
               inline
@@ -92,7 +94,7 @@ export function CardProyect({ proyect }) {
                 </div>
               )}
             >
-              {(role === "admin" || role === "superadmin") && !proyect?.owner?.username === username ? (
+              {(role === "admin" || role === "superadmin") ? (
                 <></>
               ) : (
                 <DropdownItem>

@@ -58,7 +58,7 @@ function ForumsPersonals() {
               {username === currentPath.split("/")[3] ? (
                 <div className="bg-Gris p-4 rounded-lg shadow-sm max-w-md w-full flex justify-center items-center">
                   <h4 className="font-barolw text-lg font-medium text-black uppercase">
-                    No has creado foros todavía
+                    No has creado hilos todavía
                   </h4>
                 </div>
               ) : (

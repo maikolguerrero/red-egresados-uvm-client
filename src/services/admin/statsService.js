@@ -8,7 +8,7 @@ export const getContentStats = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/stats/all`,
+        `/stats/all`,
         {
           method: "GET",
         }
@@ -21,11 +21,13 @@ export const getContentStats = createAsyncThunk(
           stats: response.data
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

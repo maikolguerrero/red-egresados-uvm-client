@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../public/LogoUvm.png"
+import logo from "../assets/LogoUVM.png"
 import { useDispatch } from "react-redux";
-import { logoutSesion } from "../services/auth/authService";
+import { logoutSesion } from "../services/auth/authServiceApiFetch";
 import socketService from "../services/socket/socket.service";
 import { ButtonNavHamburger } from "./Buttons/ButtonNavHamburger";
 import useIsMobile from "../hooks/useIsMobile";

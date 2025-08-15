@@ -9,7 +9,7 @@ export const getContentLanding = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/landing`,
+        `/content/landing`,
         {
           method: "GET",
         }
@@ -22,11 +22,13 @@ export const getContentLanding = createAsyncThunk(
           landing: response.data
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -38,7 +40,7 @@ export const getContentFooter = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await fetch(
-        `${URL_API}/api/content/landing/footer`,
+        `${URL_API}/content/landing/footer`,
         {
           mode: "cors",
           credentials: "include",
@@ -57,11 +59,13 @@ export const getContentFooter = createAsyncThunk(
           footer: datas.data
         };
       } else {
-        throw `${datas.message}`;
+        notify.error(datas.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, true)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -73,7 +77,7 @@ export const updateContentLanding = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/landing`,
+        `/content/landing`,
         {
           method: "PATCH",
           headers: {
@@ -90,11 +94,18 @@ export const updateContentLanding = createAsyncThunk(
           landingUpdate: response.data
         };
       } else {
-        throw `${response.message}`;
+        if (response?.metadata?.errors[0]?.message) {
+          notify.error(response?.metadata?.errors[0]?.message, false);
+          return thunkAPI.rejectWithValue({ continue: false });
+        }
+
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -106,7 +117,7 @@ export const addMediaCarrousel = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/landing/carousel/media`,
+        `/content/landing/carousel/media`,
         {
           method: "POST",
           body: data.data,
@@ -120,11 +131,13 @@ export const addMediaCarrousel = createAsyncThunk(
           pictureCarrousel: response.data
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -136,7 +149,7 @@ export const deleteMediaCarrousel = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/landing/carousel/${data.index}`,
+        `/content/landing/carousel/${data.index}`,
         {
           method: "DELETE",
         }
@@ -149,11 +162,13 @@ export const deleteMediaCarrousel = createAsyncThunk(
           idItemCarrouse: data.idItem
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -165,7 +180,7 @@ export const addMediaSubSection = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
+        `/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
         {
           method: "POST",
           body: data.data,
@@ -181,11 +196,13 @@ export const addMediaSubSection = createAsyncThunk(
           subsectionIndex: data.subsectionIndex
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -197,7 +214,7 @@ export const deleteMediaSubSection = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
+        `/content/landing/subsections/${data.sectionIndex}/${data.subsectionIndex}/image`,
         {
           method: "DELETE",
         }
@@ -211,11 +228,13 @@ export const deleteMediaSubSection = createAsyncThunk(
           subsectionIndex: data.subsectionIndex
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false)
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

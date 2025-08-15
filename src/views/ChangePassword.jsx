@@ -8,6 +8,8 @@ import { newPassword } from "../services/auth/authService";
 import Header from "../Components/Header";
 import { Label } from "flowbite-react";
 import notify from "../utils/notifications";
+import { getContentFooter } from "../services/admin/landingService";
+
 
 let styles = {
   input:
@@ -44,6 +46,7 @@ function ChangePassword() {
       navigate("/login")
     }
     //dispatch(changeEmail(params.get("token")))
+    dispatch(getContentFooter());
   }, []);
 
   const handleInputChange = (e) => {
@@ -56,6 +59,19 @@ function ChangePassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!values.newPassword.match(/[A-Z]/)) {
+      return notify.error("La contraseña debe contener al menos una mayúscula", false);
+    }
+    if (!values.newPassword.match(/[a-z]/)) {
+      return notify.error("La contraseña debe contener al menos una minúscula", false);
+    }
+    if (!values.newPassword.match(/[0-9]/)) {
+      return notify.error("La contraseña debe contener al menos un número", false);
+    }
+    if (!values.newPassword.match(/[^a-zA-Z0-9]/)) {
+      return notify.error("La contraseña debe contener al menos un carácter especial", false);
+    }
     if (!(values.newPassword == values.confirmNewPassword)) {
       return notify.error("Las contraseñas no coinciden", false);
     }
@@ -65,6 +81,10 @@ function ChangePassword() {
     if (values.confirmNewPassword.trim() === "") {
       return notify.error("Confirma la nueva contraseña", false);
     }
+    if (values.newPassword.length < 8) {
+      return notify.error("La contraseña debe tener al menos 8 caracteres", false);
+    }
+    
     dispatch(newPassword(values));
     navigate("/login")
   };

@@ -68,6 +68,11 @@ export default function Message({ message, isOwn, markMessagesAsRead }) {
     const renderStatus = () => {
         if (!isOwn) return null;
 
+        if (message.isTemp) return (
+            <span className="flex items-center gap-0.5 text-xs font-medium text-gray-400 whitespace-nowrap">
+                No enviado
+            </span>
+        )
         return isRead ? (
             <span className="flex items-center gap-0.5 text-lg font-medium text-blue-400 whitespace-nowrap">
                 <BsCheckAll />

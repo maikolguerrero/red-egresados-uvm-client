@@ -1,5 +1,3 @@
-import { HiX } from "react-icons/hi";
-import perfil from "../../../public/Perfil.jpg"
 import { useNavigate } from "react-router-dom";
 import { ModalNotHeader } from "../Modals/ModalNotHeader";
 import { useState } from "react";
@@ -28,16 +26,6 @@ function CardReport({ item }) {
       >
         <div className="flex flex-col gap-3 md:gap-0 md:justify-between w-full p-3 border-b border-verdeA">
           <div className="flex gap-2 items-center">
-            {/* <img
-              className="rounded-full w-8"
-              src={
-                item.reporter.profilePicture === undefined ||
-                  item.reporter.profilePicture.url === null
-                  ? perfil
-                  : item.reporter.profilePicture.url
-              }
-              alt="Foto de Perfil"
-            /> */}
             {item?.reporter?.profilePicture === undefined ||
               item?.reporter?.profilePicture?.url === null ? (
                 // Si no hay foto de perfil, muestra la inicial del username

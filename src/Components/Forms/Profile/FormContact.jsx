@@ -179,17 +179,6 @@ function FormContact() {
     });
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   dispatch(
-  //     updateProfile({
-  //       personalData: valuesPersonalData,
-  //       contact: values,
-  //       socialMedia: values2,
-  //     })
-  //   );
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setShowConfirmation(true);
@@ -201,6 +190,10 @@ function FormContact() {
         personalData: valuesPersonalData,
         contact: values,
         socialMedia: values2,
+        professional: profile?.profile?.professional,
+        education: profile?.profile?.education,
+        experience: profile?.profile?.experience,
+        certifications: profile?.profile?.certifications,
       })
     );
     setShowConfirmation(false);
@@ -264,99 +257,6 @@ function FormContact() {
             </div>
           </div>
         </div>
-
-
-        {/* <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
-            <div className="w-full">
-              <p className="px-4 py-2 bg-slate-300 font-barlow-condensed rounded-md text-xs flex text-center justify-center w-auto">
-                El checkbox ☑️ que se ubica a la derecha de cada campo, funciona para hacer público ese campo a todos los usuarios de la red.
-              </p>
-            </div>
-            <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
-
-            <div className="flex flex-col gap-3">
-              <div className="w-full flex flex-col relative">
-                <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                  Fecha de Nacimiento:
-                </Label>
-                <div className="flex gap-2 items-center">
-                  <input
-                    className={styles.input}
-                    type="date"
-                    name="birthDate"
-                    max={
-                      new Date().toISOString().split("T")[0].split("-")[0] -
-                      18 +
-                      "-" +
-                      new Date().toISOString().split("T")[0].split("-")[1] +
-                      "-" +
-                      new Date().toISOString().split("T")[0].split("-")[2]
-                    } // Restar 18 años
-                    value={
-                      valuesPersonalData?.birthDate.value === null || valuesPersonalData?.birthDate.value === undefined
-                        ? ""
-                        : valuesPersonalData?.birthDate.value.split("T")[0]
-                    }
-                    onChange={handleInputChangePersonalData}
-                    placeholder="Fecha de nacimiento"
-                  />
-                  <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={valuesPersonalData?.birthDate.isPublic}
-                  onChange={(e) => {
-                    handleCheckChangePersonalData(
-                      "birthDate",
-                      !valuesPersonalData?.birthDate.isPublic
-                    );
-                  }}
-                />
-                  <div className="flex items-center gap-2 mt-2">
-                    <Checkbox
-                      className="bg-slate-200 focus:ring-1 focus:ring-RojoC checked:bg-RojoC"
-                      checked={valuesPersonalData?.birthDate.isPublic}
-                      onChange={(e) => {
-                        handleCheckChangePersonalData(
-                          "birthDate",
-                          !valuesPersonalData?.birthDate.isPublic
-                        );
-                      }}
-                    />
-                    <Label className="font-barlow-semi-condensed text-RojoC">
-                      Hacer público este contenido
-                    </Label>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div className="w-full flex flex-col relative">
-              <Label className="p-1 font-barlow-semi-condensed text-Negro text-sm">
-                Ubicación:
-              </Label>
-              <div className="flex gap-2 items-center">
-                <input
-                  className={styles.input}
-                  type="text"
-                  name="location"
-                  value={valuesPersonalData.location.value}
-                  onChange={handleInputChangePersonalData}
-                  placeholder="Ubicación"
-                />
-                <Checkbox
-                  className="w-6 h-6 bg-slate-200 focus:ring-1 focus:ring-verdeD checked:bg-verdeD"
-                  checked={valuesPersonalData?.location.isPublic}
-                  onChange={(e) => {
-                    handleCheckChangePersonalData(
-                      "location",
-                      !valuesPersonalData?.location.isPublic
-                    );
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
 
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>DATOS PERSONALES</h4>
@@ -527,7 +427,6 @@ function FormContact() {
             </div>
           </div>
         </div >
-
 
         <div className="flex flex-col gap-6">
           <h4 className={styles.subtitle_form}>REDES SOCIALES</h4>

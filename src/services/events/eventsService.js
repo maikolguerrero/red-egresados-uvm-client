@@ -9,7 +9,7 @@ export const addEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events`,
+        `/events`,
         {
           method: "POST",
           body: JSON.stringify(data),
@@ -27,12 +27,14 @@ export const addEvent = createAsyncThunk(
           data: response.data
         };
       } else {
-        throw `${response.metadata.errors[0].message}`;
+        notify.error(response.metadata.errors[0].message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
 
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -44,7 +46,7 @@ export const addPictureEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events/${data.eventId}/media/images`,
+        `/events/${data.eventId}/media/images`,
         {
           method: "POST",
           body: data.data
@@ -60,12 +62,14 @@ export const addPictureEvent = createAsyncThunk(
           eventId: data.eventId
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -77,7 +81,7 @@ export const searchEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events?page=${data.page}&limit=${data.limit}${data.type === null || data.type === undefined ? "" : "&type=" + data.type
+        `/events?page=${data.page}&limit=${data.limit}${data.type === null || data.type === undefined ? "" : "&type=" + data.type
         }${data.search === null || data.search === undefined ? "" : "&search=" + data.search
         }${data.upcoming === null || data.upcoming === undefined ? "" : "&upcoming=" + data.upcoming
         }`,
@@ -94,12 +98,14 @@ export const searchEvent = createAsyncThunk(
           pagination: response.pagination
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
       notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -111,7 +117,7 @@ export const getEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events/${data.id}`,
+        `/events/${data.id}`,
         {
           method: "GET",
         }
@@ -124,12 +130,14 @@ export const getEvent = createAsyncThunk(
           eventSelected: response.data,
         }
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
       notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -141,7 +149,7 @@ export const deleteEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events/${data.eventId}`,
+        `/events/${data.eventId}`,
         {
           method: "DELETE",
         }
@@ -154,12 +162,14 @@ export const deleteEvent = createAsyncThunk(
           message: response.message,
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -171,7 +181,7 @@ export const editEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events/${data.eventId}`,
+        `/events/${data.eventId}`,
         {
           method: "PATCH",
           headers: {
@@ -190,12 +200,14 @@ export const editEvent = createAsyncThunk(
           type: data.type
         };
       } else {
-        throw `${response.metadata.errors[0].message}`;
+        notify.error(response.metadata.errors[0].message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
 
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -207,7 +219,7 @@ export const addAgenda = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events/${data.eventId}/save`,
+        `/events/${data.eventId}/save`,
         {
           method: "POST",
         }
@@ -221,11 +233,13 @@ export const addAgenda = createAsyncThunk(
           eventId: data.eventId
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -237,7 +251,7 @@ export const deleteAgenda = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events/${data.eventId}/unsave`,
+        `/events/${data.eventId}/unsave`,
         {
           method: "DELETE",
         }
@@ -251,12 +265,13 @@ export const deleteAgenda = createAsyncThunk(
           eventId: data.eventId
         };
       } else {
-        throw `${response.message}`;
-
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }
@@ -268,7 +283,7 @@ export const deletePictureEvent = createAsyncThunk(
     try {
       // Realizar la solicitud POST
       const response = await apiFetch(
-        `/api/events/${data.eventId}/media/images/${data.imageId}`,
+        `/events/${data.eventId}/media/images/${data.imageId}`,
         {
           method: "DELETE",
         }
@@ -283,11 +298,13 @@ export const deletePictureEvent = createAsyncThunk(
           internal: data.internal,
         };
       } else {
-        throw `${response.message}`;
+        notify.error(response.message, false);
+        return thunkAPI.rejectWithValue({ continue: false });
       }
     } catch (error) {
       // Gestionar errores
-      notify.error(error, false);
+      notify.error(error, true);
+      notify.errorDefault();
       return thunkAPI.rejectWithValue({ continue: false });
     }
   }

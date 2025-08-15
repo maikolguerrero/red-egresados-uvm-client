@@ -1,5 +1,5 @@
 import { FaBars } from "react-icons/fa";
-import logo from "./../../public/LogoUvm.png";
+import logo from "./../assets/LogoUVM.png";
 import { HiXMark } from "react-icons/hi2";
 import { useState, useEffect } from "react";
 import Button from "./Buttons/Button";
@@ -62,7 +62,7 @@ function NavLogin() {
                   {
                     currentPath === "/verify-alumni" ? (
                       <>
-                        <Link to={"/login"}><Button text="LOGIN" /></Link>
+                        <Link to={"/login"}><Button text="ACCEDER" /></Link>
                         <Link to={"/register"}><Button text="REGISTRO" className="ml-2" /></Link>
                       </>
                     ) : (
@@ -70,7 +70,7 @@ function NavLogin() {
                         {currentPath === "/login" ? (
                           <Link to={"/register"}><Button text="REGISTRO" /></Link>
                         ) : (
-                          <Link to={"/login"}><Button text="LOGIN" /></Link>
+                          <Link to={"/login"}><Button text="ACCEDER" /></Link>
                         )}
                         <Link to={"/verify-alumni"}><Button text="VERIFICACIÓN" className="ml-2" /></Link>
 

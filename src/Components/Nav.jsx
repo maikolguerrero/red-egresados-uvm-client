@@ -6,7 +6,6 @@ import { PiProjectorScreenChartBold } from "react-icons/pi";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSidebar } from "../features/sidebar/sidebarSlice";
 import { useEffect, useState, useRef } from "react";
-import socketService from "../services/socket/socket.service";
 import { getUnreadNotificationCount } from "../services/notifications/notificationService";
 import useIsMobile from "../hooks/useIsMobile";
 import { MdEditDocument } from "react-icons/md";
@@ -16,8 +15,8 @@ import logger from "../utils/logger";
 function Nav() {
   const role = useSelector((state) => state.auth.role);
   const isSidebar = useSelector((state) => state.sidebar.isSidebar);
+  const unreadCount = useSelector((state) => state.notifications.unreadCount);
   const dispatch = useDispatch();
-  const [unreadCount, setUnreadCount] = useState(0);
   const [loadingCount, setLoadingCount] = useState(true);
 
   const isMobile = useIsMobile();
@@ -39,8 +38,7 @@ function Nav() {
     const fetchInitialCount = async () => {
       try {
         // Obtener el conteo inicial desde la API REST
-        const count = await getUnreadNotificationCount();
-        setUnreadCount(count);
+        dispatch(getUnreadNotificationCount());
       } catch (error) {
         logger.error("Error obteniendo conteo de notificaciones:", error);
       } finally {
@@ -50,47 +48,6 @@ function Nav() {
 
     fetchInitialCount();
   }, []);
-
-
-  useEffect(() => {
-    if (!socketService.isConnected) return;
-
-    const handleNotificationCount = (count) => {
-      setUnreadCount(count);
-    };
-
-    // Configurar listener para actualizaciones en tiempo real
-    socketService.socket.on('notification_count', handleNotificationCount);
-
-    return () => {
-      if (socketService.isConnected) {
-        socketService.socket.off('notification_count', handleNotificationCount);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!socketService.isConnected) return;
-
-    const handleNotificationDeleted = () => {
-      // Disminuir el contador en 1 (optimista)
-      setUnreadCount(prev => Math.max(0, prev - 1));
-
-      // Opcional: Verificar con el servidor para estar seguros
-      getUnreadNotificationCount().then(count => {
-        setUnreadCount(count);
-      });
-    };
-
-    socketService.socket.on('notification_deleted', handleNotificationDeleted);
-
-    return () => {
-      if (socketService.isConnected) {
-        socketService.socket.off('notification_deleted', handleNotificationDeleted);
-      }
-    };
-  }, []);
-
 
   const handleClickLink = () => {
     if (isMobile) {

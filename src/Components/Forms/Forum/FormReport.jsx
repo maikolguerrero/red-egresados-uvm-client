@@ -32,10 +32,10 @@ export function FormReport({ threadId, idComment }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.reason.trim() === "") {
-      return notify("Falta el tipo de reporte", typeError);
+      return notify.error("Falta el tipo de reporte", false);
     }
     if (values.description.trim() === "") {
-      return notify("Falta la descripción del reporte", typeError);
+      return notify.error("Falta la descripción del reporte", false);
     }
     if (idComment === undefined) {
       dispatch(

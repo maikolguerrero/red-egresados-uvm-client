@@ -1,9 +1,8 @@
 import { useDispatch } from "react-redux";
-import perfil from "../../../../public/Perfil.jpg";
-import { expelCollaborator, responseRequest } from "../../../services/proyects/proyectService";
+import { responseRequest } from "../../../services/proyects/proyectService";
 import { useNavigate } from "react-router-dom";
 
-export function CardRequest({ request, project }) {
+export function CardRequest({ request }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -38,19 +37,29 @@ export function CardRequest({ request, project }) {
   return (
     <div
       key={request.id}
-      className="bg-Gris px-4 py-6 flex justify-between items-center rounded-md border border-verdeD"
+      className="bg-Gris px-4 py-6 flex flex-col justify-between items-start rounded-md border border-verdeD"
     >
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <img
-            className="rounded-full w-6 md:w-6 xl:w-8"
-            src={
-              request.user.profilePicture.url === null
-                ? perfil
-                : request.user.profilePicture.url
-            }
-            alt="Foto de Perfil"
-          />
+        
+          {request.user?.profilePicture === undefined ||
+            request.user?.profilePicture?.url === null ? (
+            // Si no hay foto de perfil, muestra la inicial del username
+            <div className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full bg-verdeA flex items-center justify-center overflow-hidden flex-shrink-0">
+              <span className="text-white text-xs md:text-sm xl:text-base font-bold uppercase">
+                {request.user?.username?.charAt(0).toUpperCase()}
+              </span>
+            </div>
+          ) : (
+            // Si hay foto, muéstrala circular
+            <img
+              className="w-6 h-6 md:w-8 md:h-8 xl:w-10 xl:h-10 rounded-full object-cover"
+              src={request.user.profilePicture?.url}
+              alt={request.user.username || 'Foto de Perfil del Usuario'}
+            />
+          )}
+
+
           <div className="flex flex-col justify-center">
             <div className="flex gap-2 items-center">
               <p onClick={searchProfile} className="cursor-pointer flex gap-2 font-semibold text-Negro font-barolw text-xs lg:text-sm items-center">
@@ -58,19 +67,18 @@ export function CardRequest({ request, project }) {
               </p>
               <span>-</span>
               <p
-                className={`text-xs lg:text-sm font-semibold font-barolw ${
-                  request.status === "pending"
+                className={`text-xs lg:text-sm font-semibold font-barolw ${request.status === "pending"
                     ? "text-blue-600"
                     : request.status === "approved"
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
               >
                 {request.status === "pending"
                   ? "Pendiente"
                   : request.status === "approved"
-                  ? "Aprobado"
-                  : "Rechazado"}
+                    ? "Aprobado"
+                    : "Rechazado"}
               </p>
             </div>
             <p className="text-[10px]">{request.updatedAt.split("T")[0]}</p>
@@ -78,7 +86,7 @@ export function CardRequest({ request, project }) {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-2">
         {request.status === "pending" ? (
           <>
             <button
